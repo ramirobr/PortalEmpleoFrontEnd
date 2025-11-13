@@ -4,7 +4,11 @@ import Footer from "../../shared/components/Footer";
 export default function EmailSignup() {
   return (
     <div className="min-h-screen flex flex-col bg-white">
-      <Navbar />
+      <Navbar
+        showAuthLinks={false}
+        showCompanyRegister={true}
+        hideMainMenu={true}
+      />
       <main className="flex-1 flex flex-col items-center justify-center px-4 py-12">
         <h1 className="text-3xl md:text-4xl font-bold text-center text-primary mb-8">
           Crea tu cuenta y encuentra tu empleo ideal
