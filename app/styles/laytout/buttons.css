@@ -1,0 +1,14 @@
+@layer base {
+  .btn {
+    @apply px-6 py-2 rounded font-semibold cursor-pointer  transition-all;
+  }
+  .btn-primary {
+    @apply bg-primary hover:bg-primary/70 text-white;
+  }
+  .btn-secondary {
+    @apply bg-secondary hover:bg-secondary/70 text-white;
+  }
+  .btn-gray {
+    @apply bg-gray-100 hover:bg-gray-200 text-gray-700;
+  }
+}

@@ -1,0 +1,97 @@
+{
+  "1": {
+    "id": "1",
+    "title": "Frontend Developer",
+    "company": "Tech Solutions",
+    "companyLocation": "Quito, Ecuador",
+    "companyLogo": "/logos/company_logo.png",
+    "descripcion": "Acerca del empleo\nAbout Torc\n\nTorc is a career-first platform that connects top tech talent with meaningful job opportunities. More than just job matching, Torc is a community — offering events, livestreams, and exclusive content to help professionals grow, learn, and stay connected. When you join Torc, you’re not just finding a job — you’re joining a network that supports your career development every step of the way.\n\nTo apply, make sure to complete your profile to be reviewed by our Matching Team. Take the assessment and if you’re the right fit, we’ll reach out to schedule a conversation.\n\nAbout the Role\n\nWe are seeking a Front-End Developer to build intuitive, user-friendly, and scalable interfaces for modern web applications. You’ll collaborate closely with designers, product managers, and backend engineers to deliver seamless user experiences that align with business goals.\nThis role is perfect for someone who cares deeply about clean code, performance, and design systems, while staying up-to-date with the latest front-end frameworks and tools.",
+    "responsabilidades": [
+      "Develop responsive and performant UIs using React, Angular, or Vue.js.",
+      "Collaborate with design teams to transform wireframes and prototypes into production-ready code.",
+      "Ensure consistency and scalability through design systems and reusable components.",
+      "Optimize front-end performance for speed, accessibility, and cross-browser compatibility.",
+      "Integrate with backend APIs and services in collaboration with backend teams.",
+      "Write unit and integration tests to ensure stability and reliability.",
+      "Stay current with front-end trends and advocate for best practices."
+    ],
+    "requisitos": [
+      "3+ years of professional experience in front-end development.",
+      "Strong proficiency in JavaScript (ES6+), HTML5, and CSS3.",
+      "Hands-on experience with frameworks like React, Angular, or Vue.js.",
+      "Familiarity with RESTful APIs and modern state management (Redux, Vuex, NgRx).",
+      "Understanding of accessibility (WCAG) and responsive design principles.",
+      "Experience with Git and CI/CD workflows."
+    ],
+    "deseable": [
+      "Knowledge of TypeScript and component libraries (Material UI, Bootstrap, Tailwind).",
+      "Experience with testing frameworks like Jest, Cypress, or Playwright.",
+      "Familiarity with GraphQL, WebSockets, or micro-frontend architecture.",
+      "Exposure to design tools (Figma, Sketch, Adobe XD).",
+      "Experience with cloud platforms (AWS Amplify, Firebase, or Azure)."
+    ],
+    "experiencia": "3+ años en desarrollo frontend",
+    "correo": "rrhh@techsolutions.com",
+    "telefono": "+593 2 345 6789",
+    "salario": "$1800 - $2500 USD",
+    "direccion": "Av. Amazonas y Naciones Unidas, Quito",
+    "mapa": "https://maps.google.com/?q=Av.+Amazonas+y+Naciones+Unidas,+Quito"
+  },
+  "2": {
+    "id": "2",
+    "title": "Backend Engineer",
+    "company": "CloudSoft",
+    "companyLocation": "Guayaquil, Ecuador",
+    "companyLogo": "/logos/company_logo.png",
+    "descripcion": "Acerca del empleo\nCloudSoft es una empresa líder en soluciones cloud y desarrollo backend.\n\nBuscamos un Backend Engineer para diseñar APIs robustas y administrar infraestructura en la nube.",
+    "responsabilidades": [
+      "Diseñar y mantener APIs RESTful.",
+      "Optimizar bases de datos y servicios para alta disponibilidad.",
+      "Colaborar con equipos frontend y DevOps.",
+      "Implementar pruebas automatizadas y CI/CD."
+    ],
+    "requisitos": [
+      "3+ años de experiencia en Node.js y Express.",
+      "Experiencia con AWS, Docker y bases de datos SQL/NoSQL.",
+      "Conocimiento de seguridad y escalabilidad en la nube."
+    ],
+    "deseable": [
+      "Experiencia con microservicios y GraphQL.",
+      "Certificaciones en AWS o Google Cloud."
+    ],
+    "experiencia": "3+ años en desarrollo backend",
+    "correo": "jobs@cloudsoft.com",
+    "telefono": "+593 4 123 4567",
+    "salario": "$2000 - $3000 USD",
+    "direccion": "Malecón 2000, Guayaquil",
+    "mapa": "https://maps.google.com/?q=Malecón+2000,+Guayaquil"
+  },
+  "3": {
+    "id": "3",
+    "title": "UX Designer",
+    "company": "DesignPro",
+    "companyLocation": "Cuenca, Ecuador",
+    "companyLogo": "/logos/company_logo.png",
+    "descripcion": "Acerca del empleo\nDesignPro es una agencia creativa especializada en diseño de experiencia de usuario.\n\nBuscamos un UX Designer para crear experiencias atractivas en web y móvil.",
+    "responsabilidades": [
+      "Diseñar wireframes y prototipos en Figma y Adobe XD.",
+      "Realizar pruebas de usabilidad y entrevistas con usuarios.",
+      "Colaborar con desarrolladores y clientes."
+    ],
+    "requisitos": [
+      "2+ años de experiencia en diseño UX/UI.",
+      "Dominio de herramientas de diseño y metodologías ágiles.",
+      "Portafolio de proyectos web y móviles."
+    ],
+    "deseable": [
+      "Experiencia en diseño accesible y mobile-first.",
+      "Conocimientos de HTML/CSS y frameworks modernos."
+    ],
+    "experiencia": "2+ años en diseño UX/UI",
+    "correo": "talento@designpro.com",
+    "telefono": "+593 7 987 6543",
+    "salario": "$1500 - $2200 USD",
+    "direccion": "Av. Solano y Remigio Crespo, Cuenca",
+    "mapa": "https://maps.google.com/?q=Av.+Solano+y+Remigio+Crespo,+Cuenca"
+  }
+}
