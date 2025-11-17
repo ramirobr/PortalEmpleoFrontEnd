@@ -1,6 +1,7 @@
 import React from "react";
+import * as Slider from "@radix-ui/react-slider";
 
-interface FiltersProps {
+export interface FiltersProps {
   search: string;
   setSearch: (v: string) => void;
   location: string;
@@ -15,27 +16,33 @@ interface FiltersProps {
   setMode: (v: string) => void;
   jobs: any[];
   filters: any;
+  salaryRange?: [number, number];
+  setSalaryRange?: (range: [number, number]) => void;
 }
 
-export default function Filters({
-  search,
-  setSearch,
-  location,
-  setLocation,
-  date,
-  setDate,
-  experience,
-  setExperience,
-  company,
-  setCompany,
-  mode,
-  setMode,
-  jobs,
-  filters,
-}: FiltersProps) {
+export default function Filters(props: FiltersProps) {
+  const {
+    search,
+    setSearch,
+    location,
+    setLocation,
+    date,
+    setDate,
+    experience,
+    setExperience,
+    company,
+    setCompany,
+    mode,
+    setMode,
+    jobs,
+    filters,
+    salaryRange = [450, 7000],
+    setSalaryRange = () => {},
+  } = props;
+
   // Extract unique Ecuador provinces from companyLocation (e.g., "Quito, Ecuador" -> "Quito")
   const provinceSet = new Set<string>();
-  jobs.forEach((job) => {
+  jobs.forEach((job: any) => {
     if (typeof job.companyLocation === "string") {
       const [province] = job.companyLocation.split(",");
       if (province) provinceSet.add(province.trim());
@@ -60,6 +67,28 @@ export default function Filters({
         />
       </div>
       <div className="rounded-lg shadow p-6 flex flex-col gap-4">
+        <label htmlFor="salary-slider" className="font-semibold text-sm mb-2">
+          Rango salarial (USD)
+        </label>
+        <div className="flex flex-col gap-2">
+          <Slider.Root
+            className="relative flex items-center select-none touch-none w-full h-6"
+            min={1200}
+            max={4500}
+            step={100}
+            value={salaryRange}
+            onValueChange={(val) => setSalaryRange([val[0], val[1]])}
+            aria-label="Rango salarial"
+          >
+            <Slider.Track className="bg-gray-200 relative grow rounded-full h-2">
+              <Slider.Range className="absolute bg-blue-500 rounded-full h-2" />
+            </Slider.Track>
+            <Slider.Thumb className="block w-5 h-5 bg-white border border-blue-500 rounded-full shadow focus:outline-none focus:ring-2 focus:ring-blue-500" />
+            <Slider.Thumb className="block w-5 h-5 bg-white border border-blue-500 rounded-full shadow focus:outline-none focus:ring-2 focus:ring-blue-500" />
+          </Slider.Root>
+          {/* Removed duplicate function signature and destructuring block */}
+        </div>
+
         <label htmlFor="location-select" className="sr-only">
           Ubicación
         </label>
@@ -160,6 +189,7 @@ export default function Filters({
             setExperience("");
             setCompany("");
             setMode("");
+            setSalaryRange([1200, 4500]);
           }}
         >
           Limpiar filtros

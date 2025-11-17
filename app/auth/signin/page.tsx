@@ -6,26 +6,16 @@ export default function SignIn() {
     <div className="min-h-screen flex flex-col bg-white">
       <Navbar />
       <main className="flex-1 flex flex-col items-center justify-center px-4 py-12">
-        <h1 className="text-3xl md:text-4xl font-bold text-center text-primary mb-8">
+        <h2 className="section-title">
           Crea tu cuenta y comienza a buscar empleo
-        </h1>
+        </h2>
         <div className="w-full max-w-md flex flex-col gap-4">
-          <a
-            href="/auth/google"
-            className="flex items-center gap-2 px-4 py-3 rounded border border-gray-300 bg-blue-500 text-white font-medium text-lg shadow hover:bg-blue-600 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-400"
-          >
-            <span className="text-2xl bg-white rounded-full p-1">🌐</span>
+          <button className="cursor-pointer flex items-center justify-center gap-2 w-full py-3 rounded bg-white border border-gray-300 font-semibold text-base text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-500 mb-2">
             Acceder con Google
-          </a>
-          <a
-            href="/auth/linkedin"
-            className="flex items-center gap-2 px-4 py-3 rounded border border-gray-300 bg-blue-700 text-white font-medium text-lg shadow hover:bg-blue-800 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-400"
-          >
-            <span className="text-2xl bg-white rounded-full p-1 text-blue-700">
-              in
-            </span>
+          </button>
+          <button className="cursor-pointer flex items-center justify-center gap-2 w-full py-3 rounded bg-[#2867B2] text-white font-semibold text-base hover:bg-[#205081] focus:outline-none focus:ring-2 focus:ring-blue-500 mb-2">
             Acceder con Linkedin
-          </a>
+          </button>
           <div className="flex items-center my-4">
             <hr className="flex-1 border-gray-300" />
             <span className="mx-4 text-gray-500 font-semibold">o</span>
@@ -97,14 +87,6 @@ export default function SignIn() {
           </div>
         </div>
         */}
-        <footer className="w-full mt-12 text-center text-xs text-gray-500 border-t border-gray-200 pt-6">
-          <div className="mb-2">
-            Términos y Condiciones de uso – Política de protección de datos
-            personales y privacidad – Términos y condiciones generales de
-            contratación – Política de cookies –
-          </div>
-          <div>Preguntas frecuentes – Ofertas de Empleo</div>
-        </footer>
       </main>
       <Footer />
     </div>

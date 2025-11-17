@@ -18,6 +18,9 @@ interface FiltersPanelProps {
   filters: FiltersType;
 }
 
+import React from "react";
+
 export default function FiltersPanel(props: FiltersPanelProps) {
-  return <Filters {...props} />;
+  const [salaryRange, setSalaryRange] = React.useState<[number, number]>([1200, 4500]);
+  return <Filters {...props} salaryRange={salaryRange} setSalaryRange={setSalaryRange} />;
 }

@@ -1,5 +1,6 @@
 import Navbar from "../../shared/components/Navbar";
 import Footer from "../../shared/components/Footer";
+import Link from "next/link";
 
 export default function CompanyRegister() {
   return (
@@ -418,9 +419,12 @@ export default function CompanyRegister() {
           </button>
           <div className="text-center mt-4 text-sm">
             ¿Ya tienes cuenta?{" "}
-            <a href="/signin" className="text-primary font-semibold underline">
+            <Link
+              href="/auth/login"
+              className="text-primary font-semibold underline"
+            >
               Ingresa a tu cuenta empresa
-            </a>
+            </Link>
           </div>
         </form>
       </main>

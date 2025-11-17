@@ -53,9 +53,6 @@ export default function JobCard({ job }: { job: Job }) {
       <div className="flex mt-8">
         <div className="w-4/5">
           <p className="mb-1">
-            <span className="font-semibold">ID de trabajo:</span> {job.id}
-          </p>
-          <p className="mb-1">
             <span className="font-semibold">Tipo de trabajo:</span>{" "}
             {job.jobType || job.mode}
           </p>
@@ -80,7 +77,11 @@ export default function JobCard({ job }: { job: Job }) {
             <span className="font-semibold">Experiencia:</span> {job.experience}
           </p>
           <p className="mb-1">
-            <span className="font-semibold">Ubicación:</span> {job.location}
+            <span className="font-semibold">Ubicación:</span>{" "}
+            {job.companyLocation}
+          </p>
+          <p className="mb-1">
+            <span className="font-semibold">Modalidad:</span> {job.mode}
           </p>
         </div>
 
