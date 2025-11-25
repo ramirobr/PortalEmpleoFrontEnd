@@ -6,7 +6,7 @@ export default async function AsideMenu() {
 
   //if (!session?.user) return null;
   return (
-    <aside className="min-h-screen w-64 bg-white shadow flex flex-col items-center py-8 px-4 overflow-y-auto">
+    <aside className="sticky top-0 h-screen w-64 bg-white shadow flex flex-col items-center py-8 px-4">
       <div className="flex flex-col items-center mb-8">
         <div className="w-20 h-20 rounded-full bg-gray-200 mb-2">
           <img

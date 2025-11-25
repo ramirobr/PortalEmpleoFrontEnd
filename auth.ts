@@ -13,7 +13,10 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
       },
       async authorize(credentials) {
         if (!credentials?.email || !credentials?.password) return null;
-        const res = await signInApi(credentials.email as string, credentials.password as string);
+        const res = await signInApi(
+          credentials.email as string,
+          credentials.password as string
+        );
         if (!res || !res.isSuccess) return null;
         const { data } = res;
         return {
@@ -35,10 +38,12 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
 
       if (token.accessToken) {
         try {
-          const decoded: any = JSON.parse(Buffer.from(token.accessToken.split(".")[1], "base64").toString());
+          const decoded: any = JSON.parse(
+            Buffer.from(token.accessToken.split(".")[1], "base64").toString()
+          );
           if (decoded.exp * 1000 > Date.now()) return token;
         } catch {
-          console.log("Decoding issue")
+          console.log("Decoding issue");
         }
       }
       console.log("Token refresh", token.email);
@@ -60,7 +65,9 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
 });
 
 function extractJti(jwt: string) {
-  const payload = JSON.parse(Buffer.from(jwt.split(".")[1], "base64").toString());
+  const payload = JSON.parse(
+    Buffer.from(jwt.split(".")[1], "base64").toString()
+  );
   return payload.jti;
 }
 
@@ -77,17 +84,20 @@ async function signInApi(email: string, password: string) {
 
 async function refreshAccessToken(token: JWT) {
   try {
-    const res = await fetch(process.env.API_ENDPOINT + "/Authorization/refresh-token", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${token.accessToken}`,
-      },
-      body: JSON.stringify({
-        accessToken: token.accessToken,
-        refreshToken: token.refreshToken
-      })
-    });
+    const res = await fetch(
+      process.env.API_ENDPOINT + "/Authorization/refresh-token",
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token.accessToken}`,
+        },
+        body: JSON.stringify({
+          accessToken: token.accessToken,
+          refreshToken: token.refreshToken,
+        }),
+      }
+    );
 
     const data: RefreshToken = await res.json();
     if (!data.isSuccess) throw new Error("Failed to refresh token");
@@ -98,7 +108,7 @@ async function refreshAccessToken(token: JWT) {
       refreshToken: data.data.refreshToken ?? token.refreshToken,
     };
   } catch {
-    console.error("Error refreshing")
+    console.error("Error refreshing");
     return { ...token, error: "RefreshAccessTokenError" };
   }
 }

@@ -11,6 +11,11 @@ export default auth((req) => {
     return;
   }
 
+  // BYPASS TEMPORAL: Permitir acceso libre a /profile durante desarrollo
+  if (!session && isProfile) {
+    // No redirigir, permitir acceso
+    return;
+  }
   if (!session) {
     const newUrl = new URL("/auth/login", req.nextUrl.origin);
     return Response.redirect(newUrl);

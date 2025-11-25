@@ -2,6 +2,6 @@
   select,
   input,
   textarea {
-    @apply border-gray-light border focus:border-primary bg-[#fbfdff];
+    @apply border-gray-light border focus:border-primary bg-[#fbfdff] h-13 placeholder:text-gray-500 rounded px-4 py-2;
   }
 }
