@@ -20,7 +20,7 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
-import { signIn } from "next-auth/react";
+import { signIn, useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 import { SignIn } from "@/lib/auth/signin";
@@ -36,6 +36,7 @@ export default function LoginPage() {
   const router = useRouter();
   const [showPassword, setShowPassword] = useState(false);
   const timeoutRef = useRef<NodeJS.Timeout | null>(null);
+  const { update } = useSession();
   const form = useForm<LoginValues>({
     resolver: zodResolver(loginSchema),
     defaultValues: {
@@ -60,6 +61,7 @@ export default function LoginPage() {
     }
 
     form.reset();
+    await update();
     router.push("/");
   }
 

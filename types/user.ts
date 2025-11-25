@@ -35,10 +35,21 @@ export type LoginData = {
   refreshToken: string
 }
 
-export type Errors = {
-  Password: string[]
-  Telefono: string[]
-  Documento: string[]
-  TelefonoMobil: string[]
-  TipoDocumento: string[]
+export type RefreshToken = {
+  code: number
+  messages: any[]
+  isSuccess: boolean
+  data: RefreshTokenData
+}
+
+export type RefreshTokenData = {
+  accessToken: string
+  refreshToken: string
+}
+
+export type Logout = {
+  code: number
+  messages: string[]
+  isSuccess: boolean
+  data: null
 }

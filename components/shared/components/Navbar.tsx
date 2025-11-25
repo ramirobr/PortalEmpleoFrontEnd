@@ -17,6 +17,14 @@ export default function Navbar({
 }: NavbarProps) {
   const { data: session } = useSession();
 
+  const Logout = async () => {
+    await fetch("/api/auth/logout", {
+      method: "POST",
+    });
+
+    await signOut({ redirectTo: "/" });
+  };
+
   return (
     <nav className="p-4 flex justify-between items-center shadow-lg">
       <Link
@@ -57,9 +65,7 @@ export default function Navbar({
       )}
       <div className="flex items-center space-x-2">
         {session ? (
-          <Button onClick={() => signOut({ redirectTo: "/" })}>
-            Cerrar sesión
-          </Button>
+          <Button onClick={Logout}>Cerrar sesión</Button>
         ) : (
           <>
             <Link

@@ -32,6 +32,7 @@ import { SignUp } from "@/lib/auth/signup";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
 import { SignIn } from "@/lib/auth/signin";
+import { useSession } from "next-auth/react";
 
 const signupSchema = z
   .object({
@@ -65,6 +66,7 @@ export default function EmailSignup() {
   const [showPassword, setShowPassword] = useState(false);
   const timeoutRef = useRef<NodeJS.Timeout | null>(null);
   const router = useRouter();
+  const { update } = useSession();
   const form = useForm<FormValues>({
     resolver: zodResolver(signupSchema),
     defaultValues: {
@@ -107,6 +109,7 @@ export default function EmailSignup() {
         return null;
       }
       form.reset();
+      await update();
       router.push("/");
     } else {
       const hasError = Object.keys(registerRes.messages).length;
