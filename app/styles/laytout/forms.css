@@ -1,7 +1,0 @@
-@layer base {
-  select,
-  input,
-  textarea {
-    @apply border-gray-light border focus:border-primary bg-[#fbfdff];
-  }
-}
