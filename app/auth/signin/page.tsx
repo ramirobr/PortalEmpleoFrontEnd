@@ -1,5 +1,5 @@
-import Navbar from "../../shared/components/Navbar";
-import Footer from "../../shared/components/Footer";
+import Navbar from "../../../components/shared/components/Navbar";
+import Footer from "../../../components/shared/components/Footer";
 
 export default function SignIn() {
   return (

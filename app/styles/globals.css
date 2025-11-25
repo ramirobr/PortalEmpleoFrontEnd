@@ -43,12 +43,17 @@
   --input: #eaeff5;
   --ring: #14aa9f;
   --font-primary: "Jost", sans-serif;
+  --popover: hsl(0 0% 100%);
+  --popover-foreground: hsl(0 0% 3.9%);
+  --ring: hsl(0 0% 83.1%);
+  --accent: hsl(0 0% 14.9%);
 }
 
 @layer base {
   * {
     @apply border-border outline-ring/50;
   }
+
   body {
     font-family: var(--font-primary);
     @apply bg-background text-foreground;

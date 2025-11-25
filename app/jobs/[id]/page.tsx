@@ -1,11 +1,11 @@
 "use client";
-import jobsDetails from "../../mocks/jobDetails.json";
-import Navbar from "../../shared/components/Navbar";
+import jobsDetails from "@/lib/mocks/jobDetails.json";
+import Navbar from "../../../components/shared/components/Navbar";
 
-import Footer from "../../shared/components/Footer";
+import Footer from "../../../components/shared/components/Footer";
 import { use } from "react";
 import JobApplyForm from "../components/JobApplyForm";
-import Banner from "../../shared/components/Banner";
+import Banner from "../../../components/shared/components/Banner";
 import JobSection from "../components/JobSection";
 import Image from "next/image";
 

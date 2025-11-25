@@ -1,38 +1,71 @@
 "use client";
-import Navbar from "../../shared/components/Navbar";
-import Footer from "../../shared/components/Footer";
-import Link from "next/link";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { Card, CardContent } from "@/components/ui/card";
+
 import { Button } from "@/components/ui/button";
-import { Mail, Eye } from "lucide-react";
-import React, { useState, useRef } from "react";
+import { Card, CardContent } from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { Eye, Mail } from "lucide-react";
+import Link from "next/link";
+import { useRef, useState } from "react";
+import { useForm } from "react-hook-form";
+import { z } from "zod";
+import Footer from "../../../components/shared/components/Footer";
+import Navbar from "../../../components/shared/components/Navbar";
+
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@/components/ui/form";
+import { signIn } from "next-auth/react";
+import { useRouter } from "next/navigation";
+import { toast } from "sonner";
+import { SignIn } from "@/lib/auth/signin";
+
+const loginSchema = z.object({
+  email: z.email("Email inválido"),
+  password: z.string().min(6, "Contraseña requerida"),
+});
+
+export type LoginValues = z.infer<typeof loginSchema>;
 
 export default function LoginPage() {
+  const router = useRouter();
   const [showPassword, setShowPassword] = useState(false);
   const timeoutRef = useRef<NodeJS.Timeout | null>(null);
+  const form = useForm<LoginValues>({
+    resolver: zodResolver(loginSchema),
+    defaultValues: {
+      email: "",
+      password: "",
+    },
+  });
 
-  const handleMouseDown = () => {
-    setShowPassword(true);
-  };
-  const handleMouseUp = () => {
-    setShowPassword(false);
-  };
+  const handleMouseDown = () => setShowPassword(true);
+  const handleMouseUp = () => setShowPassword(false);
   const handleClick = () => {
     setShowPassword(true);
     if (timeoutRef.current) clearTimeout(timeoutRef.current);
-    timeoutRef.current = setTimeout(() => {
-      setShowPassword(false);
-    }, 2000);
+    timeoutRef.current = setTimeout(() => setShowPassword(false), 2000);
   };
+
+  async function onSubmit({ email, password }: LoginValues) {
+    const res = await SignIn(email, password);
+    if (res?.error) {
+      toast.error("Credenciales inválidas");
+      return;
+    }
+
+    form.reset();
+    router.push("/");
+  }
+
   return (
     <div className="min-h-screen flex flex-col bg-white">
-      <Navbar
-        showAuthLinks={false}
-        showCompanyRegister={true}
-        hideMainMenu={true}
-      />
+      <Navbar showCompanyRegister={true} hideMainMenu={true} />
       <main className="flex-1 flex flex-col items-center justify-center px-4 py-12">
         <h2 className="section-title">Ingresa a tu cuenta</h2>
         <Card className="w-full max-w-md p-6 flex flex-col gap-6 shadow-md">
@@ -65,7 +98,6 @@ export default function LoginPage() {
                     fill="#EA4335"
                     d="M24 48c6.13 0 11.64-2.02 15.82-5.51l-7.18-5.59c-2.01 1.35-4.59 2.15-7.64 2.15-6.13 0-11.3-4.13-13.16-9.66l-8.06 6.27C6.27 42.52 14.61 48 24 48z"
                   />
-                  <path fill="none" d="M0 0h48v48H0z" />
                 </g>
               </svg>
               Acceder con Google
@@ -93,75 +125,103 @@ export default function LoginPage() {
               <span className="mx-2 text-gray-400">o</span>
               <div className="flex-1 border-t border-gray-300"></div>
             </div>
-            <form className="flex flex-col gap-4">
-              <div>
-                <Label htmlFor="email" className="block font-medium mb-1">
-                  Email
-                </Label>
-                <div className="relative">
-                  <Mail className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 w-5 h-5" />
-                  <Input
-                    id="email"
-                    name="email"
-                    type="email"
-                    className="pl-10"
-                    placeholder="Ingresa tu email"
-                    required
-                  />
-                </div>
-              </div>
-              <div>
-                <Label htmlFor="password" className="block font-medium mb-1">
-                  Contraseña
-                </Label>
-                <div className="relative">
-                  <Input
-                    type={showPassword ? "text" : "password"}
-                    id="password"
-                    name="password"
-                    placeholder="Ingresa tu contraseña"
-                    className="pr-10"
-                  />
-                  <button
-                    type="button"
-                    tabIndex={0}
-                    aria-label={
-                      showPassword ? "Ocultar contraseña" : "Mostrar contraseña"
-                    }
-                    className="absolute right-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400 bg-transparent border-none p-0 cursor-pointer"
-                    onMouseDown={handleMouseDown}
-                    onMouseUp={handleMouseUp}
-                    onMouseLeave={handleMouseUp}
-                    onClick={handleClick}
-                  >
-                    <Eye aria-hidden="true" />
-                  </button>
-                </div>
-              </div>
-              <div className="flex flex-col gap-2">
+            <Form {...form}>
+              <form
+                onSubmit={form.handleSubmit(onSubmit)}
+                className="flex flex-col gap-4"
+              >
+                <FormField
+                  control={form.control}
+                  name="email"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Email *</FormLabel>
+                      <FormControl>
+                        <div className="relative">
+                          <Mail className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 w-5 h-5" />
+                          <Input
+                            {...field}
+                            type="email"
+                            placeholder="Ingresa tu email"
+                            className="pl-10"
+                          />
+                        </div>
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+
+                <FormField
+                  control={form.control}
+                  name="password"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Contraseña *</FormLabel>
+                      <FormControl>
+                        <div className="relative">
+                          <Input
+                            {...field}
+                            type={showPassword ? "text" : "password"}
+                            placeholder="Ingresa tu contraseña"
+                            className="pr-10"
+                          />
+
+                          <button
+                            type="button"
+                            aria-label={
+                              showPassword
+                                ? "Ocultar contraseña"
+                                : "Mostrar contraseña"
+                            }
+                            className="absolute right-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400"
+                            onMouseDown={handleMouseDown}
+                            onMouseUp={handleMouseUp}
+                            onMouseLeave={handleMouseUp}
+                            onClick={handleClick}
+                          >
+                            <Eye aria-hidden="true" />
+                          </button>
+                        </div>
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+
                 <Link
                   href="/forgot-password"
-                  className="text-primary font-semibold text-sm mb-2 hover:underline"
+                  className="text-primary font-semibold text-sm hover:underline"
                 >
                   Olvidé mi contraseña
                 </Link>
-                <Button type="submit" className="w-full" disabled>
+
+                <Button
+                  type="submit"
+                  className="w-full mt-2 flex items-center justify-center gap-2"
+                  disabled={form.formState.isSubmitting}
+                >
+                  {form.formState.isSubmitting && (
+                    <span className="animate-spin h-4 w-4 border-2 border-t-transparent rounded-full" />
+                  )}
                   Ingresar
                 </Button>
-              </div>
-              <div className="text-center mt-4 text-sm">
-                ¿No tienes cuenta?{" "}
-                <Link
-                  href="/auth/email"
-                  className="text-primary font-semibold underline"
-                >
-                  Regístrate como candidato
-                </Link>
-              </div>
-            </form>
+
+                <div className="text-center mt-4 text-sm">
+                  ¿No tienes cuenta?{" "}
+                  <Link
+                    href="/auth/email"
+                    className="text-primary font-semibold underline"
+                  >
+                    Regístrate como candidato
+                  </Link>
+                </div>
+              </form>
+            </Form>
           </CardContent>
         </Card>
       </main>
+
       <Footer />
     </div>
   );

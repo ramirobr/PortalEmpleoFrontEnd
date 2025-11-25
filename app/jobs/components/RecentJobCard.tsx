@@ -19,7 +19,7 @@ function getBadgeColor(type?: string) {
 export default function RecentJobCard({ job }: { job: Job }) {
   const router = useRouter();
   return (
-    <div className="bg-white border rounded-xl p-6 shadow hover:shadow-lg transition flex flex-col items-center relative min-h-[320px]">
+    <div className="bg-white border rounded-xl p-6 shadow hover:shadow-lg transition flex flex-col items-center relative min-h-80">
       {/* Job Type Badge */}
       <span
         className={`absolute left-4 top-4 px-3 py-1 rounded text-xs font-semibold ${getBadgeColor(

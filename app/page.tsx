@@ -1,8 +1,8 @@
-import Jumbo from "./shared/components/Jumbo";
-import RecentJobs from "./shared/components/RecentJobs";
-import Navbar from "./shared/components/Navbar";
-import Footer from "./shared/components/Footer";
-import Testimonials from "./shared/components/Testimonials";
+import Jumbo from "../components/shared/components/Jumbo";
+import Navbar from "../components/shared/components/Navbar";
+import Footer from "../components/shared/components/Footer";
+import Testimonials from "../components/shared/components/Testimonials";
+import RecentJobs from "@/components/shared/components/RecentJobs";
 
 export default function Home() {
   return (
