@@ -1,19 +1,17 @@
 "use client";
-
 import { useRouter, useSearchParams } from "next/navigation";
 import { Button } from "@/components/ui/button";
 
 interface Props {
   total: number;
-  limit: number;
-  page: number;
 }
 
-export function Pagination({ total, limit, page }: Props) {
+export function Pagination({ total }: Props) {
   const router = useRouter();
   const params = useSearchParams();
-
-  const totalPages = Math.ceil(total / limit);
+  const page = Number(params.get("page") ?? 1);
+  const pageSize = Number(params.get("pageSize") ?? 1);
+  const totalPages = Math.ceil(total / pageSize);
 
   const go = (p: number) => {
     const newParams = new URLSearchParams(params.toString());
@@ -33,7 +31,9 @@ export function Pagination({ total, limit, page }: Props) {
         Anterior
       </Button>
 
-      <div className="px-3">{page} / {totalPages}</div>
+      <div className="px-3">
+        {page} / {totalPages}
+      </div>
 
       <Button
         variant="outline"

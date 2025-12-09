@@ -1,12 +1,12 @@
 import { auth } from "@/auth";
 import Link from "next/link";
 
-export default async function AsideMenu() {
+export default function AsideMenu() {
   //const session = await auth();
 
   //if (!session?.user) return null;
   return (
-    <aside className="sticky top-0 h-screen w-64 bg-white shadow flex flex-col items-center py-8 px-4">
+    <aside className="sticky top-0 h-full w-64 bg-white shadow flex flex-col items-center py-8 px-4">
       <div className="flex flex-col items-center mb-8">
         <div className="w-20 h-20 rounded-full bg-gray-200 mb-2">
           <img

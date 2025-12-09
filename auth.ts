@@ -1,7 +1,8 @@
 import NextAuth from "next-auth";
 import Credentials from "next-auth/providers/credentials";
-import { LoginData, RefreshToken } from "@/types/user";
+import { GenericResponse, LoginData, RefreshToken } from "@/types/user";
 import { JWT } from "next-auth/jwt";
+import { fetchApi } from "./lib/apiClient";
 
 export const { handlers, signIn, signOut, auth } = NextAuth({
   providers: [
@@ -35,7 +36,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
   callbacks: {
     jwt: async ({ token, user }) => {
       if (user) return { ...token, ...user };
-
+      if (token.expired) return token;
       if (token.accessToken) {
         try {
           const decoded: any = JSON.parse(
@@ -43,10 +44,12 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
           );
           if (decoded.exp * 1000 > Date.now()) return token;
         } catch {
-          console.log("Decoding issue");
+          console.warn("Decoding issue");
         }
       }
-      console.log("Token refresh", token.email);
+      console.warn("Token refresh", token.email);
+
+      //BUG: Finalize proper token implementation when session expires
       return await refreshAccessToken(token);
     },
     session: async ({ session, token }) => {
@@ -58,6 +61,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
         accessToken: token.accessToken,
         refreshToken: token.refreshToken,
         emailVerified: null,
+        expired: token.expired ?? false
       };
       return session;
     },
@@ -72,35 +76,22 @@ function extractJti(jwt: string) {
 }
 
 async function signInApi(email: string, password: string) {
-  const res = await fetch(`${process.env.API_ENDPOINT}/Authorization/login`, {
+  return await fetchApi<GenericResponse<LoginData>>("/Authorization/login", {
     method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ email, password }),
+    body: { email, password },
   });
-
-  if (!res.ok) return null;
-  return (await res.json()) as { isSuccess: boolean; data: LoginData };
 }
 
 async function refreshAccessToken(token: JWT) {
   try {
-    const res = await fetch(
-      process.env.API_ENDPOINT + "/Authorization/refresh-token",
-      {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token.accessToken}`,
-        },
-        body: JSON.stringify({
-          accessToken: token.accessToken,
-          refreshToken: token.refreshToken,
-        }),
-      }
-    );
-
-    const data: RefreshToken = await res.json();
-    if (!data.isSuccess) throw new Error("Failed to refresh token");
+    const data = await fetchApi<RefreshToken>("/Authorization/refresh-token", {
+      method: "POST",
+      body: {
+        accessToken: token.accessToken,
+        refreshToken: token.refreshToken,
+      },
+    });
+    if (!data || !data.isSuccess) throw new Error("Failed to refresh token");
 
     return {
       ...token,
@@ -108,7 +99,10 @@ async function refreshAccessToken(token: JWT) {
       refreshToken: data.data.refreshToken ?? token.refreshToken,
     };
   } catch {
-    console.error("Error refreshing");
-    return { ...token, error: "RefreshAccessTokenError" };
+    console.warn("Error refreshing or expired token");
+    return {
+      ...token,
+      expired: true,
+    };
   }
 }

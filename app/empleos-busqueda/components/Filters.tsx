@@ -1,5 +1,4 @@
 "use client";
-
 import { useRouter, useSearchParams } from "next/navigation";
 import { Input } from "@/components/ui/input";
 import {
@@ -9,24 +8,36 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { useEffect, useMemo, useState } from "react";
-import { filters } from "@/lib/mocks/jobs.json";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { PriceRange } from "@/components/shared/components/PriceRange";
 import { useDebouncedValue } from "@/lib/hooks";
+import { FiltersResponse } from "@/types/search";
+import { addSpaces } from "@/lib/utils";
 
 const PRICE_RANGE_MIN = 100;
-const PRICE_RANGE_MAX = 5000;
+const PRICE_RANGE_MAX = 20000;
 
-export function Filters() {
+type Props = {
+  initialFilters: Record<string, string>;
+  filters: FiltersResponse | undefined;
+};
+
+export function Filters({ initialFilters, filters }: Props) {
   const router = useRouter();
   const params = useSearchParams();
+  const initialMount = useRef(true);
   const qs = useMemo(() => new URLSearchParams(params.toString()), [params]);
-  const [SearchQuery, setSearchQuery] = useState(qs.get("q") ?? "");
+  const [SearchQuery, setSearchQuery] = useState(
+    qs.get("q") ?? initialFilters.q ?? ""
+  );
   const debounced = useDebouncedValue(SearchQuery, 300);
   const [range, setRange] = useState<[number, number]>([
-    Number(params.get("min") ?? PRICE_RANGE_MIN),
-    Number(params.get("max") ?? PRICE_RANGE_MAX),
+    Number(qs.get("min") ?? initialFilters.min ?? PRICE_RANGE_MIN),
+    Number(qs.get("max") ?? initialFilters.max ?? PRICE_RANGE_MAX),
   ]);
+
+  const current = (key: string, fallback: string) =>
+    qs.get(key) ?? fallback ?? "";
 
   const update = (key: string, value: string) => {
     const p = new URLSearchParams(qs.toString());
@@ -36,13 +47,13 @@ export function Filters() {
     router.push("?" + p.toString(), { scroll: false });
   };
 
-  function commitRange([a, b]: [number, number]) {
-    const p = new URLSearchParams(params.toString());
+  const commitRange = ([a, b]: [number, number]) => {
+    const p = new URLSearchParams(qs.toString());
     p.set("min", String(a));
     p.set("max", String(b));
     p.set("page", "1");
     router.push("?" + p.toString(), { scroll: false });
-  }
+  };
 
   const clearAll = () => {
     router.push("?", { scroll: false });
@@ -51,6 +62,10 @@ export function Filters() {
   };
 
   useEffect(() => {
+    if (initialMount.current) {
+      initialMount.current = false;
+      return;
+    }
     update("q", SearchQuery);
   }, [debounced]);
 
@@ -63,7 +78,6 @@ export function Filters() {
           onChange={(e) => setSearchQuery(e.target.value)}
         />
       </div>
-
       <div className="rounded-lg shadow p-6 flex flex-col gap-4">
         <div>
           <label className="pb-5 block">Rango salarial</label>
@@ -80,17 +94,22 @@ export function Filters() {
         <div>
           <label>Ubicación</label>
           <Select
-            value={qs.get("location") ?? ""}
-            onValueChange={(v) => update("location", v)}
+            value={current("ubicacion", initialFilters.ubicacion)}
+            onValueChange={(v) => update("ubicacion", v)}
           >
-            <SelectTrigger className="w-full mt-1">
+            <SelectTrigger className="w-full mt-1 max-w-[212px]">
               <SelectValue placeholder="Todas" />
             </SelectTrigger>
             <SelectContent>
               <SelectItem value=" ">Todas</SelectItem>
-              <SelectItem value="Remoto">Remoto</SelectItem>
-              <SelectItem value="Presencial">Presencial</SelectItem>
-              <SelectItem value="Híbrido">Híbrido</SelectItem>
+              {filters?.ciudad?.map((ciudad) => (
+                <SelectItem
+                  key={ciudad.idCatalogo}
+                  value={ciudad.idCatalogo.toString()}
+                >
+                  {ciudad.nombre}
+                </SelectItem>
+              ))}
             </SelectContent>
           </Select>
         </div>
@@ -98,17 +117,16 @@ export function Filters() {
         <div>
           <label>Fecha</label>
           <Select
-            value={qs.get("date") ?? ""}
-            onValueChange={(v) => update("date", v)}
+            value={current("fecha", initialFilters.fecha)}
+            onValueChange={(v) => update("fecha", v)}
           >
-            <SelectTrigger className="w-full mt-1">
+            <SelectTrigger className="w-full mt-1 max-w-[212px]">
               <SelectValue placeholder="Todas" />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value=" ">Todas</SelectItem>
-              {filters.dates.map((f) => (
-                <SelectItem key={f.value} value={f.value}>
-                  {f.label}
+              {filters?.filtroFechas?.map((fecha) => (
+                <SelectItem key={fecha.valor} value={fecha.valor.toString()}>
+                  {addSpaces(fecha.nombre)}
                 </SelectItem>
               ))}
             </SelectContent>
@@ -118,17 +136,17 @@ export function Filters() {
         <div>
           <label>Experiencia</label>
           <Select
-            value={qs.get("experience") ?? ""}
+            value={current("experience", initialFilters.experiencia)}
             onValueChange={(v) => update("experience", v)}
           >
-            <SelectTrigger className="w-full mt-1">
+            <SelectTrigger className="w-full mt-1 max-w-[212px]">
               <SelectValue placeholder="Todas" />
             </SelectTrigger>
             <SelectContent>
               <SelectItem value=" ">Todas</SelectItem>
-              {filters.experience.map((f) => (
-                <SelectItem key={f.value} value={f.value}>
-                  {f.label}
+              {filters?.experiencia?.map((exp) => (
+                <SelectItem key={exp.valor} value={exp.valor.toString()}>
+                  {addSpaces(exp.nombre)}
                 </SelectItem>
               ))}
             </SelectContent>
@@ -138,17 +156,17 @@ export function Filters() {
         <div>
           <label>Empresa</label>
           <Select
-            value={qs.get("company") ?? ""}
-            onValueChange={(v) => update("company", v)}
+            value={current("empresa", initialFilters.company)}
+            onValueChange={(v) => update("empresa", v)}
           >
-            <SelectTrigger className="w-full mt-1">
+            <SelectTrigger className="w-full mt-1 max-w-[212px]">
               <SelectValue placeholder="Todas" />
             </SelectTrigger>
             <SelectContent>
               <SelectItem value=" ">Todas</SelectItem>
-              {filters.companies.map((c) => (
-                <SelectItem key={c} value={c}>
-                  {c}
+              {filters?.activeCompanies?.map((company) => (
+                <SelectItem key={company.idEmpresa} value={company.idEmpresa}>
+                  {company.razonSocial}
                 </SelectItem>
               ))}
             </SelectContent>
@@ -158,17 +176,20 @@ export function Filters() {
         <div>
           <label>Modalidad</label>
           <Select
-            value={qs.get("mode") ?? ""}
-            onValueChange={(v) => update("mode", v)}
+            value={current("modalidad", initialFilters.modalidad)}
+            onValueChange={(v) => update("modalidad", v)}
           >
-            <SelectTrigger className="w-full mt-1">
+            <SelectTrigger className="w-full mt-1 max-w-[212px]">
               <SelectValue placeholder="Todas" />
             </SelectTrigger>
             <SelectContent>
               <SelectItem value=" ">Todas</SelectItem>
-              {filters.modes.map((m) => (
-                <SelectItem key={m.value} value={m.value}>
-                  {m.label}
+              {filters?.modalidadTrabajo?.map((modalidad) => (
+                <SelectItem
+                  key={modalidad.valor}
+                  value={modalidad.valor.toString()}
+                >
+                  {addSpaces(modalidad.nombre)}
                 </SelectItem>
               ))}
             </SelectContent>

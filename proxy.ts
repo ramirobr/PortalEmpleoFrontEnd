@@ -1,21 +1,15 @@
 import { auth } from "@/auth";
 
+const PROTECTED = [/* "/profile", */ "/empleos-busqueda"]
+
 export default auth((req) => {
   const session = req.auth;
   const { pathname } = req.nextUrl;
-
-  const isProfile = pathname.startsWith("/profile");
+  const isProtected = PROTECTED.includes(pathname);
   const isAdmin = pathname.startsWith("/admin");
 
-  if (!isProfile && !isAdmin) {
-    return;
-  }
+  if (!isProtected && !isAdmin) return;
 
-  // BYPASS TEMPORAL: Permitir acceso libre a /profile durante desarrollo
-  if (!session && isProfile) {
-    // No redirigir, permitir acceso
-    return;
-  }
   if (!session) {
     const newUrl = new URL("/auth/login", req.nextUrl.origin);
     return Response.redirect(newUrl);
@@ -23,7 +17,7 @@ export default auth((req) => {
 
   const role = session.user?.role;
 
-  if (isProfile && role !== "Postulante") {
+  if (isProtected && role !== "Postulante") {
     return Response.redirect(new URL("/", req.nextUrl.origin));
   }
 

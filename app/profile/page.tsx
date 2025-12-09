@@ -2,7 +2,6 @@ import { Edit } from "lucide-react";
 import Navbar from "../../components/shared/components/Navbar";
 import AsideMenu from "./components/AsideMenu";
 import JobsApplied from "./components/JobsApplied";
-import EditProfile from "./components/EditProfile";
 import Dashboard from "./components/Dashboard";
 
 export default function ProfilePage() {

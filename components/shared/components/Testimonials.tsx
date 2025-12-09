@@ -1,36 +1,18 @@
 "use client";
 import React, { useEffect, useState } from "react";
-import { apiFetch } from "../../../lib/apiClient";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Pagination, Navigation } from "swiper/modules";
 import "swiper/css";
 import "swiper/css/pagination";
 import "swiper/css/navigation";
+import { Testimonial } from "@/types/testimonials";
+import Image from "next/image";
 
-type Testimonial = {
-  avatar: string;
-  name: string;
-  text: string;
-  role: string;
+export type TestimonialsProps = {
+  testimonials: Testimonial[] | undefined;
 };
 
-export default function Testimonials() {
-  const [testimonials, setTestimonials] = useState<Testimonial[]>([]);
-
-  useEffect(() => {
-    apiFetch<any>("/api/testimonials")
-      .then((data) => {
-        if (Array.isArray(data)) {
-          setTestimonials(data);
-        } else if (Array.isArray(data.testimonials)) {
-          setTestimonials(data.testimonials);
-        } else {
-          setTestimonials([]);
-        }
-      })
-      .catch(() => setTestimonials([]));
-  }, []);
-
+export default function Testimonials({ testimonials }: TestimonialsProps) {
   return (
     <section className="bg-gray-100 py-20">
       <div className="container">
@@ -40,7 +22,7 @@ export default function Testimonials() {
             modules={[Pagination, Navigation]}
             pagination={{
               clickable: true,
-              renderBullet: (index, className) => {
+              renderBullet: (_, className) => {
                 const safeClass =
                   className && className.trim()
                     ? className
@@ -58,30 +40,33 @@ export default function Testimonials() {
             }}
             className="pb-10 testimonials-swiper"
           >
-            {testimonials.map((t, idx) => (
+            {testimonials?.map((t, idx) => (
               <SwiperSlide key={idx}>
                 <div className="bg-white rounded-xl shadow-lg p-8 flex flex-col items-center border border-gray-light max-w-md mx-auto min-h-[350px] h-full focus:outline-none focus:ring-2 focus:ring-secondary">
-                  <img
-                    src={t.avatar}
-                    alt={t.name}
+                  <Image
+                    // src={t.foto} FIXME: Foto path doesnt work
+                    src="/logos/company_logo.png"
+                    alt={t.nombreCompleto}
                     className="w-20 h-20 rounded-full mb-4 border-4 border-secondary object-cover"
+                    width={80}
+                    height={80}
+                    loading="lazy"
                   />
                   <blockquote className="text-gray-dark text-center italic mb-4">
-                    “{t.text}”
+                    “{t.testimonioDetalle}”
                   </blockquote>
                   <div className="text-center">
                     <span className="block font-semibold text-primary">
-                      {t.name}
+                      {t.nombreCompleto}
                     </span>
                     <span className="block text-sm text-secondary">
-                      {t.role}
+                      {t.cargo}
                     </span>
                   </div>
                 </div>
               </SwiperSlide>
             ))}
           </Swiper>
-          {/* Custom style: arrows outside slider width, bullets always visible */}
           <style>{`
             .testimonials-swiper .swiper-button-prev,
             .testimonials-swiper .swiper-button-next {

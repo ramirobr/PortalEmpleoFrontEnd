@@ -102,21 +102,25 @@ export default function EmailSignup() {
     };
     const registerRes = await SignUp(signUpData);
 
-    if (registerRes.isSuccess) {
+    if (registerRes?.isSuccess) {
       const res = await SignIn(data.email, data.password);
       if (res?.error) {
         toast.error("Credenciales inválidas");
-        return null;
+        return;
       }
       form.reset();
       await update();
       router.push("/");
-    } else {
-      const hasError = Object.keys(registerRes.messages).length;
-      if (hasError) {
-        toast.error(registerRes.messages[0]);
-        console.warn("Errores:", registerRes.messages);
-      }
+    }
+    if (!registerRes) {
+      toast.error("Error durante registro");
+      return;
+    }
+
+    const hasError = Object.keys(registerRes?.messages ?? []).length;
+    if (hasError) {
+      toast.error(registerRes.messages[0]);
+      console.warn("Errores:", registerRes.messages);
     }
   }
 

@@ -13,19 +13,15 @@ export type SignupData = {
   aceptaNotificaciones: boolean;
 };
 
-export type PostulantRegisterResponse = {
+export type GenericResponse<T> = {
   code: number
   messages: string[]
   isSuccess: boolean
-  data: any
+  data: T
 }
 
-export type LoginResponse = {
-  code: number
-  messages: any[]
-  isSuccess: boolean
-  data: LoginData
-}
+export type PostulantRegisterResponse = GenericResponse<null>
+export type LoginResponse = GenericResponse<LoginData>
 
 export type LoginData = {
   fullName: string
@@ -33,23 +29,14 @@ export type LoginData = {
   email: string
   token: string
   refreshToken: string
+  expired: boolean
 }
 
-export type RefreshToken = {
-  code: number
-  messages: any[]
-  isSuccess: boolean
-  data: RefreshTokenData
-}
+export type RefreshToken = GenericResponse<RefreshTokenData>
 
 export type RefreshTokenData = {
   accessToken: string
   refreshToken: string
 }
 
-export type Logout = {
-  code: number
-  messages: string[]
-  isSuccess: boolean
-  data: null
-}
+export type Logout = GenericResponse<null>

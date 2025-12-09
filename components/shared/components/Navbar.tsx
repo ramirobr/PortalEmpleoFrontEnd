@@ -3,6 +3,8 @@ import Link from "next/link";
 import Image from "next/image";
 import { signOut, useSession } from "next-auth/react";
 import { Button } from "@/components/ui/button";
+import { fetchApi } from "@/lib/apiClient";
+import { Logout } from "@/types/user";
 // import SocialLinks from "./SocialLinks";
 interface NavbarProps {
   showCompanyRegister?: boolean;
@@ -18,8 +20,9 @@ export default function Navbar({
   const { data: session } = useSession();
 
   const Logout = async () => {
-    await fetch("/api/auth/logout", {
-      method: "POST",
+    //FIXME: Fix session issues
+    await fetchApi<Logout>("/Authorization/logout", {
+      token: session?.user.accessToken,
     });
 
     await signOut({ redirectTo: "/" });
@@ -36,7 +39,7 @@ export default function Navbar({
           src="/logos/logo-empresa.jpg"
           alt="Logo de la empresa"
           width={200}
-          height={200}
+          height={66}
           className=""
           loading="lazy"
         />

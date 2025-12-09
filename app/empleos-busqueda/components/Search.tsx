@@ -1,15 +1,16 @@
 "use client";
-import { useSearchParams } from "next/navigation";
-import { useJobs } from "../lib/useJobs";
-import { JobList } from "./JobList";
-import { TopFilters } from "./TopFilters";
 import Loader from "@/components/shared/components/Loader";
+import { useJobs } from "../hooks/useJobs";
+import { JobList } from "./JobList";
 import { Pagination } from "./Pagination";
+import { TopFilters } from "./TopFilters";
 
-export default function Search() {
-  const params = useSearchParams();
-  const searchParams = new URLSearchParams(params.toString());
-  const { jobs, total, limit, page, loading } = useJobs(searchParams);
+type Props = {
+  token?: string;
+};
+
+export default function Search({ token }: Props) {
+  const { jobs, total, loading } = useJobs(token);
 
   return (
     <div className="flex-1">
@@ -21,7 +22,7 @@ export default function Search() {
         <>
           <TopFilters total={total} />
           <JobList jobs={jobs} />
-          <Pagination total={total} limit={limit} page={page} />
+          <Pagination total={total} />
         </>
       )}
     </div>

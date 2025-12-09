@@ -9,17 +9,12 @@ declare module "next-auth" {
     email: string;
     accessToken: string;
     refreshToken: string;
+    expired?: boolean;
   }
 
   interface Session {
-    user: {
-      id: string;
-      fullName: string;
-      role: string;
-      email: string;
-      accessToken: string;
-      refreshToken: string;
-    };
+    expired?: boolean;
+    user: User
   }
 }
 
@@ -31,5 +26,6 @@ declare module "next-auth/jwt" {
     email: string;
     accessToken: string;
     refreshToken: string;
+    expired?: boolean;
   }
 }

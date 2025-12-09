@@ -2,6 +2,9 @@
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { Job } from "./JobCard";
+import { RecentJob } from "@/types/jobs";
+import { Button } from "@/components/ui/button";
+import Link from "next/link";
 
 function getBadgeColor(type?: string) {
   switch (type) {
@@ -16,19 +19,21 @@ function getBadgeColor(type?: string) {
   }
 }
 
-export default function RecentJobCard({ job }: { job: Job }) {
+export type CardProps = {
+  job: RecentJob;
+};
+
+export default function RecentJobCard({ job }: CardProps) {
   const router = useRouter();
   return (
     <div className="bg-white border rounded-xl p-6 shadow hover:shadow-lg transition flex flex-col items-center relative min-h-80">
-      {/* Job Type Badge */}
       <span
         className={`absolute left-4 top-4 px-3 py-1 rounded text-xs font-semibold ${getBadgeColor(
-          job.jobType
+          job.tituloPuesto
         )}`}
       >
-        {job.jobType || job.mode}
+        {job.tituloPuesto}
       </span>
-      {/* Favorite Icon */}
       <span className="absolute right-4 top-4">
         <svg width="28" height="28" fill="none" viewBox="0 0 24 24">
           <circle cx="12" cy="12" r="12" fill="#E6F4EA" />
@@ -38,38 +43,29 @@ export default function RecentJobCard({ job }: { job: Job }) {
           />
         </svg>
       </span>
-      {/* Logo */}
       <div className="mb-4 mt-8">
-        {job.companyLogo ? (
-          <Image
-            src={job.companyLogo}
-            alt={job.company}
-            width={64}
-            height={64}
-            className="w-16 h-16 rounded-full object-cover border border-gray-200"
-            unoptimized
-            loading="lazy"
-          />
-        ) : (
-          <div className="w-16 h-16 rounded-full bg-gray-200 flex items-center justify-center text-gray-400 text-2xl font-bold border border-gray-200">
-            {job.company[0]}
-          </div>
-        )}
+        <Image
+          // src={t.logo} FIXME: logo path doesnt work
+          src="/logos/company_logo.png"
+          alt=""
+          width={64}
+          height={64}
+          className="w-16 h-16 rounded-full object-cover border border-gray-200"
+          unoptimized
+          loading="lazy"
+        />
       </div>
-      {/* Title & Location */}
       <h3 className="text-lg font-semibold text-gray-800 mb-1 text-center">
-        {job.title}
+        {job.tituloPuesto}
       </h3>
-      <p className="text-sm text-gray-500 mb-2 text-center">
-        {job.companyLocation}
-      </p>
-      {/* Apply Button */}
-      <button
+      <p className="text-sm text-gray-500 mb-2 text-center">{job.provincia}</p>
+      <Link
         className="mt-auto px-5 py-2 border-2 border-primary text-primary rounded font-semibold hover:bg-green-50 transition cursor-pointer"
-        onClick={() => router.push(`/jobs/${job.id}`)}
+        // FIXME: ID ???
+        href={`/jobs/${job.tituloPuesto}`}
       >
         APLICAR
-      </button>
+      </Link>
     </div>
   );
 }

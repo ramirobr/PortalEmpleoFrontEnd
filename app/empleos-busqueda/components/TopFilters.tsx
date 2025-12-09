@@ -43,8 +43,8 @@ export function TopFilters({ total }: Props) {
         </Select>
         <label>Items por página:</label>
         <Select
-          defaultValue={params.get("limit") ?? "10"}
-          onValueChange={(v) => update("limit", v)}
+          defaultValue={params.get("pageSize") ?? "10"}
+          onValueChange={(v) => update("pageSize", v)}
         >
           <SelectTrigger className="w-20">
             <SelectValue placeholder="Items" />
