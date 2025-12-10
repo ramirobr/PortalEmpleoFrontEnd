@@ -1,0 +1,61 @@
+@import "tailwindcss";
+@import "./layout/theme.css";
+@import "./layout/forms.css";
+@import "./layout/buttons.css";
+@import "./layout/typography.css";
+@import "tw-animate-css";
+
+@theme inline {
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: #ffffff;
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: #ffffff;
+  --color-muted: var(--gray-light);
+  --color-muted-foreground: var(--gray-dark);
+  --color-accent: var(--primary);
+  --color-accent-foreground: #ffffff;
+  --color-border: var(--gray-light);
+  --color-input: var(--gray-light);
+  --color-ring: var(--primary);
+  --font-primary: var(--font-primary);
+}
+
+:root {
+  --radius: 0.625rem;
+  --background: #ffffff;
+  --foreground: var(--color-arsenic);
+  --card: #ffffff;
+  --card-foreground: var(--color-arsenic);
+  --primary: #14aa9f;
+  --secondary: #2b5353;
+  --gray-light: #eaeff5;
+  --gray-dark: #707f8c;
+  --color-arsenic: #424242;
+  --border: #eaeff5;
+  --input: #eaeff5;
+  --ring: #14aa9f;
+  --font-primary: "Jost", sans-serif;
+  --popover: hsl(0 0% 100%);
+  --popover-foreground: hsl(0 0% 3.9%);
+  --ring: hsl(0 0% 83.1%);
+  --accent: hsl(0 0% 14.9%);
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+
+  body {
+    font-family: var(--font-primary);
+    @apply bg-background text-foreground;
+  }
+}
