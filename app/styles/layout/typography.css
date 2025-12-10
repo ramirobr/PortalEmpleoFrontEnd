@@ -1,5 +1,0 @@
-@layer base {
-  .section-title {
-    @apply text-3xl font-bold mb-10 text-center text-primary uppercase text-shadow-xs text-shadow-gray-400;
-  }
-}
