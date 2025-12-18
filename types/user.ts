@@ -21,15 +21,17 @@ export type GenericResponse<T> = {
 }
 
 export type PostulantRegisterResponse = GenericResponse<null>
+export type CompanyRegisterResponse = GenericResponse<string>
 export type LoginResponse = GenericResponse<LoginData>
 
 export type LoginData = {
+  userId: string
   fullName: string
   role: string
   email: string
   token: string
+  tokenExpireIn: Date
   refreshToken: string
-  expired: boolean
 }
 
 export type RefreshToken = GenericResponse<RefreshTokenData>

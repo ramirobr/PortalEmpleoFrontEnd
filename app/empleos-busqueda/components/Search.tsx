@@ -22,7 +22,7 @@ export default function Search({ token }: Props) {
         <>
           <TopFilters total={total} />
           <JobList jobs={jobs} />
-          <Pagination total={total} />
+          {/* <Pagination total={total} /> */}
         </>
       )}
     </div>

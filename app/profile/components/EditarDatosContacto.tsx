@@ -4,6 +4,10 @@ import TituloSubrayado from "@/components/shared/tituloSubrayado";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
+import { Pencil } from "@/components/shared/components/iconos/Pencil";
+import { Trash } from "@/components/shared/components/iconos/Trash";
+import Loader from "@/components/shared/components/Loader";
+import { fetchDatosContacto } from "@/lib/catalog/fetchDatosContacto";
 import {
   Form,
   FormControl,
@@ -31,26 +35,74 @@ const schema = z.object({
     .default("janaya@gmail.com"),
   direccion: z.string().min(1, "La dirección es obligatoria.").default(""),
 });
-const defaultValues = {
-  celular: "+593 087379078",
-  telefono: "+593 2375293",
-  email: "janaya@gmail.com",
-  direccion: "",
-};
 
 const EditarDatosContacto: React.FC = () => {
+  const [isEditing, setIsEditing] = React.useState(false);
+  const [loading, setLoading] = React.useState(true);
+
   const form = useForm({
     resolver: zodResolver(schema),
-    defaultValues,
+    defaultValues: {
+      celular: "",
+      telefono: "",
+      email: "",
+      direccion: "",
+    },
   });
+
+  React.useEffect(() => {
+    setLoading(true);
+    fetchDatosContacto()
+      .then((data) => {
+        if (data) {
+          form.reset(data);
+        }
+      })
+      .finally(() => setLoading(false));
+  }, [form]);
+
+  const handleCancel = () => {
+    form.reset();
+    setIsEditing(false);
+  };
+
+  const handleSubmit = (data: z.infer<typeof schema>) => {
+    console.log("Datos guardados:", data);
+    // TODO: Aquí puedes agregar la lógica para enviar los datos al servidor
+    setIsEditing(false);
+  };
+
+  if (loading) {
+    return <Loader className="py-8" />;
+  }
 
   return (
     <section className="bg-white rounded-lg shadow p-8 mt-10">
-      <TituloSubrayado>Datos de Contacto</TituloSubrayado>
-
+      <div className="flex justify-between items-center mb-10">
+        <TituloSubrayado>Datos de Contacto</TituloSubrayado>
+        {!isEditing ? (
+          <button
+            type="button"
+            onClick={() => setIsEditing(true)}
+            className=""
+            aria-label="Editar datos de contacto"
+          >
+            <Pencil width={25} height={25} className="text-primary" />
+          </button>
+        ) : (
+          <button
+            type="button"
+            onClick={handleCancel}
+            className=""
+            aria-label="Cancelar edición"
+          >
+            <Trash width={25} height={25} className="text-primary" />
+          </button>
+        )}
+      </div>
       <Form {...form}>
         <form
-          onSubmit={form.handleSubmit((data) => {})}
+          onSubmit={form.handleSubmit(handleSubmit)}
           className="grid grid-cols-1 gap-6"
           aria-label="Formulario de datos de contacto"
         >
@@ -70,7 +122,7 @@ const EditarDatosContacto: React.FC = () => {
                       placeholder="+593 087379078"
                       pattern="\+593 [0-9]{9}"
                       inputMode="tel"
-                      disabled
+                      disabled={!isEditing}
                     />
                   </FormControl>
                   <FormMessage />
@@ -92,7 +144,7 @@ const EditarDatosContacto: React.FC = () => {
                       placeholder="+593 2375293"
                       pattern="\+593 [0-9]{9}"
                       inputMode="tel"
-                      disabled
+                      disabled={!isEditing}
                     />
                   </FormControl>
                   <FormMessage />
@@ -113,7 +165,7 @@ const EditarDatosContacto: React.FC = () => {
                       autoComplete="email"
                       placeholder="janaya@gmail.com"
                       type="email"
-                      disabled
+                      disabled={!isEditing}
                     />
                   </FormControl>
                   <FormMessage />
@@ -136,13 +188,25 @@ const EditarDatosContacto: React.FC = () => {
                       autoComplete="street-address"
                       placeholder="Av. Siempre Viva 123"
                       type="text"
-                      disabled
+                      disabled={!isEditing}
                     />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
               )}
             />
+          </div>
+          <div className="col-span-2 mt-8 flex justify-end">
+            <button
+              type="submit"
+              className="btn btn-primary"
+              aria-label="Guardar datos de contacto"
+              tabIndex={0}
+              role="button"
+              disabled={!isEditing}
+            >
+              Guardar
+            </button>
           </div>
         </form>
       </Form>

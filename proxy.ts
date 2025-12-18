@@ -1,31 +1,47 @@
-import { auth } from "@/auth";
+import { auth } from '@/auth';
 
-const PROTECTED = [/* "/profile", */ "/empleos-busqueda"]
+type Role = 'Postulante' | 'Administrador Empresa';
+
+const ROLE_RULES: {
+  match: (pathname: string) => boolean;
+  roles: Role[];
+}[] = [
+    {
+      match: pathname => pathname.startsWith('/profile'),
+      roles: ['Postulante'],
+    },
+    {
+      match: pathname => pathname.startsWith('/empleos-busqueda'),
+      roles: ['Postulante'],
+    },
+    {
+      match: pathname => pathname.startsWith('/admin'),
+      roles: ['Administrador Empresa'],
+    },
+  ];
 
 export default auth((req) => {
+  const { pathname, origin } = req.nextUrl;
   const session = req.auth;
-  const { pathname } = req.nextUrl;
-  const isProtected = PROTECTED.includes(pathname);
-  const isAdmin = pathname.startsWith("/admin");
-
-  if (!isProtected && !isAdmin) return;
+  const rule = ROLE_RULES.find(r => r.match(pathname));
+  if (!rule) return;
 
   if (!session) {
-    const newUrl = new URL("/auth/login", req.nextUrl.origin);
-    return Response.redirect(newUrl);
+    const loginUrl = new URL('/auth/login', origin);
+    loginUrl.searchParams.set('next', pathname);
+    return Response.redirect(loginUrl);
   }
 
-  const role = session.user?.role;
-
-  if (isProtected && role !== "Postulante") {
-    return Response.redirect(new URL("/", req.nextUrl.origin));
-  }
-
-  if (isAdmin && role !== "Administrador Empresa") {
-    return Response.redirect(new URL("/", req.nextUrl.origin));
+  const role = session.user?.role as Role | undefined;
+  if (!role || !rule.roles.includes(role)) {
+    return Response.redirect(new URL('/', origin));
   }
 });
 
 export const config = {
-  matcher: ["/((?!api|_next/static|_next/image|favicon.ico).*)"],
+  matcher: [
+    '/profile/:path*',
+    '/empleos-busqueda/:path*',
+    '/admin/:path*',
+  ],
 };

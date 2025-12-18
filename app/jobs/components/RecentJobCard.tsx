@@ -29,10 +29,10 @@ export default function RecentJobCard({ job }: CardProps) {
     <div className="bg-white border rounded-xl p-6 shadow hover:shadow-lg transition flex flex-col items-center relative min-h-80">
       <span
         className={`absolute left-4 top-4 px-3 py-1 rounded text-xs font-semibold ${getBadgeColor(
-          job.tituloPuesto
+          job.titulo
         )}`}
       >
-        {job.tituloPuesto}
+        {job.titulo}
       </span>
       <span className="absolute right-4 top-4">
         <svg width="28" height="28" fill="none" viewBox="0 0 24 24">
@@ -56,13 +56,12 @@ export default function RecentJobCard({ job }: CardProps) {
         />
       </div>
       <h3 className="text-lg font-semibold text-gray-800 mb-1 text-center">
-        {job.tituloPuesto}
+        {job.titulo}
       </h3>
       <p className="text-sm text-gray-500 mb-2 text-center">{job.provincia}</p>
       <Link
         className="mt-auto px-5 py-2 border-2 border-primary text-primary rounded font-semibold hover:bg-green-50 transition cursor-pointer"
-        // FIXME: ID ???
-        href={`/jobs/${job.tituloPuesto}`}
+        href={`/jobs/${job.id}`}
       >
         APLICAR
       </Link>

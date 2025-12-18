@@ -26,7 +26,6 @@ export async function fetchApi<T = Response>(
     const origin = internal ? "" : process.env.NEXT_PUBLIC_API;
     const res = await fetch(origin + url, finalOptions);
 
-    if (!res.ok) throw new Error(`API error ${res.status}, ${origin + url}`);
     return (await res.json()) as T;
   } catch (error) {
     console.warn(error)

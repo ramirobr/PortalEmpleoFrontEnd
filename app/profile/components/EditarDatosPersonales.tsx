@@ -3,6 +3,8 @@ import React from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
+import { Pencil } from "@/components/shared/components/iconos/Pencil";
+import { Trash } from "@/components/shared/components/iconos/Trash";
 import {
   Form,
   FormControl,
@@ -12,8 +14,8 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import TituloSubrayado from "@/components/shared/tituloSubrayado";
-
-import paises from "@/lib/paises.json";
+import { fetchPaises } from "@/lib/catalog/fetchPaises";
+import Loader from "@/components/shared/components/Loader";
 
 const estadoCivilOptions = [
   "Soltero/a",
@@ -86,6 +88,17 @@ const schema = z.object({
 });
 
 export default function EditarDatosPersonales() {
+  const [isEditing, setIsEditing] = React.useState(false);
+  const [paises, setPaises] = React.useState<string[]>([]);
+  const [loading, setLoading] = React.useState(true);
+
+  React.useEffect(() => {
+    setLoading(true);
+    fetchPaises()
+      .then(setPaises)
+      .finally(() => setLoading(false));
+  }, []);
+
   const form = useForm({
     resolver: zodResolver(schema),
     defaultValues: {
@@ -105,14 +118,48 @@ export default function EditarDatosPersonales() {
 
   const licenciaChecked = form.watch("licencia");
 
+  const handleCancel = () => {
+    form.reset();
+    setIsEditing(false);
+  };
+
+  const handleSubmit = (data: z.infer<typeof schema>) => {
+    console.log("Datos guardados:", data);
+    // TODO: Aquí puedes agregar la lógica para enviar los datos al servidor
+    setIsEditing(false);
+  };
+
+  if (loading) {
+    return <Loader className="py-8" />;
+  }
+
   return (
     <section className="bg-white rounded-lg shadow p-8 mt-10">
-      <TituloSubrayado>Datos Personales</TituloSubrayado>
+      <div className="flex justify-between items-center mb-10">
+        <TituloSubrayado>Datos Personales</TituloSubrayado>
+        {!isEditing ? (
+          <button
+            type="button"
+            onClick={() => setIsEditing(true)}
+            className=""
+            aria-label="Editar datos personales"
+          >
+            <Pencil width={25} height={25} className="text-primary" />
+          </button>
+        ) : (
+          <button
+            type="button"
+            onClick={handleCancel}
+            className=""
+            aria-label="Cancelar edición"
+          >
+            <Trash width={25} height={25} className="text-primary" />
+          </button>
+        )}
+      </div>
       <Form {...form}>
         <form
-          onSubmit={form.handleSubmit((data) => {
-            /* handle submit */
-          })}
+          onSubmit={form.handleSubmit(handleSubmit)}
           className="grid grid-cols-1 gap-6"
           aria-label="Formulario de datos personales"
         >
@@ -130,6 +177,7 @@ export default function EditarDatosPersonales() {
                       id="nombre"
                       aria-label="Nombre"
                       autoComplete="given-name"
+                      disabled={!isEditing}
                     />
                   </FormControl>
                   <FormMessage />
@@ -148,6 +196,7 @@ export default function EditarDatosPersonales() {
                       id="apellido"
                       aria-label="Apellido"
                       autoComplete="family-name"
+                      disabled={!isEditing}
                     />
                   </FormControl>
                   <FormMessage />
@@ -171,6 +220,7 @@ export default function EditarDatosPersonales() {
                       id="nacimiento"
                       type="date"
                       aria-label="Fecha de nacimiento"
+                      disabled={!isEditing}
                     />
                   </FormControl>
                   <FormMessage />
@@ -188,6 +238,7 @@ export default function EditarDatosPersonales() {
                       {...field}
                       id="nacionalidad"
                       aria-label="Nacionalidad"
+                      disabled={!isEditing}
                     >
                       {paises.map((pais) => (
                         <option key={pais} value={pais}>
@@ -214,6 +265,7 @@ export default function EditarDatosPersonales() {
                       {...field}
                       id="estadoCivil"
                       aria-label="Estado Civil"
+                      disabled={!isEditing}
                     >
                       {estadoCivilOptions.map((opt) => (
                         <option key={opt} value={opt}>
@@ -233,7 +285,12 @@ export default function EditarDatosPersonales() {
                 <FormItem>
                   <FormLabel htmlFor="genero">Género</FormLabel>
                   <FormControl>
-                    <select {...field} id="genero" aria-label="Género">
+                    <select
+                      {...field}
+                      id="genero"
+                      aria-label="Género"
+                      disabled={!isEditing}
+                    >
                       {generoOptions.map((opt) => (
                         <option key={opt} value={opt}>
                           {opt}
@@ -261,6 +318,7 @@ export default function EditarDatosPersonales() {
                       {...field}
                       id="tipoDocumento"
                       aria-label="Tipo de Documento"
+                      disabled={!isEditing}
                     >
                       {tipoDocumentoOptions.map((opt) => (
                         <option key={opt} value={opt}>
@@ -288,6 +346,7 @@ export default function EditarDatosPersonales() {
                       minLength={10}
                       inputMode="numeric"
                       pattern="[0-9]{10}"
+                      disabled={!isEditing}
                     />
                   </FormControl>
                   <FormMessage />
@@ -311,6 +370,7 @@ export default function EditarDatosPersonales() {
                       aria-label="Movilidad Propia"
                       checked={field.value}
                       value={undefined}
+                      disabled={!isEditing}
                     />
                   </FormControl>
                   <FormMessage />
@@ -333,6 +393,7 @@ export default function EditarDatosPersonales() {
                       aria-label="Poseo Licencia de Conducir"
                       checked={field.value}
                       value={undefined}
+                      disabled={!isEditing}
                     />
                   </FormControl>
                   <FormMessage />
@@ -376,6 +437,7 @@ export default function EditarDatosPersonales() {
                                 }
                               }}
                               aria-label={`Licencia tipo ${opt}`}
+                              disabled={!isEditing}
                             />
                             {opt}
                           </label>
@@ -395,6 +457,7 @@ export default function EditarDatosPersonales() {
               aria-label="Guardar datos personales"
               tabIndex={0}
               role="button"
+              disabled={!isEditing}
             >
               Guardar
             </button>

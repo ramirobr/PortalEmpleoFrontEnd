@@ -1,29 +1,20 @@
-import { CatalogEndpoints, fetchAllCatalogsByType, fetchCatalog } from "@/lib/catalog/fetch";
+import { fetchAllCatalogsByType } from "@/lib/catalog/fetch";
 import { FormFieldsResponse } from "@/types/company";
-
-const fields: CatalogEndpoints[] = [
-  "condicionFiscal",
-  "provincias",
-  "industria",
-  "cantidadEmpleados"
-]
 
 export async function fetchFormFields() {
   try {
-    const [catalogResults, ciudad] = await Promise.all([
-      Promise.all(fields.map((endpoint) => fetchCatalog(endpoint))),
-      fetchAllCatalogsByType("ciudad"),
+    const [ciudad, industria, cantidadEmpleados, condicionFiscal] = await Promise.all([
+      fetchAllCatalogsByType("CIUDAD"),
+      fetchAllCatalogsByType("INDUSTRIA"),
+      fetchAllCatalogsByType("CANTIDAD_EMPLEADOS"),
+      fetchAllCatalogsByType("CONDICION_FISCAL")
     ]);
 
-    const response = fields.reduce((acc, endpoint, i) => {
-      acc[endpoint] = catalogResults[i];
-      return acc;
-    }, {} as FormFieldsResponse);
-
-
     return {
-      ...response,
       ciudad,
+      industria,
+      cantidadEmpleados,
+      condicionFiscal
     } as FormFieldsResponse;
   } catch (error) {
     console.warn("Issue getting form fields", error);

@@ -7,29 +7,27 @@ import {
   DialogTitle,
   DialogClose,
 } from "@/components/ui/dialog";
-import EditarEducacionItem, {
-  EditarEducacionItemValues,
-} from "./EditarEducacionItem";
+import EditarExperenciaLaboralItem, {
+  EditarExperenciaLaboralItemValues,
+} from "./EditarExperenciaLaboralItem";
 import TituloSubrayado from "@/components/shared/tituloSubrayado";
-import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { z } from "zod";
 import { Trash } from "@/components/shared/components/iconos/Trash";
 import { Pencil } from "@/components/shared/components/iconos/Pencil";
 import { Plus } from "@/components/shared/components/iconos/Plus";
-import { fetchEducacion } from "@/lib/catalog/fetchEducacion";
+import { fetchExperienciaLaboral } from "@/lib/catalog/fetchExperienciaLaboral";
 import Loader from "@/components/shared/components/Loader";
+import Badge from "@/components/shared/components/Badge";
 
-const EditarEducacion: React.FC = () => {
-  // Education items from API
+const EditarExperenciaLaboral: React.FC = () => {
+  // Work experience items from API
   const [educacionItems, setEducacionItems] = useState<
-    EditarEducacionItemValues[]
+    EditarExperenciaLaboralItemValues[]
   >([]);
   const [loading, setLoading] = useState(true);
 
   React.useEffect(() => {
     setLoading(true);
-    fetchEducacion()
+    fetchExperienciaLaboral()
       .then(setEducacionItems)
       .finally(() => setLoading(false));
   }, []);
@@ -37,12 +35,16 @@ const EditarEducacion: React.FC = () => {
   // Edit modal state
   const [modalOpen, setModalOpen] = useState(false);
   const [editIndex, setEditIndex] = useState<number | null>(null);
-  const [editForm, setEditForm] = useState<EditarEducacionItemValues>({
+  const [editForm, setEditForm] = useState<EditarExperenciaLaboralItemValues>({
+    Empresa: "",
     Titulo: "",
+    Puesto: "",
     Institucion: "",
     Nivel: "",
-    Fecha: "",
+    FechaInicio: "",
+    FechaFin: "",
     Pais: "",
+    Actual: false,
   });
 
   // Add modal state
@@ -73,7 +75,7 @@ const EditarEducacion: React.FC = () => {
   // Radix Dialog handles scroll lock automatically
 
   // Save changes from edit modal form
-  const handleEditSave = (values: EditarEducacionItemValues) => {
+  const handleEditSave = (values: EditarExperenciaLaboralItemValues) => {
     if (editIndex !== null) {
       const updated = [...educacionItems];
       updated[editIndex] = { ...values };
@@ -84,7 +86,7 @@ const EditarEducacion: React.FC = () => {
   };
 
   // Save new item from add modal form (add to front)
-  const handleAddSave = (values: EditarEducacionItemValues) => {
+  const handleAddSave = (values: EditarExperenciaLaboralItemValues) => {
     setEducacionItems([{ ...values }, ...educacionItems]);
     setAddModalOpen(false);
   };
@@ -123,13 +125,12 @@ const EditarEducacion: React.FC = () => {
 
   return (
     <section className="bg-white rounded-lg shadow p-8 mt-10">
-      <TituloSubrayado>Educación</TituloSubrayado>
-      <div className="flex justify-between items-center">
-        <h3 className="text-lg font-bold mb-4">Formación académica</h3>
+      <TituloSubrayado>Experiencia Laboral</TituloSubrayado>
+      <div className="flex justify-end items-center">
         <button
           id="agregar"
-          className="cursor-pointer flex items-center gap-2 text-primary font-semibold"
-          aria-label={`Agregar nuevo item educación`}
+          className="cursor-pointer flex items-center gap-2 text-primary font-semibold align-self-end"
+          aria-label={`Agregar nuevo item experiencia laboral`}
           type="button"
           onClick={handleAddClick}
         >
@@ -140,9 +141,20 @@ const EditarEducacion: React.FC = () => {
       <hr className="border-none h-px bg-[#ebebed] mt-4 mb-3 mx-0" />
       <div className="mb-8">
         {educacionItems.map((item, idx) => (
-          <div key={idx} className="my-4 ">
+          <div key={idx} className="my-4">
             <div className="flex w-full justify-between items-center">
-              <h4 className="font-bold text-xl">{item.Titulo}</h4>
+              <div className="flex items-center gap-3">
+                <h4 className="font-bold text-xl">{item.Titulo}</h4>
+                {item.Actual && (
+                  <Badge
+                    variant="custom"
+                    bgColor="bg-green-100"
+                    textColor="text-green-700"
+                  >
+                    Actual
+                  </Badge>
+                )}
+              </div>
               <div className="flex items-center gap-3">
                 <button
                   id="editar"
@@ -164,31 +176,13 @@ const EditarEducacion: React.FC = () => {
                 </button>
               </div>
             </div>
-            <p className="font-semibold">{item.Institucion}</p>
-            <p className="font-semibold">{item.Nivel}</p>
+            <p className="font-semibold">{item.Empresa}</p>
+            <p className="font-semibold">{item.Puesto}</p>
             <p>
-              {item.Fecha
-                ? (() => {
-                    const date = new Date(item.Fecha);
-                    if (isNaN(date.getTime())) return item.Fecha;
-                    // Use deterministic month names to avoid hydration mismatch
-                    const monthNames = [
-                      "Ene",
-                      "Feb",
-                      "Mar",
-                      "Abr",
-                      "May",
-                      "Jun",
-                      "Jul",
-                      "Ago",
-                      "Sep",
-                      "Oct",
-                      "Nov",
-                      "Dic",
-                    ];
-                    const month = monthNames[date.getMonth()];
-                    return `${month} ${date.getFullYear()}`;
-                  })()
+              {item.FechaInicio && item.FechaFin
+                ? `${new Date(item.FechaInicio).toLocaleDateString(
+                    "es-ES"
+                  )} - ${new Date(item.FechaFin).toLocaleDateString("es-ES")}`
                 : ""}
             </p>
             <p>{item.Pais}</p>
@@ -197,74 +191,77 @@ const EditarEducacion: React.FC = () => {
             )}
           </div>
         ))}
-
-        {/* Modal for adding (Radix UI Dialog) */}
-        <Dialog open={addModalOpen} onOpenChange={setAddModalOpen}>
-          <DialogContent className="p-8 max-w-md">
-            <DialogHeader>
-              <DialogTitle className="text-primary font-primary mb-2.5">
-                Añadir item de educación
-              </DialogTitle>
-            </DialogHeader>
-            <EditarEducacionItem
-              initialValues={{
-                Titulo: "",
-                Institucion: "",
-                Nivel: "",
-                Fecha: "",
-                Pais: "",
-              }}
-              onSave={handleAddSave}
-              onCancel={handleAddModalClose}
-            />
-          </DialogContent>
-        </Dialog>
-
-        {/* Modal for editing (Radix UI Dialog) */}
-        <Dialog open={modalOpen} onOpenChange={setModalOpen}>
-          <DialogContent className="p-8 max-w-md">
-            <DialogHeader>
-              <DialogTitle className="text-primary font-primary mb-2.5">
-                Editar Educación
-              </DialogTitle>
-            </DialogHeader>
-            <EditarEducacionItem
-              initialValues={editForm}
-              onSave={handleEditSave}
-              onCancel={handleModalClose}
-            />
-          </DialogContent>
-        </Dialog>
-
-        {/* Modal for delete confirmation (Radix UI Dialog) */}
-        <Dialog open={deleteModalOpen} onOpenChange={setDeleteModalOpen}>
-          <DialogContent className="p-8 max-w-md flex flex-col items-center">
-            <DialogHeader>
-              <DialogTitle className="text-primary font-primary mb-2.5">
-                ¿Está seguro de borrar este item?
-              </DialogTitle>
-            </DialogHeader>
-            <div className="flex gap-4 mt-6">
-              <button
-                type="button"
-                className="cursor-pointer px-4 py-2 rounded bg-gray-200 hover:bg-gray-300"
-                onClick={handleDeleteCancel}
-              >
-                Cancelar
-              </button>
-              <button
-                type="button"
-                className="btn btn-primary"
-                onClick={handleDeleteConfirm}
-              >
-                Aceptar
-              </button>
-            </div>
-          </DialogContent>
-        </Dialog>
       </div>
+
+      {/* Modal for adding new item (Radix UI Dialog) */}
+      <Dialog open={addModalOpen} onOpenChange={setAddModalOpen}>
+        <DialogContent className="p-8 max-w-md">
+          <DialogHeader>
+            <DialogTitle className="text-primary font-primary mb-2.5">
+              Añadir Experiencia Laboral
+            </DialogTitle>
+          </DialogHeader>
+          <EditarExperenciaLaboralItem
+            initialValues={{
+              Empresa: "",
+              Titulo: "",
+              Puesto: "",
+              Institucion: "",
+              Nivel: "",
+              FechaInicio: "",
+              FechaFin: "",
+              Pais: "",
+              Actual: false,
+            }}
+            onSave={handleAddSave}
+            onCancel={handleAddModalClose}
+          />
+        </DialogContent>
+      </Dialog>
+
+      {/* Modal for editing (Radix UI Dialog) */}
+      <Dialog open={modalOpen} onOpenChange={setModalOpen}>
+        <DialogContent className="p-8 max-w-md">
+          <DialogHeader>
+            <DialogTitle className="text-primary font-primary mb-2.5">
+              Editar Experiencia Laboral
+            </DialogTitle>
+          </DialogHeader>
+          <EditarExperenciaLaboralItem
+            initialValues={editForm}
+            onSave={handleEditSave}
+            onCancel={handleModalClose}
+          />
+        </DialogContent>
+      </Dialog>
+      {/* Modal for delete confirmation (Radix UI Dialog) */}
+      <Dialog open={deleteModalOpen} onOpenChange={setDeleteModalOpen}>
+        <DialogContent className="p-8 max-w-md flex flex-col items-center">
+          <DialogHeader>
+            <DialogTitle className="text-primary font-primary mb-2.5">
+              ¿Está seguro de que desea eliminar este item?
+            </DialogTitle>
+          </DialogHeader>
+          <div className="flex gap-4 mt-4">
+            <button
+              type="button"
+              className="btn btn-secondary"
+              onClick={handleDeleteCancel}
+            >
+              Cancelar
+            </button>
+            <button
+              type="button"
+              className="btn btn-primary"
+              onClick={handleDeleteConfirm}
+            >
+              Aceptar
+            </button>
+          </div>
+        </DialogContent>
+      </Dialog>
     </section>
   );
 };
 
-export default EditarEducacion;
+export default EditarExperenciaLaboral;

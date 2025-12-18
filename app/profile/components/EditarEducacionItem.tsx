@@ -1,16 +1,10 @@
 import { DatePicker } from "@/components/ui/date-picker";
-const nivelOptions = [
-  { key: "En curso", value: "En curso" },
-  { key: "Secundario", value: "Secundario" },
-  { key: "Terciario", value: "Terciario" },
-  { key: "Universitario", value: "Universitario" },
-  { key: "Postgrado", value: "Postgrado" },
-  { key: "Master", value: "Master" },
-  { key: "Doctorado", value: "Doctorado" },
-  { key: "Otro", value: "Otro" },
-];
-import paisesRaw from "@/lib/paises.json";
-const paises = Array.from(new Set(paisesRaw));
+import {
+  fetchNivelesEducacion,
+  NivelEducacion,
+} from "@/lib/catalog/fetchNivelesEducacion";
+import { fetchPaises } from "@/lib/catalog/fetchPaises";
+import Loader from "@/components/shared/components/Loader";
 import React from "react";
 import { z } from "zod";
 import {
@@ -45,10 +39,28 @@ const EditarEducacionItem: React.FC<EditarEducacionItemProps> = ({
   onSave,
   onCancel,
 }) => {
+  const [nivelOptions, setNivelOptions] = React.useState<NivelEducacion[]>([]);
+  const [paises, setPaises] = React.useState<string[]>([]);
+  const [loading, setLoading] = React.useState(true);
+
+  React.useEffect(() => {
+    setLoading(true);
+    Promise.all([fetchNivelesEducacion(), fetchPaises()])
+      .then(([niveles, countries]) => {
+        setNivelOptions(niveles);
+        setPaises(countries);
+      })
+      .finally(() => setLoading(false));
+  }, []);
+
   const form = useForm<EditarEducacionItemValues>({
     resolver: zodResolver(schema),
     defaultValues: initialValues,
   });
+
+  if (loading) {
+    return <Loader className="py-8" />;
+  }
 
   return (
     <Form {...form}>

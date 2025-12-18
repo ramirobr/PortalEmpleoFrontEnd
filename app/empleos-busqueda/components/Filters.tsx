@@ -92,22 +92,45 @@ export function Filters({ initialFilters, filters }: Props) {
         </div>
 
         <div>
-          <label>Ubicación</label>
+          <label>Ciudad</label>
           <Select
-            value={current("ubicacion", initialFilters.ubicacion)}
-            onValueChange={(v) => update("ubicacion", v)}
+            value={current("ciudad", initialFilters.ciudad)}
+            onValueChange={(v) => update("ciudad", v)}
           >
             <SelectTrigger className="w-full mt-1 max-w-[212px]">
               <SelectValue placeholder="Todas" />
             </SelectTrigger>
             <SelectContent>
               <SelectItem value=" ">Todas</SelectItem>
-              {filters?.ciudad?.map((ciudad) => (
+              {filters?.CIUDAD?.map((ciudad) => (
                 <SelectItem
                   key={ciudad.idCatalogo}
                   value={ciudad.idCatalogo.toString()}
                 >
                   {ciudad.nombre}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+        </div>
+
+        <div>
+          <label>Provincia</label>
+          <Select
+            value={current("provincia", initialFilters.provincia)}
+            onValueChange={(v) => update("provincia", v)}
+          >
+            <SelectTrigger className="w-full mt-1 max-w-[212px]">
+              <SelectValue placeholder="Todas" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value=" ">Todas</SelectItem>
+              {filters?.PROVINCIA?.map((provincia) => (
+                <SelectItem
+                  key={provincia.idCatalogo}
+                  value={provincia.idCatalogo.toString()}
+                >
+                  {provincia.nombre}
                 </SelectItem>
               ))}
             </SelectContent>
@@ -124,8 +147,11 @@ export function Filters({ initialFilters, filters }: Props) {
               <SelectValue placeholder="Todas" />
             </SelectTrigger>
             <SelectContent>
-              {filters?.filtroFechas?.map((fecha) => (
-                <SelectItem key={fecha.valor} value={fecha.valor.toString()}>
+              {filters?.FILTRO_FECHAS?.map((fecha) => (
+                <SelectItem
+                  key={fecha.idCatalogo}
+                  value={fecha.idCatalogo.toString()}
+                >
                   {addSpaces(fecha.nombre)}
                 </SelectItem>
               ))}
@@ -144,8 +170,11 @@ export function Filters({ initialFilters, filters }: Props) {
             </SelectTrigger>
             <SelectContent>
               <SelectItem value=" ">Todas</SelectItem>
-              {filters?.experiencia?.map((exp) => (
-                <SelectItem key={exp.valor} value={exp.valor.toString()}>
+              {filters?.EXPERIENCIA?.map((exp) => (
+                <SelectItem
+                  key={exp.idCatalogo}
+                  value={exp.idCatalogo.toString()}
+                >
                   {addSpaces(exp.nombre)}
                 </SelectItem>
               ))}
@@ -184,10 +213,10 @@ export function Filters({ initialFilters, filters }: Props) {
             </SelectTrigger>
             <SelectContent>
               <SelectItem value=" ">Todas</SelectItem>
-              {filters?.modalidadTrabajo?.map((modalidad) => (
+              {filters?.MODALIDAD_TRABAJO?.map((modalidad) => (
                 <SelectItem
-                  key={modalidad.valor}
-                  value={modalidad.valor.toString()}
+                  key={modalidad.idCatalogo}
+                  value={modalidad.idCatalogo.toString()}
                 >
                   {addSpaces(modalidad.nombre)}
                 </SelectItem>

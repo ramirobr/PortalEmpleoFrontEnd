@@ -34,25 +34,24 @@ const schema = z
   .object({
     nombreEmpresa: z.string().min(1, "Nombre de la empresa requerido"),
     razonSocial: z.string().min(1, "Razón social requerida"),
-    condicionFiscal: z.string().min(1, "Selecciona una condición fiscal"),
+    idCondicionFiscal: z.number().min(1, "Selecciona una condición fiscal"),
     documento: z
       .string()
       .min(1, "Documento requerido")
       .regex(/^\d+$/, "Documento solo debe contener números"),
-    provincia: z.string().min(1, "Selecciona una provincia"),
-    ciudad: z.string().min(1, "Selecciona una ciudad"),
+    idCiudad: z.number().min(1, "Selecciona una ciudad"),
     calle: z.string().min(1, "Calle requerida"),
     numeroCasa: z
       .string()
-      .min(1, "Número requerido")
-      .regex(/^\d+$/, "Número solo debe contener números"),
+      .min(1, "Número Casa requerido"),      
     codigoPostal: z
       .string()
       .min(1, "Código postal requerido")
       .regex(/^\d+$/, "Código postal solo debe contener números"),
     telefono: z.string().min(1, "Ingresa un teléfono válido"),
-    industria: z.string().min(1, "Selecciona una industria"),
-    cantidadEmpleados: z.string().min(1, "Selecciona cantidad de empleados"),
+    idIndustria: z.number().min(1, "Selecciona una industria"),
+    idCantidadEmpleados: z.number().min(1, "Selecciona cantidad de empleados"),
+    sitioWeb: z.string().url("Ingresa una URL válida").optional().or(z.literal("")),
     nombres: z.string().min(1, "Nombre requerido"),
     apellidos: z.string().min(1, "Apellido requerido"),
     email: z.email("Email inválido"),
@@ -85,30 +84,32 @@ export default function CompanyForm({ fields }: CompanyFormProps) {
     defaultValues: {
       nombreEmpresa: "",
       razonSocial: "",
-      condicionFiscal: "",
+      idCondicionFiscal: 0,
       documento: "",
-      provincia: "",
-      ciudad: "",
+      idCiudad: 0,
       calle: "",
       numeroCasa: "",
       codigoPostal: "",
       telefono: "",
-      industria: "",
-      cantidadEmpleados: "",
+      idIndustria: 0,
+      idCantidadEmpleados: 0,
+      sitioWeb: "",
       nombres: "",
       apellidos: "",
       email: "",
       password: "",
-      repeatPassword: "",
-      aceptaTerminoCondiciones: false,
-      quieroRecibirNewsLetter: false,
-      quieroParticiparEncuestas: false,
+      aceptaTerminoCondiciones: true,
+      quieroRecibirNewsLetter: true,
+      quieroParticiparEncuestas: true
     },
     mode: "onBlur",
   });
 
   async function onSubmit(formData: FormValues) {
-    const registerRes = await CompanySignUp(formData);
+    const registerRes = await CompanySignUp({
+      ...formData,
+      sitioWeb: formData.sitioWeb || "",
+    });
 
     // FIXME: Company register not working, backend issues
     if (registerRes?.isSuccess) {
@@ -121,16 +122,10 @@ export default function CompanyForm({ fields }: CompanyFormProps) {
       await update();
       router.push("/");
     }
-    if (!registerRes) {
-      toast.error("Error durante registro");
-      return;
+    else {
+      toast.error(registerRes?.messages.join('\n'));
     }
-
-    const hasError = Object.keys(registerRes?.messages ?? []).length;
-    if (hasError) {
-      toast.error(registerRes.messages[0]);
-      console.warn("Errores:", registerRes.messages);
-    }
+    
   }
 
   return (
@@ -177,7 +172,7 @@ export default function CompanyForm({ fields }: CompanyFormProps) {
 
             <FormField
               control={form.control}
-              name="condicionFiscal"
+              name="idCondicionFiscal"
               render={({ field }) => (
                 <FormItem>
                   <FormLabel htmlFor="condicion-fiscal">
@@ -185,8 +180,8 @@ export default function CompanyForm({ fields }: CompanyFormProps) {
                   </FormLabel>
                   <FormControl>
                     <Select
-                      onValueChange={(v) => form.setValue("condicionFiscal", v)}
-                      defaultValue={field.value}
+                      onValueChange={(v) => form.setValue("idCondicionFiscal", parseInt(v))}
+                      defaultValue={field.value?.toString()}
                     >
                       <SelectTrigger id="condicion-fiscal">
                         <SelectValue placeholder="Seleccione una opción" />
@@ -194,10 +189,10 @@ export default function CompanyForm({ fields }: CompanyFormProps) {
                       <SelectContent>
                         {fields?.condicionFiscal?.map((condicion) => (
                           <SelectItem
-                            key={condicion.valor}
-                            value={condicion.valor.toString()}
+                            key={condicion.idCatalogo}
+                            value={condicion.idCatalogo.toString()}
                           >
-                            {addSpaces(condicion.nombre)}
+                            {condicion.nombre}
                           </SelectItem>
                         ))}
                       </SelectContent>
@@ -228,42 +223,11 @@ export default function CompanyForm({ fields }: CompanyFormProps) {
               )}
             />
 
-            <FormField
-              control={form.control}
-              name="provincia"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel htmlFor="provincia">
-                    Provincia <span className="text-red-500">*</span>
-                  </FormLabel>
-                  <FormControl>
-                    <Select
-                      onValueChange={(v) => form.setValue("provincia", v)}
-                      defaultValue={field.value}
-                    >
-                      <SelectTrigger id="provincia">
-                        <SelectValue placeholder="Seleccione una opción" />
-                      </SelectTrigger>
-                      <SelectContent>
-                        {fields?.provincias?.map((provincia) => (
-                          <SelectItem
-                            key={provincia.valor}
-                            value={provincia.valor.toString()}
-                          >
-                            {addSpaces(provincia.nombre)}
-                          </SelectItem>
-                        ))}
-                      </SelectContent>
-                    </Select>
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
+            
 
             <FormField
               control={form.control}
-              name="ciudad"
+              name="idCiudad"
               render={({ field }) => (
                 <FormItem>
                   <FormLabel htmlFor="ciudad">
@@ -271,8 +235,8 @@ export default function CompanyForm({ fields }: CompanyFormProps) {
                   </FormLabel>
                   <FormControl>
                     <Select
-                      onValueChange={(v) => form.setValue("ciudad", v)}
-                      defaultValue={field.value}
+                      onValueChange={(v) => form.setValue("idCiudad", parseInt(v))}
+                      defaultValue={field.value?.toString()}
                     >
                       <SelectTrigger id="ciudad">
                         <SelectValue placeholder="Seleccione una opción" />
@@ -365,7 +329,7 @@ export default function CompanyForm({ fields }: CompanyFormProps) {
 
             <FormField
               control={form.control}
-              name="industria"
+              name="idIndustria"
               render={({ field }) => (
                 <FormItem>
                   <FormLabel htmlFor="industria">
@@ -373,8 +337,8 @@ export default function CompanyForm({ fields }: CompanyFormProps) {
                   </FormLabel>
                   <FormControl>
                     <Select
-                      onValueChange={(v) => form.setValue("industria", v)}
-                      defaultValue={field.value}
+                      onValueChange={(v) => form.setValue("idIndustria", parseInt(v))}
+                      defaultValue={field.value?.toString()}
                     >
                       <SelectTrigger id="industria">
                         <SelectValue placeholder="Seleccione una opción" />
@@ -382,10 +346,10 @@ export default function CompanyForm({ fields }: CompanyFormProps) {
                       <SelectContent>
                         {fields?.industria?.map((industria) => (
                           <SelectItem
-                            key={industria.valor}
-                            value={industria.valor.toString()}
+                            key={industria.idCatalogo}
+                            value={industria.idCatalogo.toString()}
                           >
-                            {addSpaces(industria.nombre)}
+                            {industria.nombre}
                           </SelectItem>
                         ))}
                       </SelectContent>
@@ -398,7 +362,7 @@ export default function CompanyForm({ fields }: CompanyFormProps) {
 
             <FormField
               control={form.control}
-              name="cantidadEmpleados"
+              name="idCantidadEmpleados"
               render={({ field }) => (
                 <FormItem>
                   <FormLabel htmlFor="empleados">
@@ -408,9 +372,9 @@ export default function CompanyForm({ fields }: CompanyFormProps) {
                   <FormControl>
                     <Select
                       onValueChange={(v) =>
-                        form.setValue("cantidadEmpleados", v)
+                        form.setValue("idCantidadEmpleados", parseInt(v))
                       }
-                      defaultValue={field.value}
+                      defaultValue={field.value?.toString()}
                     >
                       <SelectTrigger id="empleados">
                         <SelectValue placeholder="Seleccione una opción" />
@@ -418,14 +382,30 @@ export default function CompanyForm({ fields }: CompanyFormProps) {
                       <SelectContent>
                         {fields?.cantidadEmpleados?.map((cantidad) => (
                           <SelectItem
-                            key={cantidad.valor}
-                            value={cantidad.valor.toString()}
+                            key={cantidad.idCatalogo}
+                            value={cantidad.idCatalogo.toString()}
                           >
                             {addSpaces(cantidad.nombre)}
                           </SelectItem>
                         ))}
                       </SelectContent>
                     </Select>
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            <FormField
+              control={form.control}
+              name="sitioWeb"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel htmlFor="sitioWeb">
+                    Sitio Web
+                  </FormLabel>
+                  <FormControl>
+                    <Input id="sitioWeb" placeholder="https://www.ejemplo.com" {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>

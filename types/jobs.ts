@@ -32,11 +32,14 @@ export type Jobs = {
 }
 
 export type RecentJob = {
+  id: string
+  titulo: string
+  empresa: string
+  modalidad: string
   ciudad: string
   provincia: string
-  tituloPuesto: string
-  modalidad: string
-  logo: any
+  salario: string
+  fecha: string
 }
 
 export type GetLastEightJobsResponse = GenericResponse<RecentJob[]>

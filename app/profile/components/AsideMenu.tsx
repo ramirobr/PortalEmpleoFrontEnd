@@ -1,10 +1,12 @@
-import { auth } from "@/auth";
+"use client";
+import { Session } from "next-auth";
 import Link from "next/link";
 
-export default function AsideMenu() {
-  //const session = await auth();
+type AsideMenuProps = {
+  session: Session | null;
+};
 
-  //if (!session?.user) return null;
+export default function AsideMenu({ session }: AsideMenuProps) {
   return (
     <aside className="sticky top-0 h-full w-64 bg-white shadow flex flex-col items-center py-8 px-4">
       <div className="flex flex-col items-center mb-8">
@@ -15,12 +17,10 @@ export default function AsideMenu() {
             width={80}
             height={80}
             className="object-cover w-full h-full rounded-full"
-            style={{ display: "block" }}
           />
         </div>
-        <div className="font-semibold text-lg focus:outline-blue-500 focus-visible:outline focus-visible:outline-2">
-          {/*session.user.fullName*/}
-          Juan Anaya
+        <div className="font-semibold text-lg focus:outline-blue-500 focus-visible:outline">
+          {session?.user.fullName}
         </div>
         <div className="text-sm text-gray-500">Colombia</div>
         <button className="btn btn-primary mt-4" style={{ outline: "none" }}>
@@ -34,10 +34,10 @@ export default function AsideMenu() {
             className="bg-blue-50 rounded px-3 py-2 font-semibold text-primary flex items-center"
           >
             <Link href="/profile/" className="flex items-center w-full h-full">
-              <svg className="h-[37px] w-[20px] mr-2" viewBox="0 0 20 20">
+              <svg className="h-[37px] w-5 mr-2" viewBox="0 0 20 20">
                 <path d="M15 2H5L4 3v14l1 1h10l1-1V3l-1-1m0 15H5v-3h2a1 1 0 0 0 2 0 1 1 0 0 0-2-1H5v-3h2a1 1 0 0 0 2 0 1 1 0 0 0-2 0H5V7h2a1 1 0 0 0 2-1 1 1 0 0 0-2 0H5V3h10v14zm-8-3 1-1v1H7m0-4h1-1m0-4h1c1 0 0 0 0 0v1L7 6" />
               </svg>
-              <span>Dashboard</span>
+              <span>Inicio</span>
             </Link>
           </li>
           <li
@@ -48,7 +48,7 @@ export default function AsideMenu() {
               href="/profile/edit"
               className="flex items-center w-full h-full"
             >
-              <svg className="h-[37px] w-[20px] mr-2" viewBox="0 0 20 20">
+              <svg className="h-[37px] w-5 mr-2" viewBox="0 0 20 20">
                 <path d="M12.075,10.812c1.358-0.853,2.242-2.507,2.242-4.037c0-2.181-1.795-4.618-4.198-4.618S5.921,4.594,5.921,6.775c0,1.53,0.884,3.185,2.242,4.037c-3.222,0.865-5.6,3.807-5.6,7.298c0,0.23,0.189,0.42,0.42,0.42h14.273c0.23,0,0.42-0.189,0.42-0.42C17.676,14.619,15.297,11.677,12.075,10.812 M6.761,6.775c0-2.162,1.773-3.778,3.358-3.778s3.359,1.616,3.359,3.778c0,2.162-1.774,3.778-3.359,3.778S6.761,8.937,6.761,6.775 M3.415,17.69c0.218-3.51,3.142-6.297,6.704-6.297c3.562,0,6.486,2.787,6.705,6.297H3.415z"></path>
               </svg>
               <span>Editar Perfil</span>

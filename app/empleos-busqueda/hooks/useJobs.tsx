@@ -19,8 +19,8 @@ export function useJobs(token?: string) {
   const searchTerm = searchParams.get("q") ?? undefined;
   const salarioMinimo = getNumericParam(searchParams.get("min"));
   const salarioMaximo = getNumericParam(searchParams.get("max"));
-  //BUG: Not working, needs proper backend integration
-  const ubicacion = searchParams.get("ubicacion") ?? undefined;
+  const provincia = getNumericParam(searchParams.get("provincia"));
+  const ciudad = getNumericParam(searchParams.get("ciudad"));
   const fechas = getNumericParam(searchParams.get("fecha"));
   const modalidad = getNumericParam(searchParams.get("modalidad"));
   const empresa = searchParams.get("empresa") ?? undefined;
@@ -38,11 +38,12 @@ export function useJobs(token?: string) {
         searchTerm,
         salarioMinimo,
         salarioMaximo,
-        ubicacion,
-        fechas,
-        modalidad,
-        empresa,
-        experience,
+        idEmpresa: empresa,
+        idProvincia: provincia,
+        idCiudad: ciudad,
+        idExperiencia: experience,
+        idModalidadTrabajo: modalidad,
+        idFiltroFechas: fechas,
       };
 
       try {
@@ -61,14 +62,15 @@ export function useJobs(token?: string) {
     }
 
     load();
-    return () => controller.abort();
+    return () => controller.abort("");
   }, [
     pageSize,
     currentPage,
     searchTerm,
     salarioMinimo,
     salarioMaximo,
-    ubicacion,
+    provincia,
+    ciudad,
     fechas,
     modalidad,
     empresa,

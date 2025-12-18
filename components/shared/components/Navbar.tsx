@@ -1,10 +1,11 @@
 "use client";
 import Link from "next/link";
 import Image from "next/image";
-import { signOut, useSession } from "next-auth/react";
+import { getSession, signOut, useSession } from "next-auth/react";
 import { Button } from "@/components/ui/button";
 import { fetchApi } from "@/lib/apiClient";
 import { Logout } from "@/types/user";
+import { useEffect } from "react";
 // import SocialLinks from "./SocialLinks";
 interface NavbarProps {
   showCompanyRegister?: boolean;
@@ -17,10 +18,14 @@ export default function Navbar({
   hideMainMenu = false,
   showBuscarEmpleos = false,
 }: NavbarProps) {
-  const { data: session } = useSession();
+  const { data: session, status } = useSession();
+
+  useEffect(() => {
+    const sync = async () => await getSession();
+    sync();
+  }, []);
 
   const Logout = async () => {
-    //FIXME: Fix session issues
     await fetchApi<Logout>("/Authorization/logout", {
       token: session?.user.accessToken,
     });
@@ -66,42 +71,46 @@ export default function Navbar({
           </li>
         </ul>
       )}
-      <div className="flex items-center space-x-2">
-        {session ? (
-          <Button onClick={Logout}>Cerrar sesión</Button>
-        ) : (
-          <>
-            <Link
-              href="/auth/signin"
-              className="btn btn-primary border border-primary focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:border-blue-500 focus-visible:z-10"
-            >
-              Crear cuenta
-            </Link>
-            <Link
-              href="/auth/login"
-              className="btn btn-secondary border border-secondary focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:border-blue-500 focus-visible:z-10"
-            >
-              Ingresar
-            </Link>
-          </>
-        )}
-        {showCompanyRegister && (
-          <Link
-            href="/auth/empresa"
-            aria-label="Regístrate como empresa"
-            className="btn btn-primary border border-primary focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:border-blue-500 focus-visible:z-10"
-          >
-            Regístrate como empresa
-          </Link>
-        )}
-        {showBuscarEmpleos && (
-          <Link
-            href="/empleos-busqueda"
-            aria-label="Buscar empleos"
-            className="btn btn-primary border border-primary focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:border-blue-500 focus-visible:z-10"
-          >
-            Buscar empleos
-          </Link>
+      <div>
+        {status !== "loading" && (
+          <div className="flex items-center space-x-2">
+            {session ? (
+              <Button onClick={Logout}>Cerrar sesión</Button>
+            ) : (
+              <>
+                <Link
+                  href="/auth/signin"
+                  className="btn btn-primary border border-primary focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:border-blue-500 focus-visible:z-10"
+                >
+                  Crear cuenta
+                </Link>
+                <Link
+                  href="/auth/login"
+                  className="btn btn-secondary border border-secondary focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:border-blue-500 focus-visible:z-10"
+                >
+                  Ingresar
+                </Link>
+              </>
+            )}
+            {showCompanyRegister && (
+              <Link
+                href="/auth/empresa"
+                aria-label="Regístrate como empresa"
+                className="btn btn-primary border border-primary focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:border-blue-500 focus-visible:z-10"
+              >
+                Regístrate como empresa
+              </Link>
+            )}
+            {showBuscarEmpleos && (
+              <Link
+                href="/empleos-busqueda"
+                aria-label="Buscar empleos"
+                className="btn btn-primary border border-primary focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:border-blue-500 focus-visible:z-10"
+              >
+                Buscar empleos
+              </Link>
+            )}
+          </div>
         )}
       </div>
       {/* <SocialLinks /> */}

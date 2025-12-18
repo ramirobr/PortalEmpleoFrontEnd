@@ -1,4 +1,5 @@
 import React from "react";
+import Badge from "@/components/shared/components/Badge";
 
 const jobs = [
   {
@@ -62,17 +63,18 @@ export default function JobsApplied() {
               {job.company} &bull; {job.location}
             </div>
             <div className="text-xs text-gray-400">Enviado en {job.date}</div>
-            <span
-              className={`absolute top-2 right-2 nline-block px-2 py-1 rounded text-xs font-semibold ${
+            <Badge
+              variant={
                 job.status === "Aplicado"
-                  ? "bg-blue-100 text-blue-700"
+                  ? "blue"
                   : job.status === "Elegido"
-                  ? "bg-green-100 text-green-700"
-                  : "bg-yellow-100 text-yellow-700"
-              }`}
+                  ? "green"
+                  : "yellow"
+              }
+              className="absolute top-2 right-2"
             >
               {job.status}
-            </span>
+            </Badge>
           </div>
         ))}
       </div>

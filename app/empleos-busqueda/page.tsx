@@ -21,7 +21,8 @@ export default async function JobsPage({ searchParams }: Props) {
     q: params.q,
     fecha: params.fecha,
     modalidad: params.modalidad,
-    ubicacion: params.ubicacion,
+    provincia: params.provincia,
+    ciudad: params.ciudad,
     empresa: params.empresa,
     experience: params.experience,
   };

@@ -21,22 +21,26 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
         if (!res || !res.isSuccess) return null;
         const { data } = res;
         return {
-          id: extractJti(data.token),
+          id: data.userId,
           fullName: data.fullName,
           role: data.role,
           email: data.email,
           accessToken: data.token,
+          tokenExpireIn: data.tokenExpireIn,
           refreshToken: data.refreshToken,
         };
       },
     }),
   ],
-  session: { strategy: "jwt" },
+  session: {
+    strategy: "jwt",
+    maxAge: 30 * 60,
+    updateAge: 5 * 60
+  },
   pages: { signIn: "/auth/login" },
   callbacks: {
     jwt: async ({ token, user }) => {
       if (user) return { ...token, ...user };
-      if (token.expired) return token;
       if (token.accessToken) {
         try {
           const decoded: any = JSON.parse(
@@ -48,8 +52,6 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
         }
       }
       console.warn("Token refresh", token.email);
-
-      //BUG: Finalize proper token implementation when session expires
       return await refreshAccessToken(token);
     },
     session: async ({ session, token }) => {
@@ -58,22 +60,15 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
         fullName: token.fullName,
         role: token.role,
         email: token.email,
+        emailVerified: null,
         accessToken: token.accessToken,
         refreshToken: token.refreshToken,
-        emailVerified: null,
-        expired: token.expired ?? false
+        tokenExpireIn: token.tokenExpireIn,
       };
       return session;
     },
   },
 });
-
-function extractJti(jwt: string) {
-  const payload = JSON.parse(
-    Buffer.from(jwt.split(".")[1], "base64").toString()
-  );
-  return payload.jti;
-}
 
 async function signInApi(email: string, password: string) {
   return await fetchApi<GenericResponse<LoginData>>("/Authorization/login", {
@@ -100,9 +95,6 @@ async function refreshAccessToken(token: JWT) {
     };
   } catch {
     console.warn("Error refreshing or expired token");
-    return {
-      ...token,
-      expired: true,
-    };
+    return token;
   }
 }

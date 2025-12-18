@@ -1,4 +1,4 @@
-import { PostulantRegisterResponse, SignupData } from "@/types/user";
+import { PostulantRegisterResponse, SignupData, CompanyRegisterResponse } from "@/types/user";
 import { fetchApi } from "../apiClient";
 import { CompanySignUpData } from "@/types/company";
 
@@ -11,7 +11,7 @@ export async function SignUp(body: SignupData) {
 }
 
 export async function CompanySignUp(body: CompanySignUpData) {
-  const company = await fetchApi<PostulantRegisterResponse>("/Company/registerCompany", {
+  const company = await fetchApi<CompanyRegisterResponse>("/Company/registerCompany", {
     method: "POST",
     body,
   });

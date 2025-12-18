@@ -9,11 +9,10 @@ declare module "next-auth" {
     email: string;
     accessToken: string;
     refreshToken: string;
-    expired?: boolean;
+    tokenExpireIn: Date;
   }
 
   interface Session {
-    expired?: boolean;
     user: User
   }
 }
@@ -26,6 +25,6 @@ declare module "next-auth/jwt" {
     email: string;
     accessToken: string;
     refreshToken: string;
-    expired?: boolean;
+    tokenExpireIn: Date;
   }
 }
