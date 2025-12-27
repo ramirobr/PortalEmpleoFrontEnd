@@ -5,6 +5,8 @@ import { Job } from "./JobCard";
 import { RecentJob } from "@/types/jobs";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
+import FavoriteButton from "@/components/shared/components/FavoriteButton";
+import { Session } from "next-auth";
 
 function getBadgeColor(type?: string) {
   switch (type) {
@@ -21,28 +23,14 @@ function getBadgeColor(type?: string) {
 
 export type CardProps = {
   job: RecentJob;
+  session?: Session | null;
 };
 
-export default function RecentJobCard({ job }: CardProps) {
+export default function RecentJobCard({ job, session }: CardProps) {
   const router = useRouter();
   return (
     <div className="bg-white border rounded-xl p-6 shadow hover:shadow-lg transition flex flex-col items-center relative min-h-80">
-      <span
-        className={`absolute left-4 top-4 px-3 py-1 rounded text-xs font-semibold ${getBadgeColor(
-          job.titulo
-        )}`}
-      >
-        {job.titulo}
-      </span>
-      <span className="absolute right-4 top-4">
-        <svg width="28" height="28" fill="none" viewBox="0 0 24 24">
-          <circle cx="12" cy="12" r="12" fill="#E6F4EA" />
-          <path
-            d="M16.5 9.5c0-1.38-1.12-2.5-2.5-2.5-.96 0-1.78.55-2.18 1.36-.4-.81-1.22-1.36-2.18-1.36-1.38 0-2.5 1.12-2.5 2.5 0 2.28 4.68 5.36 4.68 5.36s4.68-3.08 4.68-5.36z"
-            fill="#22C55E"
-          />
-        </svg>
-      </span>
+      <FavoriteButton jobId={job.id} session={session || null} />
       <div className="mb-4 mt-8">
         <Image
           // src={t.logo} FIXME: logo path doesnt work

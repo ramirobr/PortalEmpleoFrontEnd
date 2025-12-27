@@ -1,10 +1,8 @@
 "use client";
-import React from "react";
-import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { z } from "zod";
-import { Pencil } from "@/components/shared/components/iconos/Pencil";
-import { Trash } from "@/components/shared/components/iconos/Trash";
+import Loader from "@/components/shared/components/Loader";
+import TituloSubrayado from "@/components/shared/tituloSubrayado";
+import { Button } from "@/components/ui/button";
+import { DatePicker } from "@/components/ui/date-picker";
 import {
   Form,
   FormControl,
@@ -13,9 +11,27 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
-import TituloSubrayado from "@/components/shared/tituloSubrayado";
+import { Input } from "@/components/ui/input";
 import { fetchPaises } from "@/lib/catalog/fetchPaises";
-import Loader from "@/components/shared/components/Loader";
+import { zodResolver } from "@hookform/resolvers/zod";
+import React from "react";
+import { useForm } from "react-hook-form";
+import { z } from "zod";
+import { Checkbox } from "@/components/ui/checkbox";
+import { Label } from "@/components/ui/label";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { validarCedulaEcuatoriana } from "@/lib/utils";
+import { Card } from "@/components/ui/card";
+import Pencil from "@/components/shared/components/iconos/Pencil";
+import Trash from "@/components/shared/components/iconos/Trash";
+import { UserInfoData } from "@/types/profile";
+import { DatosPersonalesFieldsResponse } from "@/types/user";
 
 const estadoCivilOptions = [
   "Soltero/a",
@@ -25,91 +41,56 @@ const estadoCivilOptions = [
   "Viudo/a",
   "Unión Libre",
 ];
-const tipoDocumentoOptions = ["Cedula", "Pasaporte"];
 const generoOptions = ["Masculino", "Femenino", "Otro"];
 const licenciaOptions = ["A", "A1", "B", "C", "D", "E", "E1", "F", "G"];
-
-function validarCedulaEcuatoriana(value: string) {
-  if (!/^[0-9]{10}$/.test(value)) return false;
-  // Validación básica de cédula ecuatoriana
-  const province = parseInt(value.substring(0, 2), 10);
-  if (province < 1 || province > 24) return false;
-  const thirdDigit = parseInt(value[2], 10);
-  if (thirdDigit > 6) return false;
-  let total = 0;
-  for (let i = 0; i < 9; i++) {
-    let num = parseInt(value[i], 10);
-    if (i % 2 === 0) {
-      num *= 2;
-      if (num > 9) num -= 9;
-    }
-    total += num;
-  }
-  let checkDigit = total % 10 ? 10 - (total % 10) : 0;
-  return checkDigit === parseInt(value[9], 10);
-}
 
 const schema = z.object({
   nombre: z
     .string()
-    .min(3, "El nombre es obligatorio y debe tener al menos 3 caracteres.")
-    .default("Juan"),
+    .min(3, "El nombre es obligatorio y debe tener al menos 3 caracteres."),
   apellido: z
     .string()
-    .min(3, "El apellido es obligatorio y debe tener al menos 3 caracteres.")
-    .default("Anaya"),
-  nacionalidad: z
-    .string()
-    .min(1, "La nacionalidad es obligatoria.")
-    .default("Ecuatoriana"),
-  nacimiento: z
-    .string()
-    .min(1, "La fecha de nacimiento es obligatoria.")
-    .default("1982-12-16"),
-  estadoCivil: z
-    .string()
-    .min(1, "El estado civil es obligatorio.")
-    .default("Soltero/a"),
-  tipoDocumento: z
-    .string()
-    .min(1, "El tipo de documento es obligatorio.")
-    .default("Cedula"),
+    .min(3, "El apellido es obligatorio y debe tener al menos 3 caracteres."),
+  nacionalidad: z.string().min(1, "La nacionalidad es obligatoria."),
+  nacimiento: z.date({
+    message: "La fecha de nacimiento es obligatoria.",
+  }),
+  estadoCivil: z.string().min(1, "El estado civil es obligatorio."),
+  tipoDocumento: z.string().min(1, "El tipo de documento es obligatorio."),
   cedula: z
     .string()
-    .min(10, "La cédula debe tener 10 dígitos.")
-    .max(10, "La cédula debe tener 10 dígitos.")
+    .min(1, "Ingresa la cédula")
     .refine(validarCedulaEcuatoriana, {
       message: "Cédula ecuatoriana inválida.",
     }),
-  genero: z.string().min(1, "El género es obligatorio.").default("Masculino"),
+  genero: z.string().min(1, "El género es obligatorio."),
   movilidad: z.boolean().default(false),
   licencia: z.boolean().default(false),
   tipoLicencia: z.array(z.string()).optional(),
 });
 
-export default function EditarDatosPersonales() {
-  const [isEditing, setIsEditing] = React.useState(false);
-  const [paises, setPaises] = React.useState<string[]>([]);
-  const [loading, setLoading] = React.useState(true);
+type EditarDatosPersonalesProps = {
+  user: UserInfoData;
+  fields: DatosPersonalesFieldsResponse | null;
+};
 
-  React.useEffect(() => {
-    setLoading(true);
-    fetchPaises()
-      .then(setPaises)
-      .finally(() => setLoading(false));
-  }, []);
+export default function EditarDatosPersonales({
+  user,
+  fields,
+}: EditarDatosPersonalesProps) {
+  const [isEditing, setIsEditing] = React.useState(false);
 
   const form = useForm({
     resolver: zodResolver(schema),
     defaultValues: {
-      nombre: "Juan",
-      apellido: "Anaya",
-      nacionalidad: "Ecuatoriana",
-      nacimiento: "1982-12-16",
-      estadoCivil: "Soltero/a",
-      tipoDocumento: "Cedula",
-      cedula: "",
-      genero: "Masculino",
+      nombre: user?.datosPersonales.nombre,
+      apellido: user?.datosPersonales.apellido,
+      nacionalidad: user?.datosContacto.pais,
+      nacimiento: new Date(user?.datosPersonales.fechaNacimiento),
+      estadoCivil: "",
+      tipoDocumento: user?.datosPersonales.tipoDocumento,
+      cedula: user?.datosPersonales.numeroDocumento,
+      genero: "",
       movilidad: false,
       licencia: false,
       tipoLicencia: [],
@@ -118,30 +99,26 @@ export default function EditarDatosPersonales() {
 
   const licenciaChecked = form.watch("licencia");
 
-  const handleCancel = () => {
-    form.reset();
-    setIsEditing(false);
-  };
-
   const handleSubmit = (data: z.infer<typeof schema>) => {
     console.log("Datos guardados:", data);
-    // TODO: Aquí puedes agregar la lógica para enviar los datos al servidor
     setIsEditing(false);
+    // TODO: Aquí puedes agregar la lógica para enviar los datos al servidor
   };
 
-  if (loading) {
-    return <Loader className="py-8" />;
-  }
+  const handleCancel = () => {
+    setIsEditing(false);
+    form.reset();
+  };
 
   return (
-    <section className="bg-white rounded-lg shadow p-8 mt-10">
+    <Card className="px-6">
       <div className="flex justify-between items-center mb-10">
-        <TituloSubrayado>Datos Personales</TituloSubrayado>
+        <TituloSubrayado className="mb-0">Datos Personales</TituloSubrayado>
         {!isEditing ? (
           <button
             type="button"
             onClick={() => setIsEditing(true)}
-            className=""
+            className="cursor-pointer"
             aria-label="Editar datos personales"
           >
             <Pencil width={25} height={25} className="text-primary" />
@@ -150,7 +127,7 @@ export default function EditarDatosPersonales() {
           <button
             type="button"
             onClick={handleCancel}
-            className=""
+            className="cursor-pointer"
             aria-label="Cancelar edición"
           >
             <Trash width={25} height={25} className="text-primary" />
@@ -160,11 +137,9 @@ export default function EditarDatosPersonales() {
       <Form {...form}>
         <form
           onSubmit={form.handleSubmit(handleSubmit)}
-          className="grid grid-cols-1 gap-6"
           aria-label="Formulario de datos personales"
         >
-          {/* Fila 1: Nombre / Apellido */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-4">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
             <FormField
               control={form.control}
               name="nombre"
@@ -172,12 +147,11 @@ export default function EditarDatosPersonales() {
                 <FormItem>
                   <FormLabel htmlFor="nombre">Nombre</FormLabel>
                   <FormControl>
-                    <input
-                      {...field}
+                    <Input
                       id="nombre"
-                      aria-label="Nombre"
                       autoComplete="given-name"
                       disabled={!isEditing}
+                      {...field}
                     />
                   </FormControl>
                   <FormMessage />
@@ -191,12 +165,11 @@ export default function EditarDatosPersonales() {
                 <FormItem>
                   <FormLabel htmlFor="apellido">Apellido</FormLabel>
                   <FormControl>
-                    <input
-                      {...field}
+                    <Input
                       id="apellido"
-                      aria-label="Apellido"
                       autoComplete="family-name"
                       disabled={!isEditing}
+                      {...field}
                     />
                   </FormControl>
                   <FormMessage />
@@ -204,7 +177,6 @@ export default function EditarDatosPersonales() {
               )}
             />
           </div>
-          {/* Fila 2: Fecha de Nacimiento / Nacionalidad */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-4">
             <FormField
               control={form.control}
@@ -215,11 +187,10 @@ export default function EditarDatosPersonales() {
                     Fecha de nacimiento
                   </FormLabel>
                   <FormControl>
-                    <input
-                      {...field}
+                    <DatePicker
                       id="nacimiento"
-                      type="date"
-                      aria-label="Fecha de nacimiento"
+                      value={field.value}
+                      onChange={field.onChange}
                       disabled={!isEditing}
                     />
                   </FormControl>
@@ -234,25 +205,28 @@ export default function EditarDatosPersonales() {
                 <FormItem>
                   <FormLabel htmlFor="nacionalidad">Nacionalidad</FormLabel>
                   <FormControl>
-                    <select
-                      {...field}
-                      id="nacionalidad"
-                      aria-label="Nacionalidad"
+                    <Select
+                      onValueChange={field.onChange}
+                      defaultValue={field.value?.toString()}
                       disabled={!isEditing}
                     >
-                      {paises.map((pais) => (
-                        <option key={pais} value={pais}>
-                          {pais}
-                        </option>
-                      ))}
-                    </select>
+                      <SelectTrigger id="nacionalidad">
+                        <SelectValue placeholder="Nacionalidad" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        {fields?.pais?.map((pais) => (
+                          <SelectItem key={pais.idCatalogo} value={pais.nombre}>
+                            {pais.nombre}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
                   </FormControl>
                   <FormMessage />
                 </FormItem>
               )}
             />
           </div>
-          {/* Fila 3: Estado Civil / Género */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-4">
             <FormField
               control={form.control}
@@ -261,18 +235,22 @@ export default function EditarDatosPersonales() {
                 <FormItem>
                   <FormLabel htmlFor="estadoCivil">Estado Civil</FormLabel>
                   <FormControl>
-                    <select
-                      {...field}
-                      id="estadoCivil"
-                      aria-label="Estado Civil"
+                    <Select
+                      onValueChange={field.onChange}
+                      defaultValue={field.value?.toString()}
                       disabled={!isEditing}
                     >
-                      {estadoCivilOptions.map((opt) => (
-                        <option key={opt} value={opt}>
-                          {opt}
-                        </option>
-                      ))}
-                    </select>
+                      <SelectTrigger id="estadoCivil">
+                        <SelectValue placeholder="Estado Civil" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        {estadoCivilOptions.map((estado) => (
+                          <SelectItem key={estado} value={estado}>
+                            {estado}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -285,25 +263,28 @@ export default function EditarDatosPersonales() {
                 <FormItem>
                   <FormLabel htmlFor="genero">Género</FormLabel>
                   <FormControl>
-                    <select
-                      {...field}
-                      id="genero"
-                      aria-label="Género"
+                    <Select
+                      onValueChange={field.onChange}
+                      defaultValue={field.value?.toString()}
                       disabled={!isEditing}
                     >
-                      {generoOptions.map((opt) => (
-                        <option key={opt} value={opt}>
-                          {opt}
-                        </option>
-                      ))}
-                    </select>
+                      <SelectTrigger id="genero">
+                        <SelectValue placeholder="Género" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        {generoOptions.map((genero) => (
+                          <SelectItem key={genero} value={genero}>
+                            {genero}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
                   </FormControl>
                   <FormMessage />
                 </FormItem>
               )}
             />
           </div>
-          {/* Fila 4: Tipo de Documento / Número de Cédula */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-4">
             <FormField
               control={form.control}
@@ -314,18 +295,25 @@ export default function EditarDatosPersonales() {
                     Tipo de Documento
                   </FormLabel>
                   <FormControl>
-                    <select
-                      {...field}
-                      id="tipoDocumento"
-                      aria-label="Tipo de Documento"
+                    <Select
+                      onValueChange={field.onChange}
+                      defaultValue={field.value?.toString()}
                       disabled={!isEditing}
                     >
-                      {tipoDocumentoOptions.map((opt) => (
-                        <option key={opt} value={opt}>
-                          {opt}
-                        </option>
-                      ))}
-                    </select>
+                      <SelectTrigger id="tipoDocumento">
+                        <SelectValue placeholder="Tipo de Documento" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        {fields?.tipo_documento?.map((documento) => (
+                          <SelectItem
+                            key={documento.idCatalogo}
+                            value={documento.nombre}
+                          >
+                            {documento.nombre}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -338,15 +326,15 @@ export default function EditarDatosPersonales() {
                 <FormItem>
                   <FormLabel htmlFor="cedula">Número de Cédula</FormLabel>
                   <FormControl>
-                    <input
-                      {...field}
+                    <Input
                       id="cedula"
-                      aria-label="Número de Cédula"
+                      placeholder="Cédula"
                       maxLength={10}
                       minLength={10}
                       inputMode="numeric"
                       pattern="[0-9]{10}"
                       disabled={!isEditing}
+                      {...field}
                     />
                   </FormControl>
                   <FormMessage />
@@ -355,7 +343,7 @@ export default function EditarDatosPersonales() {
             />
           </div>
           {/* Fila 5: Movilidad Propia / Licencia de conducir */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-4">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
             <FormField
               control={form.control}
               name="movilidad"
@@ -363,13 +351,10 @@ export default function EditarDatosPersonales() {
                 <FormItem className="block">
                   <FormLabel htmlFor="movilidad">Movilidad Propia</FormLabel>
                   <FormControl>
-                    <input
-                      type="checkbox"
-                      {...field}
+                    <Checkbox
                       id="movilidad"
-                      aria-label="Movilidad Propia"
                       checked={field.value}
-                      value={undefined}
+                      onCheckedChange={field.onChange}
                       disabled={!isEditing}
                     />
                   </FormControl>
@@ -386,13 +371,10 @@ export default function EditarDatosPersonales() {
                     Poseo Licencia de Conducir
                   </FormLabel>
                   <FormControl>
-                    <input
-                      type="checkbox"
-                      {...field}
+                    <Checkbox
                       id="licencia"
-                      aria-label="Poseo Licencia de Conducir"
                       checked={field.value}
-                      value={undefined}
+                      onCheckedChange={field.onChange}
                       disabled={!isEditing}
                     />
                   </FormControl>
@@ -401,7 +383,6 @@ export default function EditarDatosPersonales() {
               )}
             />
           </div>
-          {/* Fila 6: Tipo de Licencia (100%) */}
           {licenciaChecked && (
             <div className="col-span-2">
               <FormField
@@ -417,18 +398,13 @@ export default function EditarDatosPersonales() {
                         className="flex flex-row flex-wrap gap-5"
                       >
                         {licenciaOptions.map((opt) => (
-                          <label
-                            key={opt}
-                            className="flex items-center gap-2"
-                            htmlFor={`tipoLicencia-${opt}`}
-                          >
-                            <input
-                              type="checkbox"
+                          <div className="flex items-center gap-2" key={opt}>
+                            <Checkbox
                               id={`tipoLicencia-${opt}`}
                               value={opt}
                               checked={field.value?.includes(opt) || false}
-                              onChange={(e) => {
-                                if (e.target.checked) {
+                              onCheckedChange={(checked) => {
+                                if (checked) {
                                   field.onChange([...(field.value || []), opt]);
                                 } else {
                                   field.onChange(
@@ -436,11 +412,16 @@ export default function EditarDatosPersonales() {
                                   );
                                 }
                               }}
-                              aria-label={`Licencia tipo ${opt}`}
                               disabled={!isEditing}
+                              aria-label={`Licencia tipo ${opt}`}
                             />
-                            {opt}
-                          </label>
+                            <Label
+                              htmlFor={`tipoLicencia-${opt}`}
+                              className="mb-0"
+                            >
+                              {opt}
+                            </Label>
+                          </div>
                         ))}
                       </div>
                     </FormControl>
@@ -450,20 +431,19 @@ export default function EditarDatosPersonales() {
               />
             </div>
           )}
-          <div className="col-span-2 mt-8 flex justify-end">
-            <button
-              type="submit"
-              className="btn btn-primary"
-              aria-label="Guardar datos personales"
-              tabIndex={0}
-              role="button"
-              disabled={!isEditing}
-            >
-              Guardar
-            </button>
-          </div>
+          {isEditing && (
+            <div className="col-span-2 mt-8 flex justify-end">
+              <Button
+                type="submit"
+                aria-label="Guardar datos personales"
+                disabled={!form.formState.isDirty}
+              >
+                Guardar
+              </Button>
+            </div>
+          )}
         </form>
       </Form>
-    </section>
+    </Card>
   );
 }

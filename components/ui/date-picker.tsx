@@ -14,9 +14,11 @@ import { useState } from "react";
 type DatePickerProps = {
   value: Date | undefined;
   onChange: (d: Date | undefined) => void;
+  id?: string;
+  disabled?: boolean;
 };
 
-export function DatePicker({ value, onChange }: DatePickerProps) {
+export function DatePicker({ value, onChange, id, disabled }: DatePickerProps) {
   const [open, setOpen] = useState(false);
 
   return (
@@ -24,8 +26,9 @@ export function DatePicker({ value, onChange }: DatePickerProps) {
       <Popover open={open} onOpenChange={setOpen}>
         <PopoverTrigger asChild>
           <Button
+            disabled={disabled}
             variant="outline"
-            id="date"
+            id={id}
             className="justify-between font-normal bg-input/30 hover:bg-input/30 hover:text-card-foreground"
           >
             {value ? value.toLocaleDateString() : "Fecha"}

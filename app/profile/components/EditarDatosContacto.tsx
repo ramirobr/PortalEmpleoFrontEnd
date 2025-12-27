@@ -1,13 +1,8 @@
 "use client";
-import React from "react";
 import TituloSubrayado from "@/components/shared/tituloSubrayado";
-import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { z } from "zod";
-import { Pencil } from "@/components/shared/components/iconos/Pencil";
-import { Trash } from "@/components/shared/components/iconos/Trash";
 import Loader from "@/components/shared/components/Loader";
-import { fetchDatosContacto } from "@/lib/catalog/fetchDatosContacto";
+import { Button } from "@/components/ui/button";
+import { Card } from "@/components/ui/card";
 import {
   Form,
   FormControl,
@@ -16,60 +11,63 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
+import { Input } from "@/components/ui/input";
+import { PhoneInput } from "@/components/ui/phone-input";
+import { zodResolver } from "@hookform/resolvers/zod";
+import React from "react";
+import { useForm } from "react-hook-form";
+import { z } from "zod";
+import Pencil from "@/components/shared/components/iconos/Pencil";
+import Trash from "@/components/shared/components/iconos/Trash";
+import { DatosContacto } from "@/types/profile";
 
 const schema = z.object({
-  celular: z
-    .string()
-    .min(10, "El celular debe tener al menos 10 dígitos.")
-    .max(14, "El celular no debe exceder 14 caracteres.")
-    .default("+593 087379078"),
+  celular: z.string().min(1, "El celular debe tener al menos 10 dígitos."),
   telefono: z
     .string()
-    .min(7, "El teléfono debe tener al menos 7 dígitos.")
-    .max(14, "El teléfono no debe exceder 14 caracteres.")
-    .default("+593 2375293"),
-  email: z
-    .string()
-    .email("El email no es válido.")
-    .min(1, "El email es obligatorio.")
-    .default("janaya@gmail.com"),
-  direccion: z.string().min(1, "La dirección es obligatoria.").default(""),
+    .min(7, "El celular debe tener al menos 10 dígitos.")
+    .max(14, "El celular no debe exceder 14 caracteres."),
+  email: z.email("El email no es válido.").min(1, "El email es obligatorio."),
+  direccion: z.string().min(1, "La dirección es obligatoria."),
 });
 
-const EditarDatosContacto: React.FC = () => {
-  const [isEditing, setIsEditing] = React.useState(false);
+type EditarDatosContactoProps = {
+  datosContacto: DatosContacto;
+};
+
+export default function EditarDatosContacto({
+  datosContacto,
+}: EditarDatosContactoProps) {
   const [loading, setLoading] = React.useState(true);
+  const [isEditing, setIsEditing] = React.useState(false);
+
+  React.useEffect(() => {
+    // Simulating data fetching
+    const timer = setTimeout(() => {
+      setLoading(false);
+    }, 1000);
+    return () => clearTimeout(timer);
+  }, []);
 
   const form = useForm({
     resolver: zodResolver(schema),
     defaultValues: {
-      celular: "",
+      //TODO: Include proper country code or just remove
+      celular: `+593${datosContacto.phoneNumber}`,
       telefono: "",
-      email: "",
-      direccion: "",
+      email: datosContacto.email,
+      direccion: datosContacto.address,
     },
   });
 
-  React.useEffect(() => {
-    setLoading(true);
-    fetchDatosContacto()
-      .then((data) => {
-        if (data) {
-          form.reset(data);
-        }
-      })
-      .finally(() => setLoading(false));
-  }, [form]);
-
-  const handleCancel = () => {
-    form.reset();
+  const handleSubmit = (data: z.infer<typeof schema>) => {
+    console.log({ data });
     setIsEditing(false);
   };
 
-  const handleSubmit = (data: z.infer<typeof schema>) => {
-    console.log("Datos guardados:", data);
-    // TODO: Aquí puedes agregar la lógica para enviar los datos al servidor
+  const handleCancel = () => {
     setIsEditing(false);
+    form.reset();
   };
 
   if (loading) {
@@ -77,14 +75,14 @@ const EditarDatosContacto: React.FC = () => {
   }
 
   return (
-    <section className="bg-white rounded-lg shadow p-8 mt-10">
+    <Card className="px-6">
       <div className="flex justify-between items-center mb-10">
-        <TituloSubrayado>Datos de Contacto</TituloSubrayado>
+        <TituloSubrayado className="mb-0">Datos de Contacto</TituloSubrayado>
         {!isEditing ? (
           <button
             type="button"
             onClick={() => setIsEditing(true)}
-            className=""
+            className="cursor-pointer"
             aria-label="Editar datos de contacto"
           >
             <Pencil width={25} height={25} className="text-primary" />
@@ -93,7 +91,7 @@ const EditarDatosContacto: React.FC = () => {
           <button
             type="button"
             onClick={handleCancel}
-            className=""
+            className="cursor-pointer"
             aria-label="Cancelar edición"
           >
             <Trash width={25} height={25} className="text-primary" />
@@ -103,10 +101,10 @@ const EditarDatosContacto: React.FC = () => {
       <Form {...form}>
         <form
           onSubmit={form.handleSubmit(handleSubmit)}
-          className="grid grid-cols-1 gap-6"
+          className=""
           aria-label="Formulario de datos de contacto"
         >
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-4">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
             <FormField
               control={form.control}
               name="celular"
@@ -114,14 +112,11 @@ const EditarDatosContacto: React.FC = () => {
                 <FormItem>
                   <FormLabel htmlFor="celular">Celular</FormLabel>
                   <FormControl>
-                    <input
-                      {...field}
-                      id="celular"
-                      aria-label="Celular"
-                      autoComplete="tel"
-                      placeholder="+593 087379078"
-                      pattern="\+593 [0-9]{9}"
-                      inputMode="tel"
+                    <PhoneInput
+                      defaultCountry="EC"
+                      placeholder="2375293123"
+                      value={field.value}
+                      onChange={field.onChange}
                       disabled={!isEditing}
                     />
                   </FormControl>
@@ -136,14 +131,15 @@ const EditarDatosContacto: React.FC = () => {
                 <FormItem>
                   <FormLabel htmlFor="telefono">Teléfono</FormLabel>
                   <FormControl>
-                    <input
-                      {...field}
+                    <Input
+                      type="text"
                       id="telefono"
-                      aria-label="Teléfono"
-                      autoComplete="tel"
-                      placeholder="+593 2375293"
-                      pattern="\+593 [0-9]{9}"
                       inputMode="tel"
+                      placeholder="+593 2375293"
+                      value={field.value}
+                      onChange={(e) =>
+                        field.onChange(e.target.value.replace(/\D/g, ""))
+                      }
                       disabled={!isEditing}
                     />
                   </FormControl>
@@ -151,6 +147,8 @@ const EditarDatosContacto: React.FC = () => {
                 </FormItem>
               )}
             />
+          </div>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
             <FormField
               control={form.control}
               name="email"
@@ -158,22 +156,19 @@ const EditarDatosContacto: React.FC = () => {
                 <FormItem>
                   <FormLabel htmlFor="email">Email</FormLabel>
                   <FormControl>
-                    <input
-                      {...field}
+                    <Input
                       id="email"
-                      aria-label="Email"
-                      autoComplete="email"
-                      placeholder="janaya@gmail.com"
                       type="email"
+                      autoComplete="email"
+                      placeholder="Email"
                       disabled={!isEditing}
+                      {...field}
                     />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
               )}
             />
-          </div>
-          <div className="grid grid-cols-1 mb-4">
             <FormField
               control={form.control}
               name="direccion"
@@ -181,14 +176,13 @@ const EditarDatosContacto: React.FC = () => {
                 <FormItem>
                   <FormLabel htmlFor="direccion">Dirección</FormLabel>
                   <FormControl>
-                    <input
-                      {...field}
+                    <Input
                       id="direccion"
-                      aria-label="Dirección"
+                      type="email"
                       autoComplete="street-address"
                       placeholder="Av. Siempre Viva 123"
-                      type="text"
                       disabled={!isEditing}
+                      {...field}
                     />
                   </FormControl>
                   <FormMessage />
@@ -196,22 +190,19 @@ const EditarDatosContacto: React.FC = () => {
               )}
             />
           </div>
-          <div className="col-span-2 mt-8 flex justify-end">
-            <button
-              type="submit"
-              className="btn btn-primary"
-              aria-label="Guardar datos de contacto"
-              tabIndex={0}
-              role="button"
-              disabled={!isEditing}
-            >
-              Guardar
-            </button>
-          </div>
+          {isEditing && (
+            <div className="col-span-2 mt-8 flex justify-end">
+              <Button
+                type="submit"
+                aria-label="Guardar datos de contacto"
+                disabled={!form.formState.isDirty}
+              >
+                Guardar
+              </Button>
+            </div>
+          )}
         </form>
       </Form>
-    </section>
+    </Card>
   );
-};
-
-export default EditarDatosContacto;
+}

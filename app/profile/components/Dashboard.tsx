@@ -1,5 +1,3 @@
-import React from "react";
-
 export default function Dashboard() {
   return (
     <>
@@ -22,12 +20,9 @@ export default function Dashboard() {
           <div className="text-sm text-gray-500 mt-2">Elegido</div>
         </div>
       </div>
-      <div className="grid grid-cols-3 gap-6">
-        <div className="bg-white rounded-lg shadow p-6 col-span-2">
-          <div className="font-semibold mb-2">Grafico</div>
-        </div>
+      <div className="grid grid-cols-1 gap-6">
         <div className="bg-white rounded-lg shadow p-6">
-          <div className="font-semibold mb-2">Notifications</div>
+          <div className="font-semibold mb-2">Notificaciones</div>
           <div className="flex items-start gap-2 mb-2">
             <div className="bg-green-100 rounded-full p-2">
               <svg
@@ -42,7 +37,7 @@ export default function Dashboard() {
               </svg>
             </div>
             <div className="text-sm">
-              The application is undo approved on your job{" "}
+              Aplicación rechazada{" "}
               <span className="text-primary font-semibold">
                 Junior Graphic Designer (Web)
               </span>{" "}

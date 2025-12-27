@@ -1,19 +1,21 @@
 "use client";
 import { RecentJob } from "@/types/jobs";
 import RecentJobCard from "../../../app/jobs/components/RecentJobCard";
+import { Session } from "next-auth";
 
 export type RecentJobsProps = {
   jobs: RecentJob[] | undefined;
+  session?: Session | null;
 };
 
-const RecentJobs = ({ jobs }: RecentJobsProps) => {
+const RecentJobs = ({ jobs, session }: RecentJobsProps) => {
   return (
     <section className="py-20">
       <div className="container">
         <h2 className="section-title">Trabajos Recientes</h2>
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6">
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
           {jobs?.map((job) => (
-            <RecentJobCard key={job.id} job={job} />
+            <RecentJobCard key={job.id} job={job} session={session} />
           ))}
         </div>
       </div>

@@ -1,8 +1,9 @@
 "use client";
-import React from "react";
-import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { z } from "zod";
+import Pencil from "@/components/shared/components/iconos/Pencil";
+import Trash from "@/components/shared/components/iconos/Trash";
+import Loader from "@/components/shared/components/Loader";
+import TituloSubrayado from "@/components/shared/tituloSubrayado";
+import { Card } from "@/components/ui/card";
 import {
   Form,
   FormControl,
@@ -11,11 +12,22 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
-import Trash from "@/components/shared/components/iconos/Trash";
-import Pencil from "@/components/shared/components/iconos/Pencil";
-import TituloSubrayado from "@/components/shared/tituloSubrayado";
+import { zodResolver } from "@hookform/resolvers/zod";
+import React from "react";
+import { useForm } from "react-hook-form";
+import { z } from "zod";
 
 export default function EditarFoto() {
+  const [loading, setLoading] = React.useState(true);
+
+  React.useEffect(() => {
+    // Simulating data fetching
+    const timer = setTimeout(() => {
+      setLoading(false);
+    }, 1000);
+    return () => clearTimeout(timer);
+  }, []);
+
   const schema = z.object({
     imagen: z.any().optional(),
   });
@@ -24,8 +36,12 @@ export default function EditarFoto() {
     resolver: zodResolver(schema),
   });
 
+  if (loading) {
+    return <Loader className="py-8" />;
+  }
+
   return (
-    <section className="bg-white rounded-lg shadow p-8 mt-10">
+    <Card className="px-6">
       <TituloSubrayado>Editar foto de perfil</TituloSubrayado>
       <Form {...form}>
         <form
@@ -47,48 +63,44 @@ export default function EditarFoto() {
               name="imagen"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel htmlFor="imagen" className="sr-only">
-                    Imagen de perfil
-                  </FormLabel>
-                  <FormControl>
-                    <div>
+                  <FormLabel className="sr-only">Imagen de perfil</FormLabel>
+                  <div className="relative">
+                    <FormControl>
                       <input
-                        id="imagen"
                         type="file"
                         accept="image/*"
                         className="hidden"
                         aria-label="Buscar foto de perfil"
                         onChange={(e) => field.onChange(e.target.files?.[0])}
+                        ref={field.ref}
+                        // We rely on the generated id from FormItem/FormControl
                       />
-                      {/* Icono lápiz (editar) */}
-                      <label
-                        htmlFor="imagen"
-                        className="absolute -bottom-4 right-1 bg-white rounded-full p-1 shadow-md cursor-pointer flex items-center justify-center"
-                        aria-label="Cambiar foto de perfil"
-                        style={{ width: "32px", height: "32px" }}
-                      >
-                        <Pencil
-                          width={20}
-                          height={20}
-                          className="text-primary"
-                        />
-                      </label>
-                      {/* Icono basurero (remover) */}
-                      <button
-                        type="button"
-                        className="absolute -bottom-4 left-1 bg-white rounded-full p-1 shadow-md cursor-pointer flex items-center justify-center"
-                        aria-label="Remover foto de perfil"
-                        style={{ width: "32px", height: "32px" }}
-                        onClick={() => field.onChange(undefined)}
-                      >
-                        <Trash
-                          width={20}
-                          height={20}
-                          className="text-primary"
-                        />
-                      </button>
-                    </div>
-                  </FormControl>
+                    </FormControl>
+                    {/* Icono lápiz (editar) */}
+                    <button
+                      type="button"
+                      className="absolute -bottom-4 right-1 bg-white rounded-full p-1 shadow-md cursor-pointer flex items-center justify-center w-8 h-8"
+                      aria-label="Cambiar foto de perfil"
+                      onClick={() => {
+                        const input = document.querySelector(
+                          'input[type="file"][aria-label="Buscar foto de perfil"]'
+                        ) as HTMLInputElement;
+                        input?.click();
+                      }}
+                    >
+                      <Pencil width={20} height={20} className="text-primary" />
+                    </button>
+                    {/* Icono basurero (remover) */}
+                    <button
+                      type="button"
+                      className="absolute -bottom-4 left-1 bg-white rounded-full p-1 shadow-md cursor-pointer flex items-center justify-center"
+                      aria-label="Remover foto de perfil"
+                      style={{ width: "32px", height: "32px" }}
+                      onClick={() => field.onChange(undefined)}
+                    >
+                      <Trash width={20} height={20} className="text-primary" />
+                    </button>
+                  </div>
                   <FormMessage />
                 </FormItem>
               )}
@@ -102,6 +114,6 @@ export default function EditarFoto() {
           </div>
         </form>
       </Form>
-    </section>
+    </Card>
   );
 }

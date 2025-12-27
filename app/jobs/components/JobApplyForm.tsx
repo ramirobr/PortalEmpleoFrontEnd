@@ -1,3 +1,4 @@
+import { Card } from "@/components/ui/card";
 import React, { useState } from "react";
 
 interface JobApplyFormProps {
@@ -47,7 +48,7 @@ export default function JobApplyForm({ onSuccess }: JobApplyFormProps) {
   }
 
   return (
-    <section className="bg-white rounded-lg shadow p-8 mt-10">
+    <Card className="px-6">
       <h2 className="section-title">Formulario de aplicación</h2>
       <form className="flex flex-col gap-4" onSubmit={handleSubmit} noValidate>
         <div>
@@ -141,6 +142,6 @@ export default function JobApplyForm({ onSuccess }: JobApplyFormProps) {
           </div>
         )}
       </form>
-    </section>
+    </Card>
   );
 }

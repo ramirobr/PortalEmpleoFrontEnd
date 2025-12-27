@@ -42,7 +42,7 @@ const catalogTypes = [
   "TIPO_ACEPTACION",
   "TIPO_DOCUMENTO",
   "TIPO_EMPLEO",
-  "TIPO_USUARIO"
+  "TIPO_USUARIO",
 ] as const;
 
 export type CatalogTypes = typeof catalogTypes[number];

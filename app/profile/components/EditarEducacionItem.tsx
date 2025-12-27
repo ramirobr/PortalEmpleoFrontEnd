@@ -1,13 +1,5 @@
 import { DatePicker } from "@/components/ui/date-picker";
 import {
-  fetchNivelesEducacion,
-  NivelEducacion,
-} from "@/lib/catalog/fetchNivelesEducacion";
-import { fetchPaises } from "@/lib/catalog/fetchPaises";
-import Loader from "@/components/shared/components/Loader";
-import React from "react";
-import { z } from "zod";
-import {
   Form,
   FormControl,
   FormField,
@@ -15,15 +7,18 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
-import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
+import React from "react";
+import { useForm } from "react-hook-form";
+import { z } from "zod";
 
 const schema = z.object({
-  Titulo: z.string().min(1, "El título es obligatorio."),
-  Institucion: z.string().min(1, "La institución es obligatoria."),
-  Nivel: z.string().min(1, "El nivel es obligatorio."),
-  Fecha: z.string().min(1, "La fecha es obligatoria."),
-  Pais: z.string().min(1, "El país es obligatorio."),
+  titulo: z.string().min(1, "El título es obligatorio."),
+  institucion: z.string().min(1, "La institución es obligatoria."),
+  fechaInicio: z.string().min(1, "La fecha de inicio es obligatoria."),
+  fechaFin: z.string().min(1, "La fecha de finalización es obligatoria."),
+  periodo: z.string().min(1, "El país es obligatorio."),
+  estaCursando: z.boolean(),
 });
 
 export type EditarEducacionItemValues = z.infer<typeof schema>;
@@ -39,28 +34,10 @@ const EditarEducacionItem: React.FC<EditarEducacionItemProps> = ({
   onSave,
   onCancel,
 }) => {
-  const [nivelOptions, setNivelOptions] = React.useState<NivelEducacion[]>([]);
-  const [paises, setPaises] = React.useState<string[]>([]);
-  const [loading, setLoading] = React.useState(true);
-
-  React.useEffect(() => {
-    setLoading(true);
-    Promise.all([fetchNivelesEducacion(), fetchPaises()])
-      .then(([niveles, countries]) => {
-        setNivelOptions(niveles);
-        setPaises(countries);
-      })
-      .finally(() => setLoading(false));
-  }, []);
-
   const form = useForm<EditarEducacionItemValues>({
     resolver: zodResolver(schema),
     defaultValues: initialValues,
   });
-
-  if (loading) {
-    return <Loader className="py-8" />;
-  }
 
   return (
     <Form {...form}>
@@ -71,7 +48,7 @@ const EditarEducacionItem: React.FC<EditarEducacionItemProps> = ({
       >
         <FormField
           control={form.control}
-          name="Titulo"
+          name="titulo"
           render={({ field }) => (
             <FormItem>
               <FormLabel htmlFor="edit-titulo">Título</FormLabel>
@@ -89,7 +66,7 @@ const EditarEducacionItem: React.FC<EditarEducacionItemProps> = ({
         />
         <FormField
           control={form.control}
-          name="Institucion"
+          name="institucion"
           render={({ field }) => (
             <FormItem>
               <FormLabel htmlFor="edit-institucion">Institución</FormLabel>
@@ -107,38 +84,36 @@ const EditarEducacionItem: React.FC<EditarEducacionItemProps> = ({
         />
         <FormField
           control={form.control}
-          name="Nivel"
+          name="periodo"
           render={({ field }) => (
             <FormItem>
-              <FormLabel htmlFor="edit-nivel">Nivel</FormLabel>
+              <FormLabel htmlFor="periodo">Periodo</FormLabel>
               <FormControl>
-                <select
+                <input
                   {...field}
-                  id="edit-nivel"
+                  id="periodo"
                   className="w-full border rounded px-3 py-2"
                   required
-                >
-                  <option value="">Seleccione un nivel</option>
-                  {nivelOptions.map((opt) => (
-                    <option key={opt.key} value={opt.value}>
-                      {opt.value}
-                    </option>
-                  ))}
-                </select>
+                />
               </FormControl>
               <FormMessage />
             </FormItem>
           )}
         />
+
         <FormField
           control={form.control}
-          name="Fecha"
+          name="fechaInicio"
           render={({ field }) => (
             <FormItem>
-              <FormLabel htmlFor="edit-fecha">Fecha</FormLabel>
+              <FormLabel htmlFor="edit-fecha-inicio">Fecha de inicio</FormLabel>
               <FormControl>
                 <DatePicker
-                  value={field.value ? new Date(field.value) : undefined}
+                  value={
+                    typeof field.value === "string" && field.value
+                      ? new Date(field.value)
+                      : undefined
+                  }
                   onChange={(date) => {
                     field.onChange(
                       date ? date.toISOString().split("T")[0] : ""
@@ -152,24 +127,25 @@ const EditarEducacionItem: React.FC<EditarEducacionItemProps> = ({
         />
         <FormField
           control={form.control}
-          name="Pais"
+          name="fechaFin"
           render={({ field }) => (
             <FormItem>
-              <FormLabel htmlFor="edit-pais">País</FormLabel>
+              <FormLabel htmlFor="edit-fecha-fin">
+                Fecha de finalización
+              </FormLabel>
               <FormControl>
-                <select
-                  {...field}
-                  id="edit-pais"
-                  className="w-full border rounded px-3 py-2"
-                  required
-                >
-                  <option value="">Seleccione un país</option>
-                  {paises.map((pais) => (
-                    <option key={pais} value={pais}>
-                      {pais}
-                    </option>
-                  ))}
-                </select>
+                <DatePicker
+                  value={
+                    typeof field.value === "string" && field.value
+                      ? new Date(field.value)
+                      : undefined
+                  }
+                  onChange={(date) => {
+                    field.onChange(
+                      date ? date.toISOString().split("T")[0] : ""
+                    );
+                  }}
+                />
               </FormControl>
               <FormMessage />
             </FormItem>

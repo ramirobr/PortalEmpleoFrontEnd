@@ -2,7 +2,8 @@ import type { Metadata } from "next";
 import { Jost } from "next/font/google";
 import "./styles/globals.css";
 import { Toaster } from "@/components/ui/sonner";
-import { SessionProvider } from "next-auth/react";
+import { auth } from "@/auth";
+import { Providers } from "./providers";
 
 const jost = Jost({
   variable: "--font-jost",
@@ -14,17 +15,16 @@ export const metadata: Metadata = {
   description: "Conecta, Certifica, Crece",
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
+  const session = await auth();
   return (
     <html lang="en">
       <body className="font-primary">
-        <SessionProvider>
-          {children}
-        </SessionProvider>
+        <Providers session={session}>{children}</Providers>
         <Toaster position="bottom-right" />
       </body>
     </html>

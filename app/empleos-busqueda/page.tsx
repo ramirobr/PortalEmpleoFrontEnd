@@ -1,6 +1,7 @@
 import { Filters } from "./components/Filters";
 import Footer from "../../components/shared/components/Footer";
-import Navbar from "../../components/shared/components/Navbar";
+// import Navbar from "../../components/shared/components/Navbar"; // Replaced by MainLayout
+import MainLayout from "../../components/shared/layout/MainLayout";
 import Banner from "../../components/shared/components/Banner";
 import Search from "./components/Search";
 import { Suspense } from "react";
@@ -29,20 +30,21 @@ export default async function JobsPage({ searchParams }: Props) {
 
   return (
     <div className="min-h-screen">
-      <Navbar />
-      <main className="mx-auto">
-        <Banner />
-        <section className="container py-12 flex gap-8">
-          <Suspense>
-            <Filters
-              initialFilters={filters as Record<string, string>}
-              filters={filtersItems}
-            />
-            <Search token={session?.user.accessToken} />
-          </Suspense>
-        </section>
-      </main>
-      <Footer />
+      <MainLayout>
+        <div className="mx-auto">
+          <Banner />
+          <section className="container py-12 flex gap-8">
+            <Suspense>
+              <Filters
+                initialFilters={filters as Record<string, string>}
+                filters={filtersItems}
+              />
+              <Search token={session?.user.accessToken} />
+            </Suspense>
+          </section>
+        </div>
+        <Footer />
+      </MainLayout>
     </div>
   );
 }

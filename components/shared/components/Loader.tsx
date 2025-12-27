@@ -1,4 +1,5 @@
 import React from "react";
+// Force refresh
 
 interface LoaderProps {
   size?: number;
@@ -8,7 +9,7 @@ interface LoaderProps {
 
 const Loader: React.FC<LoaderProps> = ({
   size = 40,
-  color = "#2563eb",
+  color = "var(--color-primary)",
   className = "",
 }) => (
   <div
@@ -20,8 +21,7 @@ const Loader: React.FC<LoaderProps> = ({
       width={size}
       height={size}
       viewBox="0 0 50 50"
-      className="animate-spin"
-      style={{ display: "inline-block" }}
+      className="animate-spin inline-block"
     >
       <circle
         cx="25"

@@ -1,51 +1,50 @@
 "use client";
-import React, { useState } from "react";
+import Badge from "@/components/shared/components/Badge";
+import { Pencil } from "@/components/shared/components/iconos/Pencil";
+import { Plus } from "@/components/shared/components/iconos/Plus";
+import { Trash } from "@/components/shared/components/iconos/Trash";
+import TituloSubrayado from "@/components/shared/tituloSubrayado";
+import { Card } from "@/components/ui/card";
 import {
   Dialog,
   DialogContent,
   DialogHeader,
   DialogTitle,
-  DialogClose,
 } from "@/components/ui/dialog";
+import { ExperienciaLaboral } from "@/types/profile";
+import { useState } from "react";
 import EditarExperenciaLaboralItem, {
   EditarExperenciaLaboralItemValues,
 } from "./EditarExperenciaLaboralItem";
-import TituloSubrayado from "@/components/shared/tituloSubrayado";
-import { Trash } from "@/components/shared/components/iconos/Trash";
-import { Pencil } from "@/components/shared/components/iconos/Pencil";
-import { Plus } from "@/components/shared/components/iconos/Plus";
-import { fetchExperienciaLaboral } from "@/lib/catalog/fetchExperienciaLaboral";
-import Loader from "@/components/shared/components/Loader";
-import Badge from "@/components/shared/components/Badge";
+import { CatalogsByType } from "@/types/search";
 
-const EditarExperenciaLaboral: React.FC = () => {
-  // Work experience items from API
-  const [educacionItems, setEducacionItems] = useState<
-    EditarExperenciaLaboralItemValues[]
-  >([]);
-  const [loading, setLoading] = useState(true);
+const initialExp = {
+  empresa: "",
+  puesto: "",
+  fechaInicio: "",
+  fechaFin: "",
+  pais: "",
+  estaTrabajando: false,
+  ciudad: "",
+};
 
-  React.useEffect(() => {
-    setLoading(true);
-    fetchExperienciaLaboral()
-      .then(setEducacionItems)
-      .finally(() => setLoading(false));
-  }, []);
+type EditarExperenciaLaboralProps = {
+  experiencia: ExperienciaLaboral[];
+  pais: CatalogsByType[] | undefined;
+};
+
+export default function EditarExperenciaLaboral({
+  experiencia,
+  pais,
+}: EditarExperenciaLaboralProps) {
+  const [educacionItems, setEducacionItems] =
+    useState<EditarExperenciaLaboralItemValues[]>(experiencia);
 
   // Edit modal state
   const [modalOpen, setModalOpen] = useState(false);
   const [editIndex, setEditIndex] = useState<number | null>(null);
-  const [editForm, setEditForm] = useState<EditarExperenciaLaboralItemValues>({
-    Empresa: "",
-    Titulo: "",
-    Puesto: "",
-    Institucion: "",
-    Nivel: "",
-    FechaInicio: "",
-    FechaFin: "",
-    Pais: "",
-    Actual: false,
-  });
+  const [editForm, setEditForm] =
+    useState<EditarExperenciaLaboralItemValues>(initialExp);
 
   // Add modal state
   const [addModalOpen, setAddModalOpen] = useState(false);
@@ -119,14 +118,10 @@ const EditarExperenciaLaboral: React.FC = () => {
     setAddModalOpen(false);
   };
 
-  if (loading) {
-    return <Loader className="py-8" />;
-  }
-
   return (
-    <section className="bg-white rounded-lg shadow p-8 mt-10">
-      <TituloSubrayado>Experiencia Laboral</TituloSubrayado>
-      <div className="flex justify-end items-center">
+    <Card className="px-6">
+      <div className="flex justify-between items-center">
+        <TituloSubrayado className="mb-0">Experiencia Laboral</TituloSubrayado>
         <button
           id="agregar"
           className="cursor-pointer flex items-center gap-2 text-primary font-semibold align-self-end"
@@ -139,13 +134,12 @@ const EditarExperenciaLaboral: React.FC = () => {
         </button>
       </div>
       <hr className="border-none h-px bg-[#ebebed] mt-4 mb-3 mx-0" />
-      <div className="mb-8">
+      <div>
         {educacionItems.map((item, idx) => (
           <div key={idx} className="my-4">
-            <div className="flex w-full justify-between items-center">
+            <div className="flex w-full justify-between items-center gap-6">
               <div className="flex items-center gap-3">
-                <h4 className="font-bold text-xl">{item.Titulo}</h4>
-                {item.Actual && (
+                {item.estaTrabajando && (
                   <Badge
                     variant="custom"
                     bgColor="bg-green-100"
@@ -159,7 +153,6 @@ const EditarExperenciaLaboral: React.FC = () => {
                 <button
                   id="editar"
                   className="cursor-pointer"
-                  aria-label={`Editar item educación: ${item.Titulo}`}
                   type="button"
                   onClick={() => handleEditClick(idx)}
                 >
@@ -168,7 +161,6 @@ const EditarExperenciaLaboral: React.FC = () => {
                 <button
                   id="borrar"
                   className="cursor-pointer"
-                  aria-label={`Borrar item educación: ${item.Titulo}`}
                   type="button"
                   onClick={() => handleDeleteClick(idx)}
                 >
@@ -176,16 +168,16 @@ const EditarExperenciaLaboral: React.FC = () => {
                 </button>
               </div>
             </div>
-            <p className="font-semibold">{item.Empresa}</p>
-            <p className="font-semibold">{item.Puesto}</p>
+            <p className="font-semibold">{item.empresa}</p>
+            <p className="font-semibold">{item.puesto}</p>
             <p>
-              {item.FechaInicio && item.FechaFin
-                ? `${new Date(item.FechaInicio).toLocaleDateString(
+              {item.fechaInicio && item.fechaFin
+                ? `${new Date(item.fechaInicio).toLocaleDateString(
                     "es-ES"
-                  )} - ${new Date(item.FechaFin).toLocaleDateString("es-ES")}`
+                  )} - ${new Date(item.fechaFin).toLocaleDateString("es-ES")}`
                 : ""}
             </p>
-            <p>{item.Pais}</p>
+            <p>{item.pais}</p>
             {idx !== educacionItems.length - 1 && (
               <hr className="border-none h-px bg-[#ebebed] mt-4 mb-3 mx-0" />
             )}
@@ -193,7 +185,6 @@ const EditarExperenciaLaboral: React.FC = () => {
         ))}
       </div>
 
-      {/* Modal for adding new item (Radix UI Dialog) */}
       <Dialog open={addModalOpen} onOpenChange={setAddModalOpen}>
         <DialogContent className="p-8 max-w-md">
           <DialogHeader>
@@ -202,24 +193,14 @@ const EditarExperenciaLaboral: React.FC = () => {
             </DialogTitle>
           </DialogHeader>
           <EditarExperenciaLaboralItem
-            initialValues={{
-              Empresa: "",
-              Titulo: "",
-              Puesto: "",
-              Institucion: "",
-              Nivel: "",
-              FechaInicio: "",
-              FechaFin: "",
-              Pais: "",
-              Actual: false,
-            }}
+            initialValues={initialExp}
             onSave={handleAddSave}
             onCancel={handleAddModalClose}
+            pais={pais}
           />
         </DialogContent>
       </Dialog>
 
-      {/* Modal for editing (Radix UI Dialog) */}
       <Dialog open={modalOpen} onOpenChange={setModalOpen}>
         <DialogContent className="p-8 max-w-md">
           <DialogHeader>
@@ -231,10 +212,10 @@ const EditarExperenciaLaboral: React.FC = () => {
             initialValues={editForm}
             onSave={handleEditSave}
             onCancel={handleModalClose}
+            pais={pais}
           />
         </DialogContent>
       </Dialog>
-      {/* Modal for delete confirmation (Radix UI Dialog) */}
       <Dialog open={deleteModalOpen} onOpenChange={setDeleteModalOpen}>
         <DialogContent className="p-8 max-w-md flex flex-col items-center">
           <DialogHeader>
@@ -260,8 +241,6 @@ const EditarExperenciaLaboral: React.FC = () => {
           </div>
         </DialogContent>
       </Dialog>
-    </section>
+    </Card>
   );
-};
-
-export default EditarExperenciaLaboral;
+}

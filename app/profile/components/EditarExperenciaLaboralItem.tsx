@@ -1,8 +1,4 @@
 import { DatePicker } from "@/components/ui/date-picker";
-import { fetchPaises } from "@/lib/catalog/fetchPaises";
-import Loader from "@/components/shared/components/Loader";
-import React from "react";
-import { z } from "zod";
 import {
   Form,
   FormControl,
@@ -11,60 +7,54 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
-import { useForm } from "react-hook-form";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { CatalogsByType } from "@/types/search";
 import { zodResolver } from "@hookform/resolvers/zod";
+import React from "react";
+import { useForm } from "react-hook-form";
+import { z } from "zod";
 
 const schema = z.object({
-  Empresa: z.string().min(1, "La empresa es obligatoria."),
-  Titulo: z.string().min(1, "El título es obligatorio."),
-  Puesto: z.string().min(1, "El puesto es obligatorio."),
-  Institucion: z.string().min(1, "La institución es obligatoria."),
-  Nivel: z.string().min(1, "El nivel es obligatorio."),
-  FechaInicio: z.string().min(1, "La fecha de inicio es obligatoria."),
-  FechaFin: z.string().min(1, "La fecha de finalización es obligatoria."),
-  Pais: z.string().min(1, "El país es obligatorio."),
-  Actual: z.boolean(),
+  empresa: z.string().min(1, "La empresa es obligatoria."),
+  puesto: z.string().min(1, "El puesto es obligatorio."),
+  ciudad: z.string().min(1, "La ciudad es obligatoria."), //TODO: Missing
+  fechaInicio: z.string().min(1, "La fecha de inicio es obligatoria."),
+  fechaFin: z.string().min(1, "La fecha de finalización es obligatoria."),
+  pais: z.string().min(1, "El país es obligatorio."),
+  estaTrabajando: z.boolean(),
 });
 
 export type EditarExperenciaLaboralItemValues = z.infer<typeof schema>;
 
 interface EditarExperenciaLaboralItemProps {
+  pais: CatalogsByType[] | undefined;
   initialValues: EditarExperenciaLaboralItemValues;
   onSave: (values: EditarExperenciaLaboralItemValues) => void;
   onCancel: () => void;
 }
 
+//TODO: Missing integration
 const EditarExperenciaLaboralItem: React.FC<
   EditarExperenciaLaboralItemProps
-> = ({ initialValues, onSave, onCancel }) => {
-  const [paises, setPaises] = React.useState<string[]>([]);
-  const [loading, setLoading] = React.useState(true);
-
-  React.useEffect(() => {
-    setLoading(true);
-    fetchPaises()
-      .then(setPaises)
-      .finally(() => setLoading(false));
-  }, []);
-
+> = ({ initialValues, pais, onSave, onCancel }) => {
   const form = useForm<EditarExperenciaLaboralItemValues>({
     resolver: zodResolver(schema),
     defaultValues: {
-      Empresa: initialValues.Empresa || "",
-      Titulo: initialValues.Titulo || "",
-      Puesto: initialValues.Puesto || "",
-      Institucion: initialValues.Institucion || "",
-      Nivel: initialValues.Nivel || "",
-      FechaInicio: initialValues.FechaInicio || "",
-      FechaFin: initialValues.FechaFin || "",
-      Pais: initialValues.Pais || "",
-      Actual: initialValues.Actual ?? false,
+      empresa: initialValues.empresa || "",
+      puesto: initialValues.puesto || "",
+      fechaInicio: initialValues.fechaInicio || "",
+      fechaFin: initialValues.fechaFin || "",
+      pais: initialValues.pais || "",
+      estaTrabajando: initialValues.estaTrabajando ?? false,
+      ciudad: "",
     },
   });
-
-  if (loading) {
-    return <Loader className="py-8" />;
-  }
 
   return (
     <Form {...form}>
@@ -77,7 +67,7 @@ const EditarExperenciaLaboralItem: React.FC<
       >
         <FormField<EditarExperenciaLaboralItemValues>
           control={form.control}
-          name="Empresa"
+          name="empresa"
           render={({ field }) => (
             <FormItem>
               <FormLabel htmlFor="edit-empresa">Empresa</FormLabel>
@@ -95,7 +85,7 @@ const EditarExperenciaLaboralItem: React.FC<
             </FormItem>
           )}
         />
-        <FormField<EditarExperenciaLaboralItemValues>
+        {/* <FormField<EditarExperenciaLaboralItemValues>
           control={form.control}
           name="Titulo"
           render={({ field }) => (
@@ -116,10 +106,10 @@ const EditarExperenciaLaboralItem: React.FC<
               <FormMessage />
             </FormItem>
           )}
-        />
+        /> */}
         <FormField<EditarExperenciaLaboralItemValues>
           control={form.control}
-          name="Puesto"
+          name="puesto"
           render={({ field }) => (
             <FormItem>
               <FormLabel htmlFor="editar-puesto">Puesto</FormLabel>
@@ -139,7 +129,7 @@ const EditarExperenciaLaboralItem: React.FC<
         />
         <FormField<EditarExperenciaLaboralItemValues>
           control={form.control}
-          name="FechaInicio"
+          name="fechaInicio"
           render={({ field }) => (
             <FormItem>
               <FormLabel htmlFor="edit-fecha-inicio">Fecha de inicio</FormLabel>
@@ -163,7 +153,7 @@ const EditarExperenciaLaboralItem: React.FC<
         />
         <FormField<EditarExperenciaLaboralItemValues>
           control={form.control}
-          name="FechaFin"
+          name="fechaFin"
           render={({ field }) => (
             <FormItem>
               <FormLabel htmlFor="edit-fecha-fin">
@@ -189,25 +179,26 @@ const EditarExperenciaLaboralItem: React.FC<
         />
         <FormField<EditarExperenciaLaboralItemValues>
           control={form.control}
-          name="Pais"
+          name="pais"
           render={({ field }) => (
             <FormItem>
               <FormLabel htmlFor="edit-pais">País</FormLabel>
               <FormControl>
-                <select
-                  {...field}
-                  id="edit-pais"
-                  className="w-full border rounded px-3 py-2"
-                  required
-                  value={field.value as string}
+                <Select
+                  onValueChange={field.onChange}
+                  defaultValue={field.value?.toString()}
                 >
-                  <option value="">Seleccione un país</option>
-                  {paises.map((pais) => (
-                    <option key={pais} value={pais}>
-                      {pais}
-                    </option>
-                  ))}
-                </select>
+                  <SelectTrigger id="edit-pais">
+                    <SelectValue placeholder="Seleccione un país" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {pais?.map((pais) => (
+                      <SelectItem key={pais.idCatalogo} value={pais.nombre}>
+                        {pais.nombre}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -215,7 +206,7 @@ const EditarExperenciaLaboralItem: React.FC<
         />
         <FormField<EditarExperenciaLaboralItemValues>
           control={form.control}
-          name="Actual"
+          name="estaTrabajando"
           render={({ field }) => (
             <FormItem>
               <div className="flex items-center gap-2">

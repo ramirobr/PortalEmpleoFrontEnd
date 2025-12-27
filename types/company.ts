@@ -1,12 +1,11 @@
-import { CatalogEndpoints } from "@/lib/catalog/fetch";
-import { CatalogItem, CatalogsByType } from "./search";
+import { CatalogsByType } from "./search";
 
 export type FormFieldsResponse = {
-  ciudad: CatalogsByType[] | undefined
-  industria: CatalogsByType[] | undefined
-  condicionFiscal: CatalogsByType[] | undefined
-  cantidadEmpleados: CatalogsByType[] | undefined
-} & Record<CatalogEndpoints, CatalogItem[] | undefined>
+  ciudad?: CatalogsByType[];
+  industria?: CatalogsByType[];
+  condicionFiscal?: CatalogsByType[];
+  cantidadEmpleados?: CatalogsByType[];
+};
 
 export type CompanySignUpData = {
   nombreEmpresa: string,

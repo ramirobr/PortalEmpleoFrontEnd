@@ -1,5 +1,8 @@
 "use client";
-import React, { useState } from "react";
+import Badge from "@/components/shared/components/Badge";
+import { Plus } from "@/components/shared/components/iconos/Plus";
+import TituloSubrayado from "@/components/shared/tituloSubrayado";
+import { Card } from "@/components/ui/card";
 import {
   Dialog,
   DialogContent,
@@ -14,54 +17,34 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
-import { useForm } from "react-hook-form";
+import { Habilidades } from "@/types/profile";
 import { zodResolver } from "@hookform/resolvers/zod";
+import React, { useState } from "react";
+import { useForm } from "react-hook-form";
 import { z } from "zod";
-import TituloSubrayado from "@/components/shared/tituloSubrayado";
-import { Trash } from "@/components/shared/components/iconos/Trash";
-import { Pencil } from "@/components/shared/components/iconos/Pencil";
-import { Plus } from "@/components/shared/components/iconos/Plus";
-import Loader from "@/components/shared/components/Loader";
-import Badge from "@/components/shared/components/Badge";
-import { fetchHabilidades, Habilidad } from "@/lib/catalog/fetchHabilidades";
 
 const habilidadSchema = z.object({
   nombre: z.string().min(1, "El nombre es obligatorio."),
-  nivel: z.string().min(1, "El nivel es obligatorio."),
 });
 
-const EditarHabilidades: React.FC = () => {
-  const [habilidades, setHabilidades] = useState<Habilidad[]>([]);
-  const [loading, setLoading] = useState(true);
+type Habilidad = Pick<Habilidades, "nombre">;
+type EditarHabilidadesProps = {
+  habilidades: Habilidades[];
+};
 
-  React.useEffect(() => {
-    setLoading(true);
-    fetchHabilidades()
-      .then(setHabilidades)
-      .finally(() => setLoading(false));
-  }, []);
-
-  // Edit modal state
+export default function EditarHabilidades({
+  habilidades: initialHabilidades,
+}: EditarHabilidadesProps) {
+  const [habilidades, setHabilidades] =
+    useState<Habilidades[]>(initialHabilidades);
   const [modalOpen, setModalOpen] = useState(false);
   const [editIndex, setEditIndex] = useState<number | null>(null);
   const [editForm, setEditForm] = useState<Habilidad>({
     nombre: "",
-    nivel: "",
   });
-
-  // Add modal state
   const [addModalOpen, setAddModalOpen] = useState(false);
-
-  // Delete confirmation modal state
   const [deleteModalOpen, setDeleteModalOpen] = useState(false);
   const [deleteIndex, setDeleteIndex] = useState<number | null>(null);
-
-  // Open edit modal and set form data
-  const handleEditClick = (idx: number) => {
-    setEditIndex(idx);
-    setEditForm({ ...habilidades[idx] });
-    setModalOpen(true);
-  };
 
   // Open add modal
   const handleAddClick = () => {
@@ -78,7 +61,8 @@ const EditarHabilidades: React.FC = () => {
   const handleEditSave = (values: Habilidad) => {
     if (editIndex !== null) {
       const updated = [...habilidades];
-      updated[editIndex] = { ...values };
+      //TODO: Integration
+      // updated[editIndex] = { ...values };
       setHabilidades(updated);
       setModalOpen(false);
       setEditIndex(null);
@@ -87,7 +71,8 @@ const EditarHabilidades: React.FC = () => {
 
   // Save new item from add modal form (add to front)
   const handleAddSave = (values: Habilidad) => {
-    setHabilidades([{ ...values }, ...habilidades]);
+    //TODO: Integration
+    // setHabilidades([{ ...values }, ...habilidades]);
     setAddModalOpen(false);
   };
 
@@ -119,15 +104,10 @@ const EditarHabilidades: React.FC = () => {
     setAddModalOpen(false);
   };
 
-  if (loading) {
-    return <Loader className="py-8" />;
-  }
-
   return (
-    <section className="bg-white rounded-lg shadow p-8 mt-10">
-      <TituloSubrayado>Habilidades</TituloSubrayado>
+    <Card className="px-6">
       <div className="flex justify-between items-center">
-        <h3 className="text-lg font-bold mb-4">Competencias y habilidades</h3>
+        <TituloSubrayado className="mb-0">Habilidades</TituloSubrayado>
         <button
           id="agregar"
           className="cursor-pointer flex items-center gap-2 text-primary font-semibold"
@@ -139,7 +119,7 @@ const EditarHabilidades: React.FC = () => {
           Añadir item
         </button>
       </div>
-      <hr className="border-none h-px bg-[#ebebed] mt-4 mb-3 mx-0" />
+
       <div className="mb-8 flex flex-wrap gap-3">
         {habilidades.map((item, idx) => (
           <Badge
@@ -213,9 +193,9 @@ const EditarHabilidades: React.FC = () => {
           </div>
         </DialogContent>
       </Dialog>
-    </section>
+    </Card>
   );
-};
+}
 
 // Form component for adding new habilidad
 interface AddHabilidadFormProps {
@@ -231,7 +211,6 @@ const AddHabilidadForm: React.FC<AddHabilidadFormProps> = ({
     resolver: zodResolver(habilidadSchema),
     defaultValues: {
       nombre: "",
-      nivel: "",
     },
   });
 
@@ -341,5 +320,3 @@ const EditHabilidadForm: React.FC<EditHabilidadFormProps> = ({
     </Form>
   );
 };
-
-export default EditarHabilidades;

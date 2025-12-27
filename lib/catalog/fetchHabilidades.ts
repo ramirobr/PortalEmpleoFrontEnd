@@ -2,7 +2,6 @@ import { fetchApi } from "../apiClient";
 
 export interface Habilidad {
   nombre: string;
-  nivel: string;
 }
 
 export async function fetchHabilidades(): Promise<Habilidad[]> {

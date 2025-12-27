@@ -2,16 +2,6 @@
 
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { Eye, Mail } from "lucide-react";
-import Link from "next/link";
-import { useRef, useState } from "react";
-import { useForm } from "react-hook-form";
-import { z } from "zod";
-import Footer from "../../../components/shared/components/Footer";
-import Navbar from "../../../components/shared/components/Navbar";
-
 import {
   Form,
   FormControl,
@@ -20,10 +10,19 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
-import { signIn, useSession } from "next-auth/react";
-import { useRouter } from "next/navigation";
-import { toast } from "sonner";
+import { Input } from "@/components/ui/input";
 import { SignIn } from "@/lib/auth/signin";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { Eye, Mail } from "lucide-react";
+import { useSession } from "next-auth/react";
+import Link from "next/link";
+import { useRouter } from "next/navigation";
+import { useRef, useState } from "react";
+import { useForm } from "react-hook-form";
+import { toast } from "sonner";
+import { z } from "zod";
+import Footer from "../../../components/shared/components/Footer";
+import Navbar from "../../../components/shared/components/Navbar";
 
 const loginSchema = z.object({
   email: z.email("Email inválido"),
@@ -36,6 +35,10 @@ export default function LoginPage() {
   const router = useRouter();
   const [showPassword, setShowPassword] = useState(false);
   const timeoutRef = useRef<NodeJS.Timeout | null>(null);
+  const next =
+    typeof window !== "undefined"
+      ? new URLSearchParams(window.location.search).get("next")
+      : null;
   const { update } = useSession();
   const form = useForm<LoginValues>({
     resolver: zodResolver(loginSchema),
@@ -62,7 +65,7 @@ export default function LoginPage() {
 
     form.reset();
     await update();
-    router.push("/");
+    router.push(next ?? "/");
   }
 
   return (
@@ -209,7 +212,7 @@ export default function LoginPage() {
                   Ingresar
                 </Button>
 
-                <div className="text-center mt-4 text-sm">
+                <div className="text-center text-sm">
                   ¿No tienes cuenta?{" "}
                   <Link
                     href="/auth/email"

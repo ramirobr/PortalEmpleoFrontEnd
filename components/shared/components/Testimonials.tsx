@@ -1,11 +1,12 @@
 "use client";
 import React, { useEffect, useState } from "react";
 import { Swiper, SwiperSlide } from "swiper/react";
-import { Pagination, Navigation } from "swiper/modules";
+import { Pagination } from "swiper/modules";
 import "swiper/css";
 import "swiper/css/pagination";
 import "swiper/css/navigation";
 import { Testimonial } from "@/types/testimonials";
+import "@/app/styles/layout/swiper.css"; // Custom styles for Swiper
 import Image from "next/image";
 
 export type TestimonialsProps = {
@@ -19,7 +20,7 @@ export default function Testimonials({ testimonials }: TestimonialsProps) {
         <h2 className="section-title">Testimonios</h2>
         <div className="relative">
           <Swiper
-            modules={[Pagination, Navigation]}
+            modules={[Pagination]}
             pagination={{
               clickable: true,
               renderBullet: (_, className) => {
@@ -30,7 +31,6 @@ export default function Testimonials({ testimonials }: TestimonialsProps) {
                 return `<span class='${safeClass}'></span>`;
               },
             }}
-            navigation={true}
             spaceBetween={32}
             slidesPerView={1}
             breakpoints={{
@@ -68,26 +68,19 @@ export default function Testimonials({ testimonials }: TestimonialsProps) {
             ))}
           </Swiper>
           <style>{`
-            .testimonials-swiper .swiper-button-prev,
-            .testimonials-swiper .swiper-button-next {
-              position: absolute;
-              top: 50%;
-              transform: translateY(-50%);
-              z-index: 10;
-              width: 44px;
-              height: 44px;
-              background: #fff;
-              border-radius: 50%;
-              box-shadow: 0 2px 8px rgba(0,0,0,0.08);
-              display: flex;
-              align-items: center;
-              justify-content: center;
+            .testimonials-swiper {
+              overflow: hidden !important;
             }
-            .testimonials-swiper .swiper-button-prev {
-              left: -56px;
+            .testimonials-swiper .swiper-wrapper {
+              align-items: stretch;
             }
-            .testimonials-swiper .swiper-button-next {
-              right: -56px;
+            .testimonials-swiper .swiper-slide {
+              display: flex !important;
+              align-items: stretch;
+              height: auto;
+            }
+            .testimonials-swiper .swiper-slide > div {
+              width: 100%;
             }
             .testimonials-swiper .swiper-pagination {
               position: static;

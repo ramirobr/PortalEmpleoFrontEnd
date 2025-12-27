@@ -102,7 +102,7 @@ export function Filters({ initialFilters, filters }: Props) {
             </SelectTrigger>
             <SelectContent>
               <SelectItem value=" ">Todas</SelectItem>
-              {filters?.CIUDAD?.map((ciudad) => (
+              {filters?.ciudad?.map((ciudad) => (
                 <SelectItem
                   key={ciudad.idCatalogo}
                   value={ciudad.idCatalogo.toString()}
@@ -125,7 +125,7 @@ export function Filters({ initialFilters, filters }: Props) {
             </SelectTrigger>
             <SelectContent>
               <SelectItem value=" ">Todas</SelectItem>
-              {filters?.PROVINCIA?.map((provincia) => (
+              {filters?.provincia?.map((provincia) => (
                 <SelectItem
                   key={provincia.idCatalogo}
                   value={provincia.idCatalogo.toString()}
@@ -147,7 +147,7 @@ export function Filters({ initialFilters, filters }: Props) {
               <SelectValue placeholder="Todas" />
             </SelectTrigger>
             <SelectContent>
-              {filters?.FILTRO_FECHAS?.map((fecha) => (
+              {filters?.filtro_fechas?.map((fecha) => (
                 <SelectItem
                   key={fecha.idCatalogo}
                   value={fecha.idCatalogo.toString()}
@@ -170,7 +170,7 @@ export function Filters({ initialFilters, filters }: Props) {
             </SelectTrigger>
             <SelectContent>
               <SelectItem value=" ">Todas</SelectItem>
-              {filters?.EXPERIENCIA?.map((exp) => (
+              {filters?.experiencia?.map((exp) => (
                 <SelectItem
                   key={exp.idCatalogo}
                   value={exp.idCatalogo.toString()}
@@ -213,7 +213,7 @@ export function Filters({ initialFilters, filters }: Props) {
             </SelectTrigger>
             <SelectContent>
               <SelectItem value=" ">Todas</SelectItem>
-              {filters?.MODALIDAD_TRABAJO?.map((modalidad) => (
+              {filters?.modalidad_trabajo?.map((modalidad) => (
                 <SelectItem
                   key={modalidad.idCatalogo}
                   value={modalidad.idCatalogo.toString()}

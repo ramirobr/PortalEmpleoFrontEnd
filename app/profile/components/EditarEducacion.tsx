@@ -1,49 +1,41 @@
 "use client";
-import React, { useState } from "react";
+import { Pencil } from "@/components/shared/components/iconos/Pencil";
+import { Plus } from "@/components/shared/components/iconos/Plus";
+import { Trash } from "@/components/shared/components/iconos/Trash";
+import TituloSubrayado from "@/components/shared/tituloSubrayado";
+import { Card } from "@/components/ui/card";
 import {
   Dialog,
   DialogContent,
   DialogHeader,
   DialogTitle,
-  DialogClose,
 } from "@/components/ui/dialog";
+import { Educacion } from "@/types/profile";
+import { useState } from "react";
 import EditarEducacionItem, {
   EditarEducacionItemValues,
 } from "./EditarEducacionItem";
-import TituloSubrayado from "@/components/shared/tituloSubrayado";
-import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { z } from "zod";
-import { Trash } from "@/components/shared/components/iconos/Trash";
-import { Pencil } from "@/components/shared/components/iconos/Pencil";
-import { Plus } from "@/components/shared/components/iconos/Plus";
-import { fetchEducacion } from "@/lib/catalog/fetchEducacion";
-import Loader from "@/components/shared/components/Loader";
 
-const EditarEducacion: React.FC = () => {
-  // Education items from API
-  const [educacionItems, setEducacionItems] = useState<
-    EditarEducacionItemValues[]
-  >([]);
-  const [loading, setLoading] = useState(true);
+const initial: EditarEducacionItemValues = {
+  titulo: "",
+  periodo: "",
+  fechaInicio: "",
+  fechaFin: "",
+  institucion: "",
+  estaCursando: false,
+};
 
-  React.useEffect(() => {
-    setLoading(true);
-    fetchEducacion()
-      .then(setEducacionItems)
-      .finally(() => setLoading(false));
-  }, []);
+type EditarEducacionProps = {
+  educacion: Educacion[];
+};
 
-  // Edit modal state
+export default function EditarEducacion({ educacion }: EditarEducacionProps) {
+  const [educacionItems, setEducacionItems] =
+    useState<EditarEducacionItemValues[]>(educacion);
+
   const [modalOpen, setModalOpen] = useState(false);
   const [editIndex, setEditIndex] = useState<number | null>(null);
-  const [editForm, setEditForm] = useState<EditarEducacionItemValues>({
-    Titulo: "",
-    Institucion: "",
-    Nivel: "",
-    Fecha: "",
-    Pais: "",
-  });
+  const [editForm, setEditForm] = useState<EditarEducacionItemValues>(initial);
 
   // Add modal state
   const [addModalOpen, setAddModalOpen] = useState(false);
@@ -117,15 +109,10 @@ const EditarEducacion: React.FC = () => {
     setAddModalOpen(false);
   };
 
-  if (loading) {
-    return <Loader className="py-8" />;
-  }
-
   return (
-    <section className="bg-white rounded-lg shadow p-8 mt-10">
-      <TituloSubrayado>Educación</TituloSubrayado>
+    <Card className="px-6">
       <div className="flex justify-between items-center">
-        <h3 className="text-lg font-bold mb-4">Formación académica</h3>
+        <TituloSubrayado className="mb-0">Educación</TituloSubrayado>
         <button
           id="agregar"
           className="cursor-pointer flex items-center gap-2 text-primary font-semibold"
@@ -141,13 +128,13 @@ const EditarEducacion: React.FC = () => {
       <div className="mb-8">
         {educacionItems.map((item, idx) => (
           <div key={idx} className="my-4 ">
-            <div className="flex w-full justify-between items-center">
-              <h4 className="font-bold text-xl">{item.Titulo}</h4>
+            <div className="flex w-full justify-between items-center gap-6">
+              <h4 className="font-bold text-xl">{item.titulo}</h4>
               <div className="flex items-center gap-3">
                 <button
                   id="editar"
                   className="cursor-pointer"
-                  aria-label={`Editar item educación: ${item.Titulo}`}
+                  aria-label={`Editar item educación: ${item.titulo}`}
                   type="button"
                   onClick={() => handleEditClick(idx)}
                 >
@@ -156,7 +143,7 @@ const EditarEducacion: React.FC = () => {
                 <button
                   id="borrar"
                   className="cursor-pointer"
-                  aria-label={`Borrar item educación: ${item.Titulo}`}
+                  aria-label={`Borrar item educación: ${item.titulo}`}
                   type="button"
                   onClick={() => handleDeleteClick(idx)}
                 >
@@ -164,13 +151,12 @@ const EditarEducacion: React.FC = () => {
                 </button>
               </div>
             </div>
-            <p className="font-semibold">{item.Institucion}</p>
-            <p className="font-semibold">{item.Nivel}</p>
+            <p className="font-semibold">{item.institucion}</p>
             <p>
-              {item.Fecha
+              {item.fechaFin
                 ? (() => {
-                    const date = new Date(item.Fecha);
-                    if (isNaN(date.getTime())) return item.Fecha;
+                    const date = new Date(item.fechaFin);
+                    if (isNaN(date.getTime())) return item.fechaFin;
                     // Use deterministic month names to avoid hydration mismatch
                     const monthNames = [
                       "Ene",
@@ -191,14 +177,12 @@ const EditarEducacion: React.FC = () => {
                   })()
                 : ""}
             </p>
-            <p>{item.Pais}</p>
             {idx !== educacionItems.length - 1 && (
               <hr className="border-none h-px bg-[#ebebed] mt-4 mb-3 mx-0" />
             )}
           </div>
         ))}
 
-        {/* Modal for adding (Radix UI Dialog) */}
         <Dialog open={addModalOpen} onOpenChange={setAddModalOpen}>
           <DialogContent className="p-8 max-w-md">
             <DialogHeader>
@@ -207,20 +191,13 @@ const EditarEducacion: React.FC = () => {
               </DialogTitle>
             </DialogHeader>
             <EditarEducacionItem
-              initialValues={{
-                Titulo: "",
-                Institucion: "",
-                Nivel: "",
-                Fecha: "",
-                Pais: "",
-              }}
+              initialValues={initial}
               onSave={handleAddSave}
               onCancel={handleAddModalClose}
             />
           </DialogContent>
         </Dialog>
 
-        {/* Modal for editing (Radix UI Dialog) */}
         <Dialog open={modalOpen} onOpenChange={setModalOpen}>
           <DialogContent className="p-8 max-w-md">
             <DialogHeader>
@@ -236,7 +213,6 @@ const EditarEducacion: React.FC = () => {
           </DialogContent>
         </Dialog>
 
-        {/* Modal for delete confirmation (Radix UI Dialog) */}
         <Dialog open={deleteModalOpen} onOpenChange={setDeleteModalOpen}>
           <DialogContent className="p-8 max-w-md flex flex-col items-center">
             <DialogHeader>
@@ -263,8 +239,6 @@ const EditarEducacion: React.FC = () => {
           </DialogContent>
         </Dialog>
       </div>
-    </section>
+    </Card>
   );
-};
-
-export default EditarEducacion;
+}

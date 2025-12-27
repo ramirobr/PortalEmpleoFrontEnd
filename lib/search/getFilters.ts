@@ -1,31 +1,20 @@
-import { CatalogTypes, fetchAllCatalogsByType } from "@/lib/catalog/fetch";
+import { fetchAllCatalogsByType } from "@/lib/catalog/fetch";
 import { fetchActiveCompanies } from "@/lib/company/fetchActiveCompanies";
-import { FiltersResponse } from "@/types/search";
-
-const filters: CatalogTypes[] = [
-  "FILTRO_FECHAS",
-  "EXPERIENCIA",
-  "MODALIDAD_TRABAJO",
-  "PROVINCIA",
-  "CIUDAD"
-]
+import { FILTERS } from "@/types/search";
 
 export async function fetchFilters() {
   try {
-    const [catalogResults, activeCompanies] = await Promise.all([
-      Promise.all(filters.map((endpoint) => fetchAllCatalogsByType(endpoint))),
+    const [results, activeCompanies] = await Promise.all([
+      Promise.all(FILTERS.map(fetchAllCatalogsByType)),
       fetchActiveCompanies(),
     ]);
 
-    const response = filters.reduce((acc, endpoint, i) => {
-      acc[endpoint] = catalogResults[i];
-      return acc;
-    }, {} as FiltersResponse);
-
     return {
-      ...response,
       activeCompanies,
-    } as FiltersResponse;
+      ...Object.fromEntries(
+        FILTERS.map((type, i) => [type.toLowerCase(), results[i]])
+      ),
+    };
   } catch (error) {
     console.warn("Issue getting all filters", error);
   }
