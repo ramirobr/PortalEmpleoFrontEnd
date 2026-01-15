@@ -5,8 +5,9 @@ const CATALOG_TYPES = [
   "CIUDAD",
   "INDUSTRIA",
   "CANTIDAD_EMPLEADOS",
-  "CONDICION_FISCAL"
-] as CatalogTypes[];
+  "CONDICION_FISCAL",
+  "GENERO"
+] as const satisfies readonly CatalogTypes[];
 
 export async function fetchFormFields(): Promise<FormFieldsResponse | null> {
   try {
@@ -14,7 +15,8 @@ export async function fetchFormFields(): Promise<FormFieldsResponse | null> {
       ciudad,
       industria,
       cantidadEmpleados,
-      condicionFiscal
+      condicionFiscal,
+      genero
     ] = await Promise.all(
       CATALOG_TYPES.map(fetchAllCatalogsByType)
     );
@@ -23,7 +25,8 @@ export async function fetchFormFields(): Promise<FormFieldsResponse | null> {
       ciudad,
       industria,
       cantidadEmpleados,
-      condicionFiscal
+      condicionFiscal,
+      genero
     } as FormFieldsResponse;
   } catch (error) {
     console.warn("Issue getting form fields", error);

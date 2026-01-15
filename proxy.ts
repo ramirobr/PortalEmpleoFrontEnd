@@ -10,10 +10,10 @@ const ROLE_RULES: {
     match: (pathname) => pathname.startsWith("/profile"),
     roles: ["Postulante"],
   },
-  /*{
+  {
       match: pathname => pathname.startsWith('/empleos-busqueda'),
       roles: ['Postulante'],
-    },*/
+    },
   {
     match: (pathname) => pathname.startsWith("/admin"),
     roles: ["Administrador Empresa"],

@@ -225,7 +225,11 @@ export function Filters({ initialFilters, filters }: Props) {
           </Select>
         </div>
 
-        <button type="button" className="btn btn-primary" onClick={clearAll}>
+        <button
+          type="button"
+          className="btn btn-primary cursor-pointer"
+          onClick={clearAll}
+        >
           Limpiar filtros
         </button>
       </div>

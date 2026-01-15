@@ -11,111 +11,144 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
-import { ExperienciaLaboral } from "@/types/profile";
+import { useAuthStore } from "@/context/authStore";
+import { fetchApi } from "@/lib/apiClient";
+import {
+  DatosPersonalesFieldsResponse,
+  ExperienciaLaboral,
+  ExperienciaLaboralResponse,
+  PlainStringDataMessage,
+} from "@/types/user";
+import { useSession } from "next-auth/react";
 import { useState } from "react";
-import EditarExperenciaLaboralItem, {
-  EditarExperenciaLaboralItemValues,
-} from "./EditarExperenciaLaboralItem";
-import { CatalogsByType } from "@/types/search";
-
-const initialExp = {
-  empresa: "",
-  puesto: "",
-  fechaInicio: "",
-  fechaFin: "",
-  pais: "",
-  estaTrabajando: false,
-  ciudad: "",
-};
+import { toast } from "sonner";
+import EditarExperenciaLaboralItem from "./EditarExperenciaLaboralItem";
 
 type EditarExperenciaLaboralProps = {
   experiencia: ExperienciaLaboral[];
-  pais: CatalogsByType[] | undefined;
+  fields: DatosPersonalesFieldsResponse | null;
 };
 
 export default function EditarExperenciaLaboral({
   experiencia,
-  pais,
+  fields,
 }: EditarExperenciaLaboralProps) {
-  const [educacionItems, setEducacionItems] =
-    useState<EditarExperenciaLaboralItemValues[]>(experiencia);
-
-  // Edit modal state
-  const [modalOpen, setModalOpen] = useState(false);
-  const [editIndex, setEditIndex] = useState<number | null>(null);
-  const [editForm, setEditForm] =
-    useState<EditarExperenciaLaboralItemValues>(initialExp);
-
-  // Add modal state
+  const [Experiencias, setExperiencias] =
+    useState<ExperienciaLaboral[]>(experiencia);
+  const [editModal, setEditModal] = useState<ExperienciaLaboral | null>(null);
+  const [deleteModal, setDeleteModal] = useState<string | null>(null);
   const [addModalOpen, setAddModalOpen] = useState(false);
+  const idCurriculum = useAuthStore((s) => s.idCurriculum);
+  const { data: session } = useSession();
 
-  // Delete confirmation modal state
-  const [deleteModalOpen, setDeleteModalOpen] = useState(false);
-  const [deleteIndex, setDeleteIndex] = useState<number | null>(null);
-
-  // Open edit modal and set form data
-  const handleEditClick = (idx: number) => {
-    setEditIndex(idx);
-    setEditForm({ ...educacionItems[idx] });
-    setModalOpen(true);
+  const handleEditClick = (id: string) => {
+    const exp = Experiencias.find((exp) => exp.id === id);
+    if (!exp) return;
+    setEditModal(exp);
   };
 
-  // Open add modal
   const handleAddClick = () => {
     setAddModalOpen(true);
   };
 
-  // Open delete confirmation modal
-  const handleDeleteClick = (idx: number) => {
-    setDeleteIndex(idx);
-    setDeleteModalOpen(true);
+  const handleDeleteClick = (id: string) => {
+    setDeleteModal(id);
   };
 
-  // Radix Dialog handles scroll lock automatically
+  const handleEditSave = async (values: ExperienciaLaboral) => {
+    if (!editModal) return;
+    const body = {
+      ...values,
+      idExperiencia: editModal.id,
+      idCurriculum,
+      orden: 0,
+    };
 
-  // Save changes from edit modal form
-  const handleEditSave = (values: EditarExperenciaLaboralItemValues) => {
-    if (editIndex !== null) {
-      const updated = [...educacionItems];
-      updated[editIndex] = { ...values };
-      setEducacionItems(updated);
-      setModalOpen(false);
-      setEditIndex(null);
+    const res = await fetchApi<PlainStringDataMessage>(
+      "/ExperienciaLaboral/actualizar",
+      {
+        method: "PUT",
+        token: session?.user.accessToken,
+        body,
+      }
+    );
+
+    if (!res?.isSuccess) {
+      toast.error("Error editando experiencia");
+      return;
     }
+
+    setExperiencias((prev) =>
+      prev.map((item) =>
+        item.id === editModal.id ? { ...values, id: editModal.id } : item
+      )
+    );
+    handleCancelEdit();
+    toast.success(res?.data);
   };
 
-  // Save new item from add modal form (add to front)
-  const handleAddSave = (values: EditarExperenciaLaboralItemValues) => {
-    setEducacionItems([{ ...values }, ...educacionItems]);
-    setAddModalOpen(false);
-  };
+  const handleAddSave = async (values: ExperienciaLaboral) => {
+    const { estaTrabajando, ...data } = values;
+    const body = {
+      ...data,
+      trabajoActual: estaTrabajando,
+      idCurriculum,
+      orden: 0,
+    };
 
-  // Confirm delete
-  const handleDeleteConfirm = () => {
-    if (deleteIndex !== null) {
-      const updated = [...educacionItems];
-      updated.splice(deleteIndex, 1);
-      setEducacionItems(updated);
-      setDeleteModalOpen(false);
-      setDeleteIndex(null);
+    const res = await fetchApi<ExperienciaLaboralResponse>(
+      "/ExperienciaLaboral/agregar",
+      {
+        method: "POST",
+        token: session?.user.accessToken,
+        body,
+      }
+    );
+
+    if (!res?.isSuccess) {
+      toast.error("Error agregando experiencia");
+      return;
     }
+
+    const exp: ExperienciaLaboral = {
+      ...data,
+      id: res.data.idExperiencia,
+      estaTrabajando,
+    };
+
+    setExperiencias([exp, ...Experiencias]);
+    handleAddModalClose();
+    toast.success("Experiencia laboral agregada.");
   };
 
-  // Cancel delete
+  const handleDeleteConfirm = async () => {
+    if (!deleteModal) return;
+    const res = await fetchApi<PlainStringDataMessage>(
+      "/ExperienciaLaboral/borrar/" + deleteModal,
+      {
+        method: "DELETE",
+        token: session?.user.accessToken,
+      }
+    );
+    if (!res?.isSuccess) {
+      toast.error("Error eliminando experiencia");
+      return;
+    }
+    setExperiencias((prev) => prev.filter((h) => h.id !== deleteModal));
+    handleDeleteCancel();
+    toast.success(res.data);
+  };
+
   const handleDeleteCancel = () => {
-    setDeleteModalOpen(false);
-    setDeleteIndex(null);
+    setDeleteModal(null);
   };
 
-  // Close edit modal
-  const handleModalClose = () => {
-    setModalOpen(false);
-    setEditIndex(null);
-  };
-
-  // Close add modal
   const handleAddModalClose = () => {
     setAddModalOpen(false);
+  };
+
+  const handleCancelEdit = () => {
+    setEditModal(null);
   };
 
   return (
@@ -135,54 +168,58 @@ export default function EditarExperenciaLaboral({
       </div>
       <hr className="border-none h-px bg-[#ebebed] mt-4 mb-3 mx-0" />
       <div>
-        {educacionItems.map((item, idx) => (
-          <div key={idx} className="my-4">
-            <div className="flex w-full justify-between items-center gap-6">
-              <div className="flex items-center gap-3">
-                {item.estaTrabajando && (
-                  <Badge
-                    variant="custom"
-                    bgColor="bg-green-100"
-                    textColor="text-green-700"
+        {Experiencias?.length ? (
+          Experiencias.map((item, index) => (
+            <div key={item.id} className="my-4">
+              <div className="flex w-full justify-between items-center gap-6">
+                <div className="flex items-center gap-3">
+                  {item.estaTrabajando && (
+                    <Badge
+                      variant="custom"
+                      bgColor="bg-green-100"
+                      textColor="text-green-700"
+                    >
+                      Actual
+                    </Badge>
+                  )}
+                </div>
+                <div className="flex items-center gap-3">
+                  <button
+                    id="editar"
+                    className="cursor-pointer"
+                    type="button"
+                    onClick={() => handleEditClick(item.id)}
                   >
-                    Actual
-                  </Badge>
-                )}
+                    <Pencil width={25} height={25} className="text-primary" />
+                  </button>
+                  <button
+                    id="borrar"
+                    className="cursor-pointer"
+                    type="button"
+                    onClick={() => handleDeleteClick(item.id)}
+                  >
+                    <Trash width={25} height={25} className="text-primary" />
+                  </button>
+                </div>
               </div>
-              <div className="flex items-center gap-3">
-                <button
-                  id="editar"
-                  className="cursor-pointer"
-                  type="button"
-                  onClick={() => handleEditClick(idx)}
-                >
-                  <Pencil width={25} height={25} className="text-primary" />
-                </button>
-                <button
-                  id="borrar"
-                  className="cursor-pointer"
-                  type="button"
-                  onClick={() => handleDeleteClick(idx)}
-                >
-                  <Trash width={25} height={25} className="text-primary" />
-                </button>
-              </div>
+              <p className="font-semibold">{item.empresa}</p>
+              <p className="font-semibold">{item.puesto}</p>
+              <p>
+                {item.fechaInicio && item.fechaFin
+                  ? `${new Date(item.fechaInicio).toLocaleDateString(
+                      "es-ES"
+                    )} - ${new Date(item.fechaFin).toLocaleDateString("es-ES")}`
+                  : ""}
+              </p>
+              <p>{item.pais}</p>
+              {index !== Experiencias.length - 1 && (
+                <hr className="border-none h-px bg-[#ebebed] mt-4 mb-3 mx-0" />
+              )}
             </div>
-            <p className="font-semibold">{item.empresa}</p>
-            <p className="font-semibold">{item.puesto}</p>
-            <p>
-              {item.fechaInicio && item.fechaFin
-                ? `${new Date(item.fechaInicio).toLocaleDateString(
-                    "es-ES"
-                  )} - ${new Date(item.fechaFin).toLocaleDateString("es-ES")}`
-                : ""}
-            </p>
-            <p>{item.pais}</p>
-            {idx !== educacionItems.length - 1 && (
-              <hr className="border-none h-px bg-[#ebebed] mt-4 mb-3 mx-0" />
-            )}
-          </div>
-        ))}
+          ))
+        ) : (
+          <h4 className="text-base font-semibold">No hay experiencias</h4>
+        )}
       </div>
 
       <Dialog open={addModalOpen} onOpenChange={setAddModalOpen}>
@@ -193,15 +230,15 @@ export default function EditarExperenciaLaboral({
             </DialogTitle>
           </DialogHeader>
           <EditarExperenciaLaboralItem
-            initialValues={initialExp}
+            initialValues={null}
             onSave={handleAddSave}
             onCancel={handleAddModalClose}
-            pais={pais}
+            fields={fields}
           />
         </DialogContent>
       </Dialog>
 
-      <Dialog open={modalOpen} onOpenChange={setModalOpen}>
+      <Dialog open={!!editModal} onOpenChange={handleCancelEdit}>
         <DialogContent className="p-8 max-w-md">
           <DialogHeader>
             <DialogTitle className="text-primary font-primary mb-2.5">
@@ -209,14 +246,14 @@ export default function EditarExperenciaLaboral({
             </DialogTitle>
           </DialogHeader>
           <EditarExperenciaLaboralItem
-            initialValues={editForm}
+            initialValues={editModal}
             onSave={handleEditSave}
-            onCancel={handleModalClose}
-            pais={pais}
+            onCancel={handleCancelEdit}
+            fields={fields}
           />
         </DialogContent>
       </Dialog>
-      <Dialog open={deleteModalOpen} onOpenChange={setDeleteModalOpen}>
+      <Dialog open={!!deleteModal} onOpenChange={handleDeleteCancel}>
         <DialogContent className="p-8 max-w-md flex flex-col items-center">
           <DialogHeader>
             <DialogTitle className="text-primary font-primary mb-2.5">

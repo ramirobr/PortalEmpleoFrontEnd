@@ -1,4 +1,6 @@
-import { getUserInfoByUserId } from "@/lib/user/userInfo";
+import { auth } from "@/auth";
+import { getCurriculumByUserId, getUserInfoByUserId } from "@/lib/user/info";
+import { fetchDatosPersonalesFields } from "@/lib/user/profile";
 import EditarDatosContacto from "../components/EditarDatosContacto";
 import EditarDatosPersonales from "../components/EditarDatosPersonales";
 import EditarEducacion from "../components/EditarEducacion";
@@ -6,30 +8,31 @@ import EditarExperenciaLaboral from "../components/EditarExperenciaLaboral";
 import EditarFoto from "../components/EditarFoto";
 import EditarHabilidades from "../components/EditarHabilidades";
 import EditarResumen from "../components/EditarResumen";
-import { auth } from "@/auth";
-import { fetchDatosPersonalesFields } from "@/lib/user/profile";
 
 export default async function EditProfilePage() {
   const session = await auth();
   if (!session) return;
-  console.log(session.user);
-  const user = await getUserInfoByUserId(session.user.accessToken);
+  const curriculum = await getCurriculumByUserId(session.user);
+  const user = await getUserInfoByUserId(session.user);
   const fields = await fetchDatosPersonalesFields();
-  console.log(user);
   if (!user) return;
+  console.log(session);
 
   return (
     <div className="flex flex-col gap-10">
       <EditarFoto />
       <EditarDatosPersonales user={user} fields={fields} />
-      <EditarDatosContacto datosContacto={user.datosContacto} />
-      <EditarEducacion educacion={user.educacion} />
+      <EditarDatosContacto user={user} fields={fields} />
+      <EditarEducacion educacion={user.educacion} fields={fields} />
       <EditarExperenciaLaboral
         experiencia={user.experienciaLaboral}
-        pais={fields?.pais}
+        fields={fields}
       />
-      <EditarHabilidades habilidades={user.habiliades} />
-      <EditarResumen />
+      <EditarHabilidades
+        habilidades={user.habiliades}
+        fields={fields}
+      />
+      <EditarResumen curriculum={curriculum} fields={fields} />
     </div>
   );
 }

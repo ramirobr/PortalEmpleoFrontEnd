@@ -2,26 +2,43 @@
 import { UserAuthData } from '@/types/user';
 import { create } from 'zustand';
 
+export type AuthHydratorProps = {
+  id?: string
+  pic?: string
+  idCurriculum: string
+} & Omit<Partial<UserAuthData>, 'userId'>;
+
 type AuthState = {
   isAuthenticated: boolean;
-  hydrate: (data: Partial<UserAuthData>) => void;
+  hydrate: (data: AuthHydratorProps) => void;
+  setPic: (pic?: string) => void;
   clear: () => void;
-} & Partial<UserAuthData>;
+} & AuthHydratorProps;
 
-const initalState = {
-  userId: undefined,
+const initalState: Omit<AuthState, 'hydrate' | 'clear' | 'setPic'> = {
+  id: undefined,
   fullName: undefined,
   role: undefined,
-  isAuthenticated: false
-}
+  isAuthenticated: false,
+  idCurriculum: "",
+  pic: ""
+};
+
 export const useAuthStore = create<AuthState>((set) => ({
   ...initalState,
-  hydrate: ({ userId, fullName, role }) =>
+  hydrate: ({ id, fullName, role, idCurriculum, pic }) =>
     set({
-      userId,
+      isAuthenticated: true,
+      idCurriculum,
       fullName,
       role,
-      isAuthenticated: true,
+      id,
+      pic,
     }),
+  setPic: (pic) =>
+    set((state) => ({
+      ...state,
+      pic,
+    })),
   clear: () => set(initalState),
 }));

@@ -12,7 +12,6 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { PhoneInput } from "@/components/ui/phone-input";
 import {
   Select,
   SelectContent,
@@ -23,7 +22,7 @@ import {
 import { SignIn } from "@/lib/auth/signin";
 import { SignUp } from "@/lib/auth/signup";
 import { validarCedulaEcuatoriana } from "@/lib/utils";
-import { CatalogsByType } from "@/types/search";
+import { SignUpFieldsResponse } from "@/types/user";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Eye, Mail } from "lucide-react";
 import { useSession } from "next-auth/react";
@@ -39,12 +38,8 @@ const signupSchema = z
     nombres: z.string().min(1, "Nombre requerido"),
     apellidos: z.string().min(1, "Apellido requerido"),
     idTipoDocumento: z.number().min(1, "Selecciona un tipo de documento"),
-    documento: z
-      .string()
-      .min(1, "Ingresa la cédula")
-      .refine(validarCedulaEcuatoriana, {
-        message: "Cédula ecuatoriana inválida.",
-      }),
+    documento: z.string().min(1, "Ingresa la cédula"),
+    idGenero: z.number().min(1, "Selecciona un género"),
     telefono: z.string().min(1, "Ingresa un teléfono válido"),
     telefonoMobil: z
       .string()
@@ -65,15 +60,27 @@ const signupSchema = z
   .refine((data) => data.password === data.confirmPassword, {
     message: "Las contraseñas no coinciden",
     path: ["confirmPassword"],
+  })
+  .superRefine((data, ctx) => {
+    const CEDULA = 3580;
+    if (data.idTipoDocumento === CEDULA) {
+      if (!validarCedulaEcuatoriana(data.documento)) {
+        ctx.addIssue({
+          path: ["documento"],
+          message: "Cédula inválida.",
+          code: "custom",
+        });
+      }
+    }
   });
 
 type FormValues = z.infer<typeof signupSchema>;
 
 type CompanyFormProps = {
-  tipoDoc: CatalogsByType[] | undefined;
+  fields: SignUpFieldsResponse | null;
 };
 
-export default function EmailSignup({ tipoDoc }: CompanyFormProps) {
+export default function EmailSignup({ fields }: CompanyFormProps) {
   const [showPassword, setShowPassword] = useState(false);
   const timeoutRef = useRef<NodeJS.Timeout | null>(null);
   const router = useRouter();
@@ -83,7 +90,8 @@ export default function EmailSignup({ tipoDoc }: CompanyFormProps) {
     defaultValues: {
       nombres: "",
       apellidos: "",
-      idTipoDocumento: undefined,
+      idTipoDocumento: 0,
+      idGenero: 0,
       documento: "",
       telefono: "",
       telefonoMobil: "",
@@ -178,7 +186,9 @@ export default function EmailSignup({ tipoDoc }: CompanyFormProps) {
                   name="idTipoDocumento"
                   render={({ field }) => (
                     <FormItem className="w-full md:w-1/2">
-                      <FormLabel>Tipo de documento *</FormLabel>
+                      <FormLabel htmlFor="documento">
+                        Tipo de documento *
+                      </FormLabel>
                       <FormControl>
                         <Select
                           onValueChange={(value) =>
@@ -186,11 +196,11 @@ export default function EmailSignup({ tipoDoc }: CompanyFormProps) {
                           }
                           value={field.value ? String(field.value) : ""}
                         >
-                          <SelectTrigger>
+                          <SelectTrigger id="documento">
                             <SelectValue placeholder="Tipo" />
                           </SelectTrigger>
                           <SelectContent>
-                            {tipoDoc?.map((tipo) => (
+                            {fields?.tipo_documento?.map((tipo) => (
                               <SelectItem
                                 key={tipo.idCatalogo}
                                 value={tipo.idCatalogo.toString()}
@@ -234,12 +244,17 @@ export default function EmailSignup({ tipoDoc }: CompanyFormProps) {
                   name="telefono"
                   render={({ field }) => (
                     <FormItem className="w-full md:w-1/2">
-                      <FormLabel>Teléfono *</FormLabel>
+                      <FormLabel htmlFor="telefono">Teléfono *</FormLabel>
                       <FormControl>
-                        <PhoneInput
-                          defaultCountry="EC"
+                        <Input
+                          type="text"
+                          id="telefono"
+                          inputMode="tel"
+                          placeholder="2375293123"
                           value={field.value}
-                          onChange={field.onChange}
+                          onChange={(e) =>
+                            field.onChange(e.target.value.replace(/\D/g, ""))
+                          }
                         />
                       </FormControl>
                       <span className="text-xs text-gray-500 ml-2">
@@ -350,26 +365,58 @@ export default function EmailSignup({ tipoDoc }: CompanyFormProps) {
                 />
                 <FormField
                   control={form.control}
-                  name="email"
+                  name="idGenero"
                   render={({ field }) => (
                     <FormItem className="w-full md:w-1/2">
-                      <FormLabel>Email *</FormLabel>
+                      <FormLabel htmlFor="genero">Género *</FormLabel>
                       <FormControl>
-                        <div className="relative">
-                          <Mail className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 w-5 h-5" />
-                          <Input
-                            type="email"
-                            placeholder="Ingresa tu email"
-                            className="pl-10"
-                            {...field}
-                          />
-                        </div>
+                        <Select
+                          onValueChange={(value) =>
+                            field.onChange(Number(value))
+                          }
+                          value={field.value ? String(field.value) : ""}
+                        >
+                          <SelectTrigger id="genero">
+                            <SelectValue placeholder="Género" />
+                          </SelectTrigger>
+                          <SelectContent>
+                            {fields?.genero?.map((genero) => (
+                              <SelectItem
+                                key={genero.idCatalogo}
+                                value={genero.idCatalogo.toString()}
+                              >
+                                {genero.nombre}
+                              </SelectItem>
+                            ))}
+                          </SelectContent>
+                        </Select>
                       </FormControl>
                       <FormMessage />
                     </FormItem>
                   )}
                 />
               </div>
+              <FormField
+                control={form.control}
+                name="email"
+                render={({ field }) => (
+                  <FormItem className="w-full col-span-1 md:col-span-2">
+                    <FormLabel>Email *</FormLabel>
+                    <FormControl>
+                      <div className="relative">
+                        <Mail className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 w-5 h-5" />
+                        <Input
+                          type="email"
+                          placeholder="Ingresa tu email"
+                          className="pl-10"
+                          {...field}
+                        />
+                      </div>
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
             </div>
 
             <FormField

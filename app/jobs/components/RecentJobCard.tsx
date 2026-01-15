@@ -1,12 +1,8 @@
 "use client";
-import Image from "next/image";
-import { useRouter } from "next/navigation";
-import { Job } from "./JobCard";
-import { RecentJob } from "@/types/jobs";
-import { Button } from "@/components/ui/button";
-import Link from "next/link";
 import FavoriteButton from "@/components/shared/components/FavoriteButton";
-import { Session } from "next-auth";
+import { RecentJob } from "@/types/jobs";
+import Image from "next/image";
+import Link from "next/link";
 
 function getBadgeColor(type?: string) {
   switch (type) {
@@ -23,17 +19,16 @@ function getBadgeColor(type?: string) {
 
 export type CardProps = {
   job: RecentJob;
-  session?: Session | null;
+  isFav?: boolean;
 };
 
-export default function RecentJobCard({ job, session }: CardProps) {
-  const router = useRouter();
+export default function RecentJobCard({ job, isFav }: CardProps) {
   return (
     <div className="bg-white border rounded-xl p-6 shadow hover:shadow-lg transition flex flex-col items-center relative min-h-80">
-      <FavoriteButton jobId={job.id} session={session || null} />
+      <FavoriteButton jobId={job.id} isFavorite={isFav} />
       <div className="mb-4 mt-8">
         <Image
-          // src={t.logo} FIXME: logo path doesnt work
+          // FIXME src={t.logo} logo path doesnt work
           src="/logos/company_logo.png"
           alt=""
           width={64}

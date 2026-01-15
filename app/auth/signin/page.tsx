@@ -1,10 +1,27 @@
+"use client";
+
+import { useState } from "react";
 import Navbar from "../../../components/shared/components/Navbar";
 import Footer from "../../../components/shared/components/Footer";
+import AsideMenu from "../../../components/shared/components/AsideMenu";
 
 export default function SignIn() {
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const toggleMobileMenu = () => setIsMobileMenuOpen((prev) => !prev);
+  const closeMobileMenu = () => setIsMobileMenuOpen(false);
+
   return (
     <div className="min-h-screen flex flex-col bg-white">
-      <Navbar />
+      <Navbar
+        onHamburgerClick={toggleMobileMenu}
+        isAsideOpen={isMobileMenuOpen}
+      />
+      <AsideMenu
+        isOpen={isMobileMenuOpen}
+        onClose={closeMobileMenu}
+        side="left"
+        className="w-1/2 max-w-sm"
+      />
       <main className="flex-1 flex flex-col items-center justify-center px-4 py-12">
         <h2 className="section-title">
           Crea tu cuenta y comienza a buscar empleo

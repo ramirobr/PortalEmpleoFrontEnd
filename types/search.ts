@@ -1,6 +1,6 @@
 import { CatalogTypes } from "@/lib/catalog/fetch";
-import { GenericResponse } from "./user";
 import { CatalogFieldsFromTypes } from "./generic";
+import { GenericResponse } from "./user";
 
 export type CatalogsByType = {
   idCatalogo: number
@@ -26,6 +26,14 @@ export type ActiveCompaniesResponse = GenericResponse<EmpresaItem[]>
 export type ActiveCompanies = {
   activeCompanies: EmpresaItem[] | undefined
 }
-export const FILTERS = ["FILTRO_FECHAS", "EXPERIENCIA", "MODALIDAD_TRABAJO", "PROVINCIA", "CIUDAD"] as const;
+
+export const FILTERS = [
+  "FILTRO_FECHAS",
+  "EXPERIENCIA",
+  "MODALIDAD_TRABAJO",
+  "PROVINCIA",
+  "CIUDAD",
+] as const satisfies readonly CatalogTypes[];
+
 export type FiltersResponse =
   CatalogFieldsFromTypes<typeof FILTERS, CatalogsByType[]> & ActiveCompanies;

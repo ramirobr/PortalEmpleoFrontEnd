@@ -27,3 +27,18 @@ export function validarCedulaEcuatoriana(value: string) {
   let checkDigit = total % 10 ? 10 - (total % 10) : 0;
   return checkDigit === parseInt(value[9], 10);
 }
+
+export const getInitials = (name?: string) => (name ?? "")
+  .split(" ")
+  .map((n) => n[0])
+  .join("")
+  .toUpperCase()
+  .slice(0, 2);
+
+export const fileToBase64 = (file: File) =>
+  new Promise<string>((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onload = () => resolve(reader.result as string);
+    reader.onerror = reject;
+    reader.readAsDataURL(file);
+  });

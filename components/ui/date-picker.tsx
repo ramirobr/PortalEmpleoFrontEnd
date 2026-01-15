@@ -3,7 +3,6 @@
 import { ChevronDownIcon } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Calendar } from "@/components/ui/calendar";
-import { Label } from "@/components/ui/label";
 import {
   Popover,
   PopoverContent,

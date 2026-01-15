@@ -4,6 +4,8 @@ import "./styles/globals.css";
 import { Toaster } from "@/components/ui/sonner";
 import { auth } from "@/auth";
 import { Providers } from "./providers";
+import AuthHydrator from "@/components/AuthHydrator";
+import { getCurriculumByUserId, getUserPic } from "@/lib/user/info";
 
 const jost = Jost({
   variable: "--font-jost",
@@ -21,10 +23,21 @@ export default async function RootLayout({
   children: React.ReactNode;
 }) {
   const session = await auth();
+  const curriculum = await getCurriculumByUserId(session?.user);
+  const picture = await getUserPic(session?.user);
   return (
     <html lang="en">
       <body className="font-primary">
-        <Providers session={session}>{children}</Providers>
+        <Providers session={session}>
+          {session && curriculum && (
+            <AuthHydrator
+              {...session.user}
+              idCurriculum={curriculum?.idCurriculum}
+              pic={picture}
+            />
+          )}
+          {children}
+        </Providers>
         <Toaster position="bottom-right" />
       </body>
     </html>

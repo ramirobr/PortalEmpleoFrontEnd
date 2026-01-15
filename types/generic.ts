@@ -2,7 +2,6 @@ export type Children = {
   children: React.ReactNode;
 }
 
-
 export type CatalogFieldsFromTypes<
   T extends readonly string[],
   V

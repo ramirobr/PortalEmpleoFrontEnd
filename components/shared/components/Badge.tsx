@@ -8,6 +8,7 @@ interface BadgeProps {
   fontSize?: string;
   className?: string;
   onRemove?: () => void;
+  onEdit?: () => void;
   removable?: boolean;
 }
 
@@ -19,6 +20,7 @@ const Badge: React.FC<BadgeProps> = ({
   fontSize,
   className = "",
   onRemove,
+  onEdit,
   removable = false,
 }) => {
   const isHexColor = (color: string) => /^#([0-9A-F]{3}){1,2}$/i.test(color);
@@ -75,7 +77,9 @@ const Badge: React.FC<BadgeProps> = ({
       className={`inline-flex items-center gap-1 px-2 py-1 rounded font-semibold ${variantClasses} ${bgColorClass} ${textColorClass} ${fontSizeClass} ${className}`}
       style={Object.keys(customStyles).length > 0 ? customStyles : undefined}
     >
-      <span>{children}</span>
+      <button className="cursor-pointer" onClick={onEdit}>
+        <span>{children}</span>
+      </button>
       {showRemoveButton && (
         <button
           type="button"

@@ -1,5 +1,6 @@
 "use client";
 import { Button } from "@/components/ui/button";
+import { Card } from "@/components/ui/card";
 import { Checkbox } from "@/components/ui/checkbox";
 import {
   Form,
@@ -10,7 +11,6 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { PhoneInput } from "@/components/ui/phone-input";
 import {
   Select,
   SelectContent,
@@ -18,18 +18,17 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { SignIn } from "@/lib/auth/signin";
 import { CompanySignUp } from "@/lib/auth/signup";
 import { addSpaces } from "@/lib/utils";
 import { FormFieldsResponse } from "@/types/company";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useSession } from "next-auth/react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import z from "zod";
-import { useRouter } from "next/navigation";
-import { SignIn } from "@/lib/auth/signin";
-import { Card } from "@/components/ui/card";
 
 const schema = z
   .object({
@@ -50,13 +49,10 @@ const schema = z
     telefono: z.string().min(1, "Ingresa un teléfono válido"),
     idIndustria: z.number().min(1, "Selecciona una industria"),
     idCantidadEmpleados: z.number().min(1, "Selecciona cantidad de empleados"),
-    sitioWeb: z
-      .string()
-      .url("Ingresa una URL válida")
-      .optional()
-      .or(z.literal("")),
+    sitioWeb: z.url("Ingresa una URL válida").optional().or(z.literal("")),
     nombres: z.string().min(1, "Nombre requerido"),
     apellidos: z.string().min(1, "Apellido requerido"),
+    idGenero: z.number().optional(),
     email: z.email("Email inválido"),
     password: z.string().min(7, "La contraseña debe tener mínimo 7 caracteres"),
     repeatPassword: z
@@ -99,6 +95,7 @@ export default function CompanyForm({ fields }: CompanyFormProps) {
       sitioWeb: "",
       nombres: "",
       apellidos: "",
+      idGenero: 0,
       email: "",
       password: "",
       repeatPassword: "",
@@ -320,11 +317,15 @@ export default function CompanyForm({ fields }: CompanyFormProps) {
                       Teléfono <span className="text-red-500">*</span>
                     </FormLabel>
                     <FormControl>
-                      <PhoneInput
+                      <Input
+                        type="text"
                         id="telefono"
-                        defaultCountry="EC"
-                        value={form.watch("telefono")}
-                        onChange={(v) => form.setValue("telefono", v)}
+                        inputMode="tel"
+                        placeholder="2375293123"
+                        value={field.value}
+                        onChange={(e) =>
+                          field.onChange(e.target.value.replace(/\D/g, ""))
+                        }
                       />
                     </FormControl>
                     <span className="text-xs text-gray-500 ml-2">
@@ -455,6 +456,42 @@ export default function CompanyForm({ fields }: CompanyFormProps) {
                     </FormLabel>
                     <FormControl>
                       <Input id="apellido" {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+
+              <FormField
+                control={form.control}
+                name="idGenero"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel htmlFor="idGenero">
+                      Genero{" "}
+                      <span className="text-red-500">*</span>
+                    </FormLabel>
+                    <FormControl>
+                      <Select
+                        onValueChange={(v) =>
+                          form.setValue("idGenero", parseInt(v))
+                        }
+                        defaultValue={field.value?.toString()}
+                      >
+                        <SelectTrigger id="idgenero">
+                          <SelectValue placeholder="Seleccione una opción" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          {fields?.genero?.map((genero) => (
+                            <SelectItem
+                              key={genero.idCatalogo}
+                              value={genero.idCatalogo.toString()}
+                            >
+                              {addSpaces(genero.nombre)}
+                            </SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -627,6 +664,9 @@ export default function CompanyForm({ fields }: CompanyFormProps) {
           </div>
 
           <Button type="submit" disabled={form.formState.isSubmitting}>
+            {form.formState.isSubmitting && (
+              <span className="animate-spin h-4 w-4 border-2 border-t-transparent rounded-full" />
+            )}
             Crear cuenta empresa
           </Button>
 

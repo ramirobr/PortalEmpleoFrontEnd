@@ -80,7 +80,7 @@ export function JobList({ jobs }: Props) {
 
               <p className="mb-1">
                 <span className="font-semibold">Experiencia:</span>{" "}
-                {job.experienciaMinima}
+                {job.experiencia}
               </p>
               <p className="mb-1">
                 <span className="font-semibold">Ubicación:</span> {job.pais},{" "}
@@ -94,13 +94,13 @@ export function JobList({ jobs }: Props) {
 
             <div className="w-1/5 flex flex-col gap-3 items-end md:items-start md:ml-6 mt-4 md:mt-0">
               <button
-                className="btn btn-primary block w-full shadow-md uppercase"
+                className="btn btn-primary block w-full shadow-md uppercase cursor-pointer"
                 onClick={() => router.push(`/jobs/${job.idVacante}`)}
               >
                 Aplicar
               </button>
               <button
-                className="btn btn-secondary uppercase block w-full"
+                className="btn btn-secondary uppercase block w-full cursor-pointer"
                 onClick={() => router.push(`/jobs/${job.idVacante}`)}
               >
                 VER

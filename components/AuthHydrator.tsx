@@ -1,18 +1,20 @@
 "use client";
-import { useAuthStore } from "@/context/authStore";
-import { UserAuthData } from "@/types/user";
+import { AuthHydratorProps, useAuthStore } from "@/context/authStore";
 import { useEffect } from "react";
 
-export function AuthHydrator({
-  userId,
-  fullName,
-  role,
-}: Partial<UserAuthData>) {
+export default function AuthHydrator(props: AuthHydratorProps) {
   const hydrate = useAuthStore((s) => s.hydrate);
 
   useEffect(() => {
-    hydrate({ userId, fullName, role });
-  }, [hydrate, userId, fullName, role]);
+    hydrate(props);
+  }, [
+    hydrate,
+    props.id,
+    props.fullName,
+    props.role,
+    props.idCurriculum,
+    props.pic,
+  ]);
 
   return null;
 }

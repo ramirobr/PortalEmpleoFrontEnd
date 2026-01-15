@@ -1,41 +1,34 @@
 "use client";
-import { useState } from "react";
+import {
+  removeVacanteFavorita,
+  addVacanteFavorita,
+} from "@/lib/jobs/favorites";
+import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
-import { Session } from "next-auth";
+import { useState } from "react";
 
 export type FavoriteButtonProps = {
   jobId: string;
   isFavorite?: boolean;
-  session: Session | null;
 };
 
 export default function FavoriteButton({
   jobId,
   isFavorite = false,
-  session,
 }: FavoriteButtonProps) {
   const [favorite, setFavorite] = useState(isFavorite);
+  const { data: session } = useSession();
   const router = useRouter();
 
-  const handleFavoriteClick = async (e: React.MouseEvent) => {
-    e.preventDefault();
-    e.stopPropagation();
-
-    // Si no hay sesión, redirigir a crear cuenta
+  const handleFavoriteClick = async () => {
     if (!session) {
-      router.push("/auth/crear");
+      router.push("/auth/email");
       return;
     }
 
-    // TODO: Aquí iría la llamada al API para agregar/remover favorito
-    // const response = await fetch(`/api/favorites/${jobId}`, {
-    //   method: favorite ? "DELETE" : "POST",
-    // });
-    // if (response.ok) {
-    //   setFavorite(!favorite);
-    // }
-
-    // Por ahora solo cambia el estado local
+    favorite
+      ? removeVacanteFavorita(jobId, session.user.id, session.user.accessToken)
+      : addVacanteFavorita(jobId, session.user.id, session.user.accessToken);
     setFavorite(!favorite);
   };
 

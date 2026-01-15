@@ -20,16 +20,13 @@ export default function MainLayout({ children }: Children) {
         onHamburgerClick={toggleMobileMenu}
         isAsideOpen={isMobileMenuOpen}
         showCompanyRegister
-        showBuscarEmpleos
       />
-      {session && (
-        <AsideMenu
-          isOpen={isMobileMenuOpen}
-          onClose={closeMobileMenu}
-          side="left"
-          className="w-1/2 max-w-sm"
-        />
-      )}
+      <AsideMenu
+        isOpen={isMobileMenuOpen}
+        onClose={closeMobileMenu}
+        side="left"
+        className="w-1/2 max-w-sm"
+      />
       <main className="flex-1">{children}</main>
     </div>
   );

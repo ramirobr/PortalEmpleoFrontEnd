@@ -1,7 +1,10 @@
 "use client";
-import Loader from "@/components/shared/components/Loader";
+import Pencil from "@/components/shared/components/iconos/Pencil";
+import Trash from "@/components/shared/components/iconos/Trash";
 import TituloSubrayado from "@/components/shared/tituloSubrayado";
 import { Button } from "@/components/ui/button";
+import { Card } from "@/components/ui/card";
+import { Checkbox } from "@/components/ui/checkbox";
 import { DatePicker } from "@/components/ui/date-picker";
 import {
   Form,
@@ -12,12 +15,6 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { fetchPaises } from "@/lib/catalog/fetchPaises";
-import { zodResolver } from "@hookform/resolvers/zod";
-import React from "react";
-import { useForm } from "react-hook-form";
-import { z } from "zod";
-import { Checkbox } from "@/components/ui/checkbox";
 import { Label } from "@/components/ui/label";
 import {
   Select,
@@ -26,48 +23,55 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { fetchApi } from "@/lib/apiClient";
 import { validarCedulaEcuatoriana } from "@/lib/utils";
-import { Card } from "@/components/ui/card";
-import Pencil from "@/components/shared/components/iconos/Pencil";
-import Trash from "@/components/shared/components/iconos/Trash";
-import { UserInfoData } from "@/types/profile";
-import { DatosPersonalesFieldsResponse } from "@/types/user";
+import {
+  DatosPersonalesFieldsResponse,
+  PlainStringDataMessage,
+  UserInfoData,
+} from "@/types/user";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useSession } from "next-auth/react";
+import React from "react";
+import { useForm } from "react-hook-form";
+import { toast } from "sonner";
+import { z } from "zod";
 
-const estadoCivilOptions = [
-  "Soltero/a",
-  "Casado/a",
-  "Divorciado/a",
-  "Pareja de Hecho",
-  "Viudo/a",
-  "Unión Libre",
-];
-const generoOptions = ["Masculino", "Femenino", "Otro"];
 const licenciaOptions = ["A", "A1", "B", "C", "D", "E", "E1", "F", "G"];
 
-const schema = z.object({
-  nombre: z
-    .string()
-    .min(3, "El nombre es obligatorio y debe tener al menos 3 caracteres."),
-  apellido: z
-    .string()
-    .min(3, "El apellido es obligatorio y debe tener al menos 3 caracteres."),
-  nacionalidad: z.string().min(1, "La nacionalidad es obligatoria."),
-  nacimiento: z.date({
-    message: "La fecha de nacimiento es obligatoria.",
-  }),
-  estadoCivil: z.string().min(1, "El estado civil es obligatorio."),
-  tipoDocumento: z.string().min(1, "El tipo de documento es obligatorio."),
-  cedula: z
-    .string()
-    .min(1, "Ingresa la cédula")
-    .refine(validarCedulaEcuatoriana, {
-      message: "Cédula ecuatoriana inválida.",
+const schema = z
+  .object({
+    nombre: z
+      .string()
+      .min(3, "El nombre es obligatorio y debe tener al menos 3 caracteres."),
+    apellido: z
+      .string()
+      .min(3, "El apellido es obligatorio y debe tener al menos 3 caracteres."),
+    nacionalidad: z.string().min(1, "La nacionalidad es obligatoria."),
+    nacimiento: z.date({
+      message: "La fecha de nacimiento es obligatoria.",
     }),
-  genero: z.string().min(1, "El género es obligatorio."),
-  movilidad: z.boolean().default(false),
-  licencia: z.boolean().default(false),
-  tipoLicencia: z.array(z.string()).optional(),
-});
+    idTipoDocumento: z.number().min(1, "Selecciona un tipo de documento"),
+    idTipoUsuario: z.number().optional(),
+    cedula: z.string().min(1, "Ingresa la cédula"),
+    idGenero: z.number().min(1, "Selecciona un género"),
+    movilidad: z.boolean().default(false),
+    licencia: z.boolean().default(false),
+    tipoLicencia: z.array(z.string()).optional(),
+    idEstadoCivil: z.number().optional(),
+  })
+  .superRefine((data, ctx) => {
+    const CEDULA = 3580;
+    if (data.idTipoDocumento === CEDULA) {
+      if (!validarCedulaEcuatoriana(data.cedula)) {
+        ctx.addIssue({
+          path: ["cedula"],
+          message: "Cédula inválida.",
+          code: "custom",
+        });
+      }
+    }
+  });
 
 type EditarDatosPersonalesProps = {
   user: UserInfoData;
@@ -79,30 +83,60 @@ export default function EditarDatosPersonales({
   fields,
 }: EditarDatosPersonalesProps) {
   const [isEditing, setIsEditing] = React.useState(false);
+  const { data: session } = useSession();
 
   const form = useForm({
     resolver: zodResolver(schema),
     defaultValues: {
-      nombre: user?.datosPersonales.nombre,
-      apellido: user?.datosPersonales.apellido,
-      nacionalidad: user?.datosContacto.pais,
-      nacimiento: new Date(user?.datosPersonales.fechaNacimiento),
-      estadoCivil: "",
-      tipoDocumento: user?.datosPersonales.tipoDocumento,
-      cedula: user?.datosPersonales.numeroDocumento,
-      genero: "",
-      movilidad: false,
-      licencia: false,
-      tipoLicencia: [],
+      nombre: user.datosPersonales.nombre,
+      apellido: user.datosPersonales.apellido,
+      nacionalidad: user.datosPersonales.nacionalidad ?? "",
+      nacimiento: new Date(user.datosPersonales.fechaNacimiento),
+      idTipoDocumento: user.datosPersonales.idTipoDocumento,
+      cedula: user.datosPersonales.numeroDocumento,
+      idGenero: user.datosPersonales.idGenero,
+      movilidad: user.datosPersonales.movilidad,
+      licencia: user.datosPersonales.licencia,
+      tipoLicencia: user.datosPersonales.tipoLicencia,
+      idEstadoCivil: user.datosPersonales.idEstadoCivil,
     },
   });
 
   const licenciaChecked = form.watch("licencia");
+  const handleSubmit = async (data: z.infer<typeof schema>) => {
+    const { genero: _, ...datosPersonales } = user.datosPersonales;
+    const { email, ...datosContacto } = user.datosContacto;
+    const body = {
+      ...datosPersonales,
+      ...datosContacto,
+      nombre: data.nombre,
+      apellido: data.apellido,
+      idTipoDocumento: data.idTipoDocumento,
+      idGenero: data.idGenero, 
+      numeroDocumento: data.cedula,
+      nacionalidad: data.nacionalidad,
+      fechaNacimiento: data.nacimiento.toISOString(),
+      idUsuario: session?.user.id,
+      idTipoUsuario: data.idTipoUsuario || user.datosPersonales.idTipoUsuario,
+      idEmpresa: null,
+      idEstadoCuenta: user.idEstadoCuenta,
+      correoElectronico: email,
+      movilidad: data.movilidad,
+      licencia: data.licencia,
+      idEstadoCivil: data.idEstadoCivil,
+    };
 
-  const handleSubmit = (data: z.infer<typeof schema>) => {
-    console.log("Datos guardados:", data);
+    const res = await fetchApi<PlainStringDataMessage>("/User/update-user", {
+      method: "PUT",
+      token: session?.user.accessToken,
+      body,
+    });
+    if (!res?.isSuccess) {
+      toast.error("Error actualizando datos personales");
+      return;
+    }
+    toast.success(res?.data);
     setIsEditing(false);
-    // TODO: Aquí puedes agregar la lógica para enviar los datos al servidor
   };
 
   const handleCancel = () => {
@@ -205,22 +239,7 @@ export default function EditarDatosPersonales({
                 <FormItem>
                   <FormLabel htmlFor="nacionalidad">Nacionalidad</FormLabel>
                   <FormControl>
-                    <Select
-                      onValueChange={field.onChange}
-                      defaultValue={field.value?.toString()}
-                      disabled={!isEditing}
-                    >
-                      <SelectTrigger id="nacionalidad">
-                        <SelectValue placeholder="Nacionalidad" />
-                      </SelectTrigger>
-                      <SelectContent>
-                        {fields?.pais?.map((pais) => (
-                          <SelectItem key={pais.idCatalogo} value={pais.nombre}>
-                            {pais.nombre}
-                          </SelectItem>
-                        ))}
-                      </SelectContent>
-                    </Select>
+                    <Input id="nacionalidad" disabled={!isEditing} {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -230,13 +249,13 @@ export default function EditarDatosPersonales({
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-4">
             <FormField
               control={form.control}
-              name="estadoCivil"
+              name="idEstadoCivil"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel htmlFor="estadoCivil">Estado Civil</FormLabel>
+                  <FormLabel htmlFor="idEstadoCivil">Estado Civil</FormLabel>
                   <FormControl>
                     <Select
-                      onValueChange={field.onChange}
+                      onValueChange={(value) => field.onChange(Number(value))}
                       defaultValue={field.value?.toString()}
                       disabled={!isEditing}
                     >
@@ -244,9 +263,12 @@ export default function EditarDatosPersonales({
                         <SelectValue placeholder="Estado Civil" />
                       </SelectTrigger>
                       <SelectContent>
-                        {estadoCivilOptions.map((estado) => (
-                          <SelectItem key={estado} value={estado}>
-                            {estado}
+                        {fields?.estado_civil?.map((estadoCivil) => (
+                          <SelectItem
+                            key={estadoCivil.idCatalogo}
+                            value={estadoCivil.idCatalogo.toString()}
+                          >
+                            {estadoCivil.nombre}
                           </SelectItem>
                         ))}
                       </SelectContent>
@@ -258,23 +280,26 @@ export default function EditarDatosPersonales({
             />
             <FormField
               control={form.control}
-              name="genero"
+              name="idGenero"
               render={({ field }) => (
                 <FormItem>
                   <FormLabel htmlFor="genero">Género</FormLabel>
                   <FormControl>
                     <Select
-                      onValueChange={field.onChange}
-                      defaultValue={field.value?.toString()}
+                      onValueChange={(value) => field.onChange(Number(value))}
+                      value={field.value ? String(field.value) : ""}
                       disabled={!isEditing}
                     >
                       <SelectTrigger id="genero">
                         <SelectValue placeholder="Género" />
                       </SelectTrigger>
                       <SelectContent>
-                        {generoOptions.map((genero) => (
-                          <SelectItem key={genero} value={genero}>
-                            {genero}
+                        {fields?.genero?.map((genero) => (
+                          <SelectItem
+                            key={genero.idCatalogo}
+                            value={genero.idCatalogo.toString()}
+                          >
+                            {genero.nombre}
                           </SelectItem>
                         ))}
                       </SelectContent>
@@ -288,26 +313,26 @@ export default function EditarDatosPersonales({
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-4">
             <FormField
               control={form.control}
-              name="tipoDocumento"
+              name="idTipoDocumento"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel htmlFor="tipoDocumento">
+                  <FormLabel htmlFor="idTipoDocumento">
                     Tipo de Documento
                   </FormLabel>
                   <FormControl>
                     <Select
-                      onValueChange={field.onChange}
-                      defaultValue={field.value?.toString()}
+                      onValueChange={(value) => field.onChange(Number(value))}
+                      value={field.value ? String(field.value) : ""}
                       disabled={!isEditing}
                     >
-                      <SelectTrigger id="tipoDocumento">
+                      <SelectTrigger id="idTipoDocumento">
                         <SelectValue placeholder="Tipo de Documento" />
                       </SelectTrigger>
                       <SelectContent>
                         {fields?.tipo_documento?.map((documento) => (
                           <SelectItem
                             key={documento.idCatalogo}
-                            value={documento.nombre}
+                            value={documento.idCatalogo.toString()}
                           >
                             {documento.nombre}
                           </SelectItem>
@@ -436,8 +461,13 @@ export default function EditarDatosPersonales({
               <Button
                 type="submit"
                 aria-label="Guardar datos personales"
-                disabled={!form.formState.isDirty}
+                disabled={
+                  !form.formState.isDirty || form.formState.isSubmitting
+                }
               >
+                {form.formState.isSubmitting && (
+                  <span className="animate-spin h-4 w-4 border-2 border-t-transparent rounded-full" />
+                )}
                 Guardar
               </Button>
             </div>

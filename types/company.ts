@@ -5,6 +5,7 @@ export type FormFieldsResponse = {
   industria?: CatalogsByType[];
   condicionFiscal?: CatalogsByType[];
   cantidadEmpleados?: CatalogsByType[];
+  genero?: CatalogsByType[];
 };
 
 export type CompanySignUpData = {
@@ -22,6 +23,7 @@ export type CompanySignUpData = {
   sitioWeb: string,
   nombres: string,
   apellidos: string,
+  idGenero?: number,
   email: string,
   password: string,
   aceptaTerminoCondiciones: boolean,

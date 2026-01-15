@@ -2,6 +2,7 @@
 import Badge from "@/components/shared/components/Badge";
 import { Plus } from "@/components/shared/components/iconos/Plus";
 import TituloSubrayado from "@/components/shared/tituloSubrayado";
+import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import {
   Dialog,
@@ -17,89 +18,173 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
-import { Habilidades } from "@/types/profile";
+import { Input } from "@/components/ui/input";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { useAuthStore } from "@/context/authStore";
+import { fetchApi } from "@/lib/apiClient";
+import {
+  DatosPersonalesFieldsResponse,
+  Habilidades,
+  HabilidadesResponse,
+  PlainStringDataMessage,
+} from "@/types/user";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useSession } from "next-auth/react";
 import React, { useState } from "react";
 import { useForm } from "react-hook-form";
+import { toast } from "sonner";
 import { z } from "zod";
 
 const habilidadSchema = z.object({
   nombre: z.string().min(1, "El nombre es obligatorio."),
+  aniosExperiencia: z
+    .number()
+    .min(0, "Debe ser mayor a 0")
+    .max(60, "Maximo alcanzado"),
+  idCategoria: z.number().min(1, "Selecciona una categoria"),
+  idNivel: z.number().min(1, "Selecciona un nivel"),
 });
 
-type Habilidad = Pick<Habilidades, "nombre">;
+export type HabilidadValues = z.infer<typeof habilidadSchema>;
+
 type EditarHabilidadesProps = {
   habilidades: Habilidades[];
+  fields: DatosPersonalesFieldsResponse | null;
 };
 
 export default function EditarHabilidades({
   habilidades: initialHabilidades,
+  fields,
 }: EditarHabilidadesProps) {
   const [habilidades, setHabilidades] =
     useState<Habilidades[]>(initialHabilidades);
-  const [modalOpen, setModalOpen] = useState(false);
-  const [editIndex, setEditIndex] = useState<number | null>(null);
-  const [editForm, setEditForm] = useState<Habilidad>({
-    nombre: "",
-  });
+  const [editModal, setEditModal] = useState<Habilidades | null>(null);
   const [addModalOpen, setAddModalOpen] = useState(false);
-  const [deleteModalOpen, setDeleteModalOpen] = useState(false);
-  const [deleteIndex, setDeleteIndex] = useState<number | null>(null);
+  const [pendingDeleteId, setPendingDeleteId] = useState<string | null>(null);
+  const idCurriculum = useAuthStore((s) => s.idCurriculum);
+  const { data: session } = useSession();
 
-  // Open add modal
   const handleAddClick = () => {
     setAddModalOpen(true);
   };
 
-  // Open delete confirmation modal
-  const handleDeleteClick = (idx: number) => {
-    setDeleteIndex(idx);
-    setDeleteModalOpen(true);
+  const requestDelete = (id: string) => {
+    setPendingDeleteId(id);
   };
 
-  // Save changes from edit modal form
-  const handleEditSave = (values: Habilidad) => {
-    if (editIndex !== null) {
-      const updated = [...habilidades];
-      //TODO: Integration
-      // updated[editIndex] = { ...values };
-      setHabilidades(updated);
-      setModalOpen(false);
-      setEditIndex(null);
+  const confirmDelete = async () => {
+    if (!pendingDeleteId) return;
+    const res = await fetchApi<PlainStringDataMessage>(
+      "/Habilidades/eliminar/" + pendingDeleteId,
+      {
+        method: "DELETE",
+        token: session?.user.accessToken,
+      }
+    );
+    if (!res?.isSuccess) {
+      toast.error("Error eliminando habilidad");
+      return;
     }
+    setHabilidades((prev) => prev.filter((h) => h.id !== pendingDeleteId));
+    setPendingDeleteId(null);
+    toast.success(res.data);
   };
 
-  // Save new item from add modal form (add to front)
-  const handleAddSave = (values: Habilidad) => {
-    //TODO: Integration
-    // setHabilidades([{ ...values }, ...habilidades]);
-    setAddModalOpen(false);
+  const cancelDelete = () => {
+    setPendingDeleteId(null);
   };
 
-  // Confirm delete
-  const handleDeleteConfirm = () => {
-    if (deleteIndex !== null) {
-      const updated = [...habilidades];
-      updated.splice(deleteIndex, 1);
-      setHabilidades(updated);
-      setDeleteModalOpen(false);
-      setDeleteIndex(null);
+  const handleAddSave = async (values: HabilidadValues) => {
+    const body = {
+      idCategoriaHabilidad: values.idCategoria,
+      idNivelExperiencia: values.idNivel,
+      aniosExperiencia: values.aniosExperiencia, //FIXME Not being saved
+      nombre: values.nombre,
+      idCurriculum,
+      orden: 0,
+    };
+
+    const res = await fetchApi<HabilidadesResponse>("/Habilidades/agregar", {
+      method: "POST",
+      token: session?.user.accessToken,
+      body,
+    });
+
+    if (!res?.isSuccess) {
+      toast.error("Error agregando habilidad");
+      return;
     }
+
+    const habilidad: Habilidades = {
+      id: res.data.idHabilidad,
+      nombre: res.data.nombre,
+      idNivel: res.data.idNivelExperiencia,
+      nivel: "",
+      idCategoria: res.data.idCategoriaHabilidad,
+      categoria: "",
+    };
+    setHabilidades([habilidad, ...habilidades]);
+    handleAddModalClose();
+    toast.success("Habilidad agregada");
   };
 
-  // Cancel delete
-  const handleDeleteCancel = () => {
-    setDeleteModalOpen(false);
-    setDeleteIndex(null);
+  const handleEditClick = (id: string) => {
+    const habilidad = habilidades.find((habilidad) => habilidad.id === id);
+    if (!habilidad) return;
+    setEditModal(habilidad);
   };
 
-  // Close edit modal
-  const handleModalClose = () => {
-    setModalOpen(false);
-    setEditIndex(null);
+  const handleCancelEdit = () => {
+    setEditModal(null);
   };
 
-  // Close add modal
+  const handleEditSave = async (values: HabilidadValues) => {
+    if (!editModal) return;
+    const body = {
+      idHabilidad: editModal.id,
+      idCategoriaHabilidad: values.idCategoria,
+      idNivelExperiencia: values.idNivel,
+      aniosExperiencia: values.aniosExperiencia, //FIXME Not being saved
+      nombre: values.nombre,
+      idCurriculum,
+      orden: 0,
+    };
+
+    const res = await fetchApi<PlainStringDataMessage>(
+      "/Habilidades/actualizar",
+      {
+        method: "PUT",
+        token: session?.user.accessToken,
+        body,
+      }
+    );
+
+    if (!res?.isSuccess) {
+      toast.error("Error agregando habilidad");
+      return;
+    }
+
+    const habilidad: Habilidades = {
+      id: body.idHabilidad,
+      nombre: body.nombre,
+      idNivel: body.idNivelExperiencia,
+      nivel: "",
+      idCategoria: body.idCategoriaHabilidad,
+      categoria: "",
+    };
+    setHabilidades((prev) =>
+      prev.map((item) => (item.id === habilidad.id ? habilidad : item))
+    );
+    handleCancelEdit();
+    toast.success("Habilidad editada");
+  };
+
   const handleAddModalClose = () => {
     setAddModalOpen(false);
   };
@@ -119,21 +204,26 @@ export default function EditarHabilidades({
           Añadir item
         </button>
       </div>
-
+      <hr className="border-none h-px bg-[#ebebed] mt-4 mb-3 mx-0" />
       <div className="mb-8 flex flex-wrap gap-3">
-        {habilidades.map((item, idx) => (
-          <Badge
-            key={idx}
-            variant="custom"
-            fontSize="text-sm md:text-md"
-            bgColor="bg-green-100"
-            textColor="text-green-700"
-            removable
-            onRemove={() => handleDeleteClick(idx)}
-          >
-            {item.nombre}
-          </Badge>
-        ))}
+        {habilidades?.length ? (
+          habilidades.map((item) => (
+            <Badge
+              key={item.id}
+              variant="custom"
+              fontSize="text-sm md:text-md"
+              bgColor="bg-green-100"
+              textColor="text-green-700"
+              removable
+              onEdit={() => handleEditClick(item.id)}
+              onRemove={() => requestDelete(item.id)}
+            >
+              {item.nombre}
+            </Badge>
+          ))
+        ) : (
+          <h4 className="text-base font-semibold">No hay habilidades</h4>
+        )}
       </div>
 
       {/* Modal for adding new item (Radix UI Dialog) */}
@@ -147,12 +237,12 @@ export default function EditarHabilidades({
           <AddHabilidadForm
             onSave={handleAddSave}
             onCancel={handleAddModalClose}
+            fields={fields}
           />
         </DialogContent>
       </Dialog>
 
-      {/* Modal for editing (Radix UI Dialog) */}
-      <Dialog open={modalOpen} onOpenChange={setModalOpen}>
+      <Dialog open={!!editModal} onOpenChange={handleCancelEdit}>
         <DialogContent className="p-8 max-w-md">
           <DialogHeader>
             <DialogTitle className="text-primary font-primary mb-2.5">
@@ -160,15 +250,15 @@ export default function EditarHabilidades({
             </DialogTitle>
           </DialogHeader>
           <EditHabilidadForm
-            initialValues={editForm}
+            initialValues={editModal}
             onSave={handleEditSave}
-            onCancel={handleModalClose}
+            onCancel={handleCancelEdit}
+            fields={fields}
           />
         </DialogContent>
       </Dialog>
 
-      {/* Modal for delete confirmation (Radix UI Dialog) */}
-      <Dialog open={deleteModalOpen} onOpenChange={setDeleteModalOpen}>
+      <Dialog open={!!pendingDeleteId} onOpenChange={cancelDelete}>
         <DialogContent className="p-8 max-w-md flex flex-col items-center">
           <DialogHeader>
             <DialogTitle>
@@ -176,20 +266,10 @@ export default function EditarHabilidades({
             </DialogTitle>
           </DialogHeader>
           <div className="flex gap-4 mt-4">
-            <button
-              type="button"
-              className="btn btn-secondary"
-              onClick={handleDeleteCancel}
-            >
+            <Button type="button" variant="secondary" onClick={cancelDelete}>
               Cancelar
-            </button>
-            <button
-              type="button"
-              className="btn btn-primary"
-              onClick={handleDeleteConfirm}
-            >
-              Aceptar
-            </button>
+            </Button>
+            <Button onClick={confirmDelete}>Aceptar</Button>
           </div>
         </DialogContent>
       </Dialog>
@@ -198,19 +278,23 @@ export default function EditarHabilidades({
 }
 
 // Form component for adding new habilidad
-interface AddHabilidadFormProps {
-  onSave: (values: Habilidad) => void;
+type AddHabilidadFormProps = {
+  onSave: (values: HabilidadValues) => void;
   onCancel: () => void;
-}
+} & Omit<EditarHabilidadesProps, "habilidades">;
 
 const AddHabilidadForm: React.FC<AddHabilidadFormProps> = ({
   onSave,
   onCancel,
+  fields,
 }) => {
-  const form = useForm<Habilidad>({
+  const form = useForm<HabilidadValues>({
     resolver: zodResolver(habilidadSchema),
     defaultValues: {
       nombre: "",
+      idCategoria: undefined,
+      idNivel: undefined,
+      aniosExperiencia: 0,
     },
   });
 
@@ -228,7 +312,7 @@ const AddHabilidadForm: React.FC<AddHabilidadFormProps> = ({
             <FormItem>
               <FormLabel htmlFor="add-nombre">Nombre</FormLabel>
               <FormControl>
-                <input
+                <Input
                   {...field}
                   id="add-nombre"
                   className="w-full border rounded px-3 py-2"
@@ -239,20 +323,96 @@ const AddHabilidadForm: React.FC<AddHabilidadFormProps> = ({
             </FormItem>
           )}
         />
+        <FormField
+          control={form.control}
+          name="aniosExperiencia"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel htmlFor="add-nombre">Años de experiencia</FormLabel>
+              <FormControl>
+                <Input
+                  type="number"
+                  value={field.value ?? ""}
+                  onChange={(e) => {
+                    const v = e.target.value;
+                    field.onChange(v === "" ? undefined : Number(v));
+                  }}
+                />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        <FormField
+          control={form.control}
+          name="idNivel"
+          render={({ field }) => (
+            <FormItem className="w-full">
+              <FormLabel>Tipo de experiencia *</FormLabel>
+              <FormControl>
+                <Select
+                  onValueChange={(value) => field.onChange(Number(value))}
+                  value={field.value ? String(field.value) : ""}
+                >
+                  <SelectTrigger>
+                    <SelectValue placeholder="" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {fields?.experiencia?.map((exp) => (
+                      <SelectItem
+                        key={exp.idCatalogo}
+                        value={exp.idCatalogo.toString()}
+                      >
+                        {exp.nombre}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        <FormField
+          control={form.control}
+          name="idCategoria"
+          render={({ field }) => (
+            <FormItem className="w-full">
+              <FormLabel>Categoría *</FormLabel>
+              <FormControl>
+                <Select
+                  onValueChange={(value) => field.onChange(Number(value))}
+                  value={field.value ? String(field.value) : ""}
+                >
+                  <SelectTrigger>
+                    <SelectValue placeholder="" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {fields?.categoria_habilidad?.map((cat) => (
+                      <SelectItem
+                        key={cat.idCatalogo}
+                        value={cat.idCatalogo.toString()}
+                      >
+                        {cat.nombre}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
         <div className="flex justify-end gap-2 mt-4">
-          <button
-            type="button"
-            className="px-4 py-2 rounded bg-gray-200 hover:bg-gray-300"
-            onClick={onCancel}
-          >
+          <Button type="button" variant="outline" onClick={onCancel}>
             Cancelar
-          </button>
-          <button
-            type="submit"
-            className="px-4 py-2 rounded bg-primary text-white hover:bg-primary-dark"
-          >
+          </Button>
+          <Button type="submit" disabled={form.formState.isSubmitting}>
+            {form.formState.isSubmitting && (
+              <span className="animate-spin h-4 w-4 border-2 border-t-transparent rounded-full" />
+            )}
             Guardar
-          </button>
+          </Button>
         </div>
       </form>
     </Form>
@@ -260,20 +420,27 @@ const AddHabilidadForm: React.FC<AddHabilidadFormProps> = ({
 };
 
 // Form component for editing habilidad
-interface EditHabilidadFormProps {
-  initialValues: Habilidad;
-  onSave: (values: Habilidad) => void;
+type EditHabilidadFormProps = {
+  initialValues: Habilidades | null;
+  onSave: (values: HabilidadValues) => void;
   onCancel: () => void;
-}
+  fields: DatosPersonalesFieldsResponse | null;
+};
 
 const EditHabilidadForm: React.FC<EditHabilidadFormProps> = ({
   initialValues,
   onSave,
   onCancel,
+  fields,
 }) => {
-  const form = useForm<Habilidad>({
+  const form = useForm<HabilidadValues>({
     resolver: zodResolver(habilidadSchema),
-    defaultValues: initialValues,
+    defaultValues: {
+      nombre: initialValues?.nombre || "",
+      idCategoria: initialValues?.idCategoria || 0,
+      idNivel: initialValues?.idNivel || 0,
+      aniosExperiencia: 0,
+    },
   });
 
   return (
@@ -288,11 +455,11 @@ const EditHabilidadForm: React.FC<EditHabilidadFormProps> = ({
           name="nombre"
           render={({ field }) => (
             <FormItem>
-              <FormLabel htmlFor="edit-nombre">Nombre</FormLabel>
+              <FormLabel htmlFor="add-nombre">Nombre</FormLabel>
               <FormControl>
-                <input
+                <Input
                   {...field}
-                  id="edit-nombre"
+                  id="add-nombre"
                   className="w-full border rounded px-3 py-2"
                   required
                 />
@@ -301,20 +468,96 @@ const EditHabilidadForm: React.FC<EditHabilidadFormProps> = ({
             </FormItem>
           )}
         />
+        <FormField
+          control={form.control}
+          name="aniosExperiencia"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel htmlFor="add-nombre">Años de experiencia</FormLabel>
+              <FormControl>
+                <Input
+                  type="number"
+                  value={field.value ?? ""}
+                  onChange={(e) => {
+                    const v = e.target.value;
+                    field.onChange(v === "" ? undefined : Number(v));
+                  }}
+                />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        <FormField
+          control={form.control}
+          name="idNivel"
+          render={({ field }) => (
+            <FormItem className="w-full">
+              <FormLabel>Tipo de experiencia *</FormLabel>
+              <FormControl>
+                <Select
+                  onValueChange={(value) => field.onChange(Number(value))}
+                  value={field.value ? String(field.value) : ""}
+                >
+                  <SelectTrigger>
+                    <SelectValue placeholder="" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {fields?.experiencia?.map((exp) => (
+                      <SelectItem
+                        key={exp.idCatalogo}
+                        value={exp.idCatalogo.toString()}
+                      >
+                        {exp.nombre}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        <FormField
+          control={form.control}
+          name="idCategoria"
+          render={({ field }) => (
+            <FormItem className="w-full">
+              <FormLabel>Categoría *</FormLabel>
+              <FormControl>
+                <Select
+                  onValueChange={(value) => field.onChange(Number(value))}
+                  value={field.value ? String(field.value) : ""}
+                >
+                  <SelectTrigger>
+                    <SelectValue placeholder="" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {fields?.categoria_habilidad?.map((cat) => (
+                      <SelectItem
+                        key={cat.idCatalogo}
+                        value={cat.idCatalogo.toString()}
+                      >
+                        {cat.nombre}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
         <div className="flex justify-end gap-2 mt-4">
-          <button
-            type="button"
-            className="px-4 py-2 rounded bg-gray-200 hover:bg-gray-300"
-            onClick={onCancel}
-          >
+          <Button type="button" variant="outline" onClick={onCancel}>
             Cancelar
-          </button>
-          <button
-            type="submit"
-            className="px-4 py-2 rounded bg-primary text-white hover:bg-primary-dark"
-          >
+          </Button>
+          <Button type="submit" disabled={form.formState.isSubmitting}>
+            {form.formState.isSubmitting && (
+              <span className="animate-spin h-4 w-4 border-2 border-t-transparent rounded-full" />
+            )}
             Guardar
-          </button>
+          </Button>
         </div>
       </form>
     </Form>

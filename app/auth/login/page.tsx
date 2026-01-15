@@ -1,5 +1,4 @@
 "use client";
-
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import {
@@ -23,6 +22,7 @@ import { toast } from "sonner";
 import { z } from "zod";
 import Footer from "../../../components/shared/components/Footer";
 import Navbar from "../../../components/shared/components/Navbar";
+import AsideMenu from "../../../components/shared/components/AsideMenu";
 
 const loginSchema = z.object({
   email: z.email("Email inválido"),
@@ -48,6 +48,10 @@ export default function LoginPage() {
     },
   });
 
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const toggleMobileMenu = () => setIsMobileMenuOpen((prev) => !prev);
+  const closeMobileMenu = () => setIsMobileMenuOpen(false);
+
   const handleMouseDown = () => setShowPassword(true);
   const handleMouseUp = () => setShowPassword(false);
   const handleClick = () => {
@@ -70,7 +74,17 @@ export default function LoginPage() {
 
   return (
     <div className="min-h-screen flex flex-col bg-white">
-      <Navbar showCompanyRegister={true} hideMainMenu={true} />
+      <Navbar
+        showCompanyRegister={true}
+        onHamburgerClick={toggleMobileMenu}
+        isAsideOpen={isMobileMenuOpen}
+      />
+      <AsideMenu
+        isOpen={isMobileMenuOpen}
+        onClose={closeMobileMenu}
+        side="left"
+        className="w-1/2 max-w-sm"
+      />
       <main className="flex-1 flex flex-col items-center justify-center px-4 py-12">
         <h2 className="section-title">Ingresa a tu cuenta</h2>
         <Card className="w-full max-w-md p-6 flex flex-col gap-6 shadow-md">
@@ -179,7 +193,7 @@ export default function LoginPage() {
                                 ? "Ocultar contraseña"
                                 : "Mostrar contraseña"
                             }
-                            className="absolute right-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400"
+                            className="absolute right-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400 cursor-pointer"
                             onMouseDown={handleMouseDown}
                             onMouseUp={handleMouseUp}
                             onMouseLeave={handleMouseUp}

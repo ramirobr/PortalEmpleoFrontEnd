@@ -3,12 +3,12 @@ import { GenericResponse } from "@/types/user"
 export type Job = {
   idVacante: string
   nombreEmpresa: string
-  logoEmpresa: any
+  logoEmpresa: string
   titulo: string
   descripcion: string
   requisitos: string
   nivelEstudios: string
-  experienciaMinima: number
+  experiencia: number
   modalidad: string
   ciudad: string
   provincia: string
@@ -43,3 +43,5 @@ export type RecentJob = {
 }
 
 export type GetLastEightJobsResponse = GenericResponse<RecentJob[]>
+export type GetJobByIdResponse = GenericResponse<Job>
+

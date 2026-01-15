@@ -7,5 +7,5 @@ export async function SignIn(email: string, password: string) {
     password,
     redirect: false
   });
-  return res as any
+  return res
 }
