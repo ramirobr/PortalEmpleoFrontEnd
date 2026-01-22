@@ -1,3 +1,0 @@
-export default function CrearPage() {
-  // ...your page code...
-}
