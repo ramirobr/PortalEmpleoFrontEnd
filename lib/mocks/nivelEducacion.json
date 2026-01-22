@@ -1,0 +1,10 @@
+[
+  { "key": "En curso", "value": "En curso" },
+  { "key": "Secundario", "value": "Secundario" },
+  { "key": "Terciario", "value": "Terciario" },
+  { "key": "Universitario", "value": "Universitario" },
+  { "key": "Postgrado", "value": "Postgrado" },
+  { "key": "Master", "value": "Master" },
+  { "key": "Doctorado", "value": "Doctorado" },
+  { "key": "Otro", "value": "Otro" }
+]

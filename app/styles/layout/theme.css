@@ -1,0 +1,23 @@
+@theme {
+  --color-primary: #14aa9f;
+  --color-secondary: #2b5353;
+  --color-gray-light: #eaeff5;
+  --color-gray-dark: #707f8c;
+  --color-arsenic: #424242;
+  --font-primary: var(--font-inter), sans-serif;
+  --color-black: #111817;
+}
+
+@layer base {
+  body {
+    @apply bg-white text-gray-500 font-primary;
+  }
+
+  .container {
+    @apply mx-auto px-8;
+  }
+
+  hr {
+    @apply border-gray-light;
+  }
+}
