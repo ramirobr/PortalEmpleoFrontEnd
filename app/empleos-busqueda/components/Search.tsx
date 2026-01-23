@@ -3,7 +3,7 @@ import Loader from "@/components/shared/components/Loader";
 import { useJobs } from "../hooks/useJobs";
 import { JobList } from "./JobList";
 import { Pagination } from "./Pagination";
-import { TopFilters } from "./TopFilters";
+import { TopFilters } from "@/components/shared/components/TopFilters";
 
 type Props = {
   token?: string;

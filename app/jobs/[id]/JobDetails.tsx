@@ -7,6 +7,7 @@ import { useEffect, useRef } from "react";
 import { useAuthStore } from "@/context/authStore";
 import { addVisitaVacante } from "@/lib/jobs/job";
 import { useSession } from "next-auth/react";
+import { ROLES } from "@/types/auth";
 
 function isValidEmail(email: string) {
   return /^\S+@\S+\.\S+$/.test(email);
@@ -28,6 +29,7 @@ export default function JobDetails(job: Job) {
     viewedRef.current = true;
     addVisitaVacante(job.idVacante, id, session.user.accessToken);
   }, [id, job.idVacante, session]);
+  console.log(job);
 
   return (
     <>
@@ -53,16 +55,15 @@ export default function JobDetails(job: Job) {
                 <span className="font-bold">Empresa:</span> {job.nombreEmpresa}
               </p>
               <p className="mb-1">
-                <span className="font-bold">Ubicación:</span> {job.pais},{" "}
-                {job.ciudad} {job.provincia}
+                <span className="font-bold">Ciudad:</span> {job.ciudad}
               </p>
               <p className="mb-1">
                 <span className="font-bold">Modalidad:</span> {job.modalidad}
               </p>
-              {/* FIXME direccion? 
               <p className="mb-1">
-                <span className="font-bold">Dirección:</span> {job.direccion} 
-              </p> */}
+                <span className="font-bold">Nivel de estudios:</span>{" "}
+                {job.nivelEstudios}
+              </p>
               {job.correoContacto && (
                 <p className="mb-1">
                   <span className="font-bold">Correo:</span>{" "}
@@ -79,23 +80,6 @@ export default function JobDetails(job: Job) {
                   )}
                 </p>
               )}
-              {/* FIXME telefono?
-              {job.telefono && (
-                <p className="mb-1">
-                  <span className="font-bold">Teléfono:</span>{" "}
-                  {isValidPhone(job.telefono) ? (
-                    <a
-                      href={`tel:${job.telefono}`}
-                      className="text-blue-600 underline"
-                      aria-label={`Llamar a ${job.telefono}`}
-                    >
-                      {job.telefono}
-                    </a>
-                  ) : (
-                    <span>{job.telefono}</span>
-                  )}
-                </p>
-              )} */}
               <p className="mb-1">
                 <span className="font-bold">Salario:</span> ${job.salarioBase} -
                 ${job.salarioMaximo}
@@ -113,51 +97,19 @@ export default function JobDetails(job: Job) {
                 {job.descripcion}
               </p>
             </JobSection>
-            {/* FIXME Responsabilidades?
-            <JobSection title="Responsabilidades">
-              <ul className="list-disc pl-6 mb-4">
-                {job.responsabilidades?.map((r: string, i: number) => (
-                  <li key={i}>{r}</li>
-                ))}
-              </ul>
-            </JobSection> */}
             <JobSection title="Requisitos">{job.requisitos}</JobSection>
-            {/* FIXME Deseable?
-            <JobSection title="Deseable">
-              <ul className="list-disc pl-6">
-                {job.deseable?.map((d: string, i: number) => (
-                  <li key={i}>{d}</li>
-                ))}
-              </ul>
-            </JobSection> */}
           </div>
         </div>
-        <div>
-          {/* FIXME: mapa?
-           {job.mapa && (
-            <JobSection title="Ubicación">
-              <div className="w-full h-80 rounded-md overflow-hidden border">
-                {job.mapa.trim().startsWith("<iframe") ? (
-                  <div dangerouslySetInnerHTML={{ __html: job.mapa }} />
-                ) : (
-                  <iframe
-                    src={job.mapa.replace(
-                      "https://maps.google.com/?q=",
-                      "https://www.google.com/maps?q="
-                    )}
-                    width="100%"
-                    height="100%"
-                    className="border-0 w-full h-full"
-                    allowFullScreen
-                    title={`Mapa de ${job.titulo}`}
-                  />
-                )}
-              </div>
-            </JobSection>
-          )} */}
-        </div>
+        {session?.user.role === ROLES.Postulante && (
+          <div className="sticky top-4 self-start">
+            <JobApplyForm
+              idUsuario={String(session?.user?.id || 0)}
+              idVacante={job.idVacante}
+              token={session?.user?.accessToken}
+            />
+          </div>
+        )}
       </section>
-      <JobApplyForm />
     </>
   );
 }

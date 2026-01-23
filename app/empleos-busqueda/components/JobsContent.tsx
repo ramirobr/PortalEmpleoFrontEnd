@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { Filters } from "./Filters";
+import { Filters } from "@/components/shared/components/Filters";
 import Search from "./Search";
 import { FiltersResponse } from "@/types/search";
 

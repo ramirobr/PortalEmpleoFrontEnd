@@ -19,8 +19,8 @@ export default async function Home() {
     <MainLayout>
       <Jumbo />
       <RecentJobs jobs={jobs} favJobsByUser={favoriteJobs} />
-      <Testimonials testimonials={testimonials} />
       <CallToAction />
+      <Testimonials testimonials={testimonials} />
       <Footer />
     </MainLayout>
   );

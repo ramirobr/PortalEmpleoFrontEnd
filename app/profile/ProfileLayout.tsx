@@ -1,5 +1,6 @@
 "use client";
 import Navbar from "@/components/shared/components/Navbar";
+import Footer from "@/components/shared/components/Footer";
 import { Children } from "@/types/generic";
 import { useEffect, useState } from "react";
 import AsideMenu, { NavLink } from "@/components/shared/components/AsideMenu";
@@ -109,7 +110,7 @@ export default function ProfileLayout({ children }: Children) {
   return (
     <div className="min-h-screen bg-white relative">
       <Navbar onHamburgerClick={toggleAside} isAsideOpen={isAsideOpen} />
-      <div className="flex relative">
+      <div className="relative bg-gray-50">
         <AsideMenu
           isOpen={isAsideOpen}
           onClose={closeAside}
@@ -117,9 +118,10 @@ export default function ProfileLayout({ children }: Children) {
           className="absolute top-0 left-0 h-full w-64 transform-none bg-white shadow-none md:shadow"
           links={session ? profileLinks : authLinks}
         />
-        <main className="w-full flex-1 py-10">
-          <div className="container">{children}</div>
+        <main className="w-full flex-1 py-10 flex flex-col justify-between">
+          <div className="container mb-auto">{children}</div>
         </main>
+        <Footer />
       </div>
     </div>
   );

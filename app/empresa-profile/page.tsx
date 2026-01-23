@@ -4,8 +4,11 @@ import { getCompanyDashboardByUserId } from "@/lib/company/dashboard";
 
 export default async function EmpresaProfilePage() {
   const session = await auth();
-  if (!session) return;
-  const companyDashboard = await getCompanyDashboardByUserId(session.user);
+  if (!session || !session.user.idEmpresa) return;
+  const companyDashboard = await getCompanyDashboardByUserId(
+    session.user.idEmpresa,
+    session.user.accessToken
+  );
 
   return (
     <div>

@@ -1,147 +1,123 @@
+import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
-import React, { useState } from "react";
+import { fetchApi } from "@/lib/apiClient";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { z } from "zod";
+import { toast } from "sonner";
+import { Textarea } from "@/components/ui/textarea";
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@/components/ui/form";
 
 interface JobApplyFormProps {
+  idUsuario: string;
+  idVacante: string;
+  token?: string;
   onSuccess?: () => void;
 }
 
-export default function JobApplyForm({ onSuccess }: JobApplyFormProps) {
-  const [form, setForm] = useState({
-    name: "",
-    email: "",
-    cv: "",
-    message: "",
+interface AplicacionResponse {
+  isSuccess: boolean;
+  messages?: string[];
+}
+
+const applyFormSchema = z.object({
+  message: z.string(),
+});
+
+type ApplyFormData = z.infer<typeof applyFormSchema>;
+
+export default function JobApplyForm({
+  idUsuario,
+  idVacante,
+  token,
+  onSuccess,
+}: JobApplyFormProps) {
+  const form = useForm<ApplyFormData>({
+    resolver: zodResolver(applyFormSchema),
+    defaultValues: { message: "" },
   });
-  const [errors, setErrors] = useState<{ [key: string]: string }>({});
-  const [success, setSuccess] = useState(false);
 
-  function validate() {
-    const newErrors: { [key: string]: string } = {};
-    if (!form.name.trim()) newErrors.name = "El nombre es obligatorio.";
-    if (!form.email.trim()) newErrors.email = "El correo es obligatorio.";
-    else if (!/^\S+@\S+\.\S+$/.test(form.email))
-      newErrors.email = "Correo inválido.";
-    if (form.cv && !/^https?:\/\/.+/.test(form.cv))
-      newErrors.cv = "El enlace debe ser una URL válida.";
-    return newErrors;
-  }
+  async function onSubmit(data: ApplyFormData) {
+    try {
+      const response = await fetchApi<AplicacionResponse>(
+        "/Aplicacion/add-aplicacion",
+        {
+          method: "POST",
+          body: {
+            idUsuario,
+            idVacante,
+            mensajeCandidato: data.message,
+          },
+          token,
+        },
+      );
 
-  function handleChange(
-    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
-  ) {
-    setForm({ ...form, [e.target.name]: e.target.value });
-    setErrors({ ...errors, [e.target.name]: "" });
-  }
-
-  function handleSubmit(e: React.FormEvent) {
-    e.preventDefault();
-    const newErrors = validate();
-    if (Object.keys(newErrors).length > 0) {
-      setErrors(newErrors);
-      setSuccess(false);
-      return;
+      if (response?.isSuccess) {
+        toast.success("Aplicado con éxito");
+        form.reset();
+        onSuccess?.();
+      } else {
+        toast.error(response?.messages?.[0] || "Error al enviar la aplicación");
+      }
+    } catch (error) {
+      toast.error("Error al enviar la aplicación");
+      console.error(error);
     }
-    setSuccess(true);
-    setForm({ name: "", email: "", cv: "", message: "" });
-    setErrors({});
-    if (onSuccess) onSuccess();
   }
 
   return (
     <Card className="px-6">
-      <h2 className="section-title">Formulario de aplicación</h2>
-      <form className="flex flex-col gap-4" onSubmit={handleSubmit} noValidate>
-        <div>
-          <label
-            htmlFor="name"
-            className="block text-sm font-medium text-gray-500  mb-1"
-          >
-            Nombre completo
-          </label>
-          <input
-            type="text"
-            id="name"
-            name="name"
-            required
-            className={`w-full px-4 py-2 border rounded focus:outline-none focus:ring ${
-              errors.name ? "border-red-500" : ""
-            }`}
-            value={form.name}
-            onChange={handleChange}
-          />
-          {errors.name && (
-            <span className="text-xs text-red-600">{errors.name}</span>
-          )}
-        </div>
-        <div>
-          <label
-            htmlFor="email"
-            className="block text-sm font-medium text-gray-500  mb-1"
-          >
-            Correo electrónico
-          </label>
-          <input
-            type="email"
-            id="email"
-            name="email"
-            required
-            className={`w-full px-4 py-2 border rounded focus:outline-none focus:ring ${
-              errors.email ? "border-red-500" : ""
-            }`}
-            value={form.email}
-            onChange={handleChange}
-          />
-          {errors.email && (
-            <span className="text-xs text-red-600">{errors.email}</span>
-          )}
-        </div>
-        <div>
-          <label
-            htmlFor="cv"
-            className="block text-sm font-medium text-gray-500  mb-1"
-          >
-            Enlace a tu CV o portafolio
-          </label>
-          <input
-            type="url"
-            id="cv"
-            name="cv"
-            className={`w-full px-4 py-2 border rounded focus:outline-none focus:ring ${
-              errors.cv ? "border-red-500" : ""
-            }`}
-            value={form.cv}
-            onChange={handleChange}
-          />
-          {errors.cv && (
-            <span className="text-xs text-red-600">{errors.cv}</span>
-          )}
-        </div>
-        <div>
-          <label
-            htmlFor="message"
-            className="block text-sm font-medium text-gray-500  mb-1"
-          >
-            Mensaje adicional
-          </label>
-          <textarea
-            id="message"
+      <h2 className="section-title mb-0">Formulario de aplicación</h2>
+      <Form {...form}>
+        <form
+          className="flex flex-col gap-4"
+          onSubmit={form.handleSubmit(onSubmit)}
+          noValidate
+        >
+          <FormField
+            control={form.control}
             name="message"
-            rows={4}
-            className="w-full px-4 py-2 border rounded focus:outline-none focus:ring"
-            placeholder="¿Por qué te interesa este puesto?"
-            value={form.message}
-            onChange={handleChange}
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel
+                  htmlFor="message"
+                  className="text-sm font-medium text-gray-500"
+                >
+                  Mensaje
+                </FormLabel>
+                <FormControl>
+                  <Textarea
+                    {...field}
+                    id="message"
+                    aria-label="Mensaje"
+                    placeholder="¿Por qué te interesa este puesto?"
+                    rows={5}
+                    className="w-full border rounded px-4 py-2 resize-none h-36"
+                  />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
           />
-        </div>
-        <button type="submit" className="btn btn-primary mt-4">
-          Enviar aplicación
-        </button>
-        {success && (
-          <div className="mt-4 text-green-700 font-semibold">
-            ¡Tu aplicación ha sido enviada exitosamente!
-          </div>
-        )}
-      </form>
+          <Button
+            type="submit"
+            className="btn btn-primary"
+            disabled={form.formState.isSubmitting}
+          >
+            {form.formState.isSubmitting && (
+              <span className="animate-spin h-4 w-4 border-2 border-t-transparent rounded-full" />
+            )}
+            {form.formState.isSubmitting ? "Enviando..." : "Enviar aplicación"}
+          </Button>
+        </form>
+      </Form>
     </Card>
   );
 }

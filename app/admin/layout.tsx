@@ -104,7 +104,7 @@ export default function AdminLayout({ children }: Children) {
   return (
     <div className="min-h-screen bg-white relative">
       <Navbar onHamburgerClick={toggleAside} isAsideOpen={isAsideOpen} />
-      <div className="flex relative">
+      <div className="flex relative bg-gray-50">
         <AsideMenu
           isOpen={isAsideOpen}
           onClose={closeAside}

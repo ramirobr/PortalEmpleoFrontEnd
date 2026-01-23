@@ -1,10 +1,12 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
-import Link from "next/link";
-import { useAuthStore } from "@/context/authStore";
-import { fetchMisOfertasEmpleo } from "@/lib/company/misOfertas";
-import { OfertaEmpleo } from "@/types/company";
+import {
+  BriefcaseIcon,
+  EditIcon,
+  EyeIcon,
+  MapPinIcon,
+  TrashIcon,
+} from "@/components/shared/icons/Icons";
 import {
   Select,
   SelectContent,
@@ -12,14 +14,14 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import {
-  BriefcaseIcon,
-  MapPinIcon,
-  EyeIcon,
-  EditIcon,
-  TrashIcon,
-} from "@/components/shared/icons/Icons";
+import { fetchApi } from "@/lib/apiClient";
+import { fetchMisOfertasEmpleo } from "@/lib/company/misOfertas";
+import { OfertaEmpleo } from "@/types/company";
+import { PlainStringDataMessage } from "@/types/user";
 import { useSession } from "next-auth/react";
+import Link from "next/link";
+import { useEffect, useState } from "react";
+import { toast } from "sonner";
 
 export default function OfertasPage() {
   const { data: session } = useSession();
@@ -28,13 +30,13 @@ export default function OfertasPage() {
   const [totalItems, setTotalItems] = useState(0);
   const [loading, setLoading] = useState(true);
   const [periodoBusqueda, setPeriodoBusqueda] = useState("6months");
-  
+  const [deletingId, setDeletingId] = useState<string | null>(null);
+
   const pageSize = 10;
 
   // Cargar ofertas de empleo
   useEffect(() => {
     async function cargarOfertas() {
-      
       setLoading(true);
       const resultado = await fetchMisOfertasEmpleo(
         {
@@ -43,7 +45,7 @@ export default function OfertasPage() {
           idEmpresa: session?.user.idEmpresa || "",
           periodoBusqueda,
         },
-        session?.user.accessToken
+        session?.user.accessToken,
       );
 
       if (resultado) {
@@ -81,26 +83,46 @@ export default function OfertasPage() {
     });
   };
 
+  const handleDelete = async (idVacante: string) => {
+    if (!session) return;
+
+    setDeletingId(idVacante);
+    //TODO: Change endpoint to delete vacancy
+    const res = await fetchApi<PlainStringDataMessage>(
+      "/Jobs/removeVacanteFavorita/" + idVacante + "/" + session.user.idEmpresa,
+      {
+        method: "DELETE",
+        token: session?.user.accessToken,
+      },
+    );
+    if (!res?.isSuccess) {
+      toast.error("Error eliminando oferta");
+      return;
+    }
+    toast.success("Oferta eliminada exitosamente");
+    setOfertas(ofertas.filter((oferta) => oferta.idVacante !== idVacante));
+    setTotalItems(totalItems - 1);
+    setDeletingId(null);
+  };
+
   const startIndex = (currentPage - 1) * pageSize;
   const endIndex = Math.min(startIndex + pageSize, totalItems);
 
   return (
     <div className="container mx-auto px-6 mb-8">
-      {/* Header */}
       <div className="mb-8 mt-6">
         <h1 className="text-3xl font-bold text-gray-900">Gestionar Empleos</h1>
         <p className="text-gray-500">¿Listo para retomar el trabajo?</p>
       </div>
 
       <div className="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
-        {/* Toolbar */}
         <div className="p-6 flex flex-col md:flex-row justify-between items-center border-b border-gray-100 gap-4">
           <h2 className="text-lg font-semibold text-gray-900">
             Mis Ofertas de Empleo
           </h2>
           <div className="w-full md:w-48">
-            <Select 
-              defaultValue="6months" 
+            <Select
+              defaultValue="6months"
               value={periodoBusqueda}
               onValueChange={handlePeriodoChange}
             >
@@ -115,8 +137,7 @@ export default function OfertasPage() {
           </div>
         </div>
 
-        {/* Table Header */}
-        <div className="grid grid-cols-12 gap-4 bg-gray-50/50 p-4 text-xs font-semibold text-primary font-bold uppercase tracking-wider border-b border-gray-100 hidden md:grid">
+        <div className="grid-cols-12 gap-4 bg-gray-50/50 p-4 text-xs text-primary font-bold uppercase tracking-wider border-b border-gray-100 hidden md:grid">
           <div className="col-span-12 md:col-span-5 pl-4">Título</div>
           <div className="col-span-6 md:col-span-2">Aplicaciones</div>
           <div className="col-span-6 md:col-span-2">Creado y Expira</div>
@@ -124,7 +145,6 @@ export default function OfertasPage() {
           <div className="col-span-6 md:col-span-2 text-right pr-4">Acción</div>
         </div>
 
-        {/* List */}
         <div className="divide-y divide-gray-100">
           {loading ? (
             <div className="p-12 text-center text-gray-500">
@@ -140,7 +160,6 @@ export default function OfertasPage() {
                 key={oferta.idVacante}
                 className="grid grid-cols-12 gap-4 p-4 items-center hover:bg-gray-50 transition-colors"
               >
-                {/* Title & Icon */}
                 <div className="col-span-12 md:col-span-5 flex items-start gap-4 pl-4">
                   <div>
                     <h3 className="font-semibold text-gray-900 text-base">
@@ -159,23 +178,22 @@ export default function OfertasPage() {
                   </div>
                 </div>
 
-                {/* Applications */}
                 <div className="col-span-6 md:col-span-2 text-sm">
                   <Link
                     href="#"
                     className="text-primary hover:text-green-600 hover:underline font-medium transition-colors"
                   >
-                    {oferta.totalAplicaciones}+ Postulados
+                    {oferta.totalAplicaciones}
+                    {oferta.totalAplicaciones > 9 && "+"} Postulado
+                    {oferta.totalAplicaciones !== 1 && "s"}
                   </Link>
                 </div>
 
-                {/* Dates */}
                 <div className="col-span-6 md:col-span-2 text-sm text-gray-500 flex flex-col gap-1">
                   <span>{formatDate(oferta.fechaPublicacion)}</span>
                   <span>{formatDate(oferta.fechaCierre)}</span>
                 </div>
 
-                {/* Status */}
                 <div className="col-span-6 md:col-span-1">
                   <span
                     className={`text-sm font-medium ${
@@ -190,27 +208,27 @@ export default function OfertasPage() {
                   </span>
                 </div>
 
-                {/* Actions */}
                 <div className="col-span-6 md:col-span-2 flex justify-end gap-2 pr-4">
-                  {/* View */}
-                  <button
+                  <Link
+                    href={`/jobs/${oferta.idVacante}`}
                     className="p-2 bg-sky-50 text-teal-600 rounded-full hover:bg-teal-600 hover:text-white transition-colors cursor-pointer"
                     title="Ver Detalle"
                   >
                     <EyeIcon className="w-3 h-3" />
-                  </button>
+                  </Link>
 
-                  {/* Edit */}
-                  <button
+                  <Link
+                    href={`/empresa-profile/empleos/${oferta.idVacante}`}
                     className="p-2 bg-sky-50 text-teal-600 rounded-full hover:bg-teal-600 hover:text-white transition-colors cursor-pointer"
                     title="Editar"
                   >
                     <EditIcon className="w-3 h-3" />
-                  </button>
+                  </Link>
 
-                  {/* Delete */}
                   <button
-                    className="p-2 bg-sky-50 text-teal-600 rounded-full hover:bg-teal-600 hover:text-white transition-colors cursor-pointer"
+                    onClick={() => handleDelete(oferta.idVacante)}
+                    disabled={deletingId === oferta.idVacante}
+                    className="p-2 bg-sky-50 text-teal-600 rounded-full hover:bg-teal-600 hover:text-white transition-colors cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
                     title="Eliminar"
                   >
                     <TrashIcon className="w-3 h-3" />
@@ -221,7 +239,6 @@ export default function OfertasPage() {
           )}
         </div>
 
-        {/* Pagination */}
         {!loading && totalItems > 0 && (
           <div className="p-4 border-t border-gray-100 flex items-center justify-between">
             <div className="text-sm text-gray-500">
@@ -248,7 +265,7 @@ export default function OfertasPage() {
                   >
                     {page}
                   </button>
-                )
+                ),
               )}
               <button
                 onClick={() => handlePageChange(currentPage + 1)}

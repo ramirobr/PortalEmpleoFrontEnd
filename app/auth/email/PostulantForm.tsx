@@ -46,8 +46,14 @@ const signupSchema = z
       .min(7, "El celular debe tener al menos 10 dígitos.")
       .max(14, "El celular no debe exceder 14 caracteres."),
     fechaNacimiento: z.date("Selecciona una fecha"),
-    password: z.string().min(6, "Mínimo 6 caracteres"),
-    confirmPassword: z.string().min(6, "Repite la contraseña"),
+    password: z
+      .string()
+      .min(8, "Mínimo 8 caracteres")
+      .regex(
+        /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&#])[A-Za-z\d@$!%*?&#]{8,}$/,
+        "La contraseña debe contener al menos una mayúscula, una minúscula, un número y un carácter especial (@$!%*?&#). No se permiten espacios."
+      ),
+    confirmPassword: z.string().min(8, "Repite la contraseña"),
     email: z.email("Email inválido"),
     aceptaCondicionesUso: z
       .boolean()

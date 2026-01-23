@@ -55,10 +55,16 @@ const schema = z
     apellidos: z.string().min(1, "Apellido requerido"),
     idGenero: z.number().optional(),
     email: z.email("Email inválido"),
-    password: z.string().min(7, "La contraseña debe tener mínimo 7 caracteres"),
+    password: z
+      .string()
+      .min(8, "La contraseña debe tener mínimo 8 caracteres")
+      .regex(
+        /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&#])[A-Za-z\d@$!%*?&#]{8,}$/,
+        "La contraseña debe contener al menos una mayúscula, una minúscula, un número y un carácter especial (@$!%*?&#). No se permiten espacios."
+      ),
     repeatPassword: z
       .string()
-      .min(7, "La contraseña debe tener mínimo 7 caracteres"),
+      .min(8, "La contraseña debe tener mínimo 8 caracteres"),
     aceptaTerminoCondiciones: z
       .boolean()
       .refine((v) => v === true, "Debes aceptar los términos"),
