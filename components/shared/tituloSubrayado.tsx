@@ -7,8 +7,8 @@ const TituloSubrayado: React.FC<
 > = ({ children, className = "" }) => (
   <h2
     className={cn(
-      "text-2xl font-bold mb-10 text-primary underline underline-offset-4 decoration-2",
-      className
+      "text-2xl font-bold mb-10 text-primary decoration-2 text-black",
+      className,
     )}
   >
     {children}

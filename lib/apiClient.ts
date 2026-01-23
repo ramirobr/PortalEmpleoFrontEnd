@@ -6,7 +6,7 @@ type Options = Omit<RequestInit, "body"> & {
 
 export async function fetchApi<T = Response>(
   url: string,
-  options: Options = {}
+  options: Options = {},
 ): Promise<T | null> {
   try {
     const { body, internal, token, ...rest } = options;
@@ -14,7 +14,7 @@ export async function fetchApi<T = Response>(
     const headers: HeadersInit = {
       "Content-Type": "application/json",
       ...(token ? { Authorization: `Bearer ${token}` } : {}),
-      ...(rest.headers ?? {})
+      ...(rest.headers ?? {}),
     };
 
     const finalOptions: RequestInit = {
@@ -28,7 +28,7 @@ export async function fetchApi<T = Response>(
 
     return (await res.json()) as T;
   } catch (error) {
-    console.warn(error)
-    return null
+    console.error("fetchApi Error:", url, error);
+    return null;
   }
 }

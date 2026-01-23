@@ -50,3 +50,8 @@ export const mapCatalogsToResponse = <T extends Record<string, unknown>>(
   Object.fromEntries(
     types.map((type, i) => [type.toLowerCase(), results[i]])
   ) as T;
+
+export const parseWeirdDate = (value: string) => {
+  const [d, m, y] = value.split("/");
+  return new Date(Number(y), Number(m) - 1, Number(d));
+};

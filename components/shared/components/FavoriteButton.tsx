@@ -7,6 +7,8 @@ import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 
+import { Heart } from "lucide-react";
+
 export type FavoriteButtonProps = {
   jobId: string;
   isFavorite?: boolean;
@@ -35,24 +37,23 @@ export default function FavoriteButton({
     onUnfavorite?.();
   };
 
+  const isLoggedIn = !!session;
+
   return (
     <button
       onClick={handleFavoriteClick}
-      className="absolute right-4 top-4 hover:scale-110 transition cursor-pointer"
+      className="absolute right-4 top-4 hover:scale-110 transition cursor-pointer p-2 rounded-full"
       aria-label={favorite ? "Remover de favoritos" : "Agregar a favoritos"}
     >
-      <svg width="28" height="28" fill="none" viewBox="0 0 24 24">
-        <circle
-          cx="12"
-          cy="12"
-          r="12"
-          fill={favorite ? "#DCFCE7" : "#E6F4EA"}
-        />
-        <path
-          d="M16.5 9.5c0-1.38-1.12-2.5-2.5-2.5-.96 0-1.78.55-2.18 1.36-.4-.81-1.22-1.36-2.18-1.36-1.38 0-2.5 1.12-2.5 2.5 0 2.28 4.68 5.36 4.68 5.36s4.68-3.08 4.68-5.36z"
-          fill={favorite ? "#15803D" : "#D1D5DB"}
-        />
-      </svg>
+      <Heart
+        className={`w-6 h-6 transition-colors ${
+          !isLoggedIn
+            ? "text-gray-400 fill-gray-400"
+            : favorite
+              ? "text-primary fill-primary"
+              : "text-gray-400"
+        }`}
+      />
     </button>
   );
 }

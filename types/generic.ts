@@ -8,3 +8,7 @@ export type CatalogFieldsFromTypes<
 > = {
     [K in T[number]as Lowercase<K>]?: V;
   };
+
+export type IdProp = {
+  params: Promise<{ id: string }>;
+};

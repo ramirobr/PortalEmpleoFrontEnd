@@ -8,11 +8,16 @@ export type Job = {
   descripcion: string
   requisitos: string
   nivelEstudios: string
-  experiencia: number
+  experiencia: string
   modalidad: string
+  estado: string
   ciudad: string
-  provincia: string
-  pais: string
+  idCiudad: number
+  idModalidad: number
+  idExperiencia: number
+  idNivelEstudio: number
+  provincia?: string
+  pais?: string
   salarioBase: number
   salarioMaximo: number
   fechaPublicacion: string

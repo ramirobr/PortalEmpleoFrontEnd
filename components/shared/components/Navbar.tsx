@@ -42,7 +42,7 @@ export default function Navbar({
   }, [status]);
 
   return (
-    <nav className="relative p-4 flex items-center justify-center shadow-lg bg-white">
+    <nav className="relative p-4 flex items-center justify-center shadow-md z-50 bg-white">
       <section className="container">
         <div className="grid grid-cols-3 gap-3 items-center justify-between">
           <button
