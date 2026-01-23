@@ -212,6 +212,7 @@ export default function PostulantesTodos({ filters }: PostulantesTodosProps) {
                   location: candidato.ubicacion,
                   salary: "",
                   skills: candidato.habilidades,
+                  photo: candidato.fotografia,
                 }}
               />
             ))

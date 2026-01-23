@@ -18,6 +18,7 @@ export interface Applicant {
   location: string;
   salary: string;
   skills: string[];
+  photo: string;
 }
 
 interface ApplicantCardProps {
@@ -37,6 +38,7 @@ export default function ApplicantCard({
         <div className="flex items-center gap-4">
           <div className="relative">
             <UserAvatar
+              src={applicant.photo ? `data:image/jpeg;base64,${applicant.photo}` : undefined}
               size={48}
               alt={`Foto de ${applicant.name}`}
               className="ring-2 ring-gray-100 group-hover:ring-blue-100 transition-all"

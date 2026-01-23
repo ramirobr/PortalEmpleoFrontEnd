@@ -16,7 +16,6 @@ export default async function EditProfilePage() {
   const user = await getUserInfoByUserId(session.user);
   const fields = await fetchDatosPersonalesFields();
   if (!user) return;
-  console.log(session);
 
   return (
     <div className="flex flex-col gap-10">
@@ -28,10 +27,7 @@ export default async function EditProfilePage() {
         experiencia={user.experienciaLaboral}
         fields={fields}
       />
-      <EditarHabilidades
-        habilidades={user.habiliades}
-        fields={fields}
-      />
+      <EditarHabilidades habilidades={user.habiliades} fields={fields} />
       <EditarResumen curriculum={curriculum} fields={fields} />
     </div>
   );

@@ -1,8 +1,7 @@
 "use client";
-import { Pencil } from "@/components/shared/components/iconos/Pencil";
-import { Trash } from "@/components/shared/components/iconos/Trash";
-import TituloSubrayado from "@/components/shared/tituloSubrayado";
+
 import { Button } from "@/components/ui/button";
+import { Pencil, Trash2, FileText } from "lucide-react";
 import { Card } from "@/components/ui/card";
 import {
   Form,
@@ -90,7 +89,10 @@ export default function EditarResumen({
   return (
     <Card className="px-6">
       <div className="flex justify-between items-center mb-10">
-        <TituloSubrayado className="mb-0">Resumen Profesional</TituloSubrayado>
+        <h2 className="text-2xl font-bold text-primary flex items-center gap-2">
+          <FileText width={25} height={25} className="text-primary" />
+          Resumen Profesional
+        </h2>
         {!isEditing ? (
           <button
             type="button"
@@ -98,7 +100,7 @@ export default function EditarResumen({
             className="cursor-pointer"
             aria-label="Editar resumen profesional"
           >
-            <Pencil width={25} height={25} className="text-primary" />
+            <Pencil width={20} height={20} className="text-primary" />
           </button>
         ) : (
           <button
@@ -107,7 +109,7 @@ export default function EditarResumen({
             className="cursor-pointer"
             aria-label="Cancelar edición"
           >
-            <Trash width={25} height={25} className="text-primary" />
+            <Trash2 width={20} height={20} className="text-primary" />
           </button>
         )}
       </div>
@@ -178,16 +180,17 @@ export default function EditarResumen({
             />
           </div>
           <div className="col-span-2 mt-8 flex justify-end">
-            <Button
+            <button
+              className="btn btn-primary"
               type="submit"
               aria-label="Guardar resumen profesional"
               disabled={!isEditing || form.formState.isSubmitting}
             >
               {form.formState.isSubmitting && (
-                <span className="animate-spin h-4 w-4 border-2 border-t-transparent rounded-full" />
+                <span className="animate-spin h-4 w-4 border-2 border-t-transparent rounded-full mr-2" />
               )}
               Guardar
-            </Button>
+            </button>
           </div>
         </form>
       </Form>

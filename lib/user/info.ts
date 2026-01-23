@@ -31,3 +31,30 @@ export const getUserPic = async (user?: User) => {
   });
   return json?.data;
 }
+
+export const getCandidateInfoById = async (candidateId: string, token: string) => {
+  const json = await fetchApi<UserInfoResponse>(`/User/user-info/${candidateId}`, {
+    token
+  });
+  return json?.data;
+}
+
+export const getCandidatePicById = async (candidateId: string, token: string) => {
+  const json = await fetchApi<PlainStringDataMessage>(`/User/user-picture/${candidateId}`, {
+    token
+  });
+  return json?.data;
+}
+
+export const addProfileVisit = async (userId: string, idEmpresa: string, token: string) => {
+  try {
+    await fetchApi<PlainStringDataMessage>(`/User/add-profile-visit`, {
+      method: 'POST',
+      body: { userId, idEmpresa },
+      token
+    });
+  } catch {
+    // Silently fail - this is just for tracking visits
+    console.warn('Failed to register profile visit');
+  }
+}

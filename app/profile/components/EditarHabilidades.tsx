@@ -1,7 +1,6 @@
 "use client";
 import Badge from "@/components/shared/components/Badge";
-import { Plus } from "@/components/shared/components/iconos/Plus";
-import TituloSubrayado from "@/components/shared/tituloSubrayado";
+import { Plus, Lightbulb } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import {
@@ -85,7 +84,7 @@ export default function EditarHabilidades({
       {
         method: "DELETE",
         token: session?.user.accessToken,
-      }
+      },
     );
     if (!res?.isSuccess) {
       toast.error("Error eliminando habilidad");
@@ -162,7 +161,7 @@ export default function EditarHabilidades({
         method: "PUT",
         token: session?.user.accessToken,
         body,
-      }
+      },
     );
 
     if (!res?.isSuccess) {
@@ -179,7 +178,7 @@ export default function EditarHabilidades({
       categoria: "",
     };
     setHabilidades((prev) =>
-      prev.map((item) => (item.id === habilidad.id ? habilidad : item))
+      prev.map((item) => (item.id === habilidad.id ? habilidad : item)),
     );
     handleCancelEdit();
     toast.success("Habilidad editada");
@@ -192,20 +191,22 @@ export default function EditarHabilidades({
   return (
     <Card className="px-6">
       <div className="flex justify-between items-center">
-        <TituloSubrayado className="mb-0">Habilidades</TituloSubrayado>
+        <h2 className="text-2xl font-bold text-primary flex items-center gap-2">
+          <Lightbulb width={25} height={25} className="text-primary" />
+          Habilidades
+        </h2>
         <button
           id="agregar"
-          className="cursor-pointer flex items-center gap-2 text-primary font-semibold"
+          className="cursor-pointer flex items-center gap-2 text-primary font-bold align-center btn bg-primary/10"
           aria-label="Agregar nueva habilidad"
           type="button"
           onClick={handleAddClick}
         >
-          <Plus width={25} height={25} className="text-primary" />
-          Añadir item
+          <Plus width={20} height={20} className="text-primary" />
+          Agregar
         </button>
       </div>
-      <hr className="border-none h-px bg-[#ebebed] mt-4 mb-3 mx-0" />
-      <div className="mb-8 flex flex-wrap gap-3">
+      <div className="my-8 flex flex-wrap gap-3">
         {habilidades?.length ? (
           habilidades.map((item) => (
             <Badge

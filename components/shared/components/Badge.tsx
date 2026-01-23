@@ -1,4 +1,5 @@
 import React from "react";
+import { X } from "lucide-react";
 
 interface BadgeProps {
   children: React.ReactNode;
@@ -97,22 +98,7 @@ const Badge: React.FC<BadgeProps> = ({
           className="ml-1 hover:opacity-70 transition-opacity focus:outline-none cursor-pointer"
           aria-label="Remover"
         >
-          <svg
-            width="16"
-            height="16"
-            viewBox="0 0 16 16"
-            fill="none"
-            xmlns="http://www.w3.org/2000/svg"
-            className="text-current inline-block font-bold"
-          >
-            <path
-              d="M10.5 3.5L3.5 10.5M3.5 3.5L10.5 10.5"
-              stroke="currentColor"
-              strokeWidth="1.5"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-            />
-          </svg>
+          <X size={16} className="text-current inline-block font-bold" />
         </button>
       )}
     </span>

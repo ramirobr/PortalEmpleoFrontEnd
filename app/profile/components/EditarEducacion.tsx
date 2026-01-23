@@ -1,8 +1,5 @@
 "use client";
-import { Pencil } from "@/components/shared/components/iconos/Pencil";
-import { Plus } from "@/components/shared/components/iconos/Plus";
-import { Trash } from "@/components/shared/components/iconos/Trash";
-import TituloSubrayado from "@/components/shared/tituloSubrayado";
+import { Pencil, Trash2, Plus, GraduationCap } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import {
@@ -69,10 +66,10 @@ export default function EditarEducacion({
         method: "PUT",
         token: session?.user.accessToken,
         body,
-      }
+      },
     );
     setEducacionItems((prev) =>
-      prev.map((item) => (item.id === editForm.id ? values : item))
+      prev.map((item) => (item.id === editForm.id ? values : item)),
     );
     handleModalClose();
     toast.success("Item actualizado");
@@ -110,7 +107,7 @@ export default function EditarEducacion({
       {
         method: "DELETE",
         token: session?.user.accessToken,
-      }
+      },
     );
     if (!res?.isSuccess) {
       toast.error("Error eliminando item");
@@ -136,76 +133,82 @@ export default function EditarEducacion({
   return (
     <Card className="px-6">
       <div className="flex justify-between items-center">
-        <TituloSubrayado className="mb-0">Educación</TituloSubrayado>
+        <h2 className="text-2xl font-bold text-primary flex items-center gap-2">
+          <GraduationCap width={25} height={25} className="text-primary" />
+          Educación
+        </h2>
         <button
           id="agregar"
-          className="cursor-pointer flex items-center gap-2 text-primary font-semibold"
+          className="cursor-pointer flex items-center gap-2 text-primary font-bold align-center btn bg-primary/10"
           aria-label={`Agregar nuevo item educación`}
           type="button"
           onClick={handleAddClick}
         >
-          <Plus width={25} height={25} className="text-primary" />
-          Añadir item
+          <Plus width={20} height={20} className="text-primary" />
+          Agregar
         </button>
       </div>
-      <hr className="border-none h-px bg-[#ebebed] mt-4 mb-3 mx-0" />
+
       <div className="mb-8">
         {educacionItems?.length ? (
           educacionItems.map((item, idx) => (
-            <div key={idx} className="my-4 ">
-              <div className="flex w-full justify-between items-center gap-6">
+            <div
+              key={idx}
+              className="p-4 rounded-lg border border-dashed border-[#dce5e5] flex justify-between my-4 items-center"
+            >
+              <div>
                 <h4 className="font-bold text-xl">{item.titulo}</h4>
                 <div className="flex items-center gap-3">
-                  <button
-                    id="editar"
-                    className="cursor-pointer"
-                    aria-label={`Editar item educación: ${item.titulo}`}
-                    type="button"
-                    onClick={() => handleEditClick(item.id)}
-                  >
-                    <Pencil width={25} height={25} className="text-primary" />
-                  </button>
-                  <button
-                    id="borrar"
-                    className="cursor-pointer"
-                    aria-label={`Borrar item educación: ${item.titulo}`}
-                    type="button"
-                    onClick={() => handleDeleteClick(item.id)}
-                  >
-                    <Trash width={25} height={25} className="text-primary" />
-                  </button>
+                  <p className="">{item.institucion} </p>
+                  <p className="font-bold text-black">•</p>
+                  <p>
+                    {item.fechaFin
+                      ? (() => {
+                          const date = new Date(item.fechaFin);
+                          if (isNaN(date.getTime()))
+                            return item.fechaFin.toString();
+                          // Use deterministic month names to avoid hydration mismatch
+                          const monthNames = [
+                            "Ene",
+                            "Feb",
+                            "Mar",
+                            "Abr",
+                            "May",
+                            "Jun",
+                            "Jul",
+                            "Ago",
+                            "Sep",
+                            "Oct",
+                            "Nov",
+                            "Dic",
+                          ];
+                          const month = monthNames[date.getMonth()];
+                          return `${month} ${date.getFullYear()}`;
+                        })()
+                      : ""}
+                  </p>
                 </div>
               </div>
-              <p className="font-semibold">{item.institucion}</p>
-              <p>
-                {item.fechaFin
-                  ? (() => {
-                      const date = new Date(item.fechaFin);
-                      if (isNaN(date.getTime()))
-                        return item.fechaFin.toString();
-                      // Use deterministic month names to avoid hydration mismatch
-                      const monthNames = [
-                        "Ene",
-                        "Feb",
-                        "Mar",
-                        "Abr",
-                        "May",
-                        "Jun",
-                        "Jul",
-                        "Ago",
-                        "Sep",
-                        "Oct",
-                        "Nov",
-                        "Dic",
-                      ];
-                      const month = monthNames[date.getMonth()];
-                      return `${month} ${date.getFullYear()}`;
-                    })()
-                  : ""}
-              </p>
-              {idx !== educacionItems.length - 1 && (
-                <hr className="border-none h-px bg-[#ebebed] mt-4 mb-3 mx-0" />
-              )}
+              <div className="flex items-center gap-3">
+                <button
+                  id="editar"
+                  className="cursor-pointer"
+                  aria-label={`Editar item educación: ${item.titulo}`}
+                  type="button"
+                  onClick={() => handleEditClick(item.id)}
+                >
+                  <Pencil width={20} height={20} className="text-gray-500" />
+                </button>
+                <button
+                  id="borrar"
+                  className="cursor-pointer"
+                  aria-label={`Borrar item educación: ${item.titulo}`}
+                  type="button"
+                  onClick={() => handleDeleteClick(item.id)}
+                >
+                  <Trash2 width={20} height={20} className="text-gray-500" />
+                </button>
+              </div>
             </div>
           ))
         ) : (

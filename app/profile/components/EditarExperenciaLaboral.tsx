@@ -1,9 +1,6 @@
 "use client";
 import Badge from "@/components/shared/components/Badge";
-import { Pencil } from "@/components/shared/components/iconos/Pencil";
-import { Plus } from "@/components/shared/components/iconos/Plus";
-import { Trash } from "@/components/shared/components/iconos/Trash";
-import TituloSubrayado from "@/components/shared/tituloSubrayado";
+import { Plus, Pencil, Trash2, Briefcase } from "lucide-react";
 import { Card } from "@/components/ui/card";
 import {
   Dialog,
@@ -70,7 +67,7 @@ export default function EditarExperenciaLaboral({
         method: "PUT",
         token: session?.user.accessToken,
         body,
-      }
+      },
     );
 
     if (!res?.isSuccess) {
@@ -80,8 +77,8 @@ export default function EditarExperenciaLaboral({
 
     setExperiencias((prev) =>
       prev.map((item) =>
-        item.id === editModal.id ? { ...values, id: editModal.id } : item
-      )
+        item.id === editModal.id ? { ...values, id: editModal.id } : item,
+      ),
     );
     handleCancelEdit();
     toast.success(res?.data);
@@ -102,7 +99,7 @@ export default function EditarExperenciaLaboral({
         method: "POST",
         token: session?.user.accessToken,
         body,
-      }
+      },
     );
 
     if (!res?.isSuccess) {
@@ -128,7 +125,7 @@ export default function EditarExperenciaLaboral({
       {
         method: "DELETE",
         token: session?.user.accessToken,
-      }
+      },
     );
     if (!res?.isSuccess) {
       toast.error("Error eliminando experiencia");
@@ -154,67 +151,73 @@ export default function EditarExperenciaLaboral({
   return (
     <Card className="px-6">
       <div className="flex justify-between items-center">
-        <TituloSubrayado className="mb-0">Experiencia Laboral</TituloSubrayado>
+        <h2 className="text-2xl font-bold text-primary flex items-center gap-2">
+          <Briefcase width={25} height={25} className="text-primary" />
+          Experiencia Laboral
+        </h2>
+
         <button
           id="agregar"
-          className="cursor-pointer flex items-center gap-2 text-primary font-semibold align-self-end"
+          className="cursor-pointer flex items-center gap-2 text-primary font-bold align-center btn bg-primary/10"
           aria-label={`Agregar nuevo item experiencia laboral`}
           type="button"
           onClick={handleAddClick}
         >
-          <Plus width={25} height={25} className="text-primary" />
-          Añadir item
+          <Plus width={20} height={20} className="text-primary" />
+          Agregar
         </button>
       </div>
-      <hr className="border-none h-px bg-[#ebebed] mt-4 mb-3 mx-0" />
+
       <div>
         {Experiencias?.length ? (
           Experiencias.map((item, index) => (
-            <div key={item.id} className="my-4">
-              <div className="flex w-full justify-between items-center gap-6">
+            <div
+              key={item.id}
+              className="p-4 rounded-lg border border-dashed border-[#dce5e5] flex justify-between my-4 items-center"
+            >
+              <div>
+                <h4 className="font-bold text-xl">{item.empresa}</h4>
                 <div className="flex items-center gap-3">
-                  {item.estaTrabajando && (
-                    <Badge
-                      variant="custom"
-                      bgColor="bg-green-100"
-                      textColor="text-green-700"
-                    >
-                      Actual
-                    </Badge>
-                  )}
+                  <p className="">{item.puesto}</p>
+                  <p className="font-bold text-black">•</p>
+                  <p>
+                    {item.fechaInicio && item.fechaFin
+                      ? `${new Date(item.fechaInicio).toLocaleDateString(
+                          "es-ES",
+                        )} - ${new Date(item.fechaFin).toLocaleDateString("es-ES")}`
+                      : ""}
+                  </p>
                 </div>
-                <div className="flex items-center gap-3">
-                  <button
-                    id="editar"
-                    className="cursor-pointer"
-                    type="button"
-                    onClick={() => handleEditClick(item.id)}
+                <p>{item.pais}</p>
+                {item.estaTrabajando && (
+                  <Badge
+                    variant="custom"
+                    bgColor="bg-black mt-3"
+                    textColor="text-white"
                   >
-                    <Pencil width={25} height={25} className="text-primary" />
-                  </button>
-                  <button
-                    id="borrar"
-                    className="cursor-pointer"
-                    type="button"
-                    onClick={() => handleDeleteClick(item.id)}
-                  >
-                    <Trash width={25} height={25} className="text-primary" />
-                  </button>
-                </div>
+                    Actual
+                  </Badge>
+                )}
               </div>
-              <p className="font-semibold">{item.empresa}</p>
-              <p className="font-semibold">{item.puesto}</p>
-              <p>
-                {item.fechaInicio && item.fechaFin
-                  ? `${new Date(item.fechaInicio).toLocaleDateString(
-                      "es-ES"
-                    )} - ${new Date(item.fechaFin).toLocaleDateString("es-ES")}`
-                  : ""}
-              </p>
-              <p>{item.pais}</p>
-              {index !== Experiencias.length - 1 && (
-                <hr className="border-none h-px bg-[#ebebed] mt-4 mb-3 mx-0" />
-              )}
+
+              <div className="flex items-center gap-3">
+                <button
+                  id="editar"
+                  className="cursor-pointer"
+                  type="button"
+                  onClick={() => handleEditClick(item.id)}
+                >
+                  <Pencil width={20} height={20} className="text-gray-500" />
+                </button>
+                <button
+                  id="borrar"
+                  className="cursor-pointer"
+                  type="button"
+                  onClick={() => handleDeleteClick(item.id)}
+                >
+                  <Trash2 width={20} height={20} className="text-gray-500" />
+                </button>
+              </div>
             </div>
           ))
         ) : (

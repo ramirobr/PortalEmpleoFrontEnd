@@ -1,7 +1,6 @@
 "use client";
-import Pencil from "@/components/shared/components/iconos/Pencil";
-import Trash from "@/components/shared/components/iconos/Trash";
-import TituloSubrayado from "@/components/shared/tituloSubrayado";
+
+import { Pencil, Trash2, Camera } from "lucide-react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
@@ -53,8 +52,8 @@ export default function EditarFoto() {
     typeof watchedImage === "string"
       ? watchedImage
       : watchedImage instanceof File
-      ? URL.createObjectURL(watchedImage)
-      : undefined;
+        ? URL.createObjectURL(watchedImage)
+        : undefined;
 
   async function deteleImage() {
     const res = await fetchApi<PlainStringDataMessage>(
@@ -62,7 +61,7 @@ export default function EditarFoto() {
       {
         method: "DELETE",
         token: session?.user.accessToken,
-      }
+      },
     );
     if (!res?.isSuccess) {
       toast.error("Error eliminando imagen");
@@ -88,7 +87,7 @@ export default function EditarFoto() {
         method: "PUT",
         token: session?.user.accessToken,
         body,
-      }
+      },
     );
     if (!res?.isSuccess) {
       toast.error("Error actualizando imagen");
@@ -100,7 +99,10 @@ export default function EditarFoto() {
 
   return (
     <Card className="px-6">
-      <TituloSubrayado>Editar foto de perfil</TituloSubrayado>
+      <h2 className="text-2xl font-bold text-primary flex items-center gap-2 mb-6">
+        <Camera width={25} height={25} className="text-primary" />
+        Editar foto de perfil
+      </h2>
       <Form {...form}>
         <form
           onSubmit={form.handleSubmit(onSubmit)}
@@ -152,7 +154,7 @@ export default function EditarFoto() {
                         }
                       }}
                     >
-                      <Trash width={20} height={20} className="text-primary" />
+                      <Trash2 width={20} height={20} className="text-primary" />
                     </button>
                   </div>
                   <FormMessage />
@@ -162,12 +164,16 @@ export default function EditarFoto() {
           </div>
 
           <div className="mt-10 flex gap-4 items-end">
-            <Button type="submit" disabled={form.formState.isSubmitting}>
+            <button
+              className="btn btn-primary"
+              type="submit"
+              disabled={form.formState.isSubmitting}
+            >
               {form.formState.isSubmitting && (
-                <span className="animate-spin h-4 w-4 border-2 border-t-transparent rounded-full" />
+                <span className="animate-spin h-4 w-4 border-2 border-t-transparent rounded-full mr-2" />
               )}
               Guardar
-            </Button>
+            </button>
           </div>
         </form>
       </Form>

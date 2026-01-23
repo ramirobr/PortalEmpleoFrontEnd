@@ -98,13 +98,6 @@ export default function CrearEmpleoForm({ fields, initialValues }: FormProps) {
   const salarioRange = watch("salarioRange");
 
   const onSubmit = async (values: FormData) => {
-    if (isEditMode) {
-      // TODO: Handle edit mode
-      console.log("Edit mode - updating vacancy with:", values);
-      router.push("/empresa-profile/empleos");
-      return;
-    }
-
     if (!session?.user?.idEmpresa) {
       toast.error(
         "No se pudo obtener la información de la empresa. Por favor, inicia sesión nuevamente.",
@@ -128,22 +121,26 @@ export default function CrearEmpleoForm({ fields, initialValues }: FormProps) {
     };
 
     const response = await fetchApi<PlainStringDataMessage>(
-      "/Jobs/addVacante",
+      isEditMode
+        ? "/Jobs/updateJob/" + initialValues.idVacante
+        : "/Jobs/addVacante",
       {
-        method: "POST",
+        method: isEditMode ? "PUT" : "POST",
         body: payload,
         token: session.user.accessToken,
       },
     );
 
     if (response?.isSuccess) {
-      toast.success("¡Empleo publicado exitosamente!");
+      toast.success(
+        `¡Empleo ${isEditMode ? "editado" : "publicado"} exitosamente!`,
+      );
       handleCancel();
       router.push("/empresa-profile/empleos");
     } else {
       toast.error(
         response?.messages?.join("\n") ||
-          "Hubo un problema al publicar el empleo. Intenta nuevamente.",
+          `Hubo un problema al ${isEditMode ? "editar" : "publicar"} el empleo. Intenta nuevamente.`,
       );
     }
   };

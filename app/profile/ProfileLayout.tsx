@@ -8,7 +8,7 @@ import { useSession, signOut } from "next-auth/react";
 import { fetchApi } from "@/lib/apiClient";
 import { Logout } from "@/types/user";
 
-import { LockKeyholeOpen, UserRoundPlus, Building2 } from "lucide-react";
+import { LockKeyholeOpen, UserRoundPlus, Building2, MessageSquareQuote } from "lucide-react";
 
 export default function ProfileLayout({ children }: Children) {
   const { data: session } = useSession();
@@ -78,6 +78,11 @@ export default function ProfileLayout({ children }: Children) {
           />
         </svg>
       ),
+    },
+    {
+      name: "Mis Testimonios",
+      href: "/profile/testimonios",
+      icon: <MessageSquareQuote />,
     },
     {
       name: "Salir",

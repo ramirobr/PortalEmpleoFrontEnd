@@ -5,6 +5,7 @@ export type Candidate = {
   idUsuario: string;
   nombreCompleto: string;
   ubicacion: string;
+  fotografia:string;
   habilidades: string[];
 };
 

@@ -1,8 +1,5 @@
 "use client";
-import Pencil from "@/components/shared/components/iconos/Pencil";
-import Trash from "@/components/shared/components/iconos/Trash";
-import TituloSubrayado from "@/components/shared/tituloSubrayado";
-import { Button } from "@/components/ui/button";
+
 import { Card } from "@/components/ui/card";
 import {
   Form,
@@ -27,6 +24,7 @@ import {
   UserInfoData,
 } from "@/types/user";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { Phone, UserRound, Pencil, Trash2 } from "lucide-react";
 import { useSession } from "next-auth/react";
 import React from "react";
 import { useForm } from "react-hook-form";
@@ -107,7 +105,10 @@ export default function EditarDatosContacto({
   return (
     <Card className="px-6">
       <div className="flex justify-between items-center mb-10">
-        <TituloSubrayado className="mb-0">Datos de Contacto</TituloSubrayado>
+        <h2 className="text-2xl font-bold text-primary flex items-center gap-2">
+          <Phone width={25} height={25} className="text-primary" />
+          Información de contacto
+        </h2>
         {!isEditing ? (
           <button
             type="button"
@@ -115,7 +116,7 @@ export default function EditarDatosContacto({
             className="cursor-pointer"
             aria-label="Editar datos de contacto"
           >
-            <Pencil width={25} height={25} className="text-primary" />
+            <Pencil width={20} height={20} className="text-primary" />
           </button>
         ) : (
           <button
@@ -124,7 +125,7 @@ export default function EditarDatosContacto({
             className="cursor-pointer"
             aria-label="Cancelar edición"
           >
-            <Trash width={25} height={25} className="text-primary" />
+            <Trash2 width={20} height={20} className="text-primary" />
           </button>
         )}
       </div>
@@ -318,7 +319,8 @@ export default function EditarDatosContacto({
           </div>
           {isEditing && (
             <div className="col-span-2 mt-8 flex justify-end">
-              <Button
+              <button
+                className="btn btn-primary"
                 type="submit"
                 aria-label="Guardar datos de contacto"
                 disabled={
@@ -326,10 +328,10 @@ export default function EditarDatosContacto({
                 }
               >
                 {form.formState.isSubmitting && (
-                  <span className="animate-spin h-4 w-4 border-2 border-t-transparent rounded-full" />
+                  <span className="animate-spin h-4 w-4 border-2 border-t-transparent rounded-full mr-2" />
                 )}
                 Guardar
-              </Button>
+              </button>
             </div>
           )}
         </form>

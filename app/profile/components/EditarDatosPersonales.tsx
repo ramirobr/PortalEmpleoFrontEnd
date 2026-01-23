@@ -1,7 +1,5 @@
 "use client";
-import Pencil from "@/components/shared/components/iconos/Pencil";
-import Trash from "@/components/shared/components/iconos/Trash";
-import TituloSubrayado from "@/components/shared/tituloSubrayado";
+
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Checkbox } from "@/components/ui/checkbox";
@@ -31,6 +29,7 @@ import {
   UserInfoData,
 } from "@/types/user";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { UserRound, Pencil, Trash2 } from "lucide-react";
 import { useSession } from "next-auth/react";
 import React from "react";
 import { useForm } from "react-hook-form";
@@ -112,7 +111,7 @@ export default function EditarDatosPersonales({
       nombre: data.nombre,
       apellido: data.apellido,
       idTipoDocumento: data.idTipoDocumento,
-      idGenero: data.idGenero, 
+      idGenero: data.idGenero,
       numeroDocumento: data.cedula,
       nacionalidad: data.nacionalidad,
       fechaNacimiento: data.nacimiento.toISOString(),
@@ -124,6 +123,7 @@ export default function EditarDatosPersonales({
       movilidad: data.movilidad,
       licencia: data.licencia,
       idEstadoCivil: data.idEstadoCivil,
+      tipoLicencia: data.tipoLicencia,
     };
 
     const res = await fetchApi<PlainStringDataMessage>("/User/update-user", {
@@ -147,7 +147,10 @@ export default function EditarDatosPersonales({
   return (
     <Card className="px-6">
       <div className="flex justify-between items-center mb-10">
-        <TituloSubrayado className="mb-0">Datos Personales</TituloSubrayado>
+        <h2 className="text-2xl font-bold text-primary flex items-center gap-2">
+          <UserRound width={25} height={25} className="text-primary" />
+          Información personal
+        </h2>
         {!isEditing ? (
           <button
             type="button"
@@ -155,7 +158,7 @@ export default function EditarDatosPersonales({
             className="cursor-pointer"
             aria-label="Editar datos personales"
           >
-            <Pencil width={25} height={25} className="text-primary" />
+            <Pencil width={20} height={20} className="text-primary" />
           </button>
         ) : (
           <button
@@ -164,7 +167,7 @@ export default function EditarDatosPersonales({
             className="cursor-pointer"
             aria-label="Cancelar edición"
           >
-            <Trash width={25} height={25} className="text-primary" />
+            <Trash2 width={20} height={20} className="text-primary" />
           </button>
         )}
       </div>
@@ -433,7 +436,9 @@ export default function EditarDatosPersonales({
                                   field.onChange([...(field.value || []), opt]);
                                 } else {
                                   field.onChange(
-                                    (field.value || []).filter((v) => v !== opt)
+                                    (field.value || []).filter(
+                                      (v) => v !== opt,
+                                    ),
                                   );
                                 }
                               }}
@@ -458,7 +463,8 @@ export default function EditarDatosPersonales({
           )}
           {isEditing && (
             <div className="col-span-2 mt-8 flex justify-end">
-              <Button
+              <button
+                className="btn btn-primary"
                 type="submit"
                 aria-label="Guardar datos personales"
                 disabled={
@@ -466,10 +472,10 @@ export default function EditarDatosPersonales({
                 }
               >
                 {form.formState.isSubmitting && (
-                  <span className="animate-spin h-4 w-4 border-2 border-t-transparent rounded-full" />
+                  <span className="animate-spin h-4 w-4 border-2 border-t-transparent rounded-full mr-2" />
                 )}
                 Guardar
-              </Button>
+              </button>
             </div>
           )}
         </form>

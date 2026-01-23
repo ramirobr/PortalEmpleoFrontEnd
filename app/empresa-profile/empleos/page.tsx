@@ -87,9 +87,8 @@ export default function OfertasPage() {
     if (!session) return;
 
     setDeletingId(idVacante);
-    //TODO: Change endpoint to delete vacancy
     const res = await fetchApi<PlainStringDataMessage>(
-      "/Jobs/removeVacanteFavorita/" + idVacante + "/" + session.user.idEmpresa,
+      "/Jobs/deleteJob/" + idVacante,
       {
         method: "DELETE",
         token: session?.user.accessToken,
