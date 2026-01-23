@@ -7,6 +7,7 @@ const generateApplicants = (count: number) => {
     location: "Guayaquil, EC",
     salary: `$${1000 + i * 50}`,
     skills: ["Java", "Spring", "Hibernate"],
+    photo: "",
   }));
 };
 

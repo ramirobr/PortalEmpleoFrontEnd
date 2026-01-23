@@ -1,9 +1,9 @@
 "use client";
 
-import { CandidateAplicacion } from "@/types/candidate";
+import { type CandidateAplicacion as CandidateAplicacionType } from "@/types/candidate";
 
 interface CandidateAplicacionProps {
-  aplicacion: CandidateAplicacion;
+  aplicacion: CandidateAplicacionType;
 }
 
 function formatDate(dateString: string): string {
