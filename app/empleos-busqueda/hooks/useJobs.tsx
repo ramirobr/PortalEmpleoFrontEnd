@@ -62,7 +62,7 @@ export function useJobs(token?: string) {
     }
 
     load();
-    return () => controller.abort("");
+    return () => controller.abort("aborted");
   }, [
     pageSize,
     currentPage,

@@ -42,20 +42,24 @@ export default function AsideMenu({
     };
   }, [isOpen]);
 
+  const isActivePath = (path?: string): boolean => {
+    if (!path) return false;
+    if (path === "/") return pathname === "/";
+
+    const hasChildren = links.some(
+      (l) => l.href && l.href !== path && l.href.startsWith(path + "/"),
+    );
+
+    return hasChildren
+      ? pathname === path || pathname === path + "/"
+      : pathname.startsWith(path);
+  };
+
   const getLinkClass = (path?: string) => {
-    if (!path)
-      return "px-5 py-2 cursor-pointer hover:bg-gray-100 rounded flex items-center";
-
-    let isActive = false;
-    if (path === "/") {
-      isActive = pathname === "/";
-    } else {
-      isActive = pathname.startsWith(path);
-    }
-
-    return isActive
-      ? "bg-blue-50 rounded px-5 py-2 font-semibold text-primary flex items-center"
-      : "px-5 py-2 cursor-pointer hover:bg-gray-100 rounded flex items-center";
+    const base = "px-5 py-2 rounded flex items-center";
+    return isActivePath(path)
+      ? `${base} bg-blue-50 font-semibold text-primary`
+      : `${base} cursor-pointer hover:bg-gray-100`;
   };
 
   return (

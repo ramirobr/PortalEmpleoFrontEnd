@@ -17,10 +17,12 @@ export default async function FavoritosPage() {
   return (
     <section>
       <TituloSubrayado>Empleos Favoritos</TituloSubrayado>
-      <FavoritosContent
-        favoriteJobs={favoriteJobs || []}
-        filtersItems={filtersItems}
-      />
+      <Suspense fallback={<div>Cargando...</div>}>
+        <FavoritosContent
+          favoriteJobs={favoriteJobs || []}
+          filtersItems={filtersItems}
+        />
+      </Suspense>
     </section>
   );
 }

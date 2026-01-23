@@ -28,6 +28,7 @@ export async function fetchApi<T = Response>(
 
     return (await res.json()) as T;
   } catch (error) {
+    if (error === "aborted") return null;
     console.error("fetchApi Error:", url, error);
     return null;
   }
