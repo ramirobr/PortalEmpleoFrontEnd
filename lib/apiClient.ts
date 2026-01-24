@@ -10,7 +10,6 @@ export async function fetchApi<T = Response>(
 ): Promise<T | null> {
   try {
     const { body, internal, token, ...rest } = options;
-
     const headers: HeadersInit = {
       "Content-Type": "application/json",
       ...(token ? { Authorization: `Bearer ${token}` } : {}),

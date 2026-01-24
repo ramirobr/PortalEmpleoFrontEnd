@@ -1,9 +1,9 @@
 "use client";
 
-import { CandidateIdioma } from "@/types/candidate";
+import { Idioma } from "@/types/user";
 
 interface CandidateIdiomasProps {
-  idiomas: CandidateIdioma[];
+  idiomas: Idioma[];
 }
 
 function getNivelPercentage(nivel: string): number {

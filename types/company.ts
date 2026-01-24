@@ -114,3 +114,73 @@ export interface CompanyDashboardInfoData {
 }
 
 export type CompanyDashboardInfoResponse = GenericResponse<CompanyDashboardInfoData>
+
+// Usuario Administrador de empresa
+export interface UsuarioAdministrador {
+  idUsuario: string;
+  nombre: string;
+  apellido: string;
+  nombreCompleto: string;
+  correoElectronico: string;
+  telefono: string;
+  telefonoMovil?: string;
+  tipoUsuario: {
+    id: number;
+    nombre: string;
+  };
+  estadoCuenta: {
+    id: number;
+    nombre: string;
+  };
+  genero: {
+    id: number;
+    nombre: string;
+  };
+  fechaRegistro: string;
+}
+
+// Perfil de empresa
+export interface CompanyProfileData {
+  idEmpresa: string;
+  nombre: string;
+  razonSocial: string;
+  condicionFiscal: {
+    id: number;
+    nombre: string;
+  };
+  numeroDocumento: string;
+  correoContacto: string;
+  telefonoContacto: string;
+  direccion: string;
+  ciudad: {
+    id: number;
+    nombre: string;
+  };
+  provincia: {
+    id: number;
+    nombre: string;
+  };
+  pais: {
+    id: number;
+    nombre: string;
+  };
+  industria: {
+    id: number;
+    nombre: string;
+  };
+  cantidadEmpleados: {
+    id: number;
+    nombre: string;
+  };
+  estado: {
+    id: number;
+    nombre: string;
+  };
+  fechaRegistro: string;
+  sitioWeb?: string;
+  logoUrl?: string;
+  descripcion?: string;
+  usuarioAdministrador?: UsuarioAdministrador;
+}
+
+export type CompanyProfileResponse = GenericResponse<CompanyProfileData>

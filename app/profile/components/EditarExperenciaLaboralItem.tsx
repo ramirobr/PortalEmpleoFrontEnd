@@ -29,14 +29,17 @@ import { z } from "zod";
 const schema = z.object({
   empresa: z.string().min(1, "La empresa es obligatoria."),
   puesto: z.string().min(1, "El puesto es obligatorio."),
-  fechaInicio: z.date("La fecha de inicio es obligatoria."),
-  fechaFin: z.date("La fecha de finalización es obligatoria."),
+  fechaInicio: z.date({ error: "La fecha de inicio es obligatoria." }),
+  fechaFin: z.date({ error: "La fecha de finalización es obligatoria." }).optional(),
   idPais: z.number().min(1, "Selecciona un pais"),
   idCiudad: z.number().min(1, "Selecciona una ciudad"),
   descripcion: z.string().min(1, "Descripcion es obligatoria."),
   sector: z.string().min(1, "Sector es obligatorio."),
   idTipoEmpleo: z.number().min(1, "Selecciona un tipo de empleo"),
   trabajoActual: z.boolean(),
+}).refine((data) => data.trabajoActual || data.fechaFin, {
+  message: "La fecha de finalización es obligatoria si no trabaja actualmente.",
+  path: ["fechaFin"],
 });
 
 export type EditarExperenciaLaboralItemValues = z.infer<typeof schema>;
@@ -71,6 +74,8 @@ const EditarExperenciaLaboralItem: React.FC<
     },
   });
 
+  const trabajoActual = form.watch("trabajoActual");
+
   return (
     <Form {...form}>
       <form
@@ -78,7 +83,7 @@ const EditarExperenciaLaboralItem: React.FC<
           onSave({
             ...data,
             fechaInicio: new Date(data.fechaInicio).toISOString(),
-            fechaFin: new Date(data.fechaFin).toISOString(),
+            fechaFin: data.fechaFin ? new Date(data.fechaFin).toISOString() : "",
             estaTrabajando: data.trabajoActual,
           } as unknown as ExperienciaLaboral)
         )}
@@ -125,44 +130,60 @@ const EditarExperenciaLaboralItem: React.FC<
             )}
           />
         </div>
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-          <FormField<EditarExperenciaLaboralItemValues>
-            control={form.control}
-            name="fechaInicio"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel htmlFor="edit-fecha-inicio">
-                  Fecha de inicio
-                </FormLabel>
+        <FormField<EditarExperenciaLaboralItemValues>
+          control={form.control}
+          name="fechaInicio"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel htmlFor="edit-fecha-inicio">
+                Fecha de inicio
+              </FormLabel>
+              <FormControl>
+                <DatePicker
+                  value={field.value as Date}
+                  onChange={field.onChange}
+                />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        <FormField<EditarExperenciaLaboralItemValues>
+          control={form.control}
+          name="fechaFin"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel htmlFor="edit-fecha-fin">
+                Fecha de finalización
+              </FormLabel>
+              <FormField<EditarExperenciaLaboralItemValues>
+                control={form.control}
+                name="trabajoActual"
+                render={({ field: trabajoField }) => (
+                  <div className="flex items-center gap-2 mb-2">
+                    <Checkbox
+                      id="trabajo-actual"
+                      checked={Boolean(trabajoField.value)}
+                      onCheckedChange={trabajoField.onChange}
+                    />
+                    <Label htmlFor="trabajo-actual" className="text-sm font-normal cursor-pointer">
+                      Al presente
+                    </Label>
+                  </div>
+                )}
+              />
+              {!trabajoActual && (
                 <FormControl>
                   <DatePicker
                     value={field.value as Date}
                     onChange={field.onChange}
                   />
                 </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-          <FormField<EditarExperenciaLaboralItemValues>
-            control={form.control}
-            name="fechaFin"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel htmlFor="edit-fecha-fin">
-                  Fecha de finalización
-                </FormLabel>
-                <FormControl>
-                  <DatePicker
-                    value={field.value as Date}
-                    onChange={field.onChange}
-                  />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-        </div>
+              )}
+              <FormMessage />
+            </FormItem>
+          )}
+        />
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
           <FormField<EditarExperenciaLaboralItemValues>
@@ -303,26 +324,6 @@ const EditarExperenciaLaboralItem: React.FC<
           )}
         />
 
-        <FormField<EditarExperenciaLaboralItemValues>
-          control={form.control}
-          name="trabajoActual"
-          render={({ field }) => (
-            <FormItem>
-              <div className="flex items-center gap-2">
-                <FormControl>
-                  <Label className="flex items-center gap-2">
-                    <Checkbox
-                      checked={Boolean(field.value)}
-                      onCheckedChange={field.onChange}
-                    />
-                    Al presente
-                  </Label>
-                </FormControl>
-              </div>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
         <div className="flex justify-end gap-2 mt-4">
           <Button variant="outline" onClick={onCancel}>
             Cancelar

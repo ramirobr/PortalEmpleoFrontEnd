@@ -7,6 +7,7 @@ import EditarEducacion from "../components/EditarEducacion";
 import EditarExperenciaLaboral from "../components/EditarExperenciaLaboral";
 import EditarFoto from "../components/EditarFoto";
 import EditarHabilidades from "../components/EditarHabilidades";
+import EditarIdiomas from "../components/EditarIdiomas";
 import EditarResumen from "../components/EditarResumen";
 
 export default async function EditProfilePage() {
@@ -27,6 +28,7 @@ export default async function EditProfilePage() {
         experiencia={user.experienciaLaboral}
         fields={fields}
       />
+      <EditarIdiomas idiomas={user.idiomas ?? []} fields={fields} />
       <EditarHabilidades habilidades={user.habiliades} fields={fields} />
       <EditarResumen curriculum={curriculum} fields={fields} />
     </div>

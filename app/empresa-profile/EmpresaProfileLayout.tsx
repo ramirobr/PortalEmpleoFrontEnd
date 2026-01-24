@@ -7,7 +7,7 @@ import { useSession, signOut } from "next-auth/react";
 import { fetchApi } from "@/lib/apiClient";
 import { Logout } from "@/types/user";
 
-import { LockKeyholeOpen, UserRoundPlus, Building2, UserCheck, UserX } from "lucide-react";
+import { LockKeyholeOpen, UserRoundPlus, Building2, UserCheck, UserX, Building } from "lucide-react";
 
 export default function EmpresaProfileLayout({ children }: Children) {
   const { data: session } = useSession();
@@ -37,6 +37,11 @@ export default function EmpresaProfileLayout({ children }: Children) {
       name: "Panel de Empresa",
       href: "/empresa-profile",
       icon: <Building2 />,
+    },
+    {
+      name: "Perfil de Empresa",
+      href: "/empresa-profile/perfil",
+      icon: <Building />,
     },
     {
       name: "Publicar Empleo",

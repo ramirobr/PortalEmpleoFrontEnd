@@ -61,6 +61,7 @@ export const DATOS_PERSONALES_TYPES = [
   "DISPONIBILIDAD",
   "GENERO",
   "ESTADO_CIVIL",
+  "NIVEL_IDIOMA",
 ] as const satisfies readonly CatalogTypes[];
 
 export type DatosPersonalesFieldsResponse =
@@ -106,6 +107,7 @@ export interface UserInfoData {
   educacion: Educacion[]
   experienciaLaboral: ExperienciaLaboral[]
   habiliades: Habilidades[]
+  idiomas: Idioma[]
 }
 
 export interface DatosPersonales {
@@ -147,7 +149,8 @@ export interface Educacion {
   estaCursando: boolean
   periodo: string
   idNivelEstudio: number,
-  descripcion: string
+  descripcion: string,
+  orden: number
 }
 
 export type EducacionData = {
@@ -155,7 +158,6 @@ export type EducacionData = {
   idCurriculum: string
   idNivelEstudio: number
   descripcion: string
-  orden: number
 } & Omit<Educacion, "id">
 
 export type EducacionResponse = GenericResponse<EducacionData>
@@ -172,7 +174,8 @@ export interface ExperienciaLaboral {
   idCiudad: number
   pais: string
   sector: string,
-  idTipoEmpleo: number
+  idTipoEmpleo: number,
+  orden: number
 }
 
 export type ExperienciaLaboralData = {
@@ -190,8 +193,26 @@ export interface Habilidades {
   idNivel: number
   nivel: string
   idCategoria: number
-  categoria: string
+  categoria: string,
+  orden: number
 }
+
+export interface Idioma {
+  id: string
+  nombre: string
+  idNivel: number
+  nivel: string
+  certificado: boolean
+  certificacion: string
+}
+
+export type IdiomaData = {
+  idIdioma: string
+  idNivelIdioma: number
+} & Pick<Idioma, "nombre">
+  & Pick<EducacionData, "orden" | "idCurriculum">
+
+export type IdiomaResponse = GenericResponse<IdiomaData>
 
 export type UserInfoResponse = GenericResponse<UserInfoData>
 

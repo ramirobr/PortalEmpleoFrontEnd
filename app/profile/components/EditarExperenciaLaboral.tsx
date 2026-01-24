@@ -85,9 +85,10 @@ export default function EditarExperenciaLaboral({
   };
 
   const handleAddSave = async (values: ExperienciaLaboral) => {
-    const { estaTrabajando, ...data } = values;
+    const { estaTrabajando, fechaFin, ...data } = values;
     const body = {
       ...data,
+      fechaFin: estaTrabajando ? null : fechaFin,
       trabajoActual: estaTrabajando,
       idCurriculum,
       orden: 0,
@@ -109,6 +110,7 @@ export default function EditarExperenciaLaboral({
 
     const exp: ExperienciaLaboral = {
       ...data,
+      fechaFin: estaTrabajando ? "" : fechaFin,
       id: res.data.idExperiencia,
       estaTrabajando,
     };

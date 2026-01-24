@@ -6,6 +6,7 @@ import CandidateContactInfo from "./CandidateContactInfo";
 import CandidateEducacion from "./CandidateEducacion";
 import CandidateExperiencia from "./CandidateExperiencia";
 import CandidateHabilidades from "./CandidateHabilidades";
+import CandidateIdiomas from "./CandidateIdiomas";
 import CandidateActions from "./CandidateActions";
 
 interface CandidateProfileViewProps {
@@ -67,6 +68,8 @@ export default function CandidateProfileView({
           <CandidateContactInfo datosContacto={candidate.datosContacto} />
 
           <CandidateHabilidades habilidades={candidate.habiliades} />
+
+          <CandidateIdiomas idiomas={candidate.idiomas} />
         </div>
       </div>
     </div>

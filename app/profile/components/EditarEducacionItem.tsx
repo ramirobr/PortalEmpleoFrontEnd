@@ -75,6 +75,7 @@ const EditarEducacionItem: React.FC<EditarEducacionItemProps> = ({
             fechaInicio: new Date(data.fechaInicio).toISOString(),
             fechaFin: new Date(data.fechaFin).toISOString(),
             id: "",
+            orden: 0,
           })
         )}
         className="space-y-4"
