@@ -2,12 +2,15 @@
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { useAuthStore } from "@/context/authStore";
 import { getCurriculumByUserId, getUserPic } from "@/lib/user/info";
+import { getCompanyLogo } from "@/lib/company/profile";
 import { getInitials } from "@/lib/utils";
+import { ROLES } from "@/types/auth";
 import { useSession } from "next-auth/react";
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect } from "react";
+import { Building2 } from "lucide-react";
 // import SocialLinks from "./SocialLinks";
 interface NavbarProps {
   showCompanyRegister?: boolean;
@@ -24,16 +27,34 @@ export default function Navbar({
   const pathname = usePathname();
   const id = useAuthStore((s) => s.id);
   const pic = useAuthStore((s) => s.pic);
+  const companyLogo = useAuthStore((s) => s.companyLogo);
   const hydrate = useAuthStore((s) => s.hydrate);
+
+  const isCompanyAdmin = session?.user?.role === ROLES.AdministradorEmpresa;
 
   const handleUserSession = async () => {
     if (id || !session) return;
-    const picture = await getUserPic(session.user);
-    const curriculum = await getCurriculumByUserId(session.user);
+    
+    let picture: string | undefined;
+    let logo: string | undefined;
+    let curriculumId = "";
+    
+    if (isCompanyAdmin && session.user.idEmpresa) {
+      // Para Administrador Empresa, obtener el logo de la empresa
+      logo = await getCompanyLogo(session.user.idEmpresa, session.user.accessToken) || undefined;
+    } else {
+      // Para Postulante, obtener la foto de perfil y curriculum
+      picture = await getUserPic(session.user);
+      const curriculum = await getCurriculumByUserId(session.user);
+      curriculumId = curriculum?.idCurriculum ?? "";
+    }
+    
     hydrate({
       ...session.user,
-      idCurriculum: curriculum?.idCurriculum ?? "",
+      idCurriculum: curriculumId,
       pic: picture,
+      idEmpresa: session.user.idEmpresa,
+      companyLogo: logo,
     });
   };
 
@@ -60,9 +81,13 @@ export default function Navbar({
           >
             {session ? (
               <Avatar className="size-10">
-                <AvatarImage src={pic} />
+                <AvatarImage src={isCompanyAdmin ? companyLogo : pic} />
                 <AvatarFallback>
-                  {getInitials(session.user.fullName)}
+                  {isCompanyAdmin ? (
+                    <Building2 className="size-5 text-primary" />
+                  ) : (
+                    getInitials(session.user.fullName)
+                  )}
                 </AvatarFallback>
               </Avatar>
             ) : (
@@ -126,7 +151,7 @@ export default function Navbar({
                   )}
                 </>
               )}
-              {showCompanyRegister && (
+              {showCompanyRegister && !isCompanyAdmin && (
                 <Link
                   href="/auth/empresa"
                   aria-label="Regístrate como empresa"
