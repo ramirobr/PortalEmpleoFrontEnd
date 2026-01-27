@@ -1,5 +1,6 @@
 "use client";
 
+import Pill from "@/components/shared/components/Pill";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import {
@@ -12,7 +13,10 @@ import {
   Loader2,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
-import { UserTestimonial, estadoTestimonioMap } from "@/lib/testimonials/schema";
+import {
+  UserTestimonial,
+  estadoTestimonioMap,
+} from "@/lib/testimonials/schema";
 import { useState } from "react";
 import { toast } from "sonner";
 import {
@@ -52,7 +56,7 @@ function TestimonioCard({
     pendiente: {
       icon: Clock,
       label: "En revisión",
-      className: "text-yellow-600 bg-yellow-50",
+      className: "text-yellow-600 bg-amber-100",
     },
     rechazado: {
       icon: AlertCircle,
@@ -62,57 +66,68 @@ function TestimonioCard({
   };
 
   // Mapear el estado del API al estado interno
-  const estadoKey = estadoTestimonioMap[testimonio.estadoTestimonio] || "pendiente";
+  const estadoKey =
+    estadoTestimonioMap[testimonio.estadoTestimonio] || "pendiente";
   const estado = estadoConfig[estadoKey as keyof typeof estadoConfig];
   const EstadoIcon = estado.icon;
 
   return (
     <Card className="p-6">
+      {/* Header con estado y acciones */}
       <div className="flex flex-col gap-4">
-        {/* Header con estado y acciones */}
-        <div className="flex items-start justify-between">
-          <div
-            className={cn(
-              "flex items-center gap-1.5 px-3 py-1 rounded-full text-sm font-medium",
-              estado.className
+        <div className="flex items-center justify-between">
+          <Pill
+            variant="custom"
+            bgColor={cn(
+              "px-3 py-1 rounded-full text-sm font-medium",
+              estado.className,
             )}
+            className="w-fit"
+            noButton
           >
             <EstadoIcon className="w-4 h-4" />
             {testimonio.estadoTestimonio || estado.label}
-          </div>
-          <div className="flex gap-2">
-            <Button
-              variant="ghost"
-              size="sm"
-              className="h-8 w-8 p-0"
+          </Pill>
+          <div className="flex items-center gap-6">
+            <button
+              id="editar"
+              className="cursor-pointer"
+              aria-label={`Editar testimonio: ${testimonio.idTestimonio}`}
+              type="button"
               onClick={() => onEdit(testimonio.idTestimonio)}
-              title="Editar testimonio"
             >
-              <Pencil className="w-4 h-4 text-gray-500" />
-            </Button>
-            <Button
-              variant="ghost"
-              size="sm"
-              className="h-8 w-8 p-0"
+              <Pencil
+                width={20}
+                height={20}
+                className="text-gray-500 hover:text-primary transition-colors"
+              />
+            </button>
+            <button
+              id="eliminar"
+              className="cursor-pointer"
+              aria-label={`Eliminar testimonio: ${testimonio.idTestimonio}`}
+              type="button"
               onClick={() => onDelete(testimonio.idTestimonio)}
-              title="Eliminar testimonio"
             >
-              <Trash2 className="w-4 h-4 text-red-500" />
-            </Button>
+              <Trash2
+                width={20}
+                height={20}
+                className="text-gray-500 hover:text-primary transition-colors"
+              />
+            </button>
           </div>
         </div>
 
         {/* Cargo y empresa */}
         <div>
-          <h4 className="font-semibold text-gray-800">{testimonio.cargo}</h4>
-          <p className="text-sm text-muted-foreground">{testimonio.empresa}</p>
+          <p className="font-bold text-xl">{testimonio.empresa}</p>
+          <p className="font-medium text-lg">{testimonio.cargo}</p>
         </div>
 
         {/* Testimonio */}
         <p className="text-gray-600 leading-relaxed">
           &ldquo;{testimonio.testimonioDetalle}&rdquo;
         </p>
-
         {/* Footer con calificación y fecha */}
         <div className="flex items-center justify-between pt-4 border-t">
           <div className="flex gap-0.5">
@@ -123,7 +138,7 @@ function TestimonioCard({
                   "w-5 h-5",
                   star <= testimonio.calificacion
                     ? "fill-yellow-400 text-yellow-400"
-                    : "text-gray-300"
+                    : "text-gray-300",
                 )}
               />
             ))}
@@ -166,7 +181,8 @@ export default function TestimoniosList({
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
   const [editDialogOpen, setEditDialogOpen] = useState(false);
   const [selectedId, setSelectedId] = useState<string | null>(null);
-  const [selectedTestimonio, setSelectedTestimonio] = useState<UserTestimonial | null>(null);
+  const [selectedTestimonio, setSelectedTestimonio] =
+    useState<UserTestimonial | null>(null);
   const [isDeleting, setIsDeleting] = useState(false);
 
   const totalPages = Math.ceil(totalItems / pageSize);
@@ -198,13 +214,18 @@ export default function TestimoniosList({
 
     setIsDeleting(true);
     try {
-      const response = await deleteTestimonial(selectedId, session.user.accessToken);
-      
+      const response = await deleteTestimonial(
+        selectedId,
+        session.user.accessToken,
+      );
+
       if (response?.isSuccess) {
         toast.success("Testimonio eliminado correctamente");
         onRefresh();
       } else {
-        toast.error(response?.messages?.[0] || "Error al eliminar el testimonio");
+        toast.error(
+          response?.messages?.[0] || "Error al eliminar el testimonio",
+        );
       }
     } catch (error) {
       console.error("Error deleting testimonial:", error);
@@ -253,7 +274,10 @@ export default function TestimoniosList({
           </h3>
           <div className="flex items-center gap-2">
             <span className="text-sm text-muted-foreground">Mostrar:</span>
-            <Select value={String(pageSize)} onValueChange={handlePageSizeChange}>
+            <Select
+              value={String(pageSize)}
+              onValueChange={handlePageSizeChange}
+            >
               <SelectTrigger className="w-20">
                 <SelectValue />
               </SelectTrigger>
@@ -283,7 +307,8 @@ export default function TestimoniosList({
           <div className="flex flex-col sm:flex-row items-center justify-between gap-4 pt-4">
             <span className="text-sm text-muted-foreground">
               Mostrando {(currentPage - 1) * pageSize + 1} -{" "}
-              {Math.min(currentPage * pageSize, totalItems)} de {totalItems} testimonios
+              {Math.min(currentPage * pageSize, totalItems)} de {totalItems}{" "}
+              testimonios
             </span>
             <div className="flex items-center justify-center gap-2">
               <button
@@ -305,18 +330,24 @@ export default function TestimoniosList({
                     <SelectValue />
                   </SelectTrigger>
                   <SelectContent>
-                    {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => (
-                      <SelectItem key={page} value={String(page)}>
-                        {page}
-                      </SelectItem>
-                    ))}
+                    {Array.from({ length: totalPages }, (_, i) => i + 1).map(
+                      (page) => (
+                        <SelectItem key={page} value={String(page)}>
+                          {page}
+                        </SelectItem>
+                      ),
+                    )}
                   </SelectContent>
                 </Select>
-                <span className="text-sm text-muted-foreground">de {totalPages}</span>
+                <span className="text-sm text-muted-foreground">
+                  de {totalPages}
+                </span>
               </div>
 
               <button
-                onClick={() => onPageChange(Math.min(totalPages, currentPage + 1))}
+                onClick={() =>
+                  onPageChange(Math.min(totalPages, currentPage + 1))
+                }
                 disabled={currentPage >= totalPages || loading}
                 className="px-3 py-1 border rounded bg-white disabled:opacity-50 cursor-pointer hover:bg-gray-50"
               >
@@ -344,10 +375,7 @@ export default function TestimoniosList({
             >
               Cancelar
             </Button>
-            <Button 
-              onClick={handleDeleteConfirm}
-              disabled={isDeleting}
-            >
+            <Button onClick={handleDeleteConfirm} disabled={isDeleting}>
               {isDeleting ? (
                 <>
                   <Loader2 className="w-4 h-4 mr-2 animate-spin" />

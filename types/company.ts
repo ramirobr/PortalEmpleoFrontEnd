@@ -32,6 +32,18 @@ export const CREAR_EMPLEO_FILTERS = [
 export type CrearEmpleoFiltersResponse =
   CatalogFieldsFromTypes<typeof CREAR_EMPLEO_FILTERS, CatalogsByType[]>;
 
+export const COMPANY_PROFILE_FILTERS = [
+  "ESTADO_EMPRESA",
+  "CONDICION_FISCAL",
+  "INDUSTRIA",
+  "CANTIDAD_EMPLEADOS",
+  "CIUDAD",
+  "GENERO"
+] as const satisfies readonly CatalogTypes[];
+
+export type CompanyProfileFiltersResponse =
+  CatalogFieldsFromTypes<typeof COMPANY_PROFILE_FILTERS, CatalogsByType[]>;
+
 export type CompanySignUpData = {
   nombreEmpresa: string,
   razonSocial: string,

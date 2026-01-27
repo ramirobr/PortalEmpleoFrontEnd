@@ -1,7 +1,7 @@
 "use client";
 
 import { Habilidades } from "@/types/user";
-import Badge from "@/components/shared/components/Badge";
+import Pill from "@/components/shared/components/Pill";
 
 interface CandidateHabilidadesProps {
   habilidades: Habilidades[];
@@ -34,7 +34,7 @@ export default function CandidateHabilidades({
       acc[skill.categoria].push(skill);
       return acc;
     },
-    {} as Record<string, Habilidades[]>
+    {} as Record<string, Habilidades[]>,
   );
 
   return (
@@ -69,7 +69,7 @@ export default function CandidateHabilidades({
               {skills.map((skill) => {
                 const { bgColor, textColor } = getNivelColor(skill.nivel);
                 return (
-                  <Badge
+                  <Pill
                     key={skill.id}
                     variant="custom"
                     bgColor={bgColor}
@@ -77,7 +77,7 @@ export default function CandidateHabilidades({
                     className="flex items-center gap-1"
                   >
                     {skill.nombre}
-                  </Badge>
+                  </Pill>
                 );
               })}
             </div>

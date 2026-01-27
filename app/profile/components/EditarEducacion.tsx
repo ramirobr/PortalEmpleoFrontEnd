@@ -1,4 +1,5 @@
 "use client";
+import Pill from "@/components/shared/components/Pill";
 import { Pencil, Trash2, Plus, GraduationCap } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
@@ -149,47 +150,32 @@ export default function EditarEducacion({
         </button>
       </div>
 
-      <div className="mb-8">
+      <div className="grid md:grid-cols-2 gap-4">
         {educacionItems?.length ? (
           educacionItems.map((item, idx) => (
             <div
               key={idx}
-              className="p-4 rounded-lg border border-dashed border-[#dce5e5] flex justify-between my-4 items-center"
+              className="p-4 rounded-lg border border-dashed border-[#dce5e5] flex justify-between my-4"
             >
               <div>
                 <h4 className="font-bold text-xl">{item.titulo}</h4>
-                <div className="flex items-center gap-3">
-                  <p className="">{item.institucion} </p>
-                  <p className="font-bold text-black">•</p>
-                  <p>
-                    {item.fechaFin
-                      ? (() => {
-                          const date = new Date(item.fechaFin);
-                          if (isNaN(date.getTime()))
-                            return item.fechaFin.toString();
-                          // Use deterministic month names to avoid hydration mismatch
-                          const monthNames = [
-                            "Ene",
-                            "Feb",
-                            "Mar",
-                            "Abr",
-                            "May",
-                            "Jun",
-                            "Jul",
-                            "Ago",
-                            "Sep",
-                            "Oct",
-                            "Nov",
-                            "Dic",
-                          ];
-                          const month = monthNames[date.getMonth()];
-                          return `${month} ${date.getFullYear()}`;
-                        })()
-                      : ""}
-                  </p>
+                <div className="flex flex-col gap-3">
+                  <p className="font-medium text-lg">{item.institucion} </p>
+                  {item.fechaInicio && item.fechaFin && (
+                    <Pill
+                      variant="custom"
+                      bgColor="text-sm font-medium text-gray-500 bg-gray-50 px-3 py-1 rounded-full border border-gray-light uppercase"
+                      noButton
+                    >
+                      {`${new Date(item.fechaInicio).toLocaleDateString(
+                        "es-ES",
+                        { month: "short", year: "numeric" },
+                      )} - ${new Date(item.fechaFin).toLocaleDateString("es-ES", { month: "short", year: "numeric" })}`}
+                    </Pill>
+                  )}
                 </div>
               </div>
-              <div className="flex items-center gap-3">
+              <div className="flex items-center gap-6 self-start">
                 <button
                   id="editar"
                   className="cursor-pointer"
@@ -197,7 +183,11 @@ export default function EditarEducacion({
                   type="button"
                   onClick={() => handleEditClick(item.id)}
                 >
-                  <Pencil width={20} height={20} className="text-gray-500" />
+                  <Pencil
+                    width={20}
+                    height={20}
+                    className="text-gray-500 hover:text-primary transition-colors"
+                  />
                 </button>
                 <button
                   id="borrar"
@@ -206,7 +196,11 @@ export default function EditarEducacion({
                   type="button"
                   onClick={() => handleDeleteClick(item.id)}
                 >
-                  <Trash2 width={20} height={20} className="text-gray-500" />
+                  <Trash2
+                    width={20}
+                    height={20}
+                    className="text-gray-500 hover:text-primary transition-colors"
+                  />
                 </button>
               </div>
             </div>
@@ -255,7 +249,7 @@ export default function EditarEducacion({
               </DialogTitle>
             </DialogHeader>
             <div className="flex gap-4 mt-6">
-              <Button variant="secondary" onClick={handleDeleteCancel}>
+              <Button variant="outline" onClick={handleDeleteCancel}>
                 Cancelar
               </Button>
               <Button onClick={handleDeleteConfirm}>Aceptar</Button>

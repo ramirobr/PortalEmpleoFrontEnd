@@ -250,7 +250,7 @@ export default function LoginPage() {
                 />
 
                 <Link
-                  href="/forgot-password"
+                  href="/auth/forgot-password"
                   className="mt-3 text-center text-primary font-semibold text-sm hover:underline"
                 >
                   ¿Olvidaste tu contraseña?

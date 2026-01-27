@@ -234,7 +234,7 @@ export default function EditTestimonioDialog({
                 {isSubmitting ? (
                   <>
                     <Loader2 className="w-4 h-4 mr-2 animate-spin" />
-                    Guardando...
+                    Guardando
                   </>
                 ) : (
                   "Guardar Cambios"

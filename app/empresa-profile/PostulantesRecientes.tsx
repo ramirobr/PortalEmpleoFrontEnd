@@ -1,4 +1,4 @@
-import Badge from "@/components/shared/components/Badge";
+import Pill from "@/components/shared/components/Pill";
 import Link from "next/link";
 import { AplicanteReciente } from "@/types/company";
 
@@ -48,15 +48,15 @@ export default function PostulantesRecientes({
                       {aplicante.usuario.ubicacion}
                     </p>
                   </div>
-                  <Badge variant="gray">
+                  <Pill variant="gray">
                     {aplicante.usuario.estadoAplicacion.nombre}
-                  </Badge>
+                  </Pill>
                 </div>
                 <div className="flex flex-wrap gap-2">
                   {aplicante.usuario.habilidades.map((skill, index) => (
-                    <Badge key={index} variant="gray">
+                    <Pill key={index} variant="gray">
                       {skill}
-                    </Badge>
+                    </Pill>
                   ))}
                 </div>
               </div>

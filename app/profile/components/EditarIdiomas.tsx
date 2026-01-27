@@ -80,7 +80,7 @@ export default function EditarIdiomas({
       {
         method: "DELETE",
         token: session?.user.accessToken,
-      }
+      },
     );
     if (!res?.isSuccess) {
       toast.error("Error eliminando idioma");
@@ -115,11 +115,15 @@ export default function EditarIdiomas({
       return;
     }
 
+    const nivelNombre =
+      fields?.nivel_idioma?.find((n) => n.idCatalogo === res.data.idNivelIdioma)
+        ?.nombre ?? "";
+
     const idioma: Idioma = {
       id: res.data.idIdioma,
       nombre: res.data.nombre,
       idNivel: res.data.idNivelIdioma,
-      nivel: "",
+      nivel: nivelNombre,
       certificado: values.certificado,
       certificacion: values.certificacion || "",
     };
@@ -160,16 +164,20 @@ export default function EditarIdiomas({
       return;
     }
 
+    const nivelNombre =
+      fields?.nivel_idioma?.find((n) => n.idCatalogo === body.idNivelIdioma)
+        ?.nombre ?? "";
+
     const idioma: Idioma = {
       id: body.idIdioma,
       nombre: body.nombre,
       idNivel: body.idNivelIdioma,
-      nivel: "",
+      nivel: nivelNombre,
       certificado: values.certificado,
       certificacion: values.certificacion || "",
     };
     setIdiomas((prev) =>
-      prev.map((item) => (item.id === idioma.id ? idioma : item))
+      prev.map((item) => (item.id === idioma.id ? idioma : item)),
     );
     handleCancelEdit();
     toast.success("Idioma editado");
@@ -198,45 +206,56 @@ export default function EditarIdiomas({
         </button>
       </div>
 
-      <div className="mb-8">
+      <div className="my-8 flex flex-wrap gap-3">
         {idiomas?.length ? (
           idiomas.map((item) => (
             <div
               key={item.id}
-              className="p-4 rounded-lg border border-dashed border-[#dce5e5] flex justify-between my-4 items-center"
+              className="flex gap-10 items-center justify-between p-3 rounded-lg  bg-gray-50 border border-gray-light"
             >
-              <div>
-                <h4 className="font-bold text-xl">{item.nombre}</h4>
-                <div className="flex items-center gap-3">
-                  <p>{item.nivel || "Sin nivel especificado"}</p>
+              <button
+                type="button"
+                className="text-left cursor-pointer self-start"
+                aria-label={`Editar idioma: ${item.nombre}`}
+                onClick={() => handleEditClick(item.id)}
+              >
+                <p className="font-semibold text-black font-bold text-lg">
+                  {item.nombre}
+                </p>
+                <div className="flex items-center gap-2 text-primary uppercase font-medium">
+                  <p>{item.nivel || "Sin nivel"}</p>
+
                   {item.certificado && item.certificacion && (
                     <>
-                      <p className="font-bold text-black">•</p>
+                      <p>•</p>
                       <p>{item.certificacion}</p>
                     </>
                   )}
                 </div>
-              </div>
-              <div className="flex items-center gap-3">
-                <button
-                  id="editar-idioma"
-                  className="cursor-pointer"
-                  aria-label={`Editar idioma: ${item.nombre}`}
-                  type="button"
-                  onClick={() => handleEditClick(item.id)}
+              </button>
+              <button
+                id="borrar-idioma"
+                className="cursor-pointer text-gray-400 hover:text-gray-600 transition-colors mt-1"
+                aria-label={`Borrar idioma: ${item.nombre}`}
+                type="button"
+                onClick={() => requestDelete(item.id)}
+              >
+                <svg
+                  width="14"
+                  height="14"
+                  viewBox="0 0 14 14"
+                  fill="none"
+                  xmlns="http://www.w3.org/2000/svg"
+                  className="stroke-current"
                 >
-                  <Pencil width={20} height={20} className="text-gray-500" />
-                </button>
-                <button
-                  id="borrar-idioma"
-                  className="cursor-pointer"
-                  aria-label={`Borrar idioma: ${item.nombre}`}
-                  type="button"
-                  onClick={() => requestDelete(item.id)}
-                >
-                  <Trash2 width={20} height={20} className="text-gray-500" />
-                </button>
-              </div>
+                  <path
+                    d="M1 1L13 13M1 13L13 1"
+                    strokeWidth="2"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  />
+                </svg>
+              </button>
             </div>
           ))
         ) : (
@@ -284,7 +303,7 @@ export default function EditarIdiomas({
             </DialogTitle>
           </DialogHeader>
           <div className="flex gap-4 mt-4">
-            <Button type="button" variant="secondary" onClick={cancelDelete}>
+            <Button type="button" variant="outline" onClick={cancelDelete}>
               Cancelar
             </Button>
             <Button onClick={confirmDelete}>Aceptar</Button>
@@ -330,7 +349,9 @@ const AddIdiomaForm: React.FC<AddIdiomaFormProps> = ({
           name="nombre"
           render={({ field }) => (
             <FormItem>
-              <FormLabel htmlFor="add-nombre-idioma">Nombre del idioma</FormLabel>
+              <FormLabel htmlFor="add-nombre-idioma">
+                Nombre del idioma
+              </FormLabel>
               <FormControl>
                 <Input
                   {...field}
@@ -397,7 +418,9 @@ const AddIdiomaForm: React.FC<AddIdiomaFormProps> = ({
             name="certificacion"
             render={({ field }) => (
               <FormItem>
-                <FormLabel htmlFor="add-certificacion">Título del certificado</FormLabel>
+                <FormLabel htmlFor="add-certificacion">
+                  Título del certificado
+                </FormLabel>
                 <FormControl>
                   <Input
                     {...field}
@@ -465,7 +488,9 @@ const EditIdiomaForm: React.FC<EditIdiomaFormProps> = ({
           name="nombre"
           render={({ field }) => (
             <FormItem>
-              <FormLabel htmlFor="edit-nombre-idioma">Nombre del idioma</FormLabel>
+              <FormLabel htmlFor="edit-nombre-idioma">
+                Nombre del idioma
+              </FormLabel>
               <FormControl>
                 <Input
                   {...field}
@@ -532,7 +557,9 @@ const EditIdiomaForm: React.FC<EditIdiomaFormProps> = ({
             name="certificacion"
             render={({ field }) => (
               <FormItem>
-                <FormLabel htmlFor="edit-certificacion">Título del certificado</FormLabel>
+                <FormLabel htmlFor="edit-certificacion">
+                  Título del certificado
+                </FormLabel>
                 <FormControl>
                   <Input
                     {...field}

@@ -76,7 +76,7 @@ const EditarEducacionItem: React.FC<EditarEducacionItemProps> = ({
             fechaFin: new Date(data.fechaFin).toISOString(),
             id: "",
             orden: 0,
-          })
+          }),
         )}
         className="space-y-4"
         aria-label="Editar educación"
@@ -215,7 +215,7 @@ const EditarEducacionItem: React.FC<EditarEducacionItemProps> = ({
         </div>
 
         <div className="flex justify-end gap-2 mt-4">
-          <Button variant="secondary" onClick={onCancel}>
+          <Button variant="outline" onClick={onCancel}>
             Cancelar
           </Button>
           <Button type="submit" disabled={form.formState.isSubmitting}>

@@ -1,5 +1,5 @@
 "use client";
-import Badge from "@/components/shared/components/Badge";
+import Pill from "@/components/shared/components/Pill";
 import { Plus, Pencil, Trash2, Briefcase } from "lucide-react";
 import { Card } from "@/components/ui/card";
 import {
@@ -170,46 +170,54 @@ export default function EditarExperenciaLaboral({
         </button>
       </div>
 
-      <div>
+      <div className="grid md:grid-cols-2 gap-4">
         {Experiencias?.length ? (
           Experiencias.map((item, index) => (
             <div
               key={item.id}
-              className="p-4 rounded-lg border border-dashed border-[#dce5e5] flex justify-between my-4 items-center"
+              className="p-4 rounded-lg border border-dashed border-[#dce5e5] flex justify-between my-4"
             >
               <div>
-                <h4 className="font-bold text-xl">{item.empresa}</h4>
-                <div className="flex items-center gap-3">
-                  <p className="">{item.puesto}</p>
-                  <p className="font-bold text-black">•</p>
-                  <p>
-                    {item.fechaInicio && item.fechaFin
-                      ? `${new Date(item.fechaInicio).toLocaleDateString(
-                          "es-ES",
-                        )} - ${new Date(item.fechaFin).toLocaleDateString("es-ES")}`
-                      : ""}
-                  </p>
-                </div>
-                <p>{item.pais}</p>
                 {item.estaTrabajando && (
-                  <Badge
+                  <Pill
                     variant="custom"
-                    bgColor="bg-black mt-3"
+                    bgColor="bg-black mb-3"
                     textColor="text-white"
                   >
                     Actual
-                  </Badge>
+                  </Pill>
                 )}
+                <h4 className="font-bold text-xl">{item.empresa}</h4>
+                <div className="flex flex-col  gap-3">
+                  <p className="font-medium text-lg">{item.puesto}</p>
+                  {item.fechaInicio && item.fechaFin && (
+                    <Pill
+                      variant="custom"
+                      bgColor="text-sm font-medium text-gray-500 bg-gray-50 px-3 py-1 rounded-full border border-gray-light uppercase"
+                      noButton
+                    >
+                      {`${new Date(item.fechaInicio).toLocaleDateString(
+                        "es-ES",
+                        { month: "short", year: "numeric" },
+                      )} - ${new Date(item.fechaFin).toLocaleDateString("es-ES", { month: "short", year: "numeric" })}`}
+                    </Pill>
+                  )}
+                </div>
+                <p>{item.pais}</p>
               </div>
 
-              <div className="flex items-center gap-3">
+              <div className="flex items-center gap-6 self-start">
                 <button
                   id="editar"
                   className="cursor-pointer"
                   type="button"
                   onClick={() => handleEditClick(item.id)}
                 >
-                  <Pencil width={20} height={20} className="text-gray-500" />
+                  <Pencil
+                    width={20}
+                    height={20}
+                    className="text-gray-500 hover:text-primary transition-colors"
+                  />
                 </button>
                 <button
                   id="borrar"
@@ -217,7 +225,11 @@ export default function EditarExperenciaLaboral({
                   type="button"
                   onClick={() => handleDeleteClick(item.id)}
                 >
-                  <Trash2 width={20} height={20} className="text-gray-500" />
+                  <Trash2
+                    width={20}
+                    height={20}
+                    className="text-gray-500 hover:text-primary transition-colors"
+                  />
                 </button>
               </div>
             </div>
@@ -266,11 +278,7 @@ export default function EditarExperenciaLaboral({
             </DialogTitle>
           </DialogHeader>
           <div className="flex gap-4 mt-4">
-            <button
-              type="button"
-              className="btn btn-secondary"
-              onClick={handleDeleteCancel}
-            >
+            <button type="button" onClick={handleDeleteCancel}>
               Cancelar
             </button>
             <button

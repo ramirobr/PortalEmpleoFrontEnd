@@ -8,7 +8,7 @@ import { redirect } from "next/navigation";
 import { fetchApi } from "@/lib/apiClient";
 import { Logout } from "@/types/user";
 
-import { Building2 } from "lucide-react";
+import { Building2, Briefcase, MessageSquare, Shield } from "lucide-react";
 
 export default function AdminLayout({ children }: Children) {
   const { data: session, status } = useSession();
@@ -46,20 +46,35 @@ export default function AdminLayout({ children }: Children) {
     {
       name: "Gestionar Empleos",
       href: "/admin/empleos",
+      icon: <Briefcase />,
+    },
+    {
+      name: "Gestionar Empresas",
+      href: "/admin/empresas",
+      icon: <Building2 />,
+    },
+    {
+      name: "Gestionar Candidatos",
+      href: "/admin/candidatos",
       icon: (
         <svg
           xmlns="http://www.w3.org/2000/svg"
           viewBox="0 0 24 24"
           fill="currentColor"
         >
-          <path d="M20 6h-4V4c0-1.11-.89-2-2-2h-4c-1.11 0-2 .89-2 2v2H4c-1.11 0-1.99.89-1.99 2L2 19c0 1.11.89 2 2 2h16c1.11 0 2-.89 2-2V8c0-1.11-.89-2-2-2zm-6 0h-4V4h4v2z" />
+          <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z" />
         </svg>
       ),
     },
     {
-      name: "Gestionar Empresas",
-      href: "/admin/empresas",
-      icon: <Building2 />,
+      name: "Gestionar Testimonios",
+      href: "/admin/testimonios",
+      icon: <MessageSquare />,
+    },
+    {
+      name: "Gestionar Roles",
+      href: "/admin/roles",
+      icon: <Shield />,
     },
     {
       name: "Gestionar Usuarios",

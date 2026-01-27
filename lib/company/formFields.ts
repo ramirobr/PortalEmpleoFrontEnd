@@ -1,5 +1,5 @@
 import { fetchAllCatalogsByType } from "@/lib/catalog/fetch";
-import { CANDIDATOS_SEARCH_FILTERS, CandidatosSearchFiltersResponse, CREAR_EMPLEO_FILTERS, CrearEmpleoFiltersResponse, EMPRESA_FORM_FILTERS, FormFieldsResponse } from "@/types/company";
+import { CANDIDATOS_SEARCH_FILTERS, CandidatosSearchFiltersResponse, COMPANY_PROFILE_FILTERS, CompanyProfileFiltersResponse, CREAR_EMPLEO_FILTERS, CrearEmpleoFiltersResponse, EMPRESA_FORM_FILTERS, FormFieldsResponse } from "@/types/company";
 import { mapCatalogsToResponse } from "../utils";
 
 export async function fetchFormFields(): Promise<FormFieldsResponse | null> {
@@ -34,6 +34,18 @@ export async function crearEmpleoFilters(): Promise<CrearEmpleoFiltersResponse |
     return mapCatalogsToResponse(CREAR_EMPLEO_FILTERS, results);
   } catch (error) {
     console.warn("Issue getting crear empleo filters", error);
+    return null;
+  }
+}
+
+export async function fetchCompanyProfileCatalogs(): Promise<CompanyProfileFiltersResponse | null> {
+  try {
+    const results = await Promise.all(
+      COMPANY_PROFILE_FILTERS.map(fetchAllCatalogsByType)
+    );
+    return mapCatalogsToResponse(COMPANY_PROFILE_FILTERS, results);
+  } catch (error) {
+    console.warn("Issue getting company profile filters", error);
     return null;
   }
 }

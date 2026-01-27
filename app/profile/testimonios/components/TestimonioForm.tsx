@@ -65,12 +65,12 @@ export default function TestimonioForm({ onSuccess }: TestimonioFormProps) {
           testimonioDetalle: data.testimonioDetalle,
           calificacion: data.calificacion,
         },
-        session.user.accessToken
+        session.user.accessToken,
       );
 
       if (response?.isSuccess) {
         toast.success(
-          "¡Gracias por tu testimonio! Será revisado antes de publicarse."
+          "¡Gracias por tu testimonio! Será revisado antes de publicarse.",
         );
         form.reset();
         setIsOpen(false);
@@ -105,7 +105,7 @@ export default function TestimonioForm({ onSuccess }: TestimonioFormProps) {
           </div>
           <Button onClick={() => setIsOpen(true)} className="gap-2">
             <Plus className="w-4 h-4" />
-            Agregar Testimonio
+            Agregar
           </Button>
         </div>
       </Card>
@@ -128,10 +128,7 @@ export default function TestimonioForm({ onSuccess }: TestimonioFormProps) {
                 <FormItem>
                   <FormLabel>Cargo actual *</FormLabel>
                   <FormControl>
-                    <Input
-                      placeholder="Ej: Frontend Developer"
-                      {...field}
-                    />
+                    <Input placeholder="Ej: Frontend Developer" {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -145,10 +142,7 @@ export default function TestimonioForm({ onSuccess }: TestimonioFormProps) {
                 <FormItem>
                   <FormLabel>Empresa *</FormLabel>
                   <FormControl>
-                    <Input
-                      placeholder="Ej: Tech Solutions S.A."
-                      {...field}
-                    />
+                    <Input placeholder="Ej: Tech Solutions S.A." {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -203,7 +197,7 @@ export default function TestimonioForm({ onSuccess }: TestimonioFormProps) {
                             "w-8 h-8 transition-colors",
                             (hoveredStar || watchCalificacion) >= star
                               ? "fill-yellow-400 text-yellow-400"
-                              : "text-gray-300"
+                              : "text-gray-300",
                           )}
                         />
                       </button>
@@ -216,9 +210,9 @@ export default function TestimonioForm({ onSuccess }: TestimonioFormProps) {
           />
 
           <div className="flex justify-end gap-3 pt-4 border-t">
-            <Button 
-              type="button" 
-              variant="outline" 
+            <Button
+              type="button"
+              variant="outline"
               onClick={handleCancel}
               disabled={isSubmitting}
             >

@@ -2,7 +2,7 @@
 
 import { DatosPersonales } from "@/types/user";
 import UserAvatar from "@/components/shared/components/UserAvatar";
-import Badge from "@/components/shared/components/Badge";
+import Pill from "@/components/shared/components/Pill";
 import { MapPinIcon } from "@/components/shared/icons/Icons";
 
 interface CandidateHeaderProps {
@@ -95,7 +95,7 @@ export default function CandidateHeader({
           {/* Additional Info */}
           <div className="flex flex-wrap gap-3 mt-4">
             {datosPersonales.movilidad && (
-              <Badge
+              <Pill
                 variant="custom"
                 bgColor="bg-purple-100"
                 textColor="text-purple-700"
@@ -114,10 +114,10 @@ export default function CandidateHeader({
                   />
                 </svg>
                 Disponibilidad de movilidad
-              </Badge>
+              </Pill>
             )}
             {datosPersonales.licencia && (
-              <Badge
+              <Pill
                 variant="custom"
                 bgColor="bg-orange-100"
                 textColor="text-orange-700"
@@ -136,7 +136,7 @@ export default function CandidateHeader({
                   />
                 </svg>
                 Licencia: {datosPersonales.tipoLicencia.join(", ")}
-              </Badge>
+              </Pill>
             )}
           </div>
         </div>

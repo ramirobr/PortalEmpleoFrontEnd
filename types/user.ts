@@ -67,6 +67,12 @@ export const DATOS_PERSONALES_TYPES = [
 export type DatosPersonalesFieldsResponse =
   CatalogFieldsFromTypes<typeof DATOS_PERSONALES_TYPES, CatalogsByType[]>;
 
+export interface Notificacion {
+  idNotificacion: string
+  descripcion: string
+  fechaCreacion: string
+}
+
 export interface DashboardInfoData {
   userName: string
   userEmail: string
@@ -85,9 +91,11 @@ export interface DashboardInfoData {
   resumenProfesional: string
   disponibilidad: string
   listaTrabajosAplicados: ListaTrabajosAplicado[]
+  notificaciones: Notificacion[]
 }
 
 export interface ListaTrabajosAplicado {
+  id: number
   estado: string
   fechaAplicacion: string
   titulo: string

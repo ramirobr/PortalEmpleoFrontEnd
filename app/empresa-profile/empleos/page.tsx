@@ -22,6 +22,7 @@ import { useSession } from "next-auth/react";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
+import TablePagination from "@/components/shared/components/TablePagination";
 
 export default function OfertasPage() {
   const { data: session } = useSession();
@@ -136,145 +137,152 @@ export default function OfertasPage() {
           </div>
         </div>
 
-        <div className="grid-cols-12 gap-4 bg-gray-50/50 p-4 text-xs text-primary font-bold uppercase tracking-wider border-b border-gray-100 hidden md:grid">
-          <div className="col-span-12 md:col-span-5 pl-4">Título</div>
-          <div className="col-span-6 md:col-span-2">Aplicaciones</div>
-          <div className="col-span-6 md:col-span-2">Creado y Expira</div>
-          <div className="col-span-6 md:col-span-1">Estado</div>
-          <div className="col-span-6 md:col-span-2 text-right pr-4">Acción</div>
-        </div>
-
-        <div className="divide-y divide-gray-100">
-          {loading ? (
-            <div className="p-12 text-center text-gray-500">
-              <p>Cargando ofertas...</p>
-            </div>
-          ) : ofertas.length === 0 ? (
-            <div className="p-12 text-center text-gray-500">
-              <p>No hay ofertas de empleo para mostrar</p>
-            </div>
-          ) : (
-            ofertas.map((oferta) => (
-              <div
-                key={oferta.idVacante}
-                className="grid grid-cols-12 gap-4 p-4 items-center hover:bg-gray-50 transition-colors"
-              >
-                <div className="col-span-12 md:col-span-5 flex items-start gap-4 pl-4">
-                  <div>
-                    <h3 className="font-semibold text-gray-900 text-base">
-                      {oferta.tituloPuesto}
-                    </h3>
-                    <div className="flex items-center text-gray-500 text-sm mt-1 gap-4">
-                      <span className="flex items-center gap-1">
-                        <BriefcaseIcon className="w-4 h-4" />
-                        {oferta.empresa.nombre}
+        <div className="overflow-x-auto">
+          <table className="w-full">
+            <thead>
+              <tr className="bg-gray-50 border-b border-gray-100">
+                <th
+                  scope="col"
+                  className="py-5 px-4 text-left text-xs text-primary font-bold uppercase tracking-wider"
+                >
+                  Título
+                </th>
+                <th
+                  scope="col"
+                  className="py-5 px-4 text-left text-xs text-primary font-bold uppercase tracking-wider"
+                >
+                  Aplicaciones
+                </th>
+                <th
+                  scope="col"
+                  className="py-5 px-4 text-left text-xs text-primary font-bold uppercase tracking-wider"
+                >
+                  Creado y Expira
+                </th>
+                <th
+                  scope="col"
+                  className="py-5 px-4 text-left text-xs text-primary font-bold uppercase tracking-wider"
+                >
+                  Estado
+                </th>
+                <th
+                  scope="col"
+                  className="py-5 px-4 text-right text-xs text-primary font-bold uppercase tracking-wider"
+                >
+                  Acción
+                </th>
+              </tr>
+            </thead>
+            <tbody className="divide-y divide-gray-100">
+              {loading ? (
+                <tr>
+                  <td colSpan={5} className="p-12 text-center text-gray-500">
+                    <p>Cargando ofertas...</p>
+                  </td>
+                </tr>
+              ) : ofertas.length === 0 ? (
+                <tr>
+                  <td colSpan={5} className="p-12 text-center text-gray-500">
+                    <p>No hay ofertas de empleo para mostrar</p>
+                  </td>
+                </tr>
+              ) : (
+                ofertas.map((oferta) => (
+                  <tr
+                    key={oferta.idVacante}
+                    className="hover:bg-gray-50 transition-colors"
+                  >
+                    <td className="py-2 px-4">
+                      <div className="flex items-start gap-4">
+                        <div>
+                          <h3 className="font-semibold text-gray-900 text-base">
+                            {oferta.tituloPuesto}
+                          </h3>
+                          <div className="flex items-center text-gray-500 text-sm mt-1 gap-4">
+                            <span className="flex items-center gap-1">
+                              <BriefcaseIcon className="w-4 h-4" />
+                              {oferta.empresa.nombre}
+                            </span>
+                            <span className="flex items-center gap-1">
+                              <MapPinIcon className="w-4 h-4" />
+                              {oferta.ubicacion}
+                            </span>
+                          </div>
+                        </div>
+                      </div>
+                    </td>
+                    <td className="py-2 px-4 text-sm">
+                      <Link
+                        href="#"
+                        className="text-primary hover:text-green-600 hover:underline font-medium transition-colors"
+                      >
+                        {oferta.totalAplicaciones}
+                        {oferta.totalAplicaciones > 9 && "+"} Postulado
+                        {oferta.totalAplicaciones !== 1 && "s"}
+                      </Link>
+                    </td>
+                    <td className="py-2 px-4 text-sm text-gray-500">
+                      <div className="flex flex-col gap-1">
+                        <span>{formatDate(oferta.fechaPublicacion)}</span>
+                        <span>{formatDate(oferta.fechaCierre)}</span>
+                      </div>
+                    </td>
+                    <td className="py-2 px-4">
+                      <span
+                        className={`text-sm font-medium ${
+                          oferta.estadoVacante.nombre === "Activa"
+                            ? "text-green-600"
+                            : oferta.estadoVacante.nombre === "Expirado"
+                              ? "text-red-500"
+                              : "text-gray-500"
+                        }`}
+                      >
+                        {oferta.estadoVacante.nombre}
                       </span>
-                      <span className="flex items-center gap-1">
-                        <MapPinIcon className="w-4 h-4" />
-                        {oferta.ubicacion}
-                      </span>
-                    </div>
-                  </div>
-                </div>
-
-                <div className="col-span-6 md:col-span-2 text-sm">
-                  <Link
-                    href="#"
-                    className="text-primary hover:text-green-600 hover:underline font-medium transition-colors"
-                  >
-                    {oferta.totalAplicaciones}
-                    {oferta.totalAplicaciones > 9 && "+"} Postulado
-                    {oferta.totalAplicaciones !== 1 && "s"}
-                  </Link>
-                </div>
-
-                <div className="col-span-6 md:col-span-2 text-sm text-gray-500 flex flex-col gap-1">
-                  <span>{formatDate(oferta.fechaPublicacion)}</span>
-                  <span>{formatDate(oferta.fechaCierre)}</span>
-                </div>
-
-                <div className="col-span-6 md:col-span-1">
-                  <span
-                    className={`text-sm font-medium ${
-                      oferta.estadoVacante.nombre === "Activa"
-                        ? "text-green-600"
-                        : oferta.estadoVacante.nombre === "Expirado"
-                          ? "text-red-500"
-                          : "text-gray-500"
-                    }`}
-                  >
-                    {oferta.estadoVacante.nombre}
-                  </span>
-                </div>
-
-                <div className="col-span-6 md:col-span-2 flex justify-end gap-2 pr-4">
-                  <Link
-                    href={`/jobs/${oferta.idVacante}`}
-                    className="p-2 bg-sky-50 text-teal-600 rounded-full hover:bg-teal-600 hover:text-white transition-colors cursor-pointer"
-                    title="Ver Detalle"
-                  >
-                    <EyeIcon className="w-3 h-3" />
-                  </Link>
-
-                  <Link
-                    href={`/empresa-profile/empleos/${oferta.idVacante}`}
-                    className="p-2 bg-sky-50 text-teal-600 rounded-full hover:bg-teal-600 hover:text-white transition-colors cursor-pointer"
-                    title="Editar"
-                  >
-                    <EditIcon className="w-3 h-3" />
-                  </Link>
-
-                  <button
-                    onClick={() => handleDelete(oferta.idVacante)}
-                    disabled={deletingId === oferta.idVacante}
-                    className="p-2 bg-sky-50 text-teal-600 rounded-full hover:bg-teal-600 hover:text-white transition-colors cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
-                    title="Eliminar"
-                  >
-                    <TrashIcon className="w-3 h-3" />
-                  </button>
-                </div>
-              </div>
-            ))
-          )}
-        </div>
-
-        {!loading && totalItems > 0 && (
-          <div className="p-4 border-t border-gray-100 flex items-center justify-between">
-            <div className="text-sm text-gray-500">
-              Mostrando {startIndex + 1} a {endIndex} de {totalItems} empleos
-            </div>
-            <div className="flex items-center gap-2">
-              <button
-                onClick={() => handlePageChange(currentPage - 1)}
-                disabled={currentPage === 1}
-                className="px-3 py-1 border border-gray-200 rounded-md text-sm hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer"
-              >
-                Anterior
-              </button>
-              {Array.from({ length: totalPages }, (_, i) => i + 1).map(
-                (page) => (
-                  <button
-                    key={page}
-                    onClick={() => handlePageChange(page)}
-                    className={`px-3 py-1 rounded-md text-sm cursor-pointer ${
-                      currentPage === page
-                        ? "bg-primary text-white"
-                        : "border border-gray-200 hover:bg-gray-50 text-gray-700"
-                    }`}
-                  >
-                    {page}
-                  </button>
-                ),
+                    </td>
+                    <td className="py-2 px-4">
+                      <div className="flex justify-end gap-2">
+                        <Link
+                          href={`/jobs/${oferta.idVacante}`}
+                          className="p-2 bg-sky-50 text-teal-600 rounded-full hover:bg-teal-600 hover:text-white transition-colors cursor-pointer"
+                          title="Ver Detalle"
+                        >
+                          <EyeIcon className="w-3 h-3" />
+                        </Link>
+                        <Link
+                          href={`/empresa-profile/empleos/${oferta.idVacante}`}
+                          className="p-2 bg-sky-50 text-teal-600 rounded-full hover:bg-teal-600 hover:text-white transition-colors cursor-pointer"
+                          title="Editar"
+                        >
+                          <EditIcon className="w-3 h-3" />
+                        </Link>
+                        <button
+                          onClick={() => handleDelete(oferta.idVacante)}
+                          disabled={deletingId === oferta.idVacante}
+                          className="p-2 bg-sky-50 text-teal-600 rounded-full hover:bg-teal-600 hover:text-white transition-colors cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
+                          title="Eliminar"
+                        >
+                          <TrashIcon className="w-3 h-3" />
+                        </button>
+                      </div>
+                    </td>
+                  </tr>
+                ))
               )}
-              <button
-                onClick={() => handlePageChange(currentPage + 1)}
-                disabled={currentPage === totalPages}
-                className="px-3 py-1 border border-gray-200 rounded-md text-sm hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer"
-              >
-                Siguiente
-              </button>
-            </div>
-          </div>
+            </tbody>
+          </table>
+        </div>
+
+        {/* Shared Pagination Component */}
+        {!loading && totalItems > 0 && (
+          <TablePagination
+            currentPage={currentPage}
+            pageSize={pageSize}
+            totalItems={totalItems}
+            itemLabel="empleos"
+            onPageChange={handlePageChange}
+            className="mt-0 rounded-b-xl border-t-0"
+          />
         )}
       </div>
     </div>

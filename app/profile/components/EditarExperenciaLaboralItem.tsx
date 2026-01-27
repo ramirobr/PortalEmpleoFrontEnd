@@ -26,21 +26,26 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 
-const schema = z.object({
-  empresa: z.string().min(1, "La empresa es obligatoria."),
-  puesto: z.string().min(1, "El puesto es obligatorio."),
-  fechaInicio: z.date({ error: "La fecha de inicio es obligatoria." }),
-  fechaFin: z.date({ error: "La fecha de finalización es obligatoria." }).optional(),
-  idPais: z.number().min(1, "Selecciona un pais"),
-  idCiudad: z.number().min(1, "Selecciona una ciudad"),
-  descripcion: z.string().min(1, "Descripcion es obligatoria."),
-  sector: z.string().min(1, "Sector es obligatorio."),
-  idTipoEmpleo: z.number().min(1, "Selecciona un tipo de empleo"),
-  trabajoActual: z.boolean(),
-}).refine((data) => data.trabajoActual || data.fechaFin, {
-  message: "La fecha de finalización es obligatoria si no trabaja actualmente.",
-  path: ["fechaFin"],
-});
+const schema = z
+  .object({
+    empresa: z.string().min(1, "La empresa es obligatoria."),
+    puesto: z.string().min(1, "El puesto es obligatorio."),
+    fechaInicio: z.date({ error: "La fecha de inicio es obligatoria." }),
+    fechaFin: z
+      .date({ error: "La fecha de finalización es obligatoria." })
+      .optional(),
+    idPais: z.number().min(1, "Selecciona un pais"),
+    idCiudad: z.number().min(1, "Selecciona una ciudad"),
+    descripcion: z.string().min(1, "Descripcion es obligatoria."),
+    sector: z.string().min(1, "Sector es obligatorio."),
+    idTipoEmpleo: z.number().min(1, "Selecciona un tipo de empleo"),
+    trabajoActual: z.boolean(),
+  })
+  .refine((data) => data.trabajoActual || data.fechaFin, {
+    message:
+      "La fecha de finalización es obligatoria si no trabaja actualmente.",
+    path: ["fechaFin"],
+  });
 
 export type EditarExperenciaLaboralItemValues = z.infer<typeof schema>;
 
@@ -83,9 +88,11 @@ const EditarExperenciaLaboralItem: React.FC<
           onSave({
             ...data,
             fechaInicio: new Date(data.fechaInicio).toISOString(),
-            fechaFin: data.fechaFin ? new Date(data.fechaFin).toISOString() : "",
+            fechaFin: data.fechaFin
+              ? new Date(data.fechaFin).toISOString()
+              : "",
             estaTrabajando: data.trabajoActual,
-          } as unknown as ExperienciaLaboral)
+          } as unknown as ExperienciaLaboral),
         )}
         className="space-y-5"
         aria-label="Editar experiencia laboral"
@@ -135,9 +142,7 @@ const EditarExperenciaLaboralItem: React.FC<
           name="fechaInicio"
           render={({ field }) => (
             <FormItem>
-              <FormLabel htmlFor="edit-fecha-inicio">
-                Fecha de inicio
-              </FormLabel>
+              <FormLabel htmlFor="edit-fecha-inicio">Fecha de inicio</FormLabel>
               <FormControl>
                 <DatePicker
                   value={field.value as Date}
@@ -166,7 +171,10 @@ const EditarExperenciaLaboralItem: React.FC<
                       checked={Boolean(trabajoField.value)}
                       onCheckedChange={trabajoField.onChange}
                     />
-                    <Label htmlFor="trabajo-actual" className="text-sm font-normal cursor-pointer">
+                    <Label
+                      htmlFor="trabajo-actual"
+                      className="text-sm font-normal cursor-pointer"
+                    >
                       Al presente
                     </Label>
                   </div>

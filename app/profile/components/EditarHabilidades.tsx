@@ -1,5 +1,5 @@
 "use client";
-import Badge from "@/components/shared/components/Badge";
+import Pill from "@/components/shared/components/Pill";
 import { Plus, Lightbulb } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
@@ -211,18 +211,18 @@ export default function EditarHabilidades({
       <div className="my-8 flex flex-wrap gap-3">
         {habilidades?.length ? (
           habilidades.map((item) => (
-            <Badge
+            <Pill
               key={item.id}
               variant="custom"
               fontSize="text-sm md:text-md"
-              bgColor="bg-green-100"
-              textColor="text-green-700"
+              bgColor="flex items-center gap-2 px-4 py-2 bg-primary/10 text-primary rounded-full border border-primary/20 transition-all hover:bg-primary/20 text-sm font-bold uppercase tracking-wide [&>*]:uppercase"
+              textColor="text-green-700 font-bold uppercase"
               removable
               onEdit={() => handleEditClick(item.id)}
               onRemove={() => requestDelete(item.id)}
             >
               {item.nombre}
-            </Badge>
+            </Pill>
           ))
         ) : (
           <h4 className="text-base font-semibold">No hay habilidades</h4>
@@ -269,7 +269,7 @@ export default function EditarHabilidades({
             </DialogTitle>
           </DialogHeader>
           <div className="flex gap-4 mt-4">
-            <Button type="button" variant="secondary" onClick={cancelDelete}>
+            <Button type="button" variant="outline" onClick={cancelDelete}>
               Cancelar
             </Button>
             <Button onClick={confirmDelete}>Aceptar</Button>

@@ -1,5 +1,5 @@
 "use client";
-import Badge from "@/components/shared/components/Badge";
+import Pill from "@/components/shared/components/Pill";
 import FavoriteButton from "@/components/shared/components/FavoriteButton";
 import { ROLES } from "@/types/auth";
 import { Job, RecentJob } from "@/types/jobs";
@@ -45,7 +45,7 @@ export default function JobCard({ job, isFavorite = false }: JobCardProps) {
         <div className="flex flex-col items-center gap-4 flex-wrap justify-center">
           {logo ? (
             <Image
-              src={logo}
+              src={`data:image/png;base64,${logo}`}
               alt={`Logo de la empresa ${companyName}`}
               width={64}
               height={64}
@@ -71,14 +71,14 @@ export default function JobCard({ job, isFavorite = false }: JobCardProps) {
             <p className="text-lg font-bold text-black mb-4 leading-snug text-center">
               {title || "Software Development"}
             </p>
-            <Badge
+            <Pill
               variant="custom"
               bgColor="bg-black"
               textColor="text-white"
               noButton={true}
             >
               {modality}
-            </Badge>
+            </Pill>
           </div>
         </div>
 

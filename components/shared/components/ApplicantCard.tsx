@@ -3,7 +3,7 @@
 import React from "react";
 import Link from "next/link";
 import UserAvatar from "./UserAvatar";
-import Badge from "./Badge";
+import Pill from "./Pill";
 import {
   MapPinIcon,
   EyeIcon,
@@ -38,7 +38,11 @@ export default function ApplicantCard({
         <div className="flex items-center gap-4">
           <div className="relative">
             <UserAvatar
-              src={applicant.photo ? `data:image/jpeg;base64,${applicant.photo}` : undefined}
+              src={
+                applicant.photo
+                  ? `data:image/jpeg;base64,${applicant.photo}`
+                  : undefined
+              }
               size={48}
               alt={`Foto de ${applicant.name}`}
               className="ring-2 ring-gray-100 group-hover:ring-blue-100 transition-all"
@@ -52,7 +56,7 @@ export default function ApplicantCard({
             </div>
             <div className="flex flex-wrap gap-2 mt-2">
               {applicant.skills.map((skill) => (
-                <Badge
+                <Pill
                   key={skill}
                   variant="custom"
                   fontSize="text-xs"
@@ -60,12 +64,11 @@ export default function ApplicantCard({
                   textColor="text-green-700"
                 >
                   {skill}
-                </Badge>
+                </Pill>
               ))}
             </div>
           </div>
         </div>
-
       </div>
 
       <div className="flex items-center gap-2 mt-2">

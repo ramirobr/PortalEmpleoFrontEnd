@@ -1,7 +1,7 @@
 import React from "react";
 import { X } from "lucide-react";
 
-interface BadgeProps {
+interface PillProps {
   children: React.ReactNode;
   variant?: "blue" | "green" | "yellow" | "red" | "gray" | "custom";
   bgColor?: string;
@@ -14,7 +14,7 @@ interface BadgeProps {
   noButton?: boolean;
 }
 
-const Badge: React.FC<BadgeProps> = ({
+const Pill: React.FC<PillProps> = ({
   children,
   variant = "blue",
   bgColor,
@@ -81,10 +81,10 @@ const Badge: React.FC<BadgeProps> = ({
       style={Object.keys(customStyles).length > 0 ? customStyles : undefined}
     >
       {noButton ? (
-        <span>{children}</span>
+        children
       ) : (
-        <button className="cursor-pointer" onClick={onEdit}>
-          <span>{children}</span>
+        <button className="cursor-pointer whitespace-nowrap" onClick={onEdit}>
+          {children}
         </button>
       )}
 
@@ -95,7 +95,7 @@ const Badge: React.FC<BadgeProps> = ({
             e.stopPropagation();
             onRemove();
           }}
-          className="ml-1 hover:opacity-70 transition-opacity focus:outline-none cursor-pointer"
+          className="flex items-center justify-center hover:bg-primary/30 rounded-full transition-colors text-current cursor-pointer p-0.5"
           aria-label="Remover"
         >
           <X size={16} className="text-current inline-block font-bold" />
@@ -105,4 +105,4 @@ const Badge: React.FC<BadgeProps> = ({
   );
 };
 
-export default Badge;
+export default Pill;

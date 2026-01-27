@@ -29,31 +29,23 @@ export default function Navbar({
   const pic = useAuthStore((s) => s.pic);
   const companyLogo = useAuthStore((s) => s.companyLogo);
   const hydrate = useAuthStore((s) => s.hydrate);
-
   const isCompanyAdmin = session?.user?.role === ROLES.AdministradorEmpresa;
 
   const handleUserSession = async () => {
     if (id || !session) return;
-    
-    let picture: string | undefined;
-    let logo: string | undefined;
-    let curriculumId = "";
-    
-    if (isCompanyAdmin && session.user.idEmpresa) {
-      // Para Administrador Empresa, obtener el logo de la empresa
-      logo = await getCompanyLogo(session.user.idEmpresa, session.user.accessToken) || undefined;
-    } else {
-      // Para Postulante, obtener la foto de perfil y curriculum
-      picture = await getUserPic(session.user);
-      const curriculum = await getCurriculumByUserId(session.user);
-      curriculumId = curriculum?.idCurriculum ?? "";
-    }
-    
+    const { user } = session;
+    const isAdmin = isCompanyAdmin && user.idEmpresa;
+    const [picture, logo, curriculum] = await Promise.all([
+      isAdmin ? undefined : getUserPic(user),
+      isAdmin ? getCompanyLogo(user.idEmpresa!, user.accessToken) : undefined,
+      isAdmin ? undefined : getCurriculumByUserId(user),
+    ]);
+
     hydrate({
-      ...session.user,
-      idCurriculum: curriculumId,
+      ...user,
+      idCurriculum: curriculum?.idCurriculum ?? "",
       pic: picture,
-      idEmpresa: session.user.idEmpresa,
+      idEmpresa: user.idEmpresa,
       companyLogo: logo,
     });
   };

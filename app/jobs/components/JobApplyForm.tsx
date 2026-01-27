@@ -73,7 +73,7 @@ export default function JobApplyForm({
   }
 
   return (
-    <Card className="px-6">
+    <Card className="px-6 py-5 gap-4">
       <h2 className="section-title mb-0">Formulario de aplicación</h2>
       <Form {...form}>
         <form
@@ -106,16 +106,18 @@ export default function JobApplyForm({
               </FormItem>
             )}
           />
-          <Button
-            type="submit"
-            className="btn btn-primary"
-            disabled={form.formState.isSubmitting}
-          >
-            {form.formState.isSubmitting && (
-              <span className="animate-spin h-4 w-4 border-2 border-t-transparent rounded-full" />
-            )}
-            {form.formState.isSubmitting ? "Enviando..." : "Enviar aplicación"}
-          </Button>
+          <div className="flex justify-end">
+            <Button
+              type="submit"
+              className="btn btn-primary w-auto px-6"
+              disabled={form.formState.isSubmitting}
+            >
+              {form.formState.isSubmitting && (
+                <span className="animate-spin h-4 w-4 border-2 border-t-transparent rounded-full" />
+              )}
+              {form.formState.isSubmitting ? "Enviando..." : "Enviar aplicación"}
+            </Button>
+          </div>
         </form>
       </Form>
     </Card>
