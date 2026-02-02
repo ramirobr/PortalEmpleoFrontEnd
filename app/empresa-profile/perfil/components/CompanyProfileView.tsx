@@ -1,6 +1,6 @@
 "use client";
-
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { formatDate } from "@/lib/utils";
 import {
   CompanyProfileData,
   CompanyProfileFiltersResponse,
@@ -79,15 +79,7 @@ export default function CompanyProfileView({
               <p className="text-muted-foreground">{companyData.razonSocial}</p>
               {companyData.fechaRegistro && (
                 <p className="text-xs text-gray-400 mt-1">
-                  Registrada el{" "}
-                  {new Date(companyData.fechaRegistro).toLocaleDateString(
-                    "es-ES",
-                    {
-                      year: "numeric",
-                      month: "short",
-                      day: "numeric",
-                    },
-                  )}
+                  Registrada el {formatDate(companyData.fechaRegistro)}
                 </p>
               )}
             </div>
@@ -253,14 +245,7 @@ export default function CompanyProfileView({
               {admin.fechaRegistro && (
                 <div className="flex items-center gap-2 mt-3 text-xs text-gray-400">
                   <Calendar className="w-3 h-3" />
-                  <span>
-                    Registrado el{" "}
-                    {new Date(admin.fechaRegistro).toLocaleDateString("es-ES", {
-                      year: "numeric",
-                      month: "short",
-                      day: "numeric",
-                    })}
-                  </span>
+                  <span>Registrado el {formatDate(admin.fechaRegistro)}</span>
                 </div>
               )}
             </CardContent>

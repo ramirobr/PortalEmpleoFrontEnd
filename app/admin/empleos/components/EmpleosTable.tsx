@@ -16,6 +16,7 @@ import {
   AdminTableEmpty,
   AdminTableLoading,
 } from "../../components/AdminTableStates";
+import { formatDate } from "@/lib/utils";
 
 interface EmpleosTableProps {
   empleos: AdminEmpleo[];
@@ -32,14 +33,6 @@ export default function EmpleosTable({
   onStatusChange,
   onDelete,
 }: EmpleosTableProps) {
-  const formatDate = (dateString: string) => {
-    const date = new Date(dateString);
-    return date.toLocaleDateString("es-ES", {
-      day: "2-digit",
-      month: "short",
-      year: "numeric",
-    });
-  };
 
   const getStatusClasses = (status: string) => {
     switch (status.toLowerCase()) {

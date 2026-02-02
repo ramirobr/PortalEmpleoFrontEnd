@@ -7,7 +7,7 @@ import { useSession, signOut } from "next-auth/react";
 import { fetchApi } from "@/lib/apiClient";
 import { Logout } from "@/types/user";
 
-import { LockKeyholeOpen, UserRoundPlus, Building2, UserCheck, UserX, Building } from "lucide-react";
+import { LockKeyholeOpen, UserRoundPlus, Building2, Building, KeyRound } from "lucide-react";
 
 export default function EmpresaProfileLayout({ children }: Children) {
   const { data: session } = useSession();
@@ -70,8 +70,8 @@ export default function EmpresaProfileLayout({ children }: Children) {
       ),
     },
     {
-      name: "Candidatos",
-      href: "/empresa-profile/candidatos",
+      name: "Postulaciones",
+      href: "/empresa-profile/postulaciones",
       icon: (
         <svg
           xmlns="http://www.w3.org/2000/svg"
@@ -83,14 +83,9 @@ export default function EmpresaProfileLayout({ children }: Children) {
       ),
     },
     {
-      name: "Aprobados",
-      href: "/empresa-profile/candidatos/aprobados",
-      icon: <UserCheck />,
-    },
-    {
-      name: "Rechazados",
-      href: "/empresa-profile/candidatos/rechazados",
-      icon: <UserX />,
+      name: "Cambiar contraseña",
+      href: "/empresa-profile/cambiar-contrasena",
+      icon: <KeyRound className="w-5 h-5" />,
     },
     {
       name: "Salir",

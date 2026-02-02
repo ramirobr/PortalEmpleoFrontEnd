@@ -21,6 +21,7 @@ import {
   Building2,
 } from "lucide-react";
 import { useSession } from "next-auth/react";
+import { ROLES } from "@/types/auth";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useRef, useState } from "react";
@@ -88,15 +89,33 @@ export default function LoginPage() {
   };
 
   async function onSubmit({ email, password }: LoginValues) {
-    const res = await SignIn(email, password);
-    if (res?.error) {
-      toast.error("Credenciales inválidas");
-      return;
-    }
+    try {
+      const res = await SignIn(email, password);
+      if (res?.error) {
+        toast.error("Credenciales inválidas");
+        return;
+      }
 
-    form.reset();
-    await update();
-    router.push(next ?? "/");
+      form.reset();
+      // Actualiza la sesión y redirige según el rol
+      const session = await update();
+      const userRole = session?.user?.role;
+      switch (userRole) {
+        case ROLES.AdministradorSistema:
+          router.push("/admin");
+          break;
+        case ROLES.AdministradorEmpresa:
+          router.push("/empresa-profile");
+          break;
+        case ROLES.Postulante:
+          router.push("/profile");
+          break;
+        default:
+          router.push(next ?? "/");
+      }
+    } catch (error) {
+      toast.error("Credenciales inválidas");
+    }
   }
 
   return (

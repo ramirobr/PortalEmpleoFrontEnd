@@ -1,6 +1,5 @@
 "use client";
 import Pill from "@/components/shared/components/Pill";
-import { Plus, Pencil, Trash2, Briefcase } from "lucide-react";
 import { Card } from "@/components/ui/card";
 import {
   Dialog,
@@ -14,8 +13,8 @@ import {
   DatosPersonalesFieldsResponse,
   ExperienciaLaboral,
   ExperienciaLaboralResponse,
-  PlainStringDataMessage,
 } from "@/types/user";
+import { Briefcase, Pencil, Plus, Trash2 } from "lucide-react";
 import { useSession } from "next-auth/react";
 import { useState } from "react";
 import { toast } from "sonner";
@@ -61,14 +60,11 @@ export default function EditarExperenciaLaboral({
       orden: 0,
     };
 
-    const res = await fetchApi<PlainStringDataMessage>(
-      "/ExperienciaLaboral/actualizar",
-      {
-        method: "PUT",
-        token: session?.user.accessToken,
-        body,
-      },
-    );
+    const res = await fetchApi("/ExperienciaLaboral/actualizar", {
+      method: "PUT",
+      token: session?.user.accessToken,
+      body,
+    });
 
     if (!res?.isSuccess) {
       toast.error("Error editando experiencia");
@@ -122,13 +118,10 @@ export default function EditarExperenciaLaboral({
 
   const handleDeleteConfirm = async () => {
     if (!deleteModal) return;
-    const res = await fetchApi<PlainStringDataMessage>(
-      "/ExperienciaLaboral/borrar/" + deleteModal,
-      {
-        method: "DELETE",
-        token: session?.user.accessToken,
-      },
-    );
+    const res = await fetchApi("/ExperienciaLaboral/borrar/" + deleteModal, {
+      method: "DELETE",
+      token: session?.user.accessToken,
+    });
     if (!res?.isSuccess) {
       toast.error("Error eliminando experiencia");
       return;
@@ -151,7 +144,7 @@ export default function EditarExperenciaLaboral({
   };
 
   return (
-    <Card className="px-6">
+    <Card className="p-6">
       <div className="flex justify-between items-center">
         <h2 className="text-2xl font-bold text-primary flex items-center gap-2">
           <Briefcase width={25} height={25} className="text-primary" />
@@ -159,7 +152,7 @@ export default function EditarExperenciaLaboral({
         </h2>
 
         <button
-          id="agregar"
+          id="agregar-experiencia"
           className="cursor-pointer flex items-center gap-2 text-primary font-bold align-center btn bg-primary/10"
           aria-label={`Agregar nuevo item experiencia laboral`}
           type="button"

@@ -11,15 +11,6 @@ interface CandidateHeaderProps {
   picture?: string;
 }
 
-function formatDate(dateString: string): string {
-  const date = new Date(dateString);
-  return date.toLocaleDateString("es-EC", {
-    day: "numeric",
-    month: "long",
-    year: "numeric",
-  });
-}
-
 function calculateAge(birthDate: string): number {
   const today = new Date();
   const birth = new Date(birthDate);
@@ -43,7 +34,7 @@ export default function CandidateHeader({
     <div className="bg-white rounded-lg shadow p-6">
       <div className="flex flex-col sm:flex-row gap-6">
         {/* Avatar */}
-        <div className="flex-shrink-0">
+        <div className="shrink-0">
           <UserAvatar
             src={picture}
             size={120}

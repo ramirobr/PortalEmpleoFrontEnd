@@ -33,7 +33,6 @@ interface TestimonioFormProps {
 export default function TestimonioForm({ onSuccess }: TestimonioFormProps) {
   const [isOpen, setIsOpen] = useState(false);
   const [hoveredStar, setHoveredStar] = useState(0);
-  const [isSubmitting, setIsSubmitting] = useState(false);
   const { data: session } = useSession();
   const userId = useAuthStore((s) => s.id);
 
@@ -55,7 +54,6 @@ export default function TestimonioForm({ onSuccess }: TestimonioFormProps) {
       return;
     }
 
-    setIsSubmitting(true);
     try {
       const response = await createTestimonial(
         {
@@ -81,8 +79,6 @@ export default function TestimonioForm({ onSuccess }: TestimonioFormProps) {
     } catch (error) {
       console.error("Error creating testimonial:", error);
       toast.error("Ocurrió un error al enviar el testimonio");
-    } finally {
-      setIsSubmitting(false);
     }
   };
 
@@ -99,14 +95,20 @@ export default function TestimonioForm({ onSuccess }: TestimonioFormProps) {
             <h3 className="text-lg font-semibold text-gray-800">
               ¿Quieres compartir tu experiencia?
             </h3>
-            <p className="text-sm text-muted-foreground">
+            <p className="text-slate-600">
               Tu testimonio ayuda a otros usuarios a conocer PortalEmpleo
             </p>
           </div>
-          <Button onClick={() => setIsOpen(true)} className="gap-2">
-            <Plus className="w-4 h-4" />
+          <button
+            id="agregar-testimonio"
+            className="cursor-pointer flex items-center gap-2 text-primary font-bold align-center btn bg-primary/10"
+            aria-label="Agregar nuevo testimonio"
+            type="button"
+            onClick={() => setIsOpen(true)}
+          >
+            <Plus className="w-5 h-5" />
             Agregar
-          </Button>
+          </button>
         </div>
       </Card>
     );
@@ -214,12 +216,12 @@ export default function TestimonioForm({ onSuccess }: TestimonioFormProps) {
               type="button"
               variant="outline"
               onClick={handleCancel}
-              disabled={isSubmitting}
+              disabled={form.formState.isSubmitting}
             >
               Cancelar
             </Button>
-            <Button type="submit" disabled={isSubmitting}>
-              {isSubmitting ? (
+            <Button type="submit" disabled={form.formState.isSubmitting}>
+              {form.formState.isSubmitting ? (
                 <>
                   <Loader2 className="w-4 h-4 mr-2 animate-spin" />
                   Enviando...

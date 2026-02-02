@@ -1,7 +1,6 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
-import { Pencil, Trash2, FileText } from "lucide-react";
 import { Card } from "@/components/ui/card";
 import {
   Form,
@@ -21,12 +20,9 @@ import {
 import { Textarea } from "@/components/ui/textarea";
 import { useAuthStore } from "@/context/authStore";
 import { fetchApi } from "@/lib/apiClient";
-import {
-  Curriculum,
-  DatosPersonalesFieldsResponse,
-  PlainStringDataMessage,
-} from "@/types/user";
+import { Curriculum, DatosPersonalesFieldsResponse } from "@/types/user";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { FileText, Pencil, Trash2 } from "lucide-react";
 import { useSession } from "next-auth/react";
 import React from "react";
 import { useForm } from "react-hook-form";
@@ -73,7 +69,7 @@ export default function EditarResumen({
       esPrincipal: true,
     };
 
-    const res = await fetchApi<PlainStringDataMessage>("/Curriculum/guardar", {
+    const res = await fetchApi("/Curriculum/guardar", {
       method: "POST",
       token: session?.user.accessToken,
       body,
@@ -87,7 +83,7 @@ export default function EditarResumen({
   };
 
   return (
-    <Card className="px-6">
+    <Card className="p-6">
       <div className="flex justify-between items-center mb-10">
         <h2 className="text-2xl font-bold text-primary flex items-center gap-2">
           <FileText width={25} height={25} className="text-primary" />
@@ -158,6 +154,7 @@ export default function EditarResumen({
                         form.setValue("idDisponibilidad", parseInt(v))
                       }
                       defaultValue={field.value?.toString()}
+                      disabled={!isEditing}
                     >
                       <SelectTrigger id="disponibilidad">
                         <SelectValue placeholder="Seleccione disponibilidad" />
@@ -180,7 +177,7 @@ export default function EditarResumen({
             />
           </div>
           <div className="col-span-2 mt-8 flex justify-end">
-            <button
+            <Button
               className="btn btn-primary"
               type="submit"
               aria-label="Guardar resumen profesional"
@@ -190,7 +187,7 @@ export default function EditarResumen({
                 <span className="animate-spin h-4 w-4 border-2 border-t-transparent rounded-full mr-2" />
               )}
               Guardar
-            </button>
+            </Button>
           </div>
         </form>
       </Form>

@@ -55,7 +55,7 @@ export default function RoleFormDialog({
   role,
   onSubmit,
 }: RoleFormDialogProps) {
-  const [permisos, setPermisos] = useState<RolePermiso[]>([]);
+  const [permisos, setPermisos] = useState<RolePermiso[]>(mockPermisos);
   const isEditing = !!role;
 
   const form = useForm<RoleFormValues>({
@@ -67,11 +67,11 @@ export default function RoleFormDialog({
     },
   });
 
-  // Load permissions
-  useEffect(() => {
-    // TODO: Fetch from API when available
-    setPermisos(mockPermisos);
-  }, []);
+  // Load permissions - using mock data for now
+  // useEffect(() => {
+  //   // TODO: Fetch from API when available
+  //   setPermisos(mockPermisos);
+  // }, []);
 
   // Reset form when dialog opens/closes or role changes
   useEffect(() => {

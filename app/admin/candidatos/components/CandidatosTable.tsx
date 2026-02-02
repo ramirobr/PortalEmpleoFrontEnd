@@ -8,6 +8,7 @@ import {
   AdminTableEmpty,
   AdminTableLoading,
 } from "../../components/AdminTableStates";
+import { formatDate, getInitials } from "@/lib/utils";
 
 interface CandidatosTableProps {
   candidatos: AdminCandidato[];
@@ -24,15 +25,6 @@ export default function CandidatosTable({
   onSuspend,
   onDelete,
 }: CandidatosTableProps) {
-  const formatDate = (dateString: string) => {
-    const date = new Date(dateString);
-    return date.toLocaleDateString("es-ES", {
-      day: "2-digit",
-      month: "short",
-      year: "numeric",
-    });
-  };
-
   const getStatusClasses = (status: string) => {
     switch (status.toLowerCase()) {
       case "activo":
@@ -44,15 +36,6 @@ export default function CandidatosTable({
       default:
         return "text-gray-600 bg-gray-50";
     }
-  };
-
-  const getInitials = (name: string) => {
-    return name
-      .split(" ")
-      .map((n) => n[0])
-      .slice(0, 2)
-      .join("")
-      .toUpperCase();
   };
 
   if (loading) {

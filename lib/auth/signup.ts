@@ -1,11 +1,11 @@
 import { CompanySignUpData } from "@/types/company";
-import { PlainStringDataMessage, SIGN_UP_FIELDS, SignupData, SignUpFieldsResponse } from "@/types/user";
+import { SIGN_UP_FIELDS, SignupData, SignUpFieldsResponse } from "@/types/user";
 import { fetchApi } from "../apiClient";
 import { fetchAllCatalogsByType } from "../catalog/fetch";
 import { mapCatalogsToResponse } from "../utils";
 
 export async function SignUp(body: SignupData) {
-  const postulant = await fetchApi<PlainStringDataMessage>("/Postulant/RegisterPostulant", {
+  const postulant = await fetchApi("/Postulant/RegisterPostulant", {
     method: "POST",
     body,
   });
@@ -13,7 +13,7 @@ export async function SignUp(body: SignupData) {
 }
 
 export async function CompanySignUp(body: CompanySignUpData) {
-  const company = await fetchApi<PlainStringDataMessage>("/Company/registerCompany", {
+  const company = await fetchApi("/Company/registerCompany", {
     method: "POST",
     body,
   });

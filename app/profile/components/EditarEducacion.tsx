@@ -1,6 +1,5 @@
 "use client";
 import Pill from "@/components/shared/components/Pill";
-import { Pencil, Trash2, Plus, GraduationCap } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import {
@@ -15,8 +14,8 @@ import {
   DatosPersonalesFieldsResponse,
   Educacion,
   EducacionResponse,
-  PlainStringDataMessage,
 } from "@/types/user";
+import { GraduationCap, Pencil, Plus, Trash2 } from "lucide-react";
 import { useSession } from "next-auth/react";
 import { useState } from "react";
 import { toast } from "sonner";
@@ -61,14 +60,11 @@ export default function EditarEducacion({
       orden: 0,
     };
 
-    const res = await fetchApi<PlainStringDataMessage>(
-      "/Educacion/actualizar",
-      {
-        method: "PUT",
-        token: session?.user.accessToken,
-        body,
-      },
-    );
+    await fetchApi("/Educacion/actualizar", {
+      method: "PUT",
+      token: session?.user.accessToken,
+      body,
+    });
     setEducacionItems((prev) =>
       prev.map((item) => (item.id === editForm.id ? values : item)),
     );
@@ -103,13 +99,10 @@ export default function EditarEducacion({
 
   const handleDeleteConfirm = async () => {
     if (!deleteModal) return;
-    const res = await fetchApi<PlainStringDataMessage>(
-      "/Educacion/eliminar/" + deleteModal,
-      {
-        method: "DELETE",
-        token: session?.user.accessToken,
-      },
-    );
+    const res = await fetchApi("/Educacion/eliminar/" + deleteModal, {
+      method: "DELETE",
+      token: session?.user.accessToken,
+    });
     if (!res?.isSuccess) {
       toast.error("Error eliminando item");
       return;
@@ -132,14 +125,14 @@ export default function EditarEducacion({
   };
 
   return (
-    <Card className="px-6">
+    <Card className="p-6">
       <div className="flex justify-between items-center">
         <h2 className="text-2xl font-bold text-primary flex items-center gap-2">
           <GraduationCap width={25} height={25} className="text-primary" />
           Educación
         </h2>
         <button
-          id="agregar"
+          id="agregar-educacion"
           className="cursor-pointer flex items-center gap-2 text-primary font-bold align-center btn bg-primary/10"
           aria-label={`Agregar nuevo item educación`}
           type="button"

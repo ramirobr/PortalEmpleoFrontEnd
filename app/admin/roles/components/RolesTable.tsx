@@ -13,6 +13,7 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
+import { formatDate } from "@/lib/utils";
 
 interface RolesTableProps {
   roles: AdminRole[];
@@ -29,15 +30,6 @@ export default function RolesTable({
   onToggleStatus,
   onDelete,
 }: RolesTableProps) {
-  const formatDate = (dateString: string) => {
-    const date = new Date(dateString);
-    return date.toLocaleDateString("es-ES", {
-      day: "2-digit",
-      month: "short",
-      year: "numeric",
-    });
-  };
-
   const getStatusClasses = (status: string) => {
     switch (status.toLowerCase()) {
       case "activo":
@@ -51,7 +43,11 @@ export default function RolesTable({
 
   // Check if role is a system role (cannot be deleted)
   const isSystemRole = (nombre: string) => {
-    const systemRoles = ["Administrador", "Administrador Empresa", "Postulante"];
+    const systemRoles = [
+      "Administrador",
+      "Administrador Empresa",
+      "Postulante",
+    ];
     return systemRoles.includes(nombre);
   };
 
@@ -120,10 +116,7 @@ export default function RolesTable({
         </thead>
         <tbody className="divide-y divide-gray-100">
           {roles.map((role) => (
-            <tr
-              key={role.idRol}
-              className="hover:bg-gray-50 transition-colors"
-            >
+            <tr key={role.idRol} className="hover:bg-gray-50 transition-colors">
               {/* Role Name */}
               <td className="py-4 px-4">
                 <div className="flex items-center gap-3">
@@ -133,7 +126,9 @@ export default function RolesTable({
                   <div>
                     <p className="font-semibold text-gray-900">{role.nombre}</p>
                     {isSystemRole(role.nombre) && (
-                      <span className="text-xs text-gray-500">Rol del sistema</span>
+                      <span className="text-xs text-gray-500">
+                        Rol del sistema
+                      </span>
                     )}
                   </div>
                 </div>

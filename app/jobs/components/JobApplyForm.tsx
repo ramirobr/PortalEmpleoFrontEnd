@@ -14,6 +14,7 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
+import TituloSubrayado from "@/components/shared/tituloSubrayado";
 
 interface JobApplyFormProps {
   idUsuario: string;
@@ -74,7 +75,7 @@ export default function JobApplyForm({
 
   return (
     <Card className="px-6 py-5 gap-4">
-      <h2 className="section-title mb-0">Formulario de aplicación</h2>
+      <TituloSubrayado className="text-black">Formulario</TituloSubrayado>
       <Form {...form}>
         <form
           className="flex flex-col gap-4"
@@ -115,7 +116,9 @@ export default function JobApplyForm({
               {form.formState.isSubmitting && (
                 <span className="animate-spin h-4 w-4 border-2 border-t-transparent rounded-full" />
               )}
-              {form.formState.isSubmitting ? "Enviando..." : "Enviar aplicación"}
+              {form.formState.isSubmitting
+                ? "Enviando..."
+                : "Enviar aplicación"}
             </Button>
           </div>
         </form>

@@ -1,18 +1,10 @@
 "use client";
 
+import { formatDate } from "@/lib/utils";
 import { type CandidateAplicacion as CandidateAplicacionType } from "@/types/candidate";
 
 interface CandidateAplicacionProps {
   aplicacion: CandidateAplicacionType;
-}
-
-function formatDate(dateString: string): string {
-  const date = new Date(dateString);
-  return date.toLocaleDateString("es-EC", {
-    day: "numeric",
-    month: "long",
-    year: "numeric",
-  });
 }
 
 function getStatusColor(estado: string): {

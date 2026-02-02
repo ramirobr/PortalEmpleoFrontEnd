@@ -1,6 +1,6 @@
-import { CurriculumResponse, DashboardInfoResponse, PlainStringDataMessage, UserInfoResponse } from "@/types/user";
-import { fetchApi } from "../apiClient";
+import { CurriculumResponse, DashboardInfoResponse, UserInfoResponse } from "@/types/user";
 import { User } from "next-auth";
+import { fetchApi } from "../apiClient";
 
 export const getUserInfoByUserId = async (user: User) => {
   const json = await fetchApi<UserInfoResponse>(`/User/user-info/${user.id}`, {
@@ -26,7 +26,7 @@ export const getCurriculumByUserId = async (user?: User) => {
 
 export const getUserPic = async (user?: User) => {
   if (!user) return
-  const json = await fetchApi<PlainStringDataMessage>(`/User/user-picture/${user.id}`, {
+  const json = await fetchApi(`/User/user-picture/${user.id}`, {
     token: user.accessToken
   });
   return json?.data;
@@ -40,7 +40,7 @@ export const getCandidateInfoById = async (candidateId: string, token: string) =
 }
 
 export const getCandidatePicById = async (candidateId: string, token: string) => {
-  const json = await fetchApi<PlainStringDataMessage>(`/User/user-picture/${candidateId}`, {
+  const json = await fetchApi(`/User/user-picture/${candidateId}`, {
     token
   });
   return json?.data;
@@ -48,7 +48,7 @@ export const getCandidatePicById = async (candidateId: string, token: string) =>
 
 export const addProfileVisit = async (userId: string, idEmpresa: string, token: string) => {
   try {
-    await fetchApi<PlainStringDataMessage>(`/User/add-profile-visit`, {
+    await fetchApi(`/User/add-profile-visit`, {
       method: 'POST',
       body: { userId, idEmpresa },
       token

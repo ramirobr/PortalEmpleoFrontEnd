@@ -2,7 +2,7 @@ import Image from "next/image";
 
 export default function Banner() {
   return (
-    <div className="relative w-full h-32 md:h-50 lg:h-65 flex items-center justify-center mb-6">
+    <div className="relative w-full h-32 md:h-50 lg:h-65 flex items-center justify-center">
       <Image
         src="/banner.png"
         alt="Banner background"

@@ -77,7 +77,7 @@ export default function FavoritosContent({
   }, [favoriteJobs, searchParams, filtersItems]);
 
   return (
-    <div className="flex flex-col md:flex-row gap-8 relative">
+    <div className="flex flex-col md:flex-row gap-8 relative mt-12">
       {/* Mobile Overlay */}
       <div
         className={`fixed inset-0 bg-black/50 z-40 md:hidden transition-opacity duration-300 ${

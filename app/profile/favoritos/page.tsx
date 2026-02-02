@@ -1,4 +1,5 @@
 import TituloSubrayado from "@/components/shared/tituloSubrayado";
+import { Heart } from "lucide-react";
 import { auth } from "@/auth";
 import { getVacantesFavoritasByUser } from "@/lib/jobs/favorites";
 import { fetchFilters } from "@/lib/search/getFilters";
@@ -16,7 +17,10 @@ export default async function FavoritosPage() {
 
   return (
     <section>
-      <TituloSubrayado>Empleos Favoritos</TituloSubrayado>
+      <TituloSubrayado>
+        <Heart className="w-8 h-8" />
+        Empleos Favoritos
+      </TituloSubrayado>
       <Suspense fallback={<div>Cargando...</div>}>
         <FavoritosContent
           favoriteJobs={favoriteJobs || []}

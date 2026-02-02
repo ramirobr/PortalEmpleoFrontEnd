@@ -54,8 +54,8 @@ export function useJobs(token?: string) {
           token,
         });
         data?.isSuccess && setJobsData(data.data);
-      } catch (e: any) {
-        if (e.name !== "AbortError") console.warn(e);
+      } catch (e: unknown) {
+        if (e instanceof Error && e.name !== "AbortError") console.warn(e);
       } finally {
         setLoading(false);
       }

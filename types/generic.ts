@@ -12,3 +12,7 @@ export type CatalogFieldsFromTypes<
 export type IdProp = {
   params: Promise<{ id: string }>;
 };
+
+export type SearchParams = {
+  searchParams: Promise<{ [key: string]: string | string[] | undefined }>
+};

@@ -1,18 +1,10 @@
 "use client";
 
+import { formatDate } from "@/lib/utils";
 import { Educacion } from "@/types/user";
 
 interface CandidateEducacionProps {
   educaciones: Educacion[];
-}
-
-function formatDate(dateString: string | null): string {
-  if (!dateString) return "Actualidad";
-  const date = new Date(dateString);
-  return date.toLocaleDateString("es-EC", {
-    month: "short",
-    year: "numeric",
-  });
 }
 
 export default function CandidateEducacion({

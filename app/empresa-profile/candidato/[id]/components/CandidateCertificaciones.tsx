@@ -1,20 +1,12 @@
 "use client";
 
+import { formatDate } from "@/lib/utils";
 import { CandidateCertificacion } from "@/types/candidate";
 
 interface CandidateCertificacionesProps {
   certificaciones: CandidateCertificacion[];
 }
 
-function formatDate(dateString: string | null): string {
-  if (!dateString) return "Sin vencimiento";
-  const date = new Date(dateString);
-  return date.toLocaleDateString("es-EC", {
-    day: "numeric",
-    month: "short",
-    year: "numeric",
-  });
-}
 
 function isExpired(dateString: string | null): boolean {
   if (!dateString) return false;

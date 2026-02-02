@@ -12,18 +12,16 @@ export default async function JobDetailsPage({ params }: IdProp) {
   return (
     <MainLayout>
       <Banner />
-      <div className="mx-auto py-12 px-4 flex flex-col gap-8">
-        <div className="container max-w-6xl">
-          {job ? (
-            <JobDetails {...job} />
-          ) : (
-            <div className="h-[50vh]">
-              <h1 className="text-2xl font-bold mb-4 text-red-600">
-                Trabajo no encontrado
-              </h1>
-            </div>
-          )}
-        </div>
+      <div className="py-24 bg-gray-50">
+        {job ? (
+          <JobDetails {...job} />
+        ) : (
+          <div className="h-[50vh]">
+            <h1 className="text-2xl font-bold mb-4 text-red-600">
+              Trabajo no encontrado
+            </h1>
+          </div>
+        )}
       </div>
       <Footer />
     </MainLayout>

@@ -1,29 +1,29 @@
 "use client";
-
-import { AdminTestimonio } from "@/types/admin";
+import Pill from "@/components/shared/components/Pill";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { formatDate, getInitials } from "@/lib/utils";
+import { EstadoNombre, ESTADOS, TestimonialData } from "@/types/testimonials";
 import {
-  Eye,
   CheckCircle,
-  XCircle,
-  Trash2,
+  Clock,
+  Eye,
   MessageSquare,
   Star,
-  Clock,
+  Trash2,
+  XCircle,
 } from "lucide-react";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import Pill from "@/components/shared/components/Pill";
 import {
   AdminTableEmpty,
   AdminTableLoading,
 } from "../../components/AdminTableStates";
 
 interface TestimoniosTableProps {
-  testimonios: AdminTestimonio[];
+  testimonios: TestimonialData[];
   loading: boolean;
-  onView: (idTestimonio: string) => void;
-  onApprove: (idTestimonio: string) => void;
-  onReject: (idTestimonio: string) => void;
-  onDelete: (idTestimonio: string) => void;
+  onView: (id: string) => void;
+  onApprove: (id: string) => void;
+  onReject: (id: string) => void;
+  onDelete: (id: string) => void;
 }
 
 export default function TestimoniosTable({
@@ -34,35 +34,17 @@ export default function TestimoniosTable({
   onReject,
   onDelete,
 }: TestimoniosTableProps) {
-  const formatDate = (dateString: string) => {
-    const date = new Date(dateString);
-    return date.toLocaleDateString("es-ES", {
-      day: "2-digit",
-      month: "short",
-      year: "numeric",
-    });
-  };
-
-  const getStatusClasses = (status: string) => {
-    switch (status.toLowerCase()) {
-      case "aprobado":
+  const getStatusClasses = (status: ESTADOS) => {
+    switch (status) {
+      case EstadoNombre.Publicado:
         return "text-green-600 bg-green-50";
-      case "pendiente":
+      case EstadoNombre.EnRevision:
         return "text-yellow-600 bg-amber-100";
-      case "rechazado":
+      case EstadoNombre.Rechazado:
         return "text-red-600 bg-red-50";
       default:
         return "text-gray-600 bg-gray-50";
     }
-  };
-
-  const getInitials = (name: string) => {
-    return name
-      .split(" ")
-      .map((n) => n[0])
-      .slice(0, 2)
-      .join("")
-      .toUpperCase();
   };
 
   const renderStars = (rating: number) => {
@@ -152,7 +134,6 @@ export default function TestimoniosTable({
                 index % 2 === 0 ? "bg-white" : "bg-gray-50/30"
               }`}
             >
-              {/* Candidato */}
               <td className="py-4 px-4">
                 <div className="flex items-center gap-3">
                   <Avatar className="w-10 h-10 border border-gray-200">
@@ -175,19 +156,16 @@ export default function TestimoniosTable({
                 </div>
               </td>
 
-              {/* Testimonio */}
               <td className="py-4 px-4 max-w-xs">
                 <p className="text-sm text-gray-700 line-clamp-2">
                   {truncateText(testimonio.testimonioDetalle)}
                 </p>
               </td>
 
-              {/* Calificación */}
               <td className="py-4 px-4 text-center">
                 {renderStars(testimonio.calificacion)}
               </td>
 
-              {/* Fecha */}
               <td className="py-4 px-4">
                 <div className="flex items-center gap-1 text-sm text-gray-600">
                   <Clock className="w-4 h-4" />
@@ -195,53 +173,51 @@ export default function TestimoniosTable({
                 </div>
               </td>
 
-              {/* Estado */}
               <td className="py-4 px-4 text-center">
                 <Pill
                   variant="custom"
-                  bgColor={getStatusClasses(testimonio.estado.nombre).split(" ")[1]}
-                  textColor={getStatusClasses(testimonio.estado.nombre).split(" ")[0]}
+                  bgColor={
+                    getStatusClasses(testimonio.estado.nombre).split(" ")[1]
+                  }
+                  textColor={
+                    getStatusClasses(testimonio.estado.nombre).split(" ")[0]
+                  }
                   className={`inline-flex ${getStatusClasses(testimonio.estado.nombre)}`}
                 >
                   {testimonio.estado.nombre}
                 </Pill>
               </td>
 
-              {/* Acciones */}
               <td className="py-4 px-4">
                 <div className="flex items-center justify-center gap-2">
-                  {/* Ver detalle */}
                   <button
                     onClick={() => onView(testimonio.idTestimonio)}
-                    className="p-2 rounded-lg text-gray-500 hover:text-primary hover:bg-primary/10 transition-colors"
+                    className="p-2 rounded-lg text-gray-500 hover:text-primary hover:bg-primary/10 transition-colors cursor-pointer"
                     title="Ver detalle"
                   >
                     <Eye className="w-4 h-4" />
                   </button>
 
-                  {/* Aprobar (solo si está pendiente) */}
-                  {testimonio.estado.nombre.toLowerCase() === "pendiente" && (
+                  {testimonio.estado.nombre === EstadoNombre.EnRevision && (
                     <button
                       onClick={() => onApprove(testimonio.idTestimonio)}
-                      className="p-2 rounded-lg text-gray-500 hover:text-green-600 hover:bg-green-50 transition-colors"
+                      className="p-2 rounded-lg text-gray-500 hover:text-green-600 hover:bg-green-50 transition-colors cursor-pointer"
                       title="Aprobar testimonio"
                     >
                       <CheckCircle className="w-4 h-4" />
                     </button>
                   )}
 
-                  {/* Rechazar (solo si está pendiente o aprobado) */}
-                  {testimonio.estado.nombre.toLowerCase() !== "rechazado" && (
+                  {testimonio.estado.nombre !== EstadoNombre.Rechazado && (
                     <button
                       onClick={() => onReject(testimonio.idTestimonio)}
-                      className="p-2 rounded-lg text-gray-500 hover:text-orange-600 hover:bg-orange-50 transition-colors"
+                      className="p-2 rounded-lg text-gray-500 hover:text-orange-600 hover:bg-orange-50 transition-colors cursor-pointer"
                       title="Rechazar testimonio"
                     >
                       <XCircle className="w-4 h-4" />
                     </button>
                   )}
 
-                  {/* Eliminar */}
                   <button
                     onClick={() => onDelete(testimonio.idTestimonio)}
                     className="p-2 rounded-lg text-gray-500 hover:text-red-600 hover:bg-red-50 transition-colors"

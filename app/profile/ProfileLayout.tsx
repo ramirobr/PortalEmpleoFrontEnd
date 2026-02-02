@@ -8,7 +8,7 @@ import { useSession, signOut } from "next-auth/react";
 import { fetchApi } from "@/lib/apiClient";
 import { Logout } from "@/types/user";
 
-import { LockKeyholeOpen, UserRoundPlus, Building2, MessageSquareQuote } from "lucide-react";
+import { LockKeyholeOpen, UserRoundPlus, Building2, MessageSquareQuote, KeyRound } from "lucide-react";
 
 export default function ProfileLayout({ children }: Children) {
   const { data: session } = useSession();
@@ -92,6 +92,11 @@ export default function ProfileLayout({ children }: Children) {
       name: "Mis Testimonios",
       href: "/profile/testimonios",
       icon: <MessageSquareQuote />,
+    },
+    {
+      name: "Cambiar contraseña",
+      href: "/profile/cambiar-contrasena",
+      icon: <KeyRound className="w-5 h-5" />,
     },
     {
       name: "Salir",

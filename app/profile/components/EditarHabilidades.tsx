@@ -1,6 +1,5 @@
 "use client";
 import Pill from "@/components/shared/components/Pill";
-import { Plus, Lightbulb } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import {
@@ -31,9 +30,9 @@ import {
   DatosPersonalesFieldsResponse,
   Habilidades,
   HabilidadesResponse,
-  PlainStringDataMessage,
 } from "@/types/user";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { Lightbulb, Plus } from "lucide-react";
 import { useSession } from "next-auth/react";
 import React, { useState } from "react";
 import { useForm } from "react-hook-form";
@@ -79,13 +78,10 @@ export default function EditarHabilidades({
 
   const confirmDelete = async () => {
     if (!pendingDeleteId) return;
-    const res = await fetchApi<PlainStringDataMessage>(
-      "/Habilidades/eliminar/" + pendingDeleteId,
-      {
-        method: "DELETE",
-        token: session?.user.accessToken,
-      },
-    );
+    const res = await fetchApi("/Habilidades/eliminar/" + pendingDeleteId, {
+      method: "DELETE",
+      token: session?.user.accessToken,
+    });
     if (!res?.isSuccess) {
       toast.error("Error eliminando habilidad");
       return;
@@ -156,14 +152,11 @@ export default function EditarHabilidades({
       orden: 0,
     };
 
-    const res = await fetchApi<PlainStringDataMessage>(
-      "/Habilidades/actualizar",
-      {
-        method: "PUT",
-        token: session?.user.accessToken,
-        body,
-      },
-    );
+    const res = await fetchApi("/Habilidades/actualizar", {
+      method: "PUT",
+      token: session?.user.accessToken,
+      body,
+    });
 
     if (!res?.isSuccess) {
       toast.error("Error agregando habilidad");
@@ -191,14 +184,14 @@ export default function EditarHabilidades({
   };
 
   return (
-    <Card className="px-6">
+    <Card className="p-6">
       <div className="flex justify-between items-center">
         <h2 className="text-2xl font-bold text-primary flex items-center gap-2">
           <Lightbulb width={25} height={25} className="text-primary" />
           Habilidades
         </h2>
         <button
-          id="agregar"
+          id="agregar-habilidad"
           className="cursor-pointer flex items-center gap-2 text-primary font-bold align-center btn bg-primary/10"
           aria-label="Agregar nueva habilidad"
           type="button"

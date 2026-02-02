@@ -143,7 +143,7 @@ function TestimonioCard({
               />
             ))}
           </div>
-          <span className="text-sm text-muted-foreground">
+          <span className="text-slate-600">
             {new Date(testimonio.fechaTestimonio).toLocaleDateString("es-ES", {
               year: "numeric",
               month: "long",
@@ -267,13 +267,13 @@ export default function TestimoniosList({
 
   return (
     <>
-      <div className="space-y-4">
+      <div className="space-y-6 mt-10">
         <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
           <h3 className="text-xl font-semibold text-gray-800">
-            Mis testimonios ({totalItems})
+            Items ({totalItems})
           </h3>
           <div className="flex items-center gap-2">
-            <span className="text-sm text-muted-foreground">Mostrar:</span>
+            <span className="text-slate-600">Mostrar:</span>
             <Select
               value={String(pageSize)}
               onValueChange={handlePageSizeChange}
@@ -287,11 +287,11 @@ export default function TestimoniosList({
                 <SelectItem value="50">50</SelectItem>
               </SelectContent>
             </Select>
-            <span className="text-sm text-muted-foreground">por página</span>
+            <span className="text-slate-600">por página</span>
           </div>
         </div>
 
-        <div className="grid gap-4">
+        <div className="grid grid-cols-[repeat(auto-fit,minmax(300px,1fr))] gap-6">
           {testimonios.map((testimonio) => (
             <TestimonioCard
               key={testimonio.idTestimonio}
@@ -305,7 +305,7 @@ export default function TestimoniosList({
         {/* Pagination Controls */}
         {totalPages > 1 && (
           <div className="flex flex-col sm:flex-row items-center justify-between gap-4 pt-4">
-            <span className="text-sm text-muted-foreground">
+            <span className="text-slate-600">
               Mostrando {(currentPage - 1) * pageSize + 1} -{" "}
               {Math.min(currentPage * pageSize, totalItems)} de {totalItems}{" "}
               testimonios
@@ -320,7 +320,7 @@ export default function TestimoniosList({
               </button>
 
               <div className="flex items-center gap-2">
-                <span className="text-sm text-muted-foreground">Página</span>
+                <span className="text-slate-600">Página</span>
                 <Select
                   value={String(currentPage)}
                   onValueChange={(value) => onPageChange(Number(value))}
@@ -339,9 +339,7 @@ export default function TestimoniosList({
                     )}
                   </SelectContent>
                 </Select>
-                <span className="text-sm text-muted-foreground">
-                  de {totalPages}
-                </span>
+                <span className="text-slate-600">de {totalPages}</span>
               </div>
 
               <button

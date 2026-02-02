@@ -2,18 +2,10 @@
 
 import { ExperienciaLaboral } from "@/types/user";
 import { BriefcaseIcon } from "@/components/shared/icons/Icons";
+import { formatDate } from "@/lib/utils";
 
 interface CandidateExperienciaProps {
   experiencias: ExperienciaLaboral[];
-}
-
-function formatDate(dateString: string | null): string {
-  if (!dateString) return "Actualidad";
-  const date = new Date(dateString);
-  return date.toLocaleDateString("es-EC", {
-    month: "short",
-    year: "numeric",
-  });
 }
 
 function calculateDuration(

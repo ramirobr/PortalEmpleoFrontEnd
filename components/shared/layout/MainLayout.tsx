@@ -134,7 +134,6 @@ export default function MainLayout({ children }: Children) {
 
   if (!session) {
     links = authLinks;
-    // @ts-ignore
   } else if (session.user.role === ROLES.AdministradorEmpresa) {
     links = empresaLinks;
   } else {

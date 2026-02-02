@@ -1,8 +1,6 @@
 "use client";
 
-import { Pencil, Trash2, Camera } from "lucide-react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import {
   Form,
@@ -15,8 +13,8 @@ import {
 import { useAuthStore } from "@/context/authStore";
 import { fetchApi } from "@/lib/apiClient";
 import { fileToBase64, getInitials } from "@/lib/utils";
-import { PlainStringDataMessage } from "@/types/user";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { Camera, Pencil, Trash2 } from "lucide-react";
 import { useSession } from "next-auth/react";
 import { useEffect, useRef } from "react";
 import { useForm } from "react-hook-form";
@@ -56,7 +54,7 @@ export default function EditarFoto() {
         : undefined;
 
   async function deteleImage() {
-    const res = await fetchApi<PlainStringDataMessage>(
+    const res = await fetchApi(
       "/User/delete-user-picture/" + session?.user.id,
       {
         method: "DELETE",
@@ -81,14 +79,11 @@ export default function EditarFoto() {
       userId: session?.user.id,
       base64Image,
     };
-    const res = await fetchApi<PlainStringDataMessage>(
-      "/User/update-user-picture",
-      {
-        method: "PUT",
-        token: session?.user.accessToken,
-        body,
-      },
-    );
+    const res = await fetchApi("/User/update-user-picture", {
+      method: "PUT",
+      token: session?.user.accessToken,
+      body,
+    });
     if (!res?.isSuccess) {
       toast.error("Error actualizando imagen");
       return;
@@ -98,7 +93,7 @@ export default function EditarFoto() {
   }
 
   return (
-    <Card className="px-6">
+    <Card className="">
       <h2 className="text-2xl font-bold text-primary flex items-center gap-2 mb-6">
         <Camera width={25} height={25} className="text-primary" />
         Editar foto de perfil

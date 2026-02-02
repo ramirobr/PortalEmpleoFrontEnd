@@ -1,5 +1,6 @@
 import { fetchApi } from "@/lib/apiClient";
 import { GenericResponse } from "@/types/user";
+import { AplicanteReal, GetAplicantesResponse } from "@/types/company";
 
 export type Candidate = {
   idUsuario: string;
@@ -42,6 +43,20 @@ export async function fetchCandidatesList(
         idCiudad: params.idCiudad ? Number(params.idCiudad) : 0,
         searchTermn: params.searchTermn,
       },
+      token,
+    }
+  );
+  return response?.data || null;
+}
+
+export async function fetchAplicantesByVacante(
+  idVacante: string,
+  token?: string
+): Promise<AplicanteReal[] | null> {
+  const response = await fetchApi<GetAplicantesResponse>(
+    `/Jobs/getUsuariosPostuladosByVacanteId/${idVacante}`,
+    {
+      method: "GET",
       token,
     }
   );

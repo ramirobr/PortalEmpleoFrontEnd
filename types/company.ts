@@ -196,3 +196,43 @@ export interface CompanyProfileData {
 }
 
 export type CompanyProfileResponse = GenericResponse<CompanyProfileData>
+
+// Postulación: candidato + vacante + estado (para lista de candidatos de empresa)
+export type EstadoPostulacion = "Pendiente" | "Aprobada" | "Rechazada";
+
+export interface PostulacionItem {
+  idAplicacion: string;
+  idUsuario: string;
+  nombreCompleto: string;
+  fotografia: string;
+  correoElectronico: string;
+  ciudadUsuario: string;
+  tituloVacante: string;
+  ciudadVacante: string;
+  fechaPostulacion: string;
+  estadoAplicacion: string;
+  idEstadoAplicacion?: number;
+  mensajeCandidato: string;
+  archivoCV: string;
+  habilidades: string[];
+}
+
+export interface GetAplicacionesByEmpresaResponse {
+  totalItems: number;
+  pageIndex: number;
+  pageSize: number;
+  data: PostulacionItem[];
+}
+
+// Real API response for applicants
+export interface AplicanteReal {
+  idAplicacion: string;
+  idUsuario: string;
+  nombreCompleto: string;
+  correoElectronico: string;
+  fechaPostulacion: string;
+  estadoAplicacion: string;
+  mensajeCandidato: string;
+}
+
+export type GetAplicantesResponse = GenericResponse<AplicanteReal[]>;

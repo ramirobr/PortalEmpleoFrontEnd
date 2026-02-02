@@ -1,6 +1,5 @@
 "use client";
 
-import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Checkbox } from "@/components/ui/checkbox";
 import { DatePicker } from "@/components/ui/date-picker";
@@ -23,13 +22,9 @@ import {
 } from "@/components/ui/select";
 import { fetchApi } from "@/lib/apiClient";
 import { validarCedulaEcuatoriana } from "@/lib/utils";
-import {
-  DatosPersonalesFieldsResponse,
-  PlainStringDataMessage,
-  UserInfoData,
-} from "@/types/user";
+import { DatosPersonalesFieldsResponse, UserInfoData } from "@/types/user";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { UserRound, Pencil, Trash2 } from "lucide-react";
+import { Pencil, Trash2, UserRound } from "lucide-react";
 import { useSession } from "next-auth/react";
 import React from "react";
 import { useForm } from "react-hook-form";
@@ -126,7 +121,7 @@ export default function EditarDatosPersonales({
       tipoLicencia: data.tipoLicencia,
     };
 
-    const res = await fetchApi<PlainStringDataMessage>("/User/update-user", {
+    const res = await fetchApi("/User/update-user", {
       method: "PUT",
       token: session?.user.accessToken,
       body,
@@ -145,7 +140,7 @@ export default function EditarDatosPersonales({
   };
 
   return (
-    <Card className="px-6">
+    <Card className="p-6">
       <div className="flex justify-between items-center mb-10">
         <h2 className="text-2xl font-bold text-primary flex items-center gap-2">
           <UserRound width={25} height={25} className="text-primary" />

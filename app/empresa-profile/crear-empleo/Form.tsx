@@ -12,16 +12,15 @@ import {
 import { Slider } from "@/components/ui/slider";
 import { Textarea } from "@/components/ui/textarea";
 import { fetchApi } from "@/lib/apiClient";
-import { PlainStringDataMessage } from "@/types/user";
-import { useSession } from "next-auth/react";
-import { toast } from "sonner";
-import { CrearEmpleoFiltersResponse } from "@/types/company";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { Controller, useForm } from "react-hook-form";
-import { z } from "zod";
-import { useRouter } from "next/navigation";
-import { Job } from "@/types/jobs";
 import { parseWeirdDate } from "@/lib/utils";
+import { CrearEmpleoFiltersResponse } from "@/types/company";
+import { Job } from "@/types/jobs";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useSession } from "next-auth/react";
+import { useRouter } from "next/navigation";
+import { Controller, useForm } from "react-hook-form";
+import { toast } from "sonner";
+import { z } from "zod";
 
 const crearEmpleoSchema = z
   .object({
@@ -120,7 +119,7 @@ export default function CrearEmpleoForm({ fields, initialValues }: FormProps) {
       idExperiencia: Number(values.idExperiencia),
     };
 
-    const response = await fetchApi<PlainStringDataMessage>(
+    const response = await fetchApi(
       isEditMode
         ? "/Jobs/updateJob/" + initialValues.idVacante
         : "/Jobs/addVacante",

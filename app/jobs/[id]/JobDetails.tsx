@@ -8,6 +8,20 @@ import { useAuthStore } from "@/context/authStore";
 import { addVisitaVacante } from "@/lib/jobs/job";
 import { useSession } from "next-auth/react";
 import { ROLES } from "@/types/auth";
+import { Card } from "@/components/ui/card";
+import {
+  Banknote,
+  Briefcase,
+  Building,
+  Building2,
+  Calendar,
+  GraduationCap,
+  Mail,
+  MapPin,
+} from "lucide-react";
+import { timeAgo } from "@/lib/utils";
+import TituloSubrayado from "@/components/shared/tituloSubrayado";
+import IconBadge from "@/components/shared/components/IconBadge";
 
 function isValidEmail(email: string) {
   return /^\S+@\S+\.\S+$/.test(email);
@@ -40,124 +54,142 @@ export default function JobDetails(job: Job) {
 
   return (
     <>
-      <section className="w-full max-w-7xl mx-auto mb-8">
-        {/* Header con título y empresa - ancho completo */}
-        <div className="bg-gradient-to-r from-primary to-primary/80 rounded-t-xl p-6 text-white">
-          <h1 className="text-2xl md:text-3xl font-bold mb-2">{job.titulo}</h1>
-          <p className="text-white/90 text-lg">{job.nombreEmpresa}</p>
-        </div>
-
-        {/* Card de información de la empresa - ancho completo */}
-        <section className="border border-gray-light border-t-0 rounded-b-xl shadow-md bg-white mb-6">
-          <div className="p-6 flex flex-col lg:flex-row gap-6">
-            {/* Logo de la empresa */}
-            <div className="flex-shrink-0 flex justify-center lg:justify-start">
-              <div className="w-24 h-24 md:w-28 md:h-28 rounded-xl border-2 border-gray-100 shadow-sm overflow-hidden bg-gray-50 flex items-center justify-center">
-                <Image
-                  src={logoSrc}
-                  alt={`Logo de ${job.nombreEmpresa}`}
-                  width={100}
-                  height={100}
-                  className="object-contain w-full h-full p-2"
-                  unoptimized
-                />
-              </div>
-            </div>
-
-            {/* Información del puesto - grid más amplio */}
-            <div className="flex-1 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-x-8 gap-y-4">
-              <div className="flex items-center gap-3">
-                <span className="text-primary text-lg">📍</span>
-                <div>
-                  <p className="text-xs text-gray-500 uppercase tracking-wide">Ciudad</p>
-                  <p className="font-medium text-gray-800">{job.ciudad}</p>
-                </div>
-              </div>
-
-              <div className="flex items-center gap-3">
-                <span className="text-primary text-lg">🏢</span>
-                <div>
-                  <p className="text-xs text-gray-500 uppercase tracking-wide">Modalidad</p>
-                  <p className="font-medium text-gray-800">{job.modalidad}</p>
-                </div>
-              </div>
-
-              <div className="flex items-center gap-3">
-                <span className="text-primary text-lg">🎓</span>
-                <div>
-                  <p className="text-xs text-gray-500 uppercase tracking-wide">Nivel de estudios</p>
-                  <p className="font-medium text-gray-800">{job.nivelEstudios}</p>
-                </div>
-              </div>
-
-              <div className="flex items-center gap-3">
-                <span className="text-primary text-lg">⏱️</span>
-                <div>
-                  <p className="text-xs text-gray-500 uppercase tracking-wide">Experiencia</p>
-                  <p className="font-medium text-gray-800">{job.experiencia}</p>
-                </div>
-              </div>
-
-              <div className="flex items-center gap-3">
-                <span className="text-primary text-lg">💰</span>
-                <div>
-                  <p className="text-xs text-gray-500 uppercase tracking-wide">Salario</p>
-                  <p className="font-medium text-gray-800">
-                    ${job.salarioBase.toLocaleString()} - ${job.salarioMaximo.toLocaleString()}
-                  </p>
-                </div>
-              </div>
-
-              {job.correoContacto && (
-                <div className="flex items-center gap-3">
-                  <span className="text-primary text-lg">✉️</span>
-                  <div>
-                    <p className="text-xs text-gray-500 uppercase tracking-wide">Contacto</p>
-                    {isValidEmail(job.correoContacto) ? (
-                      <a
-                        href={`mailto:${job.correoContacto}`}
-                        className="font-medium text-blue-600 hover:text-blue-800 hover:underline transition-colors break-all"
-                        aria-label={`Enviar correo a ${job.correoContacto}`}
-                      >
-                        {job.correoContacto}
-                      </a>
-                    ) : (
-                      <p className="font-medium text-gray-800">{job.correoContacto}</p>
-                    )}
+      <section>
+        <div className="container">
+          <div className="grid grid-cols-1 md:grid-cols-[2fr_1fr] gap-6">
+            <div className="space-y-8">
+              <Card>
+                <div className="flex md:flex-row flex-col items-center gap-6">
+                  <div className="w-[100px] h-[100px] rounded-xl">
+                    <Image
+                      src={logoSrc}
+                      alt={`Logo de ${job.nombreEmpresa}`}
+                      width={100}
+                      height={100}
+                      className="object-cover w-full h-full rounded-xl object-center"
+                      unoptimized
+                    />
+                  </div>
+                  <div className="flex flex-col gap-3">
+                    <h2 className="text-3xl font-bold text-center md:text-left ">
+                      {job.titulo}
+                    </h2>
+                    <div className="flex md:flex-row flex-col items-center md:gap-6 gap-3">
+                      <p className="text-primary font-medium flex items-center gap-2">
+                        <Building2 />
+                        {job.nombreEmpresa}
+                      </p>
+                      <p className="text-primary font-medium flex items-center gap-2">
+                        <MapPin />
+                        {job.nombreEmpresa}
+                      </p>
+                    </div>
+                    <p className="text-primary font-medium flex items-center gap-2">
+                      <Calendar />
+                      {timeAgo(job.fechaPublicacion)}
+                    </p>
                   </div>
                 </div>
-              )}
+              </Card>
+              <Card>
+                <TituloSubrayado className="text-black">
+                  Descripción del puesto
+                </TituloSubrayado>
+                <div>{job.descripcion}</div>
+              </Card>
+              <Card>
+                <TituloSubrayado className="text-black">
+                  Requisitos
+                </TituloSubrayado>
+                <div>{job.requisitos}</div>
+              </Card>
             </div>
-          </div>
-        </section>
+            <div>
+              <Card>
+                <TituloSubrayado className="text-black">
+                  Resumen de la oferta
+                </TituloSubrayado>
+                <div className="font-bold flex items-center gap-4">
+                  <IconBadge size={32} icon={Banknote} />
+                  <div>
+                    <p className="text-primary uppercase tracking-wide">
+                      Salario
+                    </p>
+                    <p className="font-medium text-gray-800">
+                      ${job.salarioBase.toLocaleString()} - $
+                      {job.salarioMaximo.toLocaleString()}
+                    </p>
+                  </div>
+                </div>
+                <div className="font-bold flex items-center gap-4">
+                  <IconBadge size={32} icon={MapPin} />
+                  <div>
+                    <p className="text-primary uppercase tracking-wide">
+                      Ciudad
+                    </p>
+                    <p className="font-medium text-gray-800">{job.ciudad}</p>
+                  </div>
+                </div>
+                <div className="font-bold flex items-center gap-4">
+                  <IconBadge size={32} icon={Briefcase} />
+                  <div>
+                    <p className="text-primary uppercase tracking-wide">
+                      Experiencia
+                    </p>
+                    <p className="font-medium text-gray-800">
+                      {job.experiencia}
+                    </p>
+                  </div>
+                </div>
+                <div className="font-bold flex items-center gap-4">
+                  <IconBadge size={32} icon={Building} />
+                  <div>
+                    <p className="text-primary uppercase tracking-wide">
+                      Modalidad
+                    </p>
+                    <p className="font-medium text-gray-800">{job.modalidad}</p>
+                  </div>
+                </div>
+                <div className="font-bold flex items-center gap-4">
+                  <IconBadge size={32} icon={GraduationCap} />
+                  <div>
+                    <p className="text-primary uppercase tracking-wide">
+                      Nivel de estudios
+                    </p>
+                    <p className="font-medium text-gray-800">
+                      {job.nivelEstudios}
+                    </p>
+                  </div>
+                </div>
+                <div className="font-bold flex items-center gap-4">
+                  <IconBadge size={32} icon={Mail} />
+                  <div>
+                    <p className="text-primary uppercase tracking-wide">
+                      Correo de contacto
+                    </p>
+                    <a
+                      href={`mailto:${job.correoContacto}`}
+                      className="font-medium text-gray-800 break-all"
+                    >
+                      {job.correoContacto}
+                    </a>
+                  </div>
+                </div>
+              </Card>
+            </div>
 
-        {/* Contenido principal y formulario */}
-        <div className={`grid grid-cols-1 gap-6 ${
-          session?.user.role === ROLES.Postulante 
-            ? "lg:grid-cols-[1fr_380px]" 
-            : ""
-        }`}>
-          {/* Descripción y requisitos */}
-          <div className="space-y-6">
-            <JobSection title="Descripción">
-              <p className="whitespace-pre-wrap text-base leading-relaxed">
-                {job.descripcion}
-              </p>
-            </JobSection>
-            <JobSection title="Requisitos">{job.requisitos}</JobSection>
-          </div>
-
-          {/* Formulario de aplicación */}
-          {session?.user.role === ROLES.Postulante && (
-            <div className="lg:sticky lg:top-4 self-start">
+            {/* Formulario de aplicación */}
+            {session?.user.role === ROLES.Postulante && (
               <JobApplyForm
                 idUsuario={String(session?.user?.id || 0)}
                 idVacante={job.idVacante}
                 token={session?.user?.accessToken}
               />
-            </div>
-          )}
+            )}
+          </div>
+          {/*FIN COLS*/}
         </div>
+        {/*FIN CONTAINER*/}
       </section>
     </>
   );

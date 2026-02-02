@@ -244,3 +244,49 @@ export type DeleteRoleResponse = GenericResponse<string>;
 
 // Get all permissions response
 export type GetPermisosResponse = GenericResponse<RolePermiso[]>;
+
+// ===== ADMIN USUARIOS =====
+
+// Admin Usuario interface for the users management table
+export interface AdminUsuario {
+  idUsuario: string;
+  nombreCompleto: string;
+  email: string;
+  rol: {
+    idRol: string;
+    nombre: string;
+  };
+  fechaRegistro: string;
+  ultimoAcceso?: string;
+  estado: {
+    id: number;
+    nombre: string; // "Activo" | "Inactivo" | "Suspendido" | "Pendiente"
+  };
+  tipoUsuario: "candidato" | "empresa" | "admin"; // para filtrar por tipo
+}
+
+// Paginated response for admin usuarios list
+export interface AdminUsuariosPaginado {
+  totalItems: number;
+  pageIndex: number;
+  pageSize: number;
+  data: AdminUsuario[];
+}
+
+export type GetAdminUsuariosResponse =
+  GenericResponse<AdminUsuariosPaginado>;
+
+// Parameters for fetching usuarios with pagination and filters
+export interface AdminUsuariosParams {
+  pageSize: number;
+  currentPage: number;
+  sortBy?: string;
+  sortDirection?: "asc" | "desc";
+  search?: string;
+  estado?: string;
+  rol?: string;
+  tipoUsuario?: string;
+}
+
+export type UpdateUsuarioStatusResponse = GenericResponse<string>;
+export type DeleteUsuarioResponse = GenericResponse<string>;

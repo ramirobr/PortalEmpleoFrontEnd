@@ -1,5 +1,6 @@
 "use client";
 
+import TablePagination from "@/components/shared/components/TablePagination";
 import {
   BriefcaseIcon,
   EditIcon,
@@ -14,15 +15,22 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
 import { fetchApi } from "@/lib/apiClient";
 import { fetchMisOfertasEmpleo } from "@/lib/company/misOfertas";
-import { OfertaEmpleo } from "@/types/company";
-import { PlainStringDataMessage } from "@/types/user";
+import { fetchAplicantesByVacante } from "@/lib/company/candidates";
+import { formatDate } from "@/lib/utils";
+import { OfertaEmpleo, AplicanteReal } from "@/types/company";
 import { useSession } from "next-auth/react";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
-import TablePagination from "@/components/shared/components/TablePagination";
 
 export default function OfertasPage() {
   const { data: session } = useSession();
@@ -32,6 +40,10 @@ export default function OfertasPage() {
   const [loading, setLoading] = useState(true);
   const [periodoBusqueda, setPeriodoBusqueda] = useState("6months");
   const [deletingId, setDeletingId] = useState<string | null>(null);
+  const [selectedJob, setSelectedJob] = useState<OfertaEmpleo | null>(null);
+  const [isDialogOpen, setIsDialogOpen] = useState(false);
+  const [aplicantes, setAplicantes] = useState<AplicanteReal[]>([]);
+  const [loadingAplicantes, setLoadingAplicantes] = useState(false);
 
   const pageSize = 10;
 
@@ -75,26 +87,14 @@ export default function OfertasPage() {
     setCurrentPage(1); // Resetear a la primera página al cambiar el período
   };
 
-  const formatDate = (dateString: string) => {
-    const date = new Date(dateString);
-    return date.toLocaleDateString("es-ES", {
-      day: "numeric",
-      month: "long",
-      year: "numeric",
-    });
-  };
-
   const handleDelete = async (idVacante: string) => {
     if (!session) return;
 
     setDeletingId(idVacante);
-    const res = await fetchApi<PlainStringDataMessage>(
-      "/Jobs/deleteJob/" + idVacante,
-      {
-        method: "DELETE",
-        token: session?.user.accessToken,
-      },
-    );
+    const res = await fetchApi("/Jobs/deleteJob/" + idVacante, {
+      method: "DELETE",
+      token: session?.user.accessToken,
+    });
     if (!res?.isSuccess) {
       toast.error("Error eliminando oferta");
       return;
@@ -103,6 +103,19 @@ export default function OfertasPage() {
     setOfertas(ofertas.filter((oferta) => oferta.idVacante !== idVacante));
     setTotalItems(totalItems - 1);
     setDeletingId(null);
+  };
+
+  const handleViewCandidates = async (oferta: OfertaEmpleo) => {
+    setSelectedJob(oferta);
+    setIsDialogOpen(true);
+    setLoadingAplicantes(true);
+    const data = await fetchAplicantesByVacante(oferta.idVacante, session?.user.accessToken);
+    if (data) {
+      setAplicantes(data);
+    } else {
+      setAplicantes([]);
+    }
+    setLoadingAplicantes(false);
   };
 
   const startIndex = (currentPage - 1) * pageSize;
@@ -212,14 +225,14 @@ export default function OfertasPage() {
                       </div>
                     </td>
                     <td className="py-2 px-4 text-sm">
-                      <Link
-                        href="#"
+                      <button
+                        onClick={() => handleViewCandidates(oferta)}
                         className="text-primary hover:text-green-600 hover:underline font-medium transition-colors"
                       >
                         {oferta.totalAplicaciones}
                         {oferta.totalAplicaciones > 9 && "+"} Postulado
                         {oferta.totalAplicaciones !== 1 && "s"}
-                      </Link>
+                      </button>
                     </td>
                     <td className="py-2 px-4 text-sm text-gray-500">
                       <div className="flex flex-col gap-1">
@@ -285,6 +298,69 @@ export default function OfertasPage() {
           />
         )}
       </div>
+
+      {/* Dialog for viewing candidates */}
+      <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
+        <DialogContent className="max-w-4xl">
+          <DialogHeader>
+            <DialogTitle>
+              Candidatos para: {selectedJob?.tituloPuesto}
+            </DialogTitle>
+          </DialogHeader>
+          <div className="mt-4">
+            {loadingAplicantes ? (
+              <p className="text-center text-gray-500">Cargando candidatos...</p>
+            ) : (
+              <div className="space-y-4">
+                {aplicantes.map((aplicante) => (
+                  <div
+                    key={aplicante.idAplicacion}
+                    className="border rounded-lg p-4 bg-gray-50"
+                  >
+                    <div className="flex justify-between items-start">
+                      <div>
+                        <h3 className="font-semibold text-lg">
+                          {aplicante.nombreCompleto}
+                        </h3>
+                        <p className="text-sm text-gray-600">
+                          {aplicante.correoElectronico}
+                        </p>
+                        <p className="text-sm text-gray-500">
+                          Postulado el: {formatDate(aplicante.fechaPostulacion)}
+                        </p>
+                      </div>
+                      <span
+                        className={`px-2 py-1 text-xs font-medium rounded ${
+                          aplicante.estadoAplicacion === "Postulada"
+                            ? "bg-blue-100 text-blue-800"
+                            : aplicante.estadoAplicacion === "Aprobada"
+                            ? "bg-green-100 text-green-800"
+                            : aplicante.estadoAplicacion === "Rechazada"
+                            ? "bg-red-100 text-red-800"
+                            : "bg-yellow-100 text-yellow-800"
+                        }`}
+                      >
+                        {aplicante.estadoAplicacion}
+                      </span>
+                    </div>
+                    {aplicante.mensajeCandidato && (
+                      <div className="mt-2">
+                        <p className="text-sm font-medium">Mensaje del candidato:</p>
+                        <p className="text-sm text-gray-700 mt-1">
+                          {aplicante.mensajeCandidato}
+                        </p>
+                      </div>
+                    )}
+                  </div>
+                ))}
+                {aplicantes.length === 0 && (
+                  <p className="text-center text-gray-500">No hay candidatos para esta oferta.</p>
+                )}
+              </div>
+            )}
+          </div>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }

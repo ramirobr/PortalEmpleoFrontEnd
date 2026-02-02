@@ -1,14 +1,13 @@
-import { PlainStringDataMessage } from "@/types/user";
-import { fetchApi } from "../apiClient";
-import { User } from "next-auth";
 import { GetLastEightJobsResponse } from "@/types/jobs";
+import { User } from "next-auth";
+import { fetchApi } from "../apiClient";
 
 export async function addVacanteFavorita(
   idVacante: string,
   userId: string,
   token: string,
 ) {
-  const json = await fetchApi<PlainStringDataMessage>(
+  const json = await fetchApi(
     "/Jobs/addVacanteFavorita",
     {
       method: "POST",
@@ -29,7 +28,7 @@ export async function removeVacanteFavorita(
   userId: string,
   token: string,
 ) {
-  const json = await fetchApi<PlainStringDataMessage>(
+  const json = await fetchApi(
     `/Jobs/removeVacanteFavorita/${idVacante}/${userId}`,
     {
       method: "DELETE",

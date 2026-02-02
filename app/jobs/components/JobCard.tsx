@@ -65,7 +65,7 @@ export default function JobCard({ job, isFavorite = false }: JobCardProps) {
             />
           )}
           <div className="text-center">
-            <h2 className="text-xs font-bold text-slate-400 uppercase tracking-widest mb-1 leading-tight text-center">
+            <h2 className="text-xs font-bold text-slate-600 uppercase tracking-widest mb-1 leading-tight text-center">
               {companyName}
             </h2>
             <p className="text-lg font-bold text-black mb-4 leading-snug text-center">
@@ -86,14 +86,14 @@ export default function JobCard({ job, isFavorite = false }: JobCardProps) {
 
         <div className="mt-8 space-x-5">
           <p className="mb-1">
-            <span className="text-sm uppercase font-bold text-slate-400">
+            <span className="text-sm uppercase font-bold text-slate-600">
               Experiencia:
             </span>
             <br />
             <span className="text-md">{experience}</span>
           </p>
           <p className="mb-1">
-            <span className="text-sm uppercase font-bold text-slate-400">
+            <span className="text-sm uppercase font-bold text-slate-600">
               Ubicación:
             </span>{" "}
             <br />

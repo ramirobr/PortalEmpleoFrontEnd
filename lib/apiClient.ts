@@ -1,10 +1,12 @@
+import { PlainStringDataMessage } from "@/types/user";
+
 type Options = Omit<RequestInit, "body"> & {
-  body?: Record<string, any>;
+  body?: unknown;
   internal?: boolean;
   token?: string;
 };
 
-export async function fetchApi<T = Response>(
+export async function fetchApi<T = PlainStringDataMessage>(
   url: string,
   options: Options = {},
 ): Promise<T | null> {

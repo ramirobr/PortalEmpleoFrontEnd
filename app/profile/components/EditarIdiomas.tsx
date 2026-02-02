@@ -1,5 +1,4 @@
 "use client";
-import { Pencil, Trash2, Plus, Languages } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import {
@@ -31,9 +30,9 @@ import {
   DatosPersonalesFieldsResponse,
   Idioma,
   IdiomaResponse,
-  PlainStringDataMessage,
 } from "@/types/user";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { Languages, Plus } from "lucide-react";
 import { useSession } from "next-auth/react";
 import React, { useState } from "react";
 import { useForm } from "react-hook-form";
@@ -75,13 +74,10 @@ export default function EditarIdiomas({
 
   const confirmDelete = async () => {
     if (!pendingDeleteId) return;
-    const res = await fetchApi<PlainStringDataMessage>(
-      "/Idiomas/eliminar/" + pendingDeleteId,
-      {
-        method: "DELETE",
-        token: session?.user.accessToken,
-      },
-    );
+    const res = await fetchApi("/Idiomas/eliminar/" + pendingDeleteId, {
+      method: "DELETE",
+      token: session?.user.accessToken,
+    });
     if (!res?.isSuccess) {
       toast.error("Error eliminando idioma");
       return;
@@ -153,7 +149,7 @@ export default function EditarIdiomas({
       certificacion: values.certificacion || "",
     };
 
-    const res = await fetchApi<PlainStringDataMessage>("/Idiomas/actualizar", {
+    const res = await fetchApi("/Idiomas/actualizar", {
       method: "PUT",
       token: session?.user.accessToken,
       body,
@@ -188,7 +184,7 @@ export default function EditarIdiomas({
   };
 
   return (
-    <Card className="px-6">
+    <Card className="p-6">
       <div className="flex justify-between items-center">
         <h2 className="text-2xl font-bold text-primary flex items-center gap-2">
           <Languages width={25} height={25} className="text-primary" />
@@ -219,9 +215,7 @@ export default function EditarIdiomas({
                 aria-label={`Editar idioma: ${item.nombre}`}
                 onClick={() => handleEditClick(item.id)}
               >
-                <p className="font-semibold text-black font-bold text-lg">
-                  {item.nombre}
-                </p>
+                <p className="text-black font-bold text-lg">{item.nombre}</p>
                 <div className="flex items-center gap-2 text-primary uppercase font-medium">
                   <p>{item.nivel || "Sin nivel"}</p>
 

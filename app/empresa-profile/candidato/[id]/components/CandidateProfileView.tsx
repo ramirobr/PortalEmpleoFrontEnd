@@ -7,7 +7,6 @@ import CandidateEducacion from "./CandidateEducacion";
 import CandidateExperiencia from "./CandidateExperiencia";
 import CandidateHabilidades from "./CandidateHabilidades";
 import CandidateIdiomas from "./CandidateIdiomas";
-import CandidateActions from "./CandidateActions";
 
 interface CandidateProfileViewProps {
   candidate: UserInfoData;
@@ -23,7 +22,7 @@ export default function CandidateProfileView({
       {/* Header with back button */}
       <div className="mb-6">
         <a
-          href="/empresa-profile/candidatos"
+          href="/empresa-profile/postulaciones"
           className="inline-flex items-center text-sm text-primary hover:text-primary/80 transition-colors mb-4"
         >
           <svg
@@ -39,7 +38,7 @@ export default function CandidateProfileView({
               d="M15 19l-7-7 7-7"
             />
           </svg>
-          Volver a Candidatos
+          Volver a Postulaciones
         </a>
         <h1 className="text-3xl font-bold text-gray-900">Perfil del Candidato</h1>
         <p className="text-gray-500 mt-1">
@@ -63,8 +62,6 @@ export default function CandidateProfileView({
 
         {/* Right Column - Secondary Info */}
         <div className="space-y-6">
-          <CandidateActions candidateId={candidate.userId} />
-
           <CandidateContactInfo datosContacto={candidate.datosContacto} />
 
           <CandidateHabilidades habilidades={candidate.habiliades} />
