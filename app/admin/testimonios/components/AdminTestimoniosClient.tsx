@@ -49,7 +49,7 @@ export default function AdminTestimoniosClient({
   counters: initialCounters,
 }: AdminTestimoniosClientProps) {
   const { data: session } = useSession();
-  const [_, startTransition] = useTransition();
+  const [, startTransition] = useTransition();
   const router = useRouter();
   const params = useSearchParams();
 

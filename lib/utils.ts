@@ -70,6 +70,17 @@ export const formatDate = (dateString: string) => {
   });
 };
 
+export const formatLongDate = (iso: string) => {
+  const d = new Date(iso);
+  return d.toLocaleDateString("es-ES", {
+    day: "2-digit",
+    month: "short",
+    year: "numeric",
+    hour: "2-digit",
+    minute: "2-digit",
+  });
+};
+
 export const timeAgo = (dateString: string) => {
   if (!dateString) return "";
 

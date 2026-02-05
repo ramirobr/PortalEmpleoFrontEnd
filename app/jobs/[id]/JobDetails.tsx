@@ -1,14 +1,12 @@
 "use client";
-import { Job } from "@/types/jobs";
-import JobApplyForm from "../components/JobApplyForm";
-import JobSection from "../components/JobSection";
-import Image from "next/image";
-import { useEffect, useRef } from "react";
+import IconBadge from "@/components/shared/components/IconBadge";
+import TituloSubrayado from "@/components/shared/tituloSubrayado";
+import { Card } from "@/components/ui/card";
 import { useAuthStore } from "@/context/authStore";
 import { addVisitaVacante } from "@/lib/jobs/job";
-import { useSession } from "next-auth/react";
+import { timeAgo } from "@/lib/utils";
 import { ROLES } from "@/types/auth";
-import { Card } from "@/components/ui/card";
+import { Job } from "@/types/jobs";
 import {
   Banknote,
   Briefcase,
@@ -19,19 +17,10 @@ import {
   Mail,
   MapPin,
 } from "lucide-react";
-import { timeAgo } from "@/lib/utils";
-import TituloSubrayado from "@/components/shared/tituloSubrayado";
-import IconBadge from "@/components/shared/components/IconBadge";
-
-function isValidEmail(email: string) {
-  return /^\S+@\S+\.\S+$/.test(email);
-}
-function isValidPhone(phone: string) {
-  return /^\+?[0-9\s-]+$/.test(phone);
-}
-function isValidMap(url: string) {
-  return /^https?:\/\/.+/.test(url);
-}
+import { useSession } from "next-auth/react";
+import Image from "next/image";
+import { useEffect, useRef } from "react";
+import JobApplyForm from "../components/JobApplyForm";
 
 export default function JobDetails(job: Job) {
   const id = useAuthStore((s) => s.id);
@@ -39,11 +28,16 @@ export default function JobDetails(job: Job) {
   const viewedRef = useRef(false);
 
   useEffect(() => {
-    if (!id || !session || viewedRef.current) return;
+    if (
+      !id ||
+      !session ||
+      session.user.role !== ROLES.Postulante ||
+      viewedRef.current
+    )
+      return;
     viewedRef.current = true;
     addVisitaVacante(job.idVacante, id, session.user.accessToken);
   }, [id, job.idVacante, session]);
-  console.log(job);
 
   // Construir la URL del logo desde base64
   const logoSrc = job.logoEmpresa

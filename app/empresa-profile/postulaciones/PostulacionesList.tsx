@@ -1,29 +1,10 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
-import Link from "next/link";
-import { useSession } from "next-auth/react";
-import type { PostulacionItem } from "@/types/company";
+import Pill from "@/components/shared/components/Pill";
 import TablePagination from "@/components/shared/components/TablePagination";
 import UserAvatar from "@/components/shared/components/UserAvatar";
-import Pill from "@/components/shared/components/Pill";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
 import { EyeIcon, MapPinIcon } from "@/components/shared/icons/Icons";
-import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { fetchApi } from "@/lib/apiClient";
-import type { CatalogsByType } from "@/types/search";
-import {
-  fetchAplicacionesByEmpresa,
-  updateAplicacionEstado,
-} from "@/lib/company/applications";
-import { fetchMisOfertasEmpleo } from "@/lib/company/misOfertas";
 import {
   Dialog,
   DialogContent,
@@ -32,63 +13,82 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
+import { Input } from "@/components/ui/input";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import {
+  fetchAplicacionesByEmpresa,
+  updateAplicacionEstado,
+} from "@/lib/company/applications";
+import { fetchMisOfertasEmpleo } from "@/lib/company/misOfertas";
+import { formatLongDate } from "@/lib/utils";
+import type { PostulacionItem } from "@/types/company";
+import type { CatalogsByType } from "@/types/search";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useSession } from "next-auth/react";
+import Link from "next/link";
+import { useRouter, useSearchParams } from "next/navigation";
+import { useEffect, useState, useTransition } from "react";
+import { useForm } from "react-hook-form";
+import { toast } from "sonner";
+import { z } from "zod";
 
 const PAGE_SIZE = 10;
 
-function formatFecha(iso: string) {
-  const d = new Date(iso);
-  return d.toLocaleDateString("es-ES", {
-    day: "2-digit",
-    month: "short",
-    year: "numeric",
-    hour: "2-digit",
-    minute: "2-digit",
-  });
+const statusUpdateSchema = z.object({
+  estado: z.string().min(1, "Selecciona un estado"),
+});
+
+interface PostulacionesListProps {
+  estados?: CatalogsByType[];
 }
 
-export default function PostulacionesList() {
+export default function PostulacionesList({
+  estados = [],
+}: PostulacionesListProps) {
   const { data: session } = useSession();
+  const router = useRouter();
+  const params = useSearchParams();
+  const [, startTransition] = useTransition();
+
+  const currentPage = parseInt(params.get("page") || "1");
+  const searchQuery = params.get("search") || "";
+  const estadoFilter = params.get("estado") || "all";
+  const vacanteFilter = params.get("vacante") || "all";
+
   const [postulaciones, setPostulaciones] = useState<PostulacionItem[]>([]);
   const [totalItems, setTotalItems] = useState(0);
   const [loading, setLoading] = useState(false);
-  const [currentPage, setCurrentPage] = useState(1);
-  const [searchQuery, setSearchQuery] = useState("");
-  const [estadoFilter, setEstadoFilter] = useState("all");
-  const [vacanteFilter, setVacanteFilter] = useState("all");
-  const [estadosOptions, setEstadosOptions] = useState<
-    { value: string; label: string }[]
-  >([{ value: "all", label: "Todos los estados" }]);
   const [vacantes, setVacantes] = useState<{ id: string; titulo: string }[]>(
     [],
   );
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [selectedApplication, setSelectedApplication] =
     useState<PostulacionItem | null>(null);
-  const [newStatus, setNewStatus] = useState("");
-  const [updating, setUpdating] = useState(false);
 
-  useEffect(() => {
-    const fetchEstados = async () => {
-      try {
-        const response = await fetchApi<{ data: CatalogsByType[] }>(
-          `/Catalog/getAllCatalogsByType/ESTADO_APLICACION`,
-        );
-        if (response?.data) {
-          const options = response.data.map((c) => ({
-            value: c.idCatalogo.toString(),
-            label: c.nombre,
-          }));
-          setEstadosOptions([
-            { value: "all", label: "Todos los estados" },
-            ...options,
-          ]);
+  const statusForm = useForm<z.infer<typeof statusUpdateSchema>>({
+    resolver: zodResolver(statusUpdateSchema),
+    defaultValues: { estado: "" },
+  });
+
+  const updateParams = (updates: Record<string, string>) => {
+    startTransition(() => {
+      const newParams = new URLSearchParams(params);
+      Object.entries(updates).forEach(([key, value]) => {
+        if (value) {
+          newParams.set(key, value);
+        } else {
+          newParams.delete(key);
         }
-      } catch (error) {
-        console.error("Error fetching estados:", error);
-      }
-    };
-    fetchEstados();
-  }, []);
+      });
+      router.push(`?${newParams.toString()}`, { scroll: false });
+    });
+  };
 
   useEffect(() => {
     const fetchVacantes = async () => {
@@ -119,17 +119,20 @@ export default function PostulacionesList() {
 
   const handleOpenStatusDialog = (application: PostulacionItem) => {
     setSelectedApplication(application);
-    setNewStatus(application.idEstadoAplicacion?.toString() || "");
+    statusForm.reset({
+      estado: application.idEstadoAplicacion?.toString() || "",
+    });
     setIsDialogOpen(true);
   };
 
-  const handleUpdateStatus = async () => {
+  const handleUpdateStatus = async (
+    data: z.infer<typeof statusUpdateSchema>,
+  ) => {
     if (!selectedApplication || !session?.user?.accessToken) return;
-    setUpdating(true);
     try {
       const success = await updateAplicacionEstado(
         selectedApplication.idAplicacion,
-        parseInt(newStatus),
+        parseInt(data.estado),
         session.user.accessToken,
       );
       if (success) {
@@ -139,20 +142,19 @@ export default function PostulacionesList() {
             p.idAplicacion === selectedApplication.idAplicacion
               ? {
                   ...p,
-                  idEstadoAplicacion: parseInt(newStatus),
+                  idEstadoAplicacion: parseInt(data.estado),
                   estadoAplicacion:
-                    estadosOptions.find((e) => e.value === newStatus)?.label ||
-                    p.estadoAplicacion,
+                    estados.find((e) => e.idCatalogo.toString() === data.estado)
+                      ?.nombre || p.estadoAplicacion,
                 }
               : p,
           ),
         );
         setIsDialogOpen(false);
+        toast.success("Estado actualizado correctamente");
       }
     } catch (error) {
       console.error("Error updating status:", error);
-    } finally {
-      setUpdating(false);
     }
   };
 
@@ -219,26 +221,48 @@ export default function PostulacionesList() {
                   />
                 </svg>
               </span>
-              <Input
-                placeholder="Nombre, vacante, ubicación o habilidades..."
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                className="pl-10 h-10"
-              />
+              <form
+                className="flex"
+                onSubmit={(e) => {
+                  e.preventDefault();
+                  const formData = new FormData(e.currentTarget);
+                  const search = formData.get("search") as string;
+                  updateParams({ search, page: "1" });
+                }}
+              >
+                <Input
+                  name="search"
+                  placeholder="Nombre, vacante, ubicación o habilidades..."
+                  defaultValue={searchQuery}
+                  className="pl-10 h-10 flex-1"
+                />
+                <Button type="submit" className="ml-2 h-10 px-4">
+                  Buscar
+                </Button>
+              </form>
             </div>
           </div>
           <div className="w-full lg:w-44 shrink-0">
             <label className="block text-sm font-medium text-gray-700 mb-1.5">
               Estado
             </label>
-            <Select value={estadoFilter} onValueChange={setEstadoFilter}>
+            <Select
+              value={estadoFilter}
+              onValueChange={(value) =>
+                updateParams({ estado: value, page: "1" })
+              }
+            >
               <SelectTrigger className="h-10">
                 <SelectValue placeholder="Todos" />
               </SelectTrigger>
               <SelectContent>
-                {estadosOptions.map((e) => (
-                  <SelectItem key={e.value} value={e.value}>
-                    {e.label}
+                <SelectItem value="all">Todos los estados</SelectItem>
+                {estados.map((e) => (
+                  <SelectItem
+                    key={e.idCatalogo}
+                    value={e.idCatalogo.toString()}
+                  >
+                    {e.nombre}
                   </SelectItem>
                 ))}
               </SelectContent>
@@ -248,7 +272,12 @@ export default function PostulacionesList() {
             <label className="block text-sm font-medium text-gray-700 mb-1.5">
               Vacante
             </label>
-            <Select value={vacanteFilter} onValueChange={setVacanteFilter}>
+            <Select
+              value={vacanteFilter}
+              onValueChange={(value) =>
+                updateParams({ vacante: value, page: "1" })
+              }
+            >
               <SelectTrigger className="h-10">
                 <SelectValue placeholder="Todas" />
               </SelectTrigger>
@@ -262,12 +291,6 @@ export default function PostulacionesList() {
               </SelectContent>
             </Select>
           </div>
-          <Button
-            onClick={() => setCurrentPage(1)}
-            className="w-full lg:w-auto shrink-0 h-10 px-6"
-          >
-            Filtrar
-          </Button>
         </div>
       </div>
 
@@ -363,7 +386,7 @@ export default function PostulacionesList() {
                 </div>
                 <div className="flex items-center gap-3 shrink-0 text-sm text-gray-500">
                   <span title={p.fechaPostulacion}>
-                    {formatFecha(p.fechaPostulacion)}
+                    {formatLongDate(p.fechaPostulacion)}
                   </span>
                 </div>
                 <div className="flex items-center gap-2 shrink-0">
@@ -394,7 +417,7 @@ export default function PostulacionesList() {
             pageSize={PAGE_SIZE}
             totalItems={totalItems}
             itemLabel="postulaciones"
-            onPageChange={setCurrentPage}
+            onPageChange={(page) => updateParams({ page: page.toString() })}
             className="rounded-none"
           />
         )}
@@ -409,33 +432,49 @@ export default function PostulacionesList() {
               {selectedApplication?.nombreCompleto}.
             </DialogDescription>
           </DialogHeader>
-          <div className="py-4">
-            <label className="block text-sm font-medium text-gray-700 mb-2">
-              Estado
-            </label>
-            <Select value={newStatus} onValueChange={setNewStatus}>
-              <SelectTrigger>
-                <SelectValue placeholder="Selecciona un estado" />
-              </SelectTrigger>
-              <SelectContent>
-                {estadosOptions
-                  .filter((e) => e.value !== "all")
-                  .map((e) => (
-                    <SelectItem key={e.value} value={e.value}>
-                      {e.label}
+          <form onSubmit={statusForm.handleSubmit(handleUpdateStatus)}>
+            <div className="py-4">
+              <label className="block text-sm font-medium text-gray-700 mb-2">
+                Estado
+              </label>
+              <Select
+                value={statusForm.watch("estado")}
+                onValueChange={(value) => statusForm.setValue("estado", value)}
+              >
+                <SelectTrigger>
+                  <SelectValue placeholder="Selecciona un estado" />
+                </SelectTrigger>
+                <SelectContent>
+                  {estados.map((e) => (
+                    <SelectItem
+                      key={e.idCatalogo}
+                      value={e.idCatalogo.toString()}
+                    >
+                      {e.nombre}
                     </SelectItem>
                   ))}
-              </SelectContent>
-            </Select>
-          </div>
-          <DialogFooter>
-            <Button variant="outline" onClick={() => setIsDialogOpen(false)}>
-              Cancelar
-            </Button>
-            <Button onClick={handleUpdateStatus} disabled={updating}>
-              {updating ? "Actualizando..." : "Guardar"}
-            </Button>
-          </DialogFooter>
+                </SelectContent>
+              </Select>
+              {statusForm.formState.errors.estado && (
+                <p className="text-sm text-red-600 mt-1">
+                  {statusForm.formState.errors.estado.message}
+                </p>
+              )}
+            </div>
+            <DialogFooter>
+              <Button variant="outline" onClick={() => setIsDialogOpen(false)}>
+                Cancelar
+              </Button>
+              <Button
+                type="submit"
+                disabled={statusForm.formState.isSubmitting}
+              >
+                {statusForm.formState.isSubmitting
+                  ? "Actualizando..."
+                  : "Guardar"}
+              </Button>
+            </DialogFooter>
+          </form>
         </DialogContent>
       </Dialog>
     </div>

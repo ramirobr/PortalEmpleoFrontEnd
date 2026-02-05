@@ -1,3 +1,4 @@
+import { fetchAllCatalogsByType } from "@/lib/catalog/fetch";
 import PostulacionesList from "./PostulacionesList";
 
 export const metadata = {
@@ -5,16 +6,19 @@ export const metadata = {
   description: "Lista de postulaciones con aprobar o rechazar por candidato",
 };
 
-export default function PostulacionesPage() {
+export default async function PostulacionesPage() {
+  const estados = await fetchAllCatalogsByType("ESTADO_APLICACION");
+
   return (
     <>
       <section className="mb-6 px-6 pt-6">
         <h1 className="text-3xl font-bold text-gray-900">Postulaciones</h1>
         <p className="text-gray-500 mt-1">
-          Revisa las postulaciones por candidato, aprueba o rechaza según corresponda.
+          Revisa las postulaciones por candidato, aprueba o rechaza según
+          corresponda.
         </p>
       </section>
-      <PostulacionesList />
+      <PostulacionesList estados={estados} />
     </>
   );
 }
