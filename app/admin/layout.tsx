@@ -124,10 +124,10 @@ export default function AdminLayout({ children }: Children) {
           isOpen={isAsideOpen}
           onClose={closeAside}
           side="left"
-          className="absolute top-0 left-0 h-full w-64 transform-none bg-white shadow-none md:shadow"
+          className="absolute top-0 left-0 h-full w-80 transform-none bg-white shadow-none md:shadow"
           links={adminLinks}
         />
-        <main className="w-full flex-1 py-10">
+        <main className="w-full w-full  py-10 bg-gray-50 md:py-20">
           <div className="container">{children}</div>
         </main>
       </div>

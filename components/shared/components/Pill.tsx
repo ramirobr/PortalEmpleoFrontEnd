@@ -3,7 +3,7 @@ import { X } from "lucide-react";
 
 interface PillProps {
   children: React.ReactNode;
-  variant?: "blue" | "green" | "yellow" | "red" | "gray" | "custom";
+  variant?: "blue" | "green" | "yellow" | "orange" | "red" | "gray" | "custom";
   bgColor?: string;
   textColor?: string;
   fontSize?: string;
@@ -40,6 +40,8 @@ const Pill: React.FC<PillProps> = ({
         return "bg-green-100 text-green-700";
       case "yellow":
         return "bg-yellow-100 text-yellow-700";
+      case "orange":
+        return "bg-orange-100 text-orange-700";
       case "red":
         return "bg-red-100 text-red-700";
       case "gray":

@@ -9,10 +9,10 @@ export type RecentJobsProps = {
 
 const RecentJobs = ({ jobs, favJobsByUser }: RecentJobsProps) => {
   return (
-    <section className="py-20 bg-gray-50">
+    <section className="w-full  py-10 bg-gray-50 md:py-20">
       <div className="container">
         <h2 className="section-title">Trabajos Recientes</h2>
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3  gap-6">
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4  gap-6">
           {jobs?.map((job) => (
             <JobCard
               key={job.id}

@@ -168,7 +168,7 @@ export default function TestimonioForm({ onSuccess }: TestimonioFormProps) {
                 </FormControl>
                 <div className="flex justify-between">
                   <FormMessage />
-                  <span className="text-xs text-muted-foreground">
+                  <span className="text-xs text-gray-500">
                     {field.value?.length || 0}/500 caracteres
                   </span>
                 </div>

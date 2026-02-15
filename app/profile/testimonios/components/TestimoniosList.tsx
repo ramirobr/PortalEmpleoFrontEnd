@@ -240,7 +240,7 @@ export default function TestimoniosList({
   if (loading) {
     return (
       <Card className="p-8">
-        <div className="flex flex-col items-center gap-3 text-muted-foreground">
+        <div className="flex flex-col items-center gap-3 text-gray-500">
           <Loader2 className="w-8 h-8 animate-spin text-primary" />
           <p className="text-sm">Cargando testimonios...</p>
         </div>
@@ -251,7 +251,7 @@ export default function TestimoniosList({
   if (testimonios.length === 0) {
     return (
       <Card className="p-8 text-center">
-        <div className="flex flex-col items-center gap-3 text-muted-foreground">
+        <div className="flex flex-col items-center gap-3 text-gray-500">
           <Star className="w-12 h-12 text-gray-300" />
           <h3 className="text-lg font-medium text-gray-600">
             Aún no tienes testimonios

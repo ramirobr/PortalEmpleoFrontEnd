@@ -76,7 +76,7 @@ export default function CompanyProfileView({
                   </span>
                 )}
               </div>
-              <p className="text-muted-foreground">{companyData.razonSocial}</p>
+              <p className="text-gray-500">{companyData.razonSocial}</p>
               {companyData.fechaRegistro && (
                 <p className="text-xs text-gray-400 mt-1">
                   Registrada el {formatDate(companyData.fechaRegistro)}

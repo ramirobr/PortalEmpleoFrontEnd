@@ -8,7 +8,13 @@ import { useSession, signOut } from "next-auth/react";
 import { fetchApi } from "@/lib/apiClient";
 import { Logout } from "@/types/user";
 
-import { LockKeyholeOpen, UserRoundPlus, Building2, MessageSquareQuote, KeyRound } from "lucide-react";
+import {
+  LockKeyholeOpen,
+  UserRoundPlus,
+  Building2,
+  MessageSquareQuote,
+  KeyRound,
+} from "lucide-react";
 
 export default function ProfileLayout({ children }: Children) {
   const { data: session } = useSession();
@@ -68,8 +74,12 @@ export default function ProfileLayout({ children }: Children) {
       name: "Buscar Empleos",
       href: "/empleos-busqueda",
       icon: (
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
-          <path d="M15.5 14h-.79l-.28-.27A6.471 6.471 0 0 0 16 9.5 6.5 6.5 0 1 0 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/>
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          viewBox="0 0 24 24"
+          fill="currentColor"
+        >
+          <path d="M15.5 14h-.79l-.28-.27A6.471 6.471 0 0 0 16 9.5 6.5 6.5 0 1 0 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z" />
         </svg>
       ),
     },
@@ -134,7 +144,7 @@ export default function ProfileLayout({ children }: Children) {
           isOpen={isAsideOpen}
           onClose={closeAside}
           side="left"
-          className="absolute top-0 left-0 h-full w-64 transform-none bg-white shadow-none md:shadow"
+          className="absolute top-0 left-0 h-full w-80 transform-none bg-white shadow-none md:shadow"
           links={session ? profileLinks : authLinks}
         />
         <main className="w-full flex-1 py-10 flex flex-col justify-between">

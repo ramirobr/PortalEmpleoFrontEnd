@@ -33,7 +33,7 @@ export default async function JobsPage({ searchParams }: Props) {
       <MainLayout>
         <div className="mx-auto">
           <Banner />
-          <section className="container py-12 flex flex-col md:flex-row gap-8">
+          <section className="container py-20">
             <Suspense>
               <JobsContent
                 initialFilters={filters as Record<string, string>}

@@ -91,7 +91,7 @@ export default function EditTestimonioDialog({
           testimonioDetalle: data.testimonioDetalle,
           calificacion: data.calificacion,
         },
-        session.user.accessToken
+        session.user.accessToken,
       );
 
       if (response?.isSuccess) {
@@ -99,7 +99,9 @@ export default function EditTestimonioDialog({
         onOpenChange(false);
         onSuccess();
       } else {
-        toast.error(response?.messages?.[0] || "Error al actualizar el testimonio");
+        toast.error(
+          response?.messages?.[0] || "Error al actualizar el testimonio",
+        );
       }
     } catch (error) {
       console.error("Error updating testimonial:", error);
@@ -125,7 +127,10 @@ export default function EditTestimonioDialog({
         </DialogHeader>
 
         <Form {...form}>
-          <form onSubmit={form.handleSubmit(handleSubmit)} className="space-y-6">
+          <form
+            onSubmit={form.handleSubmit(handleSubmit)}
+            className="space-y-6"
+          >
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <FormField
                 control={form.control}
@@ -134,10 +139,7 @@ export default function EditTestimonioDialog({
                   <FormItem>
                     <FormLabel>Cargo actual *</FormLabel>
                     <FormControl>
-                      <Input
-                        placeholder="Ej: Frontend Developer"
-                        {...field}
-                      />
+                      <Input placeholder="Ej: Frontend Developer" {...field} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -151,10 +153,7 @@ export default function EditTestimonioDialog({
                   <FormItem>
                     <FormLabel>Empresa *</FormLabel>
                     <FormControl>
-                      <Input
-                        placeholder="Ej: Tech Solutions S.A."
-                        {...field}
-                      />
+                      <Input placeholder="Ej: Tech Solutions S.A." {...field} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -178,7 +177,7 @@ export default function EditTestimonioDialog({
                   </FormControl>
                   <div className="flex justify-between">
                     <FormMessage />
-                    <span className="text-xs text-muted-foreground">
+                    <span className="text-xs text-gray-500">
                       {field.value?.length || 0}/500 caracteres
                     </span>
                   </div>
@@ -209,7 +208,7 @@ export default function EditTestimonioDialog({
                               "w-8 h-8 transition-colors",
                               (hoveredStar || watchCalificacion) >= star
                                 ? "fill-yellow-400 text-yellow-400"
-                                : "text-gray-300"
+                                : "text-gray-300",
                             )}
                           />
                         </button>

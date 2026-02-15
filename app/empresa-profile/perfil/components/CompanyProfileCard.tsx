@@ -6,7 +6,9 @@ interface CompanyProfileCardProps {
   profile: CompanyProfileData;
 }
 
-export default function CompanyProfileCard({ profile }: CompanyProfileCardProps) {
+export default function CompanyProfileCard({
+  profile,
+}: CompanyProfileCardProps) {
   return (
     <Card>
       <CardHeader className="border-b">
@@ -26,16 +28,18 @@ export default function CompanyProfileCard({ profile }: CompanyProfileCardProps)
             <div className="flex items-center gap-2">
               <CardTitle className="text-2xl">{profile.nombre}</CardTitle>
               {profile.estado && (
-                <span className={`text-xs px-2 py-1 rounded-full ${
-                  profile.estado.nombre === "Activo" 
-                    ? "bg-green-100 text-green-700" 
-                    : "bg-yellow-100 text-yellow-700"
-                }`}>
+                <span
+                  className={`text-xs px-2 py-1 rounded-full ${
+                    profile.estado.nombre === "Activo"
+                      ? "bg-green-100 text-green-700"
+                      : "bg-yellow-100 text-yellow-700"
+                  }`}
+                >
                   {profile.estado.nombre}
                 </span>
               )}
             </div>
-            <p className="text-muted-foreground">{profile.razonSocial}</p>
+            <p className="text-gray-500">{profile.razonSocial}</p>
           </div>
         </div>
       </CardHeader>
@@ -52,7 +56,9 @@ export default function CompanyProfileCard({ profile }: CompanyProfileCardProps)
             <Briefcase className="w-5 h-5 text-primary" />
             <div>
               <p className="text-sm text-gray-500">Industria</p>
-              <p className="font-medium">{profile.industria?.nombre ?? "No especificada"}</p>
+              <p className="font-medium">
+                {profile.industria?.nombre ?? "No especificada"}
+              </p>
             </div>
           </div>
 
@@ -60,7 +66,9 @@ export default function CompanyProfileCard({ profile }: CompanyProfileCardProps)
             <Users className="w-5 h-5 text-primary" />
             <div>
               <p className="text-sm text-gray-500">Tamaño de la empresa</p>
-              <p className="font-medium">{profile.cantidadEmpleados?.nombre ?? "No especificado"}</p>
+              <p className="font-medium">
+                {profile.cantidadEmpleados?.nombre ?? "No especificado"}
+              </p>
             </div>
           </div>
 
@@ -68,7 +76,9 @@ export default function CompanyProfileCard({ profile }: CompanyProfileCardProps)
             <CheckCircle className="w-5 h-5 text-primary" />
             <div>
               <p className="text-sm text-gray-500">Condición Fiscal</p>
-              <p className="font-medium">{profile.condicionFiscal?.nombre ?? "No especificada"}</p>
+              <p className="font-medium">
+                {profile.condicionFiscal?.nombre ?? "No especificada"}
+              </p>
             </div>
           </div>
 
@@ -92,10 +102,11 @@ export default function CompanyProfileCard({ profile }: CompanyProfileCardProps)
 
         {profile.fechaRegistro && (
           <p className="text-sm text-gray-400 mt-6">
-            Empresa registrada el {new Date(profile.fechaRegistro).toLocaleDateString("es-ES", {
+            Empresa registrada el{" "}
+            {new Date(profile.fechaRegistro).toLocaleDateString("es-ES", {
               year: "numeric",
               month: "long",
-              day: "numeric"
+              day: "numeric",
             })}
           </p>
         )}

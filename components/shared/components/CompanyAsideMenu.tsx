@@ -104,7 +104,7 @@ export default function CompanyAsideMenu({
           </svg>
         </button>
 
-        <div className="flex flex-col items-center py-15  h-full mt-5">
+        <div className="flex flex-col items-center py-15  h-full">
           <nav className="flex-1 w-full">
             <ul className="space-y-2">
               <li id="Home" className={getLinkClass("/")}>
