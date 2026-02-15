@@ -254,7 +254,6 @@ export const CANDIDATOS_SEARCH_ADVANCED_FILTERS = [
   "PROVINCIA",
   "CIUDAD",
   "NIVEL_ESTUDIO",
-  "PREFERENCIA_TURNO",
 ] as const satisfies readonly CatalogTypes[];
 
 export type CandidateSearchFiltersResponse = CatalogFieldsFromTypes<
