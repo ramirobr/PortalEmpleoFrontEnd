@@ -248,3 +248,67 @@ export interface AplicanteReal {
 }
 
 export type GetAplicantesResponse = GenericResponse<AplicanteReal[]>;
+
+// Tipos para búsqueda avanzada de candidatos
+export const CANDIDATOS_SEARCH_ADVANCED_FILTERS = [
+  "PROVINCIA",
+  "CIUDAD",
+  "NIVEL_ESTUDIO",
+  "PREFERENCIA_TURNO",
+] as const satisfies readonly CatalogTypes[];
+
+export type CandidateSearchFiltersResponse = CatalogFieldsFromTypes<
+  typeof CANDIDATOS_SEARCH_ADVANCED_FILTERS,
+  CatalogsByType[]
+>;
+
+export interface CandidateSearchFilters {
+  idProvincia?: number;
+  idCiudad?: number;
+  idNivelEducacion?: number;
+  idPreferenciaTurno?: number;
+  edadMinima?: number;
+  edadMaxima?: number;
+  aspiracionSalarialMin?: number;
+  aspiracionSalarialMax?: number;
+  aniosExperienciaMin?: number;
+  aniosExperienciaMax?: number;
+  searchTerm?: string;
+  pageSize: number;
+  currentPage: number;
+}
+
+export interface CandidateSearchResult {
+  idUsuario: string;
+  nombreCompleto: string;
+  edad: number;
+  fotografia?: string;
+  ciudad: string;
+  provincia: string;
+  nivelEducacion: string;
+  institucionEducativa: string;
+  aniosExperiencia: number;
+  puestoActual: string;
+  aspiracionSalarial: number;
+  preferenciaTurno: string;
+  habilidades: string[];
+  disponibilidad: string;
+}
+
+export interface CandidateSearchPaginado {
+  totalItems: number;
+  pageIndex: number;
+  pageSize: number;
+  data: CandidateSearchResult[];
+}
+
+export type GetCandidateSearchResponse = GenericResponse<CandidateSearchPaginado>;
+
+// Simplified type for candidate listing
+export interface Candidate {
+  idUsuario: string;
+  nombreCompleto: string;
+  ubicacion: string;
+  fotografia?: string;
+  habilidades: string[];
+}

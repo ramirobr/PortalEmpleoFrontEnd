@@ -58,8 +58,8 @@ export default function AsideMenu({
   const getLinkClass = (path?: string) => {
     const base = "px-5 py-2 rounded flex items-center";
     return isActivePath(path)
-      ? `${base} bg-blue-50 font-semibold text-primary`
-      : `${base} cursor-pointer hover:bg-gray-100`;
+      ? `${base} bg-blue-50 font-semibold text-black`
+      : `${base} cursor-pointer hover:bg-primary/20 text-black`;
   };
 
   return (
@@ -73,7 +73,7 @@ export default function AsideMenu({
       )}
 
       <aside
-        className={`fixed inset-y-0 left-0 z-60 flex h-full flex-col bg-white shadow-lg transition-transform duration-300 transform  ${
+        className={`fixed inset-y-0 left-0 z-60 flex h-full flex-col bg-primary shadow-lg transition-transform duration-300 transform  ${
           isOpen
             ? "translate-x-0"
             : side === "left"
