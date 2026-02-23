@@ -129,11 +129,20 @@ export interface AplicanteReciente {
   };
 }
 
+export interface NotificacionEmpresa {
+  idNotificacion: string;
+  descripcion: string;
+  fechaCreacion: string;
+  esLeida: boolean;
+}
+
 export interface CompanyDashboardInfoData {
   ofertarPublicadas: number;
   candidatosActivos: number;
   postulacionesRecibidas: number;
   aplicantesRecientes: AplicanteReciente[];
+  notificacionesNoLeidas: number;
+  notificacionesRecientes: NotificacionEmpresa[];
 }
 
 export type CompanyDashboardInfoResponse =
@@ -277,21 +286,56 @@ export interface CandidateSearchFilters {
   currentPage: number;
 }
 
+// Actualizado para coincidir con el endpoint real /Jobs/searchCandidates
+export interface SearchCandidatesRequest {
+  pageSize: number;
+  currentPage: number;
+  searchTerm?: string;
+  sortBy?: string;
+  sortDirection?: string;
+  idPais?: number;
+  idProvincia?: number;
+  idCiudad?: number;
+  idNivelEstudio?: number;
+  idExperiencia?: number;
+  aniosExperienciaMin?: number | null;
+  aniosExperienciaMax?: number | null;
+  idDisponibilidad?: number;
+  edadMinima?: number | null;
+  edadMaxima?: number | null;
+  salarioMinimoEsperado?: number | null;
+  salarioMaximoEsperado?: number | null;
+  idGenero?: number;
+  movilidadPropia?: boolean | null;
+  poseeLicenciaConducir?: boolean | null;
+  habilidades?: string[];
+}
+
 export interface CandidateSearchResult {
   idUsuario: string;
   nombreCompleto: string;
-  edad: number;
+  correoElectronico: string;
+  telefono: string;
   fotografia?: string;
-  ciudad: string;
-  provincia: string;
-  nivelEducacion: string;
-  institucionEducativa: string;
+  ciudad?: string;
+  provincia?: string;
+  pais?: string;
+  nivelEstudioMaximo?: string;
+  ultimoTitulo?: string;
+  ultimaInstitucion?: string;
   aniosExperiencia: number;
-  puestoActual: string;
-  aspiracionSalarial: number;
-  preferenciaTurno: string;
+  puestoActual?: string;
+  empresaActual?: string;
+  resumenProfesional?: string;
+  disponibilidad?: string;
+  edad: number;
+  genero: string;
+  movilidadPropia: boolean;
+  poseeLicenciaConducir: boolean;
+  tipoLicencia?: string;
   habilidades: string[];
-  disponibilidad: string;
+  idiomas: string[];
+  fechaRegistro: string;
 }
 
 export interface CandidateSearchPaginado {

@@ -27,7 +27,11 @@ export default async function EmpresaProfilePage() {
         </p>
       </div>
 
-      <NotificacionesEmpresa />
+      <NotificacionesEmpresa
+        notificaciones={companyDashboard?.notificacionesRecientes || []}
+        notificacionesNoLeidas={companyDashboard?.notificacionesNoLeidas || 0}
+        token={session.user.accessToken}
+      />
 
       <section className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         <Card>

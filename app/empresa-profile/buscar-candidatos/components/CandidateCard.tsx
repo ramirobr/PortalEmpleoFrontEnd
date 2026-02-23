@@ -2,7 +2,7 @@
 import { CandidateSearchResult } from "@/types/company";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
-import { MapPin, GraduationCap, Briefcase, DollarSign } from "lucide-react";
+import { MapPin, GraduationCap, Briefcase, User } from "lucide-react";
 
 interface CandidateCardProps {
   candidate: CandidateSearchResult;
@@ -10,13 +10,6 @@ interface CandidateCardProps {
 
 export default function CandidateCard({ candidate }: CandidateCardProps) {
   const router = useRouter();
-
-  // Format salary
-  const formattedSalary = new Intl.NumberFormat("es-EC", {
-    style: "currency",
-    currency: "USD",
-    minimumFractionDigits: 0,
-  }).format(candidate.aspiracionSalarial);
 
   // Get top 3 skills
   const topSkills = candidate.habilidades.slice(0, 3);
@@ -27,7 +20,7 @@ export default function CandidateCard({ candidate }: CandidateCardProps) {
         <div className="flex flex-col items-center gap-4 flex-wrap justify-center">
           {candidate.fotografia ? (
             <Image
-              src={candidate.fotografia}
+              src={`data:image/jpeg;base64,${candidate.fotografia}`}
               alt={`Foto de ${candidate.nombreCompleto}`}
               width={64}
               height={64}
@@ -50,37 +43,49 @@ export default function CandidateCard({ candidate }: CandidateCardProps) {
             <h2 className="text-lg font-bold text-black mb-2 leading-snug text-center">
               {candidate.nombreCompleto}
             </h2>
-            <p className="text-sm text-slate-600 mb-4">{candidate.puestoActual}</p>
+            {candidate.puestoActual && (
+              <p className="text-sm text-slate-600 mb-4">
+                {candidate.puestoActual}
+              </p>
+            )}
           </div>
         </div>
 
         <hr className="my-3" />
 
         <div className="space-y-3">
-          <div className="flex items-start gap-2">
-            <MapPin className="w-4 h-4 text-slate-600 mt-1 shrink-0" />
-            <div>
-              <span className="text-sm font-bold text-slate-600 block">
-                Ubicación
-              </span>
-              <span className="text-sm">
-                {candidate.ciudad}, {candidate.provincia}
-              </span>
+          {(candidate.ciudad || candidate.provincia) && (
+            <div className="flex items-start gap-2">
+              <MapPin className="w-4 h-4 text-slate-600 mt-1 shrink-0" />
+              <div>
+                <span className="text-sm font-bold text-slate-600 block">
+                  Ubicación
+                </span>
+                <span className="text-sm">
+                  {[candidate.ciudad, candidate.provincia]
+                    .filter(Boolean)
+                    .join(", ") || "No especificado"}
+                </span>
+              </div>
             </div>
-          </div>
+          )}
 
-          <div className="flex items-start gap-2">
-            <GraduationCap className="w-4 h-4 text-slate-600 mt-1 shrink-0" />
-            <div>
-              <span className="text-sm font-bold text-slate-600 block">
-                Educación
-              </span>
-              <span className="text-sm">{candidate.nivelEducacion}</span>
-              <span className="text-xs text-slate-500 block">
-                {candidate.institucionEducativa}
-              </span>
+          {candidate.nivelEstudioMaximo && (
+            <div className="flex items-start gap-2">
+              <GraduationCap className="w-4 h-4 text-slate-600 mt-1 shrink-0" />
+              <div>
+                <span className="text-sm font-bold text-slate-600 block">
+                  Educación
+                </span>
+                <span className="text-sm">{candidate.nivelEstudioMaximo}</span>
+                {candidate.ultimaInstitucion && (
+                  <span className="text-xs text-slate-500 block">
+                    {candidate.ultimaInstitucion}
+                  </span>
+                )}
+              </div>
             </div>
-          </div>
+          )}
 
           <div className="flex items-start gap-2">
             <Briefcase className="w-4 h-4 text-slate-600 mt-1 shrink-0" />
@@ -96,12 +101,12 @@ export default function CandidateCard({ candidate }: CandidateCardProps) {
           </div>
 
           <div className="flex items-start gap-2">
-            <DollarSign className="w-4 h-4 text-slate-600 mt-1 shrink-0" />
+            <User className="w-4 h-4 text-slate-600 mt-1 shrink-0" />
             <div>
               <span className="text-sm font-bold text-slate-600 block">
-                Aspiración salarial
+                Edad
               </span>
-              <span className="text-sm">{formattedSalary}</span>
+              <span className="text-sm">{candidate.edad} años</span>
             </div>
           </div>
 

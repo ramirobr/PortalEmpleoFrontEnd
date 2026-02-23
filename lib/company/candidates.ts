@@ -1,6 +1,12 @@
 import { fetchApi } from "@/lib/apiClient";
 import { GenericResponse } from "@/types/user";
-import { AplicanteReal, GetAplicantesResponse } from "@/types/company";
+import {
+  AplicanteReal,
+  GetAplicantesResponse,
+  SearchCandidatesRequest,
+  CandidateSearchPaginado,
+  GetCandidateSearchResponse
+} from "@/types/company";
 
 export type Candidate = {
   idUsuario: string;
@@ -60,5 +66,45 @@ export async function fetchAplicantesByVacante(
       token,
     }
   );
+  return response?.data || null;
+}
+
+export async function searchCandidates(
+  params: Partial<SearchCandidatesRequest>,
+  token?: string
+): Promise<CandidateSearchPaginado | null> {
+  const requestBody: SearchCandidatesRequest = {
+    pageSize: params.pageSize ?? 20,
+    currentPage: params.currentPage ?? 1,
+    searchTerm: params.searchTerm ?? "",
+    sortBy: params.sortBy ?? "",
+    sortDirection: params.sortDirection ?? "",
+    idPais: params.idPais ?? 0,
+    idProvincia: params.idProvincia ?? 0,
+    idCiudad: params.idCiudad ?? 0,
+    idNivelEstudio: params.idNivelEstudio ?? 0,
+    idExperiencia: params.idExperiencia ?? 0,
+    aniosExperienciaMin: params.aniosExperienciaMin ?? null,
+    aniosExperienciaMax: params.aniosExperienciaMax ?? null,
+    idDisponibilidad: params.idDisponibilidad ?? 0,
+    edadMinima: params.edadMinima ?? null,
+    edadMaxima: params.edadMaxima ?? null,
+    salarioMinimoEsperado: params.salarioMinimoEsperado ?? null,
+    salarioMaximoEsperado: params.salarioMaximoEsperado ?? null,
+    idGenero: params.idGenero ?? 0,
+    movilidadPropia: params.movilidadPropia ?? null,
+    poseeLicenciaConducir: params.poseeLicenciaConducir ?? null,
+    habilidades: params.habilidades ?? [],
+  };
+
+  const response = await fetchApi<GetCandidateSearchResponse>(
+    "/Jobs/searchCandidates",
+    {
+      method: "POST",
+      body: requestBody,
+      token,
+    }
+  );
+
   return response?.data || null;
 }

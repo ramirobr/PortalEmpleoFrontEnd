@@ -1,6 +1,5 @@
 import { auth } from "@/auth";
-import Dashboard from "./components/Dashboard";
-import JobsApplied from "./components/JobsApplied";
+import ProfileDashboardContainer from "./components/ProfileDashboardContainer";
 import { getDashboardInfoByUserId } from "@/lib/user/info";
 
 export default async function ProfilePage() {
@@ -10,10 +9,5 @@ export default async function ProfilePage() {
   const dashboard = await getDashboardInfoByUserId(id, accessToken);
   if (!dashboard) return;
 
-  return (
-    <>
-      <Dashboard {...dashboard} />
-      <JobsApplied listaTrabajosAplicados={dashboard.listaTrabajosAplicados} />
-    </>
-  );
+  return <ProfileDashboardContainer initialDashboard={dashboard} />;
 }

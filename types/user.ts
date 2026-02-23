@@ -76,6 +76,7 @@ export interface Notificacion {
   idNotificacion: string;
   descripcion: string;
   fechaCreacion: string;
+  esLeida: boolean;
 }
 
 export interface DashboardInfoData {

@@ -1,6 +1,5 @@
 "use client";
 
-import { useState } from "react";
 import Pill from "@/components/shared/components/Pill";
 import { AplicanteReciente } from "@/types/company";
 import { Card } from "@/components/ui/card";
@@ -18,7 +17,6 @@ import {
 import { Search, FileText, Mail } from "lucide-react";
 import { formatDistanceToNow } from "date-fns";
 import { es } from "date-fns/locale";
-import TablePagination from "@/components/shared/components/TablePagination";
 
 interface PostulantesRecientesProps {
   aplicantes: AplicanteReciente[];
@@ -27,14 +25,8 @@ interface PostulantesRecientesProps {
 export default function PostulantesRecientes({
   aplicantes,
 }: PostulantesRecientesProps) {
-  const [currentPage, setCurrentPage] = useState(1);
-  const pageSize = 5;
-
-  const totalItems = aplicantes.length;
-  const totalPages = Math.ceil(totalItems / pageSize);
-  const startParam = (currentPage - 1) * pageSize;
-  const endParam = Math.min(startParam + pageSize, totalItems);
-  const currentAplicantes = aplicantes.slice(startParam, endParam);
+  // Show only the latest 5 applicants
+  const currentAplicantes = aplicantes.slice(0, 5);
 
   const getStatusVariant = (status: string) => {
     const s = status.toLowerCase();
@@ -43,12 +35,6 @@ export default function PostulantesRecientes({
     if (s.includes("descartado")) return "gray"; // or red, per design image gray seems more like "seen" or "discarded" sometimes, but let's stick to pill logic
     if (s.includes("visto")) return "gray";
     return "blue";
-  };
-
-  const handlePageChange = (page: number) => {
-    if (page >= 1 && page <= totalPages) {
-      setCurrentPage(page);
-    }
   };
 
   return (
@@ -179,17 +165,6 @@ export default function PostulantesRecientes({
             </Card>
           ))}
         </div>
-      )}
-
-      {totalItems > 0 && (
-        <TablePagination
-          currentPage={currentPage}
-          pageSize={pageSize}
-          totalItems={totalItems}
-          itemLabel="candidatos"
-          onPageChange={handlePageChange}
-          className="border-none bg-transparent px-0"
-        />
       )}
     </section>
   );
