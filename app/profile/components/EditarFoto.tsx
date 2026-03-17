@@ -1,0 +1,221 @@
+"use client";
+
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Card } from "@/components/ui/card";
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@/components/ui/form";
+import { useAuthStore } from "@/context/authStore";
+import { fetchApi } from "@/lib/apiClient";
+import { fileToBase64, getInitials } from "@/lib/utils";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { Camera, Pencil, Trash2 } from "lucide-react";
+import { useSession } from "next-auth/react";
+import React, { useEffect, useRef, useState } from "react";
+import { useForm } from "react-hook-form";
+import { toast } from "sonner";
+import { z } from "zod";
+
+const schema = z.object({
+  imagen: z.union([z.string().min(1), z.instanceof(File)]).optional(),
+});
+
+type FormValues = z.infer<typeof schema>;
+
+export default function EditarFoto() {
+  const [isEditing, setIsEditing] = useState(false);
+  const fileInputRef = useRef<HTMLInputElement | null>(null);
+  const { data: session } = useSession();
+  const fullName = useAuthStore((s) => s.fullName);
+  const pic = useAuthStore((s) => s.pic);
+  const setPic = useAuthStore((s) => s.setPic);
+
+  const form = useForm({
+    resolver: zodResolver(schema),
+    defaultValues: {
+      imagen: undefined,
+    },
+  });
+
+  useEffect(() => {
+    if (pic) form.reset({ imagen: pic });
+  }, [pic, form]);
+
+  const watchedImage = form.watch("imagen");
+  const imagePreview =
+    typeof watchedImage === "string"
+      ? watchedImage
+      : watchedImage instanceof File
+        ? URL.createObjectURL(watchedImage)
+        : undefined;
+
+  async function deteleImage() {
+    const res = await fetchApi(
+      "/User/delete-user-picture/" + session?.user.id,
+      {
+        method: "DELETE",
+        token: session?.user.accessToken,
+      },
+    );
+    if (!res?.isSuccess) {
+      toast.error("Error eliminando imagen");
+      return;
+    }
+    setPic(undefined);
+    toast.success(res.data || "Imagen eliminada");
+    setIsEditing(false);
+  }
+
+  async function onSubmit(data: FormValues) {
+    if (!data.imagen || typeof data.imagen === "string") {
+      await deteleImage();
+      return;
+    }
+    const base64Image = await fileToBase64(data.imagen);
+    const body = {
+      userId: session?.user.id,
+      base64Image,
+    };
+    const res = await fetchApi("/User/update-user-picture", {
+      method: "PUT",
+      token: session?.user.accessToken,
+      body,
+    });
+    if (!res?.isSuccess) {
+      toast.error("Error actualizando imagen");
+      return;
+    }
+    setPic(base64Image);
+    toast.success(res?.data || "Imagen actualizada");
+    setIsEditing(false);
+  }
+
+  return (
+    <Card className="">
+      <div className="flex justify-between items-center mb-6">
+        <h2 className="text-2xl font-bold text-primary flex items-center gap-2">
+          <Camera width={25} height={25} className="text-primary" />
+          Editar foto de perfil
+        </h2>
+        {!isEditing ? (
+          <button
+            type="button"
+            onClick={() => setIsEditing(true)}
+            className="cursor-pointer"
+            aria-label="Editar foto de perfil"
+          >
+            <Pencil width={20} height={20} className="text-primary" />
+          </button>
+        ) : (
+          <button
+            type="button"
+            onClick={() => {
+              setIsEditing(false);
+              form.reset();
+            }}
+            className="cursor-pointer"
+            aria-label="Cancelar edición"
+          >
+            <Trash2 width={20} height={20} className="text-primary" />
+          </button>
+        )}
+      </div>
+      <Form {...form}>
+        <form
+          onSubmit={form.handleSubmit(onSubmit)}
+          className="flex flex-col items-center"
+        >
+          <div className="relative w-24 h-24 mb-2">
+            <Avatar className="size-full">
+              <AvatarImage src={imagePreview} />
+              <AvatarFallback>{getInitials(fullName)}</AvatarFallback>
+            </Avatar>
+            <FormField
+              control={form.control}
+              name="imagen"
+              render={({ field }) => (
+                <FormItem>
+                  <div className="relative">
+                    <FormLabel className="sr-only">Imagen de perfil</FormLabel>
+                    <FormControl>
+                      <input
+                        type="file"
+                        id="avatar-upload"
+                        title="Cambiar foto de perfil"
+                        placeholder="Subir imagen"
+                        accept="image/*"
+                        className="hidden"
+                        ref={(el) => {
+                          fileInputRef.current = el;
+                          field.ref(el);
+                        }}
+                        onChange={(e) => {
+                          const file = e.target.files?.[0];
+                          if (file) field.onChange(file);
+                        }}
+                      />
+                    </FormControl>
+                    {isEditing && (
+                      <button
+                        type="button"
+                        className="absolute -bottom-4 right-1 bg-white rounded-full p-1 shadow-md cursor-pointer flex items-center justify-center w-8 h-8"
+                        aria-label="Cambiar foto de perfil"
+                        onClick={() => fileInputRef.current?.click()}
+                      >
+                        <Pencil
+                          width={20}
+                          height={20}
+                          className="text-primary"
+                        />
+                      </button>
+                    )}
+                    {isEditing && (
+                      <button
+                        type="button"
+                        className="absolute -bottom-4 left-1 bg-white rounded-full p-1 shadow-md cursor-pointer flex items-center justify-center"
+                        aria-label="Remover foto de perfil"
+                        onClick={() => {
+                          field.onChange(undefined);
+                          if (fileInputRef.current) {
+                            fileInputRef.current.value = "";
+                          }
+                        }}
+                      >
+                        <Trash2
+                          width={20}
+                          height={20}
+                          className="text-primary"
+                        />
+                      </button>
+                    )}
+                  </div>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+          </div>
+
+          {isEditing && (
+            <div className="mt-10 flex gap-4 items-end">
+              <button
+                className="btn btn-primary"
+                type="submit"
+                disabled={form.formState.isSubmitting}
+              >
+                {form.formState.isSubmitting && (
+                  <span className="animate-spin h-4 w-4 border-2 border-t-transparent rounded-full mr-2" />
+                )}
+                Guardar
+              </button>
+            </div>
+          )}
+        </form>
+      </Form>
+    </Card>
+  );
+}
