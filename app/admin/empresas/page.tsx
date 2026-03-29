@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useMemo } from "react";
+import { useState, useEffect } from "react";
 import { useSession } from "next-auth/react";
 import { Search, Building2 } from "lucide-react";
 import { Card } from "@/components/ui/card";
@@ -13,7 +13,9 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { AdminEmpresa } from "@/types/admin";
-import { mockEmpresas } from "@/lib/admin/adminEmpresas";
+import { CatalogsByType } from "@/types/search";
+import { getCatalogosByType } from "@/lib/admin/adminCatalogos";
+import { getAdminEmpresas } from "@/lib/admin/adminEmpresas";
 import EmpresasTable from "./components/EmpresasTable";
 import TablePagination from "@/components/shared/components/TablePagination";
 
@@ -21,88 +23,53 @@ export default function AdminEmpresasPage() {
   const { data: session } = useSession();
   const [empresas, setEmpresas] = useState<AdminEmpresa[]>([]);
   const [loading, setLoading] = useState(true);
+  const [totalItems, setTotalItems] = useState(0);
   const [search, setSearch] = useState("");
-  const [estadoFilter, setEstadoFilter] = useState("todos");
+  const [estadoFilter, setEstadoFilter] = useState("0");
   const [planFilter, setPlanFilter] = useState("todos");
   const [currentPage, setCurrentPage] = useState(1);
   const [pageSize, setPageSize] = useState(10);
+  const [estadoOptions, setEstadoOptions] = useState<CatalogsByType[]>([]);
+  const [planOptions, setPlanOptions] = useState<CatalogsByType[]>([]);
 
-  // Fetch empresas (using mock data for now)
+  useEffect(() => {
+    const token = session?.user?.accessToken;
+    getCatalogosByType("ESTADO_EMPRESA", token).then(setEstadoOptions);
+    getCatalogosByType("PLAN_EMPRESA", token).then(setPlanOptions);
+  }, [session]);
+
   useEffect(() => {
     const fetchEmpresas = async () => {
       setLoading(true);
-      // TODO: Replace with real API call when available
-      // const response = await getAdminEmpresas(
-      //   { pageSize, currentPage, search, estado: estadoFilter, plan: planFilter },
-      //   session?.user?.accessToken
-      // );
-      // if (response?.isSuccess) {
-      //   setEmpresas(response.data.data);
-      // }
-
-      // Using mock data for development
-      await new Promise((resolve) => setTimeout(resolve, 500));
-      setEmpresas(mockEmpresas);
+      const response = await getAdminEmpresas(
+        {
+          pageSize,
+          currentPage,
+          searchQuery: search,
+          idEstado: parseInt(estadoFilter),
+          plan: planFilter === "todos" ? "" : planFilter,
+        },
+        session?.user?.accessToken,
+      );
+      if (response?.isSuccess) {
+        setEmpresas(response.data.data);
+        setTotalItems(response.data.totalItems);
+      }
       setLoading(false);
     };
 
     fetchEmpresas();
-  }, [session, currentPage, pageSize]);
-
-  // Filter empresas based on search and filters
-  const filteredEmpresas = useMemo(() => {
-    return empresas.filter((empresa) => {
-      const matchesSearch =
-        search === "" ||
-        empresa.nombreEmpresa.toLowerCase().includes(search.toLowerCase()) ||
-        empresa.rut.toLowerCase().includes(search.toLowerCase());
-
-      const matchesEstado =
-        estadoFilter === "todos" ||
-        empresa.estado.nombre.toLowerCase() === estadoFilter.toLowerCase();
-
-      const matchesPlan =
-        planFilter === "todos" ||
-        empresa.plan.nombre.toLowerCase() === planFilter.toLowerCase();
-
-      return matchesSearch && matchesEstado && matchesPlan;
-    });
-  }, [empresas, search, estadoFilter, planFilter]);
-
-  // Paginate filtered results
-  const paginatedEmpresas = useMemo(() => {
-    const startIndex = (currentPage - 1) * pageSize;
-    return filteredEmpresas.slice(startIndex, startIndex + pageSize);
-  }, [filteredEmpresas, currentPage, pageSize]);
-
-  const totalItems = filteredEmpresas.length;
+  }, [session, currentPage, pageSize, search, estadoFilter, planFilter]);
 
   const handleEdit = (idEmpresa: string) => {
-    // TODO: Navigate to edit page or open modal
     console.log("Edit empresa:", idEmpresa);
   };
 
   const handleSuspend = async (idEmpresa: string) => {
-    // TODO: Implement with real API
     console.log("Suspend empresa:", idEmpresa);
-    // Update local state for demo
-    setEmpresas((prev) =>
-      prev.map((e) =>
-        e.idEmpresa === idEmpresa
-          ? {
-              ...e,
-              estado:
-                e.estado.nombre === "Activo"
-                  ? { id: 2, nombre: "Suspendido" }
-                  : { id: 1, nombre: "Activo" },
-            }
-          : e,
-      ),
-    );
   };
 
   const handleDelete = async (idEmpresa: string) => {
-    // TODO: Implement with real API and confirmation dialog
     console.log("Delete empresa:", idEmpresa);
     setEmpresas((prev) => prev.filter((e) => e.idEmpresa !== idEmpresa));
   };
@@ -144,9 +111,12 @@ export default function AdminEmpresasPage() {
               <SelectValue placeholder="Estado" />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value="todos">Todos los estados</SelectItem>
-              <SelectItem value="activo">Activo</SelectItem>
-              <SelectItem value="suspendido">Suspendido</SelectItem>
+              <SelectItem value="0">Todos los estados</SelectItem>
+              {estadoOptions.map((item) => (
+                <SelectItem key={item.idCatalogo} value={item.idCatalogo.toString()}>
+                  {item.nombre}
+                </SelectItem>
+              ))}
             </SelectContent>
           </Select>
 
@@ -163,24 +133,24 @@ export default function AdminEmpresasPage() {
             </SelectTrigger>
             <SelectContent>
               <SelectItem value="todos">Todos los planes</SelectItem>
-              <SelectItem value="premium">Premium</SelectItem>
-              <SelectItem value="básico">Básico</SelectItem>
+              {planOptions.map((item) => (
+                <SelectItem key={item.idCatalogo} value={item.nombre}>
+                  {item.nombre}
+                </SelectItem>
+              ))}
             </SelectContent>
           </Select>
         </div>
       </Card>
 
       <Card className="overflow-hidden">
-        {/* Table */}
         <EmpresasTable
-          empresas={paginatedEmpresas}
+          empresas={empresas}
           loading={loading}
           onEdit={handleEdit}
           onSuspend={handleSuspend}
           onDelete={handleDelete}
         />
-
-        {/* Pagination */}
         <TablePagination
           currentPage={currentPage}
           pageSize={pageSize}

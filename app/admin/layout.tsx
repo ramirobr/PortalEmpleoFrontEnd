@@ -8,7 +8,7 @@ import { redirect } from "next/navigation";
 import { fetchApi } from "@/lib/apiClient";
 import { Logout } from "@/types/user";
 
-import { Building2, Briefcase, MessageSquare, Shield } from "lucide-react";
+import { Building2, Briefcase, MessageSquare, Shield, BookOpen } from "lucide-react";
 
 export default function AdminLayout({ children }: Children) {
   const { data: session, status } = useSession();
@@ -75,6 +75,11 @@ export default function AdminLayout({ children }: Children) {
       name: "Gestionar Roles",
       href: "/admin/roles",
       icon: <Shield />,
+    },
+    {
+      name: "Gestionar Catálogos",
+      href: "/admin/catalogos",
+      icon: <BookOpen />,
     },
     {
       name: "Gestionar Usuarios",

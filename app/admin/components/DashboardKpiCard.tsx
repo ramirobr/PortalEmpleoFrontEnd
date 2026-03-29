@@ -7,8 +7,8 @@ import { LucideIcon } from "lucide-react";
 interface DashboardKpiCardProps {
   title: string;
   value: string | number;
-  change: number;
-  trend: "up" | "down" | "neutral";
+  change?: number;
+  trend?: "up" | "down" | "neutral";
   icon: LucideIcon;
   iconColorClass?: string;
   iconBgClass?: string;
@@ -34,23 +34,25 @@ export default function DashboardKpiCard({
           <Icon className={`w-5 h-5 ${iconColorClass}`} />
         </div>
       </div>
-      <div className="mt-4 flex items-center">
-        <span
-          className={`flex items-center text-xs font-medium px-2 py-0.5 rounded-full ${
-            trend === "up"
-              ? "text-green-700 bg-green-50"
-              : trend === "down"
-                ? "text-red-700 bg-red-50"
-                : "text-gray-700 bg-gray-50"
-          }`}
-        >
-          {trend === "up" && <ArrowUpRight className="w-3 h-3 mr-1" />}
-          {trend === "down" && <ArrowDownRight className="w-3 h-3 mr-1" />}
-          {trend === "neutral" && <Minus className="w-3 h-3 mr-1" />}
-          {Math.abs(change)}%
-        </span>
-        <span className="text-xs text-gray-400 ml-2">vs mes anterior</span>
-      </div>
+      {trend !== undefined && change !== undefined && (
+        <div className="mt-4 flex items-center">
+          <span
+            className={`flex items-center text-xs font-medium px-2 py-0.5 rounded-full ${
+              trend === "up"
+                ? "text-green-700 bg-green-50"
+                : trend === "down"
+                  ? "text-red-700 bg-red-50"
+                  : "text-gray-700 bg-gray-50"
+            }`}
+          >
+            {trend === "up" && <ArrowUpRight className="w-3 h-3 mr-1" />}
+            {trend === "down" && <ArrowDownRight className="w-3 h-3 mr-1" />}
+            {trend === "neutral" && <Minus className="w-3 h-3 mr-1" />}
+            {Math.abs(change)}%
+          </span>
+          <span className="text-xs text-gray-400 ml-2">vs mes anterior</span>
+        </div>
+      )}
     </Card>
   );
 }

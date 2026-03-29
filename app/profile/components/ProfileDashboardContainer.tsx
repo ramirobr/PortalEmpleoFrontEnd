@@ -56,6 +56,8 @@ export default function ProfileDashboardContainer({
         userName={userName || dashboard.userName}
         resumenProfesional={resumenProfesional || dashboard.resumenProfesional}
         userPic={userPic}
+        perfilCompletado={dashboard.perfilCompletado}
+        promedioRecomendaciones={dashboard.promedioRecomendaciones}
       />
       <DashboardQuickActions />
       <Dashboard

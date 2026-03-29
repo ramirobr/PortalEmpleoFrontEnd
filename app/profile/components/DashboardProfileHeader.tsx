@@ -1,11 +1,14 @@
 "use client";
 
 import { CheckCircle2, Star } from "lucide-react";
+import Link from "next/link";
 
 interface DashboardProfileHeaderProps {
   userName: string;
   resumenProfesional?: string;
   userPic?: string;
+  perfilCompletado?: number;
+  promedioRecomendaciones?: number;
 }
 
 import { useAuthStore } from "@/context/authStore";
@@ -14,6 +17,8 @@ export default function DashboardProfileHeader({
   userName: propUserName,
   resumenProfesional: propResumen,
   userPic: propPic,
+  perfilCompletado,
+  promedioRecomendaciones,
 }: DashboardProfileHeaderProps) {
   const storeFullName = useAuthStore((s) => s.fullName);
   const storeProfesion = useAuthStore((s) => s.profesion);
@@ -61,9 +66,12 @@ export default function DashboardProfileHeader({
           <div className="flex items-center gap-3 mb-4 w-full max-w-[500px]">
             <div className="flex-1 bg-[#18a999] rounded-full h-[32px] relative flex items-center overflow-hidden">
               {/* Filled portion */}
-              <div className="absolute left-0 top-0 bottom-0 w-[85%] bg-[#167a93] rounded-full" />
+              <div
+                className="absolute left-0 top-0 bottom-0 bg-[#167a93] rounded-full"
+                style={{ width: `${perfilCompletado ?? 0}%` }}
+              />
               <span className="relative z-10 text-white text-[16px] px-5 font-normal">
-                Perfil 100% verificado
+                Perfil {perfilCompletado ?? 0}% verificado
               </span>
             </div>
             <CheckCircle2
@@ -80,13 +88,16 @@ export default function DashboardProfileHeader({
               <Star
                 key={s}
                 className="w-8 h-8 text-[#f8c51c]"
-                fill="#f8c51c"
-                stroke="none"
+                fill={s <= Math.round(promedioRecomendaciones ?? 0) ? "#f8c51c" : "none"}
+                stroke={s <= Math.round(promedioRecomendaciones ?? 0) ? "none" : "#f8c51c"}
               />
             ))}
-            <button className="text-primary text-[15px] font-medium ml-3 hover:underline cursor-pointer">
+            <Link
+              href="/profile/recomendaciones"
+              className="text-primary text-[15px] font-medium ml-3 hover:underline"
+            >
               Ver recomendaciones de otras empresas
-            </button>
+            </Link>
           </div>
         </div>
       </div>

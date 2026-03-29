@@ -52,5 +52,5 @@ export default async function CandidatoPage({ params }: CandidatoPageProps) {
     );
   }
 
-  return <CandidateProfileView candidate={candidate} picture={picture} />;
+  return <CandidateProfileView candidate={candidate} picture={picture} idCandidato={id} />;
 }

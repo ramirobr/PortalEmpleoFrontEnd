@@ -14,6 +14,7 @@ import {
   Building2,
   MessageSquareQuote,
   KeyRound,
+  ThumbsUp,
 } from "lucide-react";
 
 export default function ProfileLayout({ children }: Children) {
@@ -102,6 +103,11 @@ export default function ProfileLayout({ children }: Children) {
       name: "Mis Testimonios",
       href: "/profile/testimonios",
       icon: <MessageSquareQuote />,
+    },
+    {
+      name: "Recomendaciones",
+      href: "/profile/recomendaciones",
+      icon: <ThumbsUp className="w-5 h-5" />,
     },
     {
       name: "Cambiar contraseña",

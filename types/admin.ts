@@ -4,18 +4,11 @@ import { GenericResponse } from "./user";
 export interface AdminEmpresa {
   idEmpresa: string;
   nombreEmpresa: string;
-  rut: string;
-  logoUrl?: string;
+  numeroDocumento: string;
   fechaRegistro: string;
   ofertasActivas: number;
-  plan: {
-    id: number;
-    nombre: string; // "Premium" | "Básico"
-  };
-  estado: {
-    id: number;
-    nombre: string; // "Activo" | "Suspendido"
-  };
+  plan: string;
+  estado: string;
 }
 
 // Paginated response for admin empresas list
@@ -33,9 +26,9 @@ export interface AdminEmpresasParams {
   pageSize: number;
   currentPage: number;
   sortBy?: string;
-  sortDirection?: "asc" | "desc";
-  search?: string;
-  estado?: string;
+  sortDirection?: string;
+  searchQuery?: string;
+  idEstado?: number;
   plan?: string;
 }
 
@@ -283,3 +276,36 @@ export interface AdminUsuariosParams {
 
 export type UpdateUsuarioStatusResponse = GenericResponse<string>;
 export type DeleteUsuarioResponse = GenericResponse<string>;
+
+// ===== ADMIN CATALOGOS =====
+
+export interface AdminCatalogo {
+  idCatalogo: number;
+  nombre: string;
+  descripcion?: string;
+  tipoCatalogo: string;
+  codigo?: string;
+  valorEntero?: number;
+  valorCadena?: string;
+  orden: number;
+  activo: boolean;
+  idCatalogoPadre?: number;
+}
+
+export type GetAdminCatalogosResponse = GenericResponse<AdminCatalogo[]>;
+export type GetAdminCatalogoByIdResponse = GenericResponse<AdminCatalogo>;
+export type CreateCatalogoResponse = GenericResponse<AdminCatalogo>;
+export type UpdateCatalogoResponse = GenericResponse<AdminCatalogo>;
+export type DeleteCatalogoResponse = GenericResponse<string>;
+
+export interface CatalogoFormValues {
+  nombre: string;
+  descripcion?: string;
+  tipoCatalogo: string;
+  codigo?: string;
+  valorEntero?: number;
+  valorCadena?: string;
+  orden: number;
+  activo: boolean;
+  idCatalogoPadre?: number;
+}

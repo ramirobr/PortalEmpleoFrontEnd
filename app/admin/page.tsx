@@ -5,23 +5,16 @@ import { useSession } from "next-auth/react";
 import {
   Users,
   Briefcase,
-  DollarSign,
-  TrendingUp,
   Building2,
   MapPin,
 } from "lucide-react";
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import DashboardKpiCard from "./components/DashboardKpiCard";
-import { SimpleBarChart, DualLineChart } from "./components/DashboardCharts";
-import {
-  mockDashboardKpis,
-  mockRevenueData,
-  mockUserGrowthData,
-} from "@/lib/admin/dashboardData";
-import { mockEmpresas } from "@/lib/admin/adminEmpresas";
+import { getAdminDashboard, AdminDashboardData } from "@/lib/admin/dashboardData";
+import { getAdminEmpresas } from "@/lib/admin/adminEmpresas";
 import { getAdminEmpleos } from "@/lib/admin/adminEmpleos";
-import { AdminEmpleo } from "@/types/admin";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { AdminEmpleo, AdminEmpresa } from "@/types/admin";
+import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import Pill from "@/components/shared/components/Pill";
 import Link from "next/link";
 import { AdminTableLoading } from "./components/AdminTableStates";
@@ -29,17 +22,20 @@ import { AdminTableLoading } from "./components/AdminTableStates";
 export default function AdminDashboardPage() {
   const { data: session } = useSession();
   const [loading, setLoading] = useState(true);
+  const [kpis, setKpis] = useState<AdminDashboardData | null>(null);
+  const [empresasRecientes, setEmpresasRecientes] = useState<AdminEmpresa[]>([]);
   const [empleosRecientes, setEmpleosRecientes] = useState<AdminEmpleo[]>([]);
 
   useEffect(() => {
     const fetchData = async () => {
-      const response = await getAdminEmpleos(
-        { pageSize: 4, currentPage: 1 },
-        session?.user?.accessToken,
-      );
-      if (response?.isSuccess) {
-        setEmpleosRecientes(response.data.data);
-      }
+      const [dashboardRes, empresasRes, empleosRes] = await Promise.all([
+        getAdminDashboard(session?.user?.accessToken),
+        getAdminEmpresas({ pageSize: 4, currentPage: 1 }, session?.user?.accessToken),
+        getAdminEmpleos({ pageSize: 4, currentPage: 1 }, session?.user?.accessToken),
+      ]);
+      if (dashboardRes?.isSuccess) setKpis(dashboardRes.data);
+      if (empresasRes?.isSuccess) setEmpresasRecientes(empresasRes.data.data);
+      if (empleosRes?.isSuccess) setEmpleosRecientes(empleosRes.data.data);
       setLoading(false);
     };
     fetchData();
@@ -48,16 +44,6 @@ export default function AdminDashboardPage() {
   if (loading) {
     return <AdminTableLoading message="Cargando dashboard..." />;
   }
-
-  // Icons map for KPIs
-  const kpiIcons = [Users, Briefcase, DollarSign, TrendingUp];
-  const kpiColors = [
-    "text-blue-600",
-    "text-purple-600",
-    "text-green-600",
-    "text-orange-600",
-  ];
-  const kpiBgs = ["bg-blue-50", "bg-purple-50", "bg-green-50", "bg-orange-50"];
 
   return (
     <div className="space-y-6">
@@ -69,48 +55,28 @@ export default function AdminDashboardPage() {
       </div>
 
       {/* KPI Cards Row */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-        {mockDashboardKpis.map((kpi, index) => (
-          <DashboardKpiCard
-            key={index}
-            title={kpi.label}
-            value={kpi.value}
-            change={kpi.change}
-            trend={kpi.trend}
-            icon={kpiIcons[index]}
-            iconColorClass={kpiColors[index]}
-            iconBgClass={kpiBgs[index]}
-          />
-        ))}
-      </div>
-
-      {/* Charts Row */}
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-        {/* Revenue Chart (2/3 width) */}
-        <Card className="lg:col-span-2 p-6">
-          <CardHeader className="px-0 pt-0 pb-6">
-            <CardTitle>Ingresos Mensuales</CardTitle>
-            <p className="text-sm text-gray-500">
-              Resumen de facturación último semestre
-            </p>
-          </CardHeader>
-          <CardContent className="px-0 pb-0">
-            <SimpleBarChart data={mockRevenueData} height={240} />
-          </CardContent>
-        </Card>
-
-        {/* User Growth Chart (1/3 width) */}
-        <Card className="p-6">
-          <CardHeader className="px-0 pt-0 pb-6">
-            <CardTitle>Crecimiento de Usuarios</CardTitle>
-            <p className="text-sm text-gray-500">
-              Nuevos registros vs. periodo anterior
-            </p>
-          </CardHeader>
-          <CardContent className="px-0 pb-0">
-            <DualLineChart data={mockUserGrowthData} height={240} />
-          </CardContent>
-        </Card>
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <DashboardKpiCard
+          title="Usuarios Activos"
+          value={kpis?.totalUsuariosActivos ?? 0}
+          icon={Users}
+          iconColorClass="text-blue-600"
+          iconBgClass="bg-blue-50"
+        />
+        <DashboardKpiCard
+          title="Ofertas Activas"
+          value={kpis?.totalOfertasActivas ?? 0}
+          icon={Briefcase}
+          iconColorClass="text-purple-600"
+          iconBgClass="bg-purple-50"
+        />
+        <DashboardKpiCard
+          title="Empresas Activas"
+          value={kpis?.totalEmpresasActivas ?? 0}
+          icon={Building2}
+          iconColorClass="text-green-600"
+          iconBgClass="bg-green-50"
+        />
       </div>
 
       {/* Recent Activity Row */}
@@ -128,17 +94,13 @@ export default function AdminDashboardPage() {
           </CardHeader>
           <CardContent>
             <div className="space-y-4">
-              {mockEmpresas.slice(0, 4).map((empresa) => (
+              {empresasRecientes.map((empresa) => (
                 <div
                   key={empresa.idEmpresa}
                   className="flex items-center justify-between p-3 rounded-lg hover:bg-gray-50 transition-colors"
                 >
                   <div className="flex items-center gap-3">
                     <Avatar className="w-10 h-10 rounded-lg">
-                      <AvatarImage
-                        src={empresa.logoUrl}
-                        alt={empresa.nombreEmpresa}
-                      />
                       <AvatarFallback className="rounded-lg bg-gray-200 text-gray-600 text-xs">
                         {empresa.nombreEmpresa.substring(0, 2).toUpperCase()}
                       </AvatarFallback>
@@ -147,20 +109,20 @@ export default function AdminDashboardPage() {
                       <p className="font-medium text-sm text-gray-900">
                         {empresa.nombreEmpresa}
                       </p>
-                      <p className="text-xs text-gray-500">{empresa.rut}</p>
+                      <p className="text-xs text-gray-500">{empresa.numeroDocumento}</p>
                     </div>
                   </div>
                   <Pill
                     variant="custom"
                     bgColor={
-                      empresa.plan.nombre === "Premium"
+                      empresa.plan === "Premium"
                         ? "bg-teal-50 text-teal-600"
                         : "bg-gray-100 text-gray-600"
                     }
                     className="w-fit scale-90"
                     noButton
                   >
-                    {empresa.plan.nombre}
+                    {empresa.plan}
                   </Pill>
                 </div>
               ))}
@@ -216,3 +178,4 @@ export default function AdminDashboardPage() {
     </div>
   );
 }
+
