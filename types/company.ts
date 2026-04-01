@@ -336,6 +336,7 @@ export interface CandidateSearchResult {
   habilidades: string[];
   idiomas: string[];
   fechaRegistro: string;
+  porcentajePerfilCompletado: number;
 }
 
 export interface CandidateSearchPaginado {
