@@ -23,8 +23,8 @@ import {
 import { useSession } from "next-auth/react";
 import { ROLES } from "@/types/auth";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
-import { useRef, useState } from "react";
+import { useRouter, useSearchParams } from "next/navigation";
+import { useRef, useState, useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { z } from "zod";
@@ -41,15 +41,20 @@ const loginSchema = z.object({
 
 export type LoginValues = z.infer<typeof loginSchema>;
 
-export default function LoginPage() {
+function LoginForm() {
   const router = useRouter();
   const [showPassword, setShowPassword] = useState(false);
   const timeoutRef = useRef<NodeJS.Timeout | null>(null);
-  const next =
-    typeof window !== "undefined"
-      ? new URLSearchParams(window.location.search).get("next")
-      : null;
-  const { update } = useSession();
+  const searchParams = useSearchParams();
+  const next = searchParams.get("next");
+  const { status, update } = useSession();
+
+  useEffect(() => {
+    if (status === "authenticated") {
+      router.push(next ?? "/");
+    }
+  }, [status, router, next]);
+
   const form = useForm<LoginValues>({
     resolver: zodResolver(loginSchema),
     defaultValues: {
@@ -97,7 +102,6 @@ export default function LoginPage() {
       }
 
       form.reset();
-      // Actualiza la sesión y redirige según el rol
       const session = await update();
       const userRole = session?.user?.role;
       switch (userRole) {
@@ -113,7 +117,7 @@ export default function LoginPage() {
         default:
           router.push(next ?? "/");
       }
-    } catch (error) {
+    } catch {
       toast.error("Credenciales inválidas");
     }
   }
@@ -135,64 +139,6 @@ export default function LoginPage() {
       <main className="flex-1 flex flex-col items-center justify-center px-4 py-12">
         <Card className="w-full max-w-md p-6 flex flex-col gap-6 shadow-md">
           <CardContent className="flex flex-col gap-6">
-            {/* 
-            <Button
-              variant="outline"
-              className="flex items-center justify-center gap-2 w-full mb-2 text-black hover:text-black"
-            >
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="20"
-                height="20"
-                viewBox="0 0 48 48"
-                className="w-5 h-5"
-              >
-                <g>
-                  <path
-                    fill="#4285F4"
-                    d="M24 9.5c3.54 0 6.73 1.22 9.24 3.22l6.9-6.9C35.64 2.34 30.13 0 24 0 14.61 0 6.27 5.48 2.13 13.44l8.06 6.27C12.6 13.16 17.87 9.5 24 9.5z"
-                  />
-                  <path
-                    fill="#34A853"
-                    d="M46.1 24.55c0-1.56-.14-3.06-.39-4.5H24v9.05h12.45c-.54 2.9-2.17 5.36-4.62 7.02l7.18 5.59C43.73 37.13 46.1 31.33 46.1 24.55z"
-                  />
-                  <path
-                    fill="#FBBC05"
-                    d="M10.19 28.71c-1.13-3.36-1.13-6.97 0-10.33l-8.06-6.27C.73 16.61 0 20.21 0 24c0 3.79.73 7.39 2.13 10.89l8.06-6.27z"
-                  />
-                  <path
-                    fill="#EA4335"
-                    d="M24 48c6.13 0 11.64-2.02 15.82-5.51l-7.18-5.59c-2.01 1.35-4.59 2.15-7.64 2.15-6.13 0-11.3-4.13-13.16-9.66l-8.06 6.27C6.27 42.52 14.61 48 24 48z"
-                  />
-                </g>
-              </svg>
-              Acceder con Google
-            </Button>
-            <Button
-              variant="default"
-              className="flex items-center justify-center gap-2 w-full mb-2 bg-[#2867B2] hover:bg-[#2867B2]"
-            >
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="20"
-                height="20"
-                viewBox="0 0 24 24"
-                fill="currentColor"
-                className="w-5 h-5"
-              >
-                <path d="M20.447 20.452h-3.554v-5.569c0-1.327-.027-3.037-1.849-3.037-1.851 0-2.134 1.445-2.134 2.939v5.667h-3.554v-11.452h3.414v1.561h.049c.476-.9 1.637-1.849 3.37-1.849 3.602 0 4.267 2.369 4.267 5.455v6.285z" />
-                <circle cx="5.337" cy="6.729" r="1.2" />
-                <rect x="3.5" y="8.5" width="3.5" height="11.952" />
-              </svg>
-              Acceder con Linkedin
-            </Button>
-            
-            <div className="flex items-center my-2">
-              <div className="flex-1 border-t border-gray-300"></div>
-              <span className="mx-2 text-gray-400">o</span>
-              <div className="flex-1 border-t border-gray-300"></div>
-            </div>
-            */}
             <div className="w-12 h-12 bg-primary/10 rounded-full flex items-center justify-center text-primary m-auto">
               <LockKeyholeOpen className="w-7 h-" />
             </div>
@@ -200,7 +146,7 @@ export default function LoginPage() {
               <h2 className="text-black text-2xl font-bold ">
                 Bienvenido de nuevo
               </h2>
-              <p className="mt-2">
+              <p className="mt-2 text-gray-600">
                 Inicia sesión para gestionar tus candidaturas
               </p>
             </div>
@@ -281,10 +227,10 @@ export default function LoginPage() {
                   disabled={form.formState.isSubmitting}
                 >
                   {form.formState.isSubmitting && (
-                    <span className="animate-spin h-4 w-4 border-2 border-t-transparent rounded-full" />
+                    <span className="animate-spin h-4 w-4 border-2 border-t-transparent rounded-full mr-2" />
                   )}
                   Iniciar Sesión
-                  <ArrowRight />
+                  <ArrowRight className="ml-2" />
                 </Button>
 
                 <div className="text-center text-sm">
@@ -304,5 +250,22 @@ export default function LoginPage() {
 
       <Footer />
     </div>
+  );
+}
+
+import { Suspense } from "react";
+import Loader from "@/components/shared/components/Loader";
+
+export default function LoginPage() {
+  return (
+    <Suspense 
+      fallback={
+        <div className="min-h-screen flex items-center justify-center bg-gray-50">
+          <Loader size={48} />
+        </div>
+      }
+    >
+      <LoginForm />
+    </Suspense>
   );
 }

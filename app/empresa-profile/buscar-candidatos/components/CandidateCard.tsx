@@ -42,9 +42,12 @@ export default function CandidateCard({ candidate }: CandidateCardProps) {
           {/* Verified Profile Bar - matching JobCard */}
           <div className="flex items-center gap-2 mb-6">
             <div className="flex-1 bg-primary rounded-full h-9 flex items-center px-6 relative overflow-hidden">
-              <div className="absolute right-0 top-0 bottom-0 w-[20%] bg-secondary" />
-              <span className="relative z-10 text-white text-[11px] font-bold uppercase text-center w-full pr-[15%]">
-                PERFIL 100% VERIFICADO
+              <div
+                className="absolute right-0 top-0 bottom-0 bg-secondary"
+                style={{ width: `${100 - candidate.porcentajePerfilCompletado}%` }}
+              />
+              <span className="relative z-10 text-white text-[11px] font-bold uppercase text-center w-full">
+                PERFIL {candidate.porcentajePerfilCompletado}% COMPLETADO
               </span>
             </div>
             <div className="w-9 h-9 rounded-full bg-primary flex items-center justify-center shrink-0 shadow-sm border-2 border-white">
