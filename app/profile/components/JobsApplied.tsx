@@ -20,31 +20,32 @@ export default function JobsApplied({
         {listaTrabajosAplicados?.length ? (
           listaTrabajosAplicados.map((job) => (
             <Link href={`/jobs/${job.id}`} key={job.id} className="block group">
-              <div className="bg-white rounded-xl border-l-8 border-l-primary shadow hover:shadow-lg transition-all overflow-hidden p-6 flex flex-col gap-3 relative h-full">
-                <Pill
-                  variant={
-                    job.estado === "Postulada"
-                      ? "blue"
-                      : job.estado === "Elegido"
-                        ? "green"
-                        : "yellow"
-                  }
-                  className="absolute top-4 right-4 uppercase text-[10px] font-extrabold tracking-widest px-3"
-                >
-                  {job.estado}
-                </Pill>
+              <div className="bg-white rounded-3xl shadow-sm hover:shadow-xl transition-all duration-500 p-8 flex flex-col gap-4 relative h-full border border-slate-50 group-hover:-translate-y-1">
+                <div className="flex justify-between items-start">
+                  <Pill
+                    variant={
+                      job.estado === "Postulada"
+                        ? "blue"
+                        : job.estado === "Elegido"
+                          ? "green"
+                          : "yellow"
+                    }
+                    className="uppercase text-[9px] font-black tracking-[0.2em] px-4 py-1.5 rounded-full"
+                  >
+                    {job.estado}
+                  </Pill>
+                </div>
                 
-                <div className="mt-4">
-                  <div className="font-bold text-primary text-xl leading-snug group-hover:text-secondary transition-colors">
+                <div className="mt-2">
+                  <h4 className="font-display font-black text-primary text-xl leading-tight uppercase tracking-tight group-hover:text-primary-container transition-colors duration-300">
                     {job.titulo}
-                  </div>
-                  <div className="text-sm font-bold uppercase tracking-widest text-gray-500 mt-1">
+                  </h4>
+                  <p className="text-sm font-bold uppercase tracking-widest text-slate-600 mt-2">
                     {job.empresa}
-                  </div>
+                  </p>
                 </div>
 
-                <div className="mt-auto pt-4 flex items-center gap-2 text-xs text-gray-500 font-medium border-t border-gray-50">
-                   <svg className="w-4 h-4 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" /></svg>
+                <div className="mt-auto pt-6 flex items-center gap-2 text-[11px] text-slate-600 font-bold uppercase tracking-wider border-t border-slate-100 italic">
                    Aplicado {formatDistanceToNow(new Date(job.fechaAplicacion), { addSuffix: true, locale: es })}
                 </div>
               </div>

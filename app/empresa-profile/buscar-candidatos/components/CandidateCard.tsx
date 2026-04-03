@@ -1,8 +1,8 @@
-"use client";
 import { CandidateSearchResult } from "@/types/company";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
-import { MapPin, GraduationCap, Briefcase, User } from "lucide-react";
+import { MapPin, Briefcase, User, Check } from "lucide-react";
+import React from "react";
 
 interface CandidateCardProps {
   candidate: CandidateSearchResult;
@@ -15,149 +15,107 @@ export default function CandidateCard({ candidate }: CandidateCardProps) {
   const topSkills = candidate.habilidades.slice(0, 3);
 
   return (
-    <div className="bg-white border-primary shadow hover:shadow-lg mb-3 relative border-l-8 border-l-primary rounded-xl transition-all overflow-hidden h-full flex flex-col">
-      <div className="p-6 relative flex-1 flex flex-col">
-        <div className="flex flex-col gap-4">
+    <div className="group bg-white rounded-xl p-8 shadow-sm transition-all duration-500 hover:shadow-xl hover:-translate-y-1.5 flex flex-col h-full border border-slate-50">
+      {/* Header Row: Photo & Status */}
+      <div className="flex justify-between items-start mb-8">
+        <div className="relative w-16 h-16 shrink-0">
           {candidate.fotografia ? (
             <Image
               src={`data:image/jpeg;base64,${candidate.fotografia}`}
               alt={`Foto de ${candidate.nombreCompleto}`}
-              width={64}
-              height={64}
-              className="w-16 h-16 rounded-full object-cover border border-gray-light shrink-0"
+              fill
+              className="rounded-xl object-cover border border-slate-100 p-1 shadow-inner"
               unoptimized
               loading="lazy"
             />
           ) : (
-            <div className="w-16 h-16 rounded-full bg-primary/10 flex items-center justify-center border border-gray-light shrink-0">
-              <span className="text-2xl font-bold text-primary">
-                {candidate.nombreCompleto
-                  .split(" ")
-                  .map((n) => n[0])
-                  .slice(0, 2)
-                  .join("")}
-              </span>
+            <div className="w-16 h-16 rounded-xl bg-primary/5 flex items-center justify-center border border-primary/10 shadow-inner">
+              <User className="w-8 h-8 text-primary/40" />
             </div>
           )}
-          {/* Verified Profile Bar - matching JobCard */}
-          <div className="flex items-center gap-2 mb-6">
-            <div className="flex-1 bg-primary rounded-full h-9 flex items-center px-6 relative overflow-hidden">
-              <div
-                className="absolute right-0 top-0 bottom-0 bg-secondary"
-                style={{ width: `${100 - candidate.porcentajePerfilCompletado}%` }}
-              />
-              <span className="relative z-10 text-white text-[11px] font-bold uppercase text-center w-full">
-                PERFIL {candidate.porcentajePerfilCompletado}% COMPLETADO
-              </span>
-            </div>
-            <div className="w-9 h-9 rounded-full bg-primary flex items-center justify-center shrink-0 shadow-sm border-2 border-white">
-              <svg
-                className="w-5 h-5 text-white"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={4}
-                  d="M5 13l4 4L19 7"
-                />
-              </svg>
-            </div>
-          </div>
-          <div className=" w-full">
-            <h2 className="text-xl font-bold text-primary mb-1 leading-snug capitalize">
-              {candidate.nombreCompleto}
-            </h2>
-            {candidate.puestoActual && (
-              <p className="text-sm font-bold uppercase tracking-widest mb-4">
-                {candidate.puestoActual}
-              </p>
-            )}
-          </div>
         </div>
-        <div className="w-full h-px bg-gray-200 my-5"></div>
-        <div className="space-y-4 flex-1">
-          <div className="flex items-start gap-2">
-            <MapPin className="w-4 h-4 text-primary mt-0.5 shrink-0" />
-            <div>
-              <span className="text-[10px] font-extrabold uppercase text-gray-400 block tracking-wider">
-                Ubicación
-              </span>
-              <span className="text-sm font-medium text-gray-700">
-                {[candidate.ciudad, candidate.provincia]
-                  .filter(Boolean)
-                  .join(", ") || "No especificado"}
-              </span>
-            </div>
-          </div>
 
-          <div className="flex items-start gap-2">
-            <GraduationCap className="w-4 h-4 text-primary mt-0.5 shrink-0" />
-            <div>
-              <span className="text-[10px] font-extrabold uppercase text-gray-400 block tracking-wider">
-                Educación
-              </span>
-              <span className="text-sm font-medium text-gray-700">
-                {candidate.nivelEstudioMaximo}
-              </span>
+        {/* Enhanced Completion Badge */}
+        <div className="flex flex-col items-end gap-2">
+          <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-primary/5 text-primary border border-primary/10">
+            <div className="w-4 h-4 rounded-full bg-primary flex items-center justify-center">
+              <Check className="w-2.5 h-2.5 text-white" strokeWidth={4} />
             </div>
+            <span className="text-[10px] font-bold uppercase tracking-widest whitespace-nowrap">
+              Perfil {candidate.porcentajePerfilCompletado}% completado
+            </span>
           </div>
-
-          <div className="flex items-start gap-2">
-            <User className="w-4 h-4 text-primary mt-0.5 shrink-0" />
-            <div>
-              <span className="text-[10px] font-extrabold uppercase text-gray-400 block tracking-wider">
-                Resumen
-              </span>
-              <p className="text-sm font-medium text-gray-700 line-clamp-2">
-                {candidate.resumenProfesional || "Sin resumen profesional"}
-              </p>
-            </div>
+          {/* Progress Accent Line */}
+          <div className="w-20 h-1 bg-slate-100 rounded-full overflow-hidden ml-auto">
+            <div
+              className={`h-full bg-primary transition-all duration-1000 w-(--completion-pc)`}
+              style={{ "--completion-pc": `${candidate.porcentajePerfilCompletado}%` } as React.CSSProperties}
+            />
           </div>
-
-          <div className="flex items-start gap-2">
-            <Briefcase className="w-4 h-4 text-primary mt-0.5 shrink-0" />
-            <div>
-              <span className="text-[10px] font-extrabold uppercase text-gray-400 block tracking-wider">
-                Experiencia
-              </span>
-              <span className="text-sm font-medium text-gray-700">
-                {candidate.aniosExperiencia}{" "}
-                {candidate.aniosExperiencia === 1 ? "año" : "años"}
-              </span>
-            </div>
-          </div>
-
-          {topSkills.length > 0 && (
-            <div className="pt-2">
-              <span className="text-[10px] font-extrabold uppercase text-gray-400 block mb-2 tracking-wider">
-                Habilidades
-              </span>
-              <div className="flex flex-wrap gap-1.5">
-                {topSkills.map((skill, index) => (
-                  <span
-                    key={index}
-                    className="px-2 py-0.5 bg-gray-100 text-gray-600 text-[10px] font-bold rounded uppercase"
-                  >
-                    {skill}
-                  </span>
-                ))}
-              </div>
-            </div>
-          )}
         </div>
       </div>
 
-      <button
-        className="bg-primary hover:bg-secondary text-white text-sm font-bold uppercase py-4 transition-colors text-center cursor-pointer w-full mt-auto"
-        onClick={() =>
-          router.push(`/empresa-profile/candidato/${candidate.idUsuario}`)
-        }
-      >
-        VER PERFIL
-      </button>
+      {/* Main Info */}
+      <div className="flex-1 flex flex-col">
+        <h3 className="text-2xl font-display font-black text-primary uppercase leading-tight mb-1 tracking-tight group-hover:text-primary-container transition-colors duration-300">
+          {candidate.nombreCompleto}
+        </h3>
+        {candidate.puestoActual && (
+          <p className="text-slate-600 font-bold uppercase tracking-widest text-[11px] mb-6">
+            {candidate.puestoActual}
+          </p>
+        )}
+
+        <div className="w-full h-px bg-slate-100 mb-6" />
+
+        <div className="grid grid-cols-2 gap-4 mb-8">
+          <div className="space-y-1">
+            <div className="flex items-center gap-1.5 text-slate-300">
+              <MapPin className="w-3 h-3" />
+              <span className="text-[10px] font-bold uppercase tracking-widest">Ubicación</span>
+            </div>
+            <p className="text-sm font-medium text-slate-600 line-clamp-1">
+              {candidate.ciudad}
+            </p>
+          </div>
+          <div className="space-y-1">
+            <div className="flex items-center gap-1.5 text-slate-300">
+              <Briefcase className="w-3 h-3" />
+              <span className="text-[10px] font-bold uppercase tracking-widest">Experiencia</span>
+            </div>
+            <p className="text-sm font-medium text-slate-600 line-clamp-1">
+              {candidate.aniosExperiencia} {candidate.aniosExperiencia === 1 ? "año" : "años"}
+            </p>
+          </div>
+        </div>
+
+        {/* Skills Preview */}
+        {topSkills.length > 0 && (
+          <div className="flex flex-wrap gap-2 mb-8">
+            {topSkills.map((skill, index) => (
+              <span
+                key={index}
+                className="px-2.5 py-1 bg-slate-50 text-slate-500 text-[10px] font-bold rounded-lg border border-slate-100"
+              >
+                {skill}
+              </span>
+            ))}
+          </div>
+        )}
+      </div>
+
+      <div className="mt-auto">
+        <button
+          className="relative group/btn w-full flex items-center justify-center gap-3 px-12 py-2.5 bg-linear-to-r from-secondary-container to-secondary text-white font-black text-xs uppercase tracking-widest rounded-full hover:shadow-2xl hover:shadow-secondary/30 transition-all duration-500 cursor-pointer overflow-hidden hover:-translate-y-1"
+          onClick={() =>
+            router.push(`/empresa-profile/candidato/${candidate.idUsuario}`)
+          }
+        >
+          <div className="absolute inset-x-0 top-0 h-full w-full bg-white/20 -translate-x-full group-hover/btn:translate-x-full transition-transform duration-1000 skew-x-12" />
+          <User className="size-4 relative z-10" />
+          <span className="relative z-10 text-[11px]">Ver Perfil Completo</span>
+        </button>
+      </div>
     </div>
   );
 }

@@ -3,7 +3,6 @@
 import { useEffect, useState } from "react";
 import { useSession } from "next-auth/react";
 import { Star, Building2, ThumbsUp, Loader2 } from "lucide-react";
-import { Card } from "@/components/ui/card";
 import { cn } from "@/lib/utils";
 import Link from "next/link";
 import { fetchApi } from "@/lib/apiClient";
@@ -60,15 +59,15 @@ function StarRating({
   return (
     <div className="flex gap-0.5">
       {[1, 2, 3, 4, 5].map((star) => (
-        <Star
-          key={star}
-          className={cn(
-            cls,
-            star <= value
-              ? "fill-yellow-400 text-yellow-400"
-              : "fill-gray-200 text-gray-200",
-          )}
-        />
+            <Star
+              key={star}
+              className={cn(
+                cls,
+                star <= value
+                  ? "fill-label-star text-label-star"
+                  : "fill-gray-200 text-gray-200",
+              )}
+            />
       ))}
     </div>
   );
@@ -82,47 +81,59 @@ function RecomendacionCard({
   colorClass: string;
 }) {
   return (
-    <Card className="p-6 flex flex-col gap-4 hover:shadow-md transition-shadow">
-      <div className="flex items-start gap-4">
+    <div className="bg-white rounded-xl shadow-sm hover:shadow-2xl transition-all duration-500 p-8 flex flex-col gap-6 relative border border-slate-50 group hover:-translate-y-1.5">
+      <div className="flex items-start gap-5">
         <div
           className={cn(
-            "w-12 h-12 rounded-xl flex items-center justify-center text-white font-bold text-sm shrink-0",
+            "w-14 h-14 rounded-2xl flex items-center justify-center text-white font-black font-display text-lg shrink-0 shadow-lg group-hover:scale-105 transition-transform duration-500",
             colorClass,
           )}
         >
           {getIniciales(rec.nombreEmpresa)}
         </div>
-        <div className="flex-1 min-w-0">
-          <p className="font-semibold text-gray-900 leading-tight">
+        <div className="flex-1 min-w-0 py-1">
+          <h4 className="font-display font-black text-primary text-xl uppercase tracking-tight leading-none mb-2">
             {rec.nombreEmpresa}
-          </p>
+          </h4>
           {rec.sector && (
-            <p className="text-sm text-gray-500">{rec.sector}</p>
+            <p className="text-[10px] font-black text-slate-600 uppercase tracking-[0.2em] italic">
+              {rec.sector}
+            </p>
           )}
         </div>
-        <StarRating value={rec.puntuacion} />
+        <div className="bg-slate-50 px-3 py-1.5 rounded-full border border-slate-100">
+          <StarRating value={rec.puntuacion} />
+        </div>
       </div>
 
-      <p className="text-gray-600 leading-relaxed text-sm">
-        &ldquo;{rec.razonRecomendacion}&rdquo;
-      </p>
+      <div className="relative">
+        <span className="absolute -top-4 -left-2 text-6xl text-primary/5 font-serif select-none">“</span>
+        <p className="text-slate-600 leading-relaxed text-[15px] font-medium relative z-10 italic">
+          {rec.razonRecomendacion}
+        </p>
+      </div>
 
-      <div className="flex items-center justify-between pt-3 border-t border-gray-100">
-        <div>
-          {rec.nombreRevisor ? (
-            <>
-              <p className="text-sm font-medium text-gray-800">
-                {rec.nombreRevisor}
-              </p>
-              {rec.cargoRevisor && (
-                <p className="text-xs text-gray-500">{rec.cargoRevisor}</p>
-              )}
-            </>
-          ) : (
-            <p className="text-sm text-gray-400 italic">Revisión anónima</p>
-          )}
+      <div className="flex items-center justify-between pt-6 border-t border-slate-100">
+        <div className="flex items-center gap-3">
+          <div className="w-8 h-8 rounded-full bg-primary/5 flex items-center justify-center border border-primary/10">
+             <ThumbsUp className="w-4 h-4 text-primary" />
+          </div>
+          <div>
+            {rec.nombreRevisor ? (
+              <>
+                <p className="text-xs font-black text-primary uppercase tracking-wider">
+                  {rec.nombreRevisor}
+                </p>
+                {rec.cargoRevisor && (
+                  <p className="text-[10px] text-slate-600 font-bold uppercase tracking-widest mt-0.5">{rec.cargoRevisor}</p>
+                )}
+              </>
+            ) : (
+              <p className="text-[10px] text-slate-300 font-black uppercase tracking-widest italic">Anónimo</p>
+            )}
+          </div>
         </div>
-        <span className="text-xs text-gray-400">
+        <span className="text-[10px] text-slate-600 font-black uppercase tracking-[0.2em] italic">
           {new Date(rec.fechaRecomendacion).toLocaleDateString("es-ES", {
             year: "numeric",
             month: "short",
@@ -130,7 +141,7 @@ function RecomendacionCard({
           })}
         </span>
       </div>
-    </Card>
+    </div>
   );
 }
 
@@ -204,53 +215,60 @@ export default function RecomendacionesPage() {
       ) : (
         <>
           {/* Resumen */}
-          <Card className="p-6 mb-8 bg-gradient-to-br from-[#f0f9f8] to-white border-[#18a999]/20">
-            <div className="flex flex-col sm:flex-row items-center gap-6">
-              <div className="flex flex-col items-center gap-2">
-                <span className="text-6xl font-bold text-[#18a999]">
-                  {total > 0 ? promedioRedondeado.toFixed(1) : "—"}
-                </span>
+          <div className="p-10 mb-12 bg-white rounded-5xl shadow-sm border border-slate-50 relative overflow-hidden group">
+            <div className="absolute top-0 right-0 w-64 h-64 bg-primary/2 rounded-full -translate-y-1/2 translate-x-1/2" />
+            
+            <div className="flex flex-col lg:flex-row items-center gap-10 relative z-10">
+              <div className="flex flex-col items-center gap-3">
+                <div className="relative">
+                  <div className="absolute inset-0 bg-primary/5 rounded-full blur-2xl animate-pulse" />
+                  <span className="text-8xl font-display font-black text-primary relative z-10 tracking-tighter">
+                    {total > 0 ? promedioRedondeado.toFixed(1) : "—"}
+                  </span>
+                </div>
                 <StarRating value={Math.round(promedio)} size="lg" />
-                <span className="text-sm text-gray-500">
+                <span className="text-[10px] text-slate-600 font-black uppercase tracking-[0.2em] mt-2 italic">
                   Puntuación promedio
                 </span>
               </div>
 
-              <div className="w-px h-16 bg-gray-200 hidden sm:block" />
+              <div className="w-px h-32 bg-slate-100 hidden lg:block" />
 
-              <div className="flex flex-col gap-2 flex-1">
+              <div className="flex flex-col gap-4 flex-1 w-full max-w-md">
                 {[5, 4, 3, 2, 1].map((star) => {
                   const count = recomendaciones.filter(
                     (r) => r.puntuacion === star,
                   ).length;
                   const pct = total > 0 ? (count / total) * 100 : 0;
                   return (
-                    <div key={star} className="flex items-center gap-3">
-                      <span className="text-sm text-gray-600 w-4 text-right">
+                    <div key={star} className="flex items-center gap-4">
+                      <span className="text-xs font-black text-slate-600 w-4">
                         {star}
                       </span>
-                      <Star className="w-4 h-4 fill-yellow-400 text-yellow-400 shrink-0" />
-                      <div className="flex-1 bg-gray-100 rounded-full h-2 overflow-hidden">
+                      <Star className="w-4 h-4 fill-primary text-primary shrink-0" />
+                      <div className="flex-1 bg-slate-50 rounded-full h-2.5 overflow-hidden border border-slate-100/50">
                         <div
-                          className="h-full bg-yellow-400 rounded-full transition-all"
-                          style={{ width: `${pct}%` }}
+                          className="h-full bg-primary rounded-full transition-all duration-1000 w-[var(--star-pc)]"
+                          style={{ "--star-pc": `${pct}%` } as React.CSSProperties}
                         />
                       </div>
-                      <span className="text-sm text-gray-500 w-4">{count}</span>
+                      <span className="text-[10px] font-black text-slate-600 w-4">{count}</span>
                     </div>
                   );
                 })}
               </div>
 
-              <div className="flex flex-col items-center gap-1 sm:ml-4">
-                <div className="flex items-center gap-2 text-[#18a999]">
-                  <ThumbsUp className="w-6 h-6" />
-                  <span className="text-2xl font-bold">{total}</span>
+              <div className="flex flex-col items-center gap-2 lg:ml-auto p-8 rounded-xl bg-primary/2 border border-primary/5 min-w-[200px]">
+                <div className="flex items-center gap-2 text-primary group-hover:scale-110 transition-transform duration-500">
+                  <ThumbsUp className="w-10 h-10 fill-primary/10" />
+                  <span className="text-5xl font-display font-black tracking-tight">{total}</span>
                 </div>
-                <span className="text-sm text-gray-500">Recomendaciones</span>
+                <span className="text-[10px] text-primary font-black uppercase tracking-[0.2em] italic">
+                   Postulaciones Validadas
+                </span>
               </div>
             </div>
-          </Card>
+          </div>
 
           {/* Lista */}
           {total === 0 ? (

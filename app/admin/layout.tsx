@@ -4,14 +4,13 @@ import { Children } from "@/types/generic";
 import { useEffect, useState } from "react";
 import AsideMenu, { NavLink } from "@/components/shared/components/AsideMenu";
 import { useSession, signOut } from "next-auth/react";
-import { redirect } from "next/navigation";
 import { fetchApi } from "@/lib/apiClient";
 import { Logout } from "@/types/user";
 
 import { Building2, Briefcase, MessageSquare, Shield, BookOpen } from "lucide-react";
 
 export default function AdminLayout({ children }: Children) {
-  const { data: session, status } = useSession();
+  const { data: session } = useSession();
   const [isAsideOpen, setIsAsideOpen] = useState(false);
 
   const toggleAside = () => setIsAsideOpen((prev) => !prev);
@@ -111,15 +110,6 @@ export default function AdminLayout({ children }: Children) {
     },
   ];
 
-  // if (status === "loading") {
-  //   return <div>Loading...</div>; // Or a spinner
-  // }
-
-  // // @ts-ignore
-  // if (status === "unauthenticated" || session?.user?.role !== 'admin') {
-  //   redirect('/');
-  // }
-
   return (
     <div className="min-h-screen bg-white relative">
       <Navbar onHamburgerClick={toggleAside} isAsideOpen={isAsideOpen} />
@@ -128,10 +118,10 @@ export default function AdminLayout({ children }: Children) {
           isOpen={isAsideOpen}
           onClose={closeAside}
           side="left"
-          className="absolute top-0 left-0 h-full w-80 transform-none bg-[#2f4f4f] shadow-none md:shadow"
+          className="absolute top-0 left-0 h-full w-80 transform-none bg-surface-dark shadow-none md:shadow"
           links={adminLinks}
         />
-        <main className="w-full w-full  py-10 bg-gray-50 md:py-20">
+        <main className="w-full py-10 bg-gray-50 md:py-20 shrink-0">
           <div className="container">{children}</div>
         </main>
       </div>

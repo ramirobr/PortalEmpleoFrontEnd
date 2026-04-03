@@ -15,7 +15,7 @@ export default function EducationSection({ educacion }: EducationSectionProps) {
   });
 
   return (
-    <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 md:p-8">
+    <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6 md:p-8">
       <div className="flex items-center gap-3 mb-6">
         <GraduationCap className="text-teal-600" size={24} />
         <h2 className="text-xl font-bold text-teal-600">Educación</h2>
@@ -25,7 +25,7 @@ export default function EducationSection({ educacion }: EducationSectionProps) {
         {sortedEducation.map((edu, index) => (
           <div key={index}>
             <div className="flex gap-4">
-              <div className="w-12 h-12 rounded-lg bg-teal-50 flex items-center justify-center flex-shrink-0 text-teal-600">
+              <div className="w-12 h-12 rounded-lg bg-teal-50 flex items-center justify-center shrink-0 text-teal-600">
                 <GraduationCap />
               </div>
               <div>

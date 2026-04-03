@@ -53,7 +53,7 @@ export default function SignIn() {
           <button className="cursor-pointer flex items-center justify-center gap-2 w-full py-3 rounded bg-white border border-gray-300 font-semibold text-base text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-500 mb-2">
             Acceder con Google
           </button>
-          <button className="cursor-pointer flex items-center justify-center gap-2 w-full py-3 rounded bg-[#2867B2] text-white font-semibold text-base hover:bg-[#205081] focus:outline-none focus:ring-2 focus:ring-blue-500 mb-2">
+          <button className="cursor-pointer flex items-center justify-center gap-2 w-full py-3 rounded bg-brand-linkedin text-white font-semibold text-base hover:bg-brand-linkedin-dark focus:outline-none focus:ring-2 focus:ring-blue-500 mb-2">
             Acceder con Linkedin
           </button>
           <div className="flex items-center my-4">

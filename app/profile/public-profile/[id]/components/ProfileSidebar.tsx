@@ -17,7 +17,7 @@ export default function ProfileSidebar({ user }: ProfileSidebarProps) {
     <div className="space-y-6">
       {/* Summary */}
       {user.resumen && (
-        <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6">
+        <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
           <div className="flex items-center gap-2 mb-4 text-teal-600 font-bold">
             <div className="p-1.5 bg-teal-50 rounded-lg">
               <FileText className="w-4 h-4" />
@@ -53,7 +53,7 @@ export default function ProfileSidebar({ user }: ProfileSidebarProps) {
 
       {/* Social Links */}
       {(user.linkedin || user.github || user.website) && (
-        <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6">
+        <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
           <h3 className="font-bold text-gray-900 mb-4">Redes Profesionales</h3>
           <div className="space-y-4">
             {user.linkedin && (

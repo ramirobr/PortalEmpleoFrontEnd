@@ -28,9 +28,9 @@ export default function ProfileHeader({
     .join(" ");
 
   return (
-    <div className="bg-white rounded-2xl shadow-sm overflow-hidden border border-gray-100">
-      <div className="h-32 bg-teal-500/10 w-full relative">
-        <div className="absolute inset-0 bg-[radial-gradient(#14aa9f_1px,transparent_1px)] [background-size:16px_16px] opacity-10"></div>
+    <div className="bg-white rounded-xl shadow-sm overflow-hidden border border-gray-100">
+      <div className="h-32 bg-primary/10 w-full relative">
+        <div className="absolute inset-0 bg-[radial-gradient(var(--primary-container)_1px,transparent_1px)] bg-size-[16px_16px] opacity-10"></div>
       </div>
       <div className="px-8 pb-8">
         <div className="relative flex flex-col md:flex-row items-start md:items-end -mt-12 mb-6 gap-6">

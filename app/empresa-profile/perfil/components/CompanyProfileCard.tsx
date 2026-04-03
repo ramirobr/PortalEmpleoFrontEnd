@@ -1,5 +1,7 @@
 import { CompanyProfileData } from "@/types/company";
 import { Building2, Globe, Users, Briefcase, CheckCircle } from "lucide-react";
+import Pill from "@/components/shared/components/Pill";
+import Image from "next/image";
 
 interface CompanyProfileCardProps {
   profile: CompanyProfileData;
@@ -9,36 +11,36 @@ export default function CompanyProfileCard({
   profile,
 }: CompanyProfileCardProps) {
   return (
-    <div className="bg-white border-primary shadow hover:shadow-lg relative border-l-8 border-l-primary rounded-xl transition-all overflow-hidden">
+    <div className="bg-white shadow-sm hover:shadow-2xl transition-all duration-700 rounded-xl overflow-hidden border border-slate-50">
       <div className="p-8 border-b border-gray-50">
         <div className="flex items-center gap-6">
           {profile.logoUrl ? (
-            <img
+            <Image
               src={profile.logoUrl}
               alt={`Logo de ${profile.nombre}`}
-              className="w-24 h-24 rounded-2xl object-cover shadow-sm border border-gray-100"
+              width={96}
+              height={96}
+              className="w-24 h-24 rounded-2xl object-cover shadow-sm border border-slate-100"
             />
           ) : (
-            <div className="w-24 h-24 rounded-2xl bg-primary/10 flex items-center justify-center border border-primary/20">
+            <div className="w-24 h-24 rounded-xl bg-primary/10 flex items-center justify-center border border-primary/20">
               <Building2 className="w-12 h-12 text-primary" />
             </div>
           )}
           <div>
-            <div className="flex items-center gap-3 mb-1">
-              <h2 className="text-3xl font-extrabold text-primary tracking-tight">{profile.nombre}</h2>
+            <div className="flex flex-col sm:flex-row items-center sm:items-baseline gap-4 mb-2">
+              <h2 className="text-3xl font-display font-black text-primary uppercase tracking-tight">{profile.nombre}</h2>
               {profile.estado && (
-                <span
-                  className={`text-[10px] font-extrabold tracking-widest uppercase px-3 py-1 rounded-full ${
-                    profile.estado.nombre === "Activo"
-                      ? "bg-green-100 text-green-700"
-                      : "bg-yellow-100 text-yellow-700"
-                  }`}
+                <Pill
+                  variant={profile.estado.nombre === "Activo" ? "green" : "yellow"}
+                  className="uppercase text-[9px] font-black tracking-[0.2em] px-4 py-1.5 rounded-full"
+                  noButton
                 >
                   {profile.estado.nombre}
-                </span>
+                </Pill>
               )}
             </div>
-            <p className="text-lg font-medium text-gray-500">{profile.razonSocial}</p>
+            <p className="text-lg font-bold uppercase tracking-widest text-slate-600">{profile.razonSocial}</p>
           </div>
         </div>
       </div>
@@ -46,7 +48,7 @@ export default function CompanyProfileCard({
         {profile.descripcion && (
           <div className="mb-8">
             <h3 className="text-xs font-extrabold uppercase tracking-widest text-gray-400 mb-3 ml-1">Acerca de la empresa</h3>
-            <p className="text-gray-700 leading-relaxed text-base bg-gray-50/50 p-6 rounded-2xl border border-gray-100/50">
+            <p className="text-gray-700 leading-relaxed text-base bg-gray-50/50 p-6 rounded-xl border border-gray-100/50">
               {profile.descripcion}
             </p>
           </div>
@@ -54,23 +56,23 @@ export default function CompanyProfileCard({
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           {[
-            { icon: Briefcase, label: "Industria", value: profile.industria?.nombre ?? "No especificada" },
-            { icon: Users, label: "Tamaño de la empresa", value: profile.cantidadEmpleados?.nombre ?? "No especificado" },
-            { icon: CheckCircle, label: "Condición Fiscal", value: profile.condicionFiscal?.nombre ?? "No especificada" },
+            { icon: Briefcase, label: "Industria", value: profile.industria?.nombre ?? "EDITORIAL / CONSULTORÍA" },
+            { icon: Users, label: "Tamaño", value: profile.cantidadEmpleados?.nombre ?? "A DEFINIR" },
+            { icon: CheckCircle, label: "Condición Fiscal", value: profile.condicionFiscal?.nombre ?? "VERIFICADA" },
           ].map((item, idx) => (
-            <div key={idx} className="flex items-center gap-4 p-5 bg-white border border-gray-100 rounded-2xl hover:border-primary/30 transition-colors group">
-              <div className="w-12 h-12 rounded-full bg-primary/5 flex items-center justify-center group-hover:bg-primary/10 transition-colors">
-                <item.icon className="w-6 h-6 text-primary" />
+            <div key={idx} className="flex items-center gap-5 p-6 bg-slate-50/50 rounded-3xl border border-slate-100 hover:border-primary/20 hover:bg-white hover:shadow-lg transition-all duration-300 group">
+              <div className="w-14 h-14 rounded-2xl bg-white shadow-sm flex items-center justify-center group-hover:bg-primary/5 transition-colors border border-slate-100">
+                <item.icon className="w-7 h-7 text-primary" />
               </div>
-              <div>
-                <p className="text-[10px] font-extrabold uppercase tracking-widest text-gray-400 mb-0.5">{item.label}</p>
-                <p className="font-bold text-gray-900">{item.value}</p>
+              <div className="space-y-1">
+                <p className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-600">{item.label}</p>
+                <p className="font-bold text-slate-900 tracking-tight">{item.value}</p>
               </div>
             </div>
           ))}
 
           {profile.sitioWeb && (
-            <div className="flex items-center gap-4 p-5 bg-white border border-gray-100 rounded-2xl hover:border-primary/30 transition-colors group">
+            <div className="flex items-center gap-4 p-5 bg-white border border-gray-100 rounded-xl hover:border-primary/30 transition-colors group">
               <div className="w-12 h-12 rounded-full bg-primary/5 flex items-center justify-center group-hover:bg-primary/10 transition-colors">
                 <Globe className="w-6 h-6 text-primary" />
               </div>
