@@ -135,7 +135,7 @@ export default function Navbar({
                       {pathname !== "/auth/login" && (
                         <Link
                           href="/auth/login"
-                          className="text-sm btn btn-secondary px-2 border border-secondary focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:border-blue-500 focus-visible:z-10"
+                          className="text-sm btn btn-primary border border-primary px-2 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:border-blue-500 focus-visible:z-10"
                         >
                           Ingresar
                         </Link>
