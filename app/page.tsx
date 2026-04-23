@@ -11,13 +11,21 @@ export default async function Home() {
       title: "Buscar Talento",
       description: "Contrata Personal",
       image: "/categories/buscar_talento.png",
+<<<<<<< HEAD
       href: "/auth/empresa",
+=======
+      href: "/auth/login",
+>>>>>>> ac6e4d45911ac6209a1e4a6474d02e91d53b6b53
     },
     {
       title: "Empleador Independiente",
       description: "Busca Personal",
       image: "/categories/empleador_independiente.png",
+<<<<<<< HEAD
       href: "/auth/empresa",
+=======
+      href: "/auth/login",
+>>>>>>> ac6e4d45911ac6209a1e4a6474d02e91d53b6b53
     },
     {
       title: "Buscar Empleo",
@@ -29,13 +37,21 @@ export default async function Home() {
       title: "Ofrecer Servicios",
       description: "Ofrece tu trabajo",
       image: "/categories/ofrecer_servicios.png",
+<<<<<<< HEAD
       href: "/auth/email",
+=======
+      href: "/empleos-busqueda/email?role=pasante",
+>>>>>>> ac6e4d45911ac6209a1e4a6474d02e91d53b6b53
     },
     {
       title: "Servicios Profesionales",
       description: "Consigue clientes",
       image: "/categories/servicios_profesionales.png",
+<<<<<<< HEAD
       href: "/auth/email",
+=======
+      href: "/empleos-busqueda/email?role=horas",
+>>>>>>> ac6e4d45911ac6209a1e4a6474d02e91d53b6b53
     },
   ];
 

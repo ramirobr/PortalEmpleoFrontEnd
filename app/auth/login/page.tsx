@@ -47,7 +47,17 @@ function LoginForm() {
   const timeoutRef = useRef<NodeJS.Timeout | null>(null);
   const searchParams = useSearchParams();
   const next = searchParams.get("next");
+<<<<<<< HEAD
   const {  update } = useSession();
+=======
+  const { status, update } = useSession();
+
+  useEffect(() => {
+    if (status === "authenticated") {
+      router.push(next ?? "/");
+    }
+  }, [status, router, next]);
+>>>>>>> ac6e4d45911ac6209a1e4a6474d02e91d53b6b53
 
   const form = useForm<LoginValues>({
     resolver: zodResolver(loginSchema),

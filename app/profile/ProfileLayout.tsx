@@ -15,7 +15,10 @@ import {
   MessageSquareQuote,
   KeyRound,
   ThumbsUp,
+<<<<<<< HEAD
   FolderOpen,
+=======
+>>>>>>> ac6e4d45911ac6209a1e4a6474d02e91d53b6b53
 } from "lucide-react";
 
 export default function ProfileLayout({ children }: Children) {
@@ -111,11 +114,14 @@ export default function ProfileLayout({ children }: Children) {
       icon: <ThumbsUp className="w-5 h-5" />,
     },
     {
+<<<<<<< HEAD
       name: "Mis Archivos",
       href: "/profile/archivos",
       icon: <FolderOpen className="w-5 h-5" />,
     },
     {
+=======
+>>>>>>> ac6e4d45911ac6209a1e4a6474d02e91d53b6b53
       name: "Cambiar contraseña",
       href: "/profile/cambiar-contrasena",
       icon: <KeyRound className="w-5 h-5" />,

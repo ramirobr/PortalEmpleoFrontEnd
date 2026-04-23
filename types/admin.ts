@@ -309,6 +309,7 @@ export interface CatalogoFormValues {
   activo: boolean;
   idCatalogoPadre?: number;
 }
+<<<<<<< HEAD
 
 // ===== ARCHIVOS =====
 
@@ -411,3 +412,5 @@ export interface ArchivoUploadFormValues {
 }
 
 export type ArchivoActionResponse = GenericResponse<unknown>;
+=======
+>>>>>>> ac6e4d45911ac6209a1e4a6474d02e91d53b6b53

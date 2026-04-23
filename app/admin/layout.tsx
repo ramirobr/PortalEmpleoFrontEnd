@@ -7,7 +7,11 @@ import { useSession, signOut } from "next-auth/react";
 import { fetchApi } from "@/lib/apiClient";
 import { Logout } from "@/types/user";
 
+<<<<<<< HEAD
 import { Building2, Briefcase, MessageSquare, Shield, BookOpen, FolderOpen, FileText } from "lucide-react";
+=======
+import { Building2, Briefcase, MessageSquare, Shield, BookOpen } from "lucide-react";
+>>>>>>> ac6e4d45911ac6209a1e4a6474d02e91d53b6b53
 
 export default function AdminLayout({ children }: Children) {
   const { data: session } = useSession();
@@ -81,6 +85,7 @@ export default function AdminLayout({ children }: Children) {
       icon: <BookOpen />,
     },
     {
+<<<<<<< HEAD
       name: "Archivos Empresas",
       href: "/admin/archivos-empresa",
       icon: <FolderOpen />,
@@ -91,6 +96,8 @@ export default function AdminLayout({ children }: Children) {
       icon: <FileText />,
     },
     {
+=======
+>>>>>>> ac6e4d45911ac6209a1e4a6474d02e91d53b6b53
       name: "Gestionar Usuarios",
       href: "/admin/usuarios",
       icon: (

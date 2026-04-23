@@ -87,9 +87,15 @@ export default function PostulantesRecientes({
                 {/* Avatar with Status Ring */}
                 <div className="relative shrink-0">
                   <Avatar className="size-20 border-[3px] border-white shadow-lg group-hover:scale-105 transition-transform duration-500">
+<<<<<<< HEAD
                     {getPhotoSrc(aplicante.usuario.fotografia) && (
                       <AvatarImage
                         src={getPhotoSrc(aplicante.usuario.fotografia) || ""}
+=======
+                    {aplicante.usuario.fotografia && (
+                      <AvatarImage
+                        src={aplicante.usuario.fotografia}
+>>>>>>> ac6e4d45911ac6209a1e4a6474d02e91d53b6b53
                         alt={aplicante.usuario.nombreCompleto}
                         className="object-cover"
                       />
@@ -159,6 +165,7 @@ export default function PostulantesRecientes({
 
               {/* Actions - Signature CTA Style */}
               <div className="flex flex-col sm:flex-row items-center gap-4 w-full lg:w-auto">
+<<<<<<< HEAD
                 <Link
                   href={`/empresa-profile/candidato/${aplicante.usuario.idUsuario}`}
                   className="flex items-center justify-center gap-3 px-10 py-2.5 bg-slate-50 text-slate-900 font-black text-[11px] uppercase tracking-widest rounded-full hover:bg-slate-100 transition-all duration-300 shadow-sm hover:shadow-md cursor-pointer min-w-[150px] w-full sm:w-auto"
@@ -188,6 +195,21 @@ export default function PostulantesRecientes({
                     <span>Contactar</span>
                   </button>
                 )}
+=======
+                <button
+                  className="flex items-center justify-center gap-3 px-10 py-2.5 bg-slate-50 text-slate-900 font-black text-[11px] uppercase tracking-widest rounded-full hover:bg-slate-100 transition-all duration-300 shadow-sm hover:shadow-md cursor-pointer min-w-[150px] w-full sm:w-auto"
+                >
+                  <FileText className="size-4" />
+                  Visualizar CV
+                </button>
+                <button
+                  className="relative group/btn flex items-center justify-center gap-3 px-12 py-2.5 bg-linear-to-r from-secondary-container to-secondary text-white font-black text-[11px] uppercase tracking-widest rounded-full hover:shadow-2xl hover:shadow-secondary/30 transition-all duration-500 cursor-pointer min-w-[160px] w-full sm:w-auto overflow-hidden hover:-translate-y-1"
+                >
+                  <div className="absolute inset-x-0 top-0 h-full w-full bg-white/20 -translate-x-full group-hover/btn:translate-x-full transition-transform duration-1000 skew-x-12" />
+                  <Mail className="size-4 relative z-10" />
+                  <span className="relative z-10">Contactar</span>
+                </button>
+>>>>>>> ac6e4d45911ac6209a1e4a6474d02e91d53b6b53
               </div>
             </div>
           ))}
