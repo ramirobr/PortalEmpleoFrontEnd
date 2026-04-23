@@ -1,18 +1,14 @@
 "use client";
 
-import { useState, useCallback } from "react";
-import { useSession } from "next-auth/react";
+import { useState, useEffect } from "react";
 import { DashboardInfoData } from "@/types/user";
-import { fetchApi } from "@/lib/apiClient";
-import Dashboard from "./Dashboard";
-import NotificacionesCandidato from "./NotificacionesCandidato";
-import JobsApplied from "./JobsApplied";
-import DashboardProfileHeader from "./DashboardProfileHeader";
-import DashboardQuickActions from "./DashboardQuickActions";
-
-interface DashboardInfoResponse {
-  data: DashboardInfoData;
-}
+import { useAuthStore } from "@/context/authStore";
+import DashboardHeroBanner from "./DashboardHeroBanner";
+import DashboardStatsBanner from "./DashboardStatsBanner";
+import DashboardJobFilters from "./DashboardJobFilters";
+import DashboardEmpleosDestacados from "./DashboardEmpleosDestacados";
+import DashboardEmplosMasBuscados from "./DashboardEmplosMasBuscados";
+import DashboardCTAButton from "./DashboardCTAButton";
 
 interface ProfileDashboardContainerProps {
   initialDashboard: DashboardInfoData;
@@ -25,52 +21,43 @@ export default function ProfileDashboardContainer({
   initialDashboard,
   userPic,
   userName,
-  resumenProfesional,
 }: ProfileDashboardContainerProps) {
-  const { data: session } = useSession();
-  const [dashboard, setDashboard] =
-    useState<DashboardInfoData>(initialDashboard);
+  const [dashboard] = useState<DashboardInfoData>(initialDashboard);
+  const setNotifications = useAuthStore((s) => s.setNotifications);
 
-  const reloadDashboard = useCallback(async () => {
-    if (!session?.user?.id || !session?.user?.accessToken) return;
-
-    try {
-      const response = await fetchApi<DashboardInfoResponse>(
-        `/User/dashboard-info/${session.user.id}`,
-        {
-          token: session.user.accessToken,
-        },
-      );
-
-      if (response?.data) {
-        setDashboard(response.data);
-      }
-    } catch (error) {
-      console.error("Error reloading dashboard:", error);
-    }
-  }, [session]);
+  useEffect(() => {
+    setNotifications(dashboard.notificaciones ?? []);
+  }, [dashboard.notificaciones, setNotifications]);
 
   return (
-    <>
-      <DashboardProfileHeader
+    <div className="-mx-8">
+      {/* Hero banner — full bleed (overrides container padding) */}
+      <DashboardHeroBanner
         userName={userName || dashboard.userName}
-        resumenProfesional={resumenProfesional || dashboard.resumenProfesional}
         userPic={userPic}
         perfilCompletado={dashboard.perfilCompletado}
-        promedioRecomendaciones={dashboard.promedioRecomendaciones}
       />
-      <DashboardQuickActions />
-      <Dashboard
-        visitas={dashboard.visitas}
-        elegido={dashboard.elegido}
-        revision={dashboard.revision}
-        totalApplications={dashboard.totalApplications}
-      />
-      <NotificacionesCandidato
-        notificacionesIniciales={dashboard.notificaciones || []}
-        onNotificacionLeida={reloadDashboard}
-      />
-      <JobsApplied listaTrabajosAplicados={dashboard.listaTrabajosAplicados} />
-    </>
+
+      {/* Green stats banner */}
+      <DashboardStatsBanner />
+
+      {/* Rest of content back inside normal padding */}
+      <div className="px-8">
+        {/* Job type filter pills */}
+        <DashboardJobFilters />
+
+        {/* Two-column job sections */}
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mt-4">
+          <DashboardEmpleosDestacados
+            jobs={dashboard.listaTrabajosAplicados || []}
+            perfilCompletado={dashboard.perfilCompletado}
+          />
+          <DashboardEmplosMasBuscados />
+        </div>
+
+        {/* CTA button */}
+        <DashboardCTAButton />
+      </div>
+    </div>
   );
 }

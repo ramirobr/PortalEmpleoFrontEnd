@@ -1,22 +1,27 @@
 "use client";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { useAuthStore } from "@/context/authStore";
 import { getCurriculumByUserId, getUserPic } from "@/lib/user/info";
 import { getCompanyLogo } from "@/lib/company/profile";
-import { getInitials } from "@/lib/utils";
 import { ROLES } from "@/types/auth";
 import { useSession } from "next-auth/react";
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useEffect } from "react";
-import { Building2 } from "lucide-react";
-// import SocialLinks from "./SocialLinks";
+import { useEffect, useState } from "react";
+import { Bell, Menu } from "lucide-react";
+import NotificationDropdown from "./NotificationDropdown";
+
 interface NavbarProps {
   showCompanyRegister?: boolean;
   onHamburgerClick?: () => void;
   isAsideOpen?: boolean;
 }
+
+const NAV_LINKS = [
+  { label: "Inicio", href: "/" },
+  { label: "Ofertas", href: "/empleos-busqueda" },
+  { label: "Para Empresas", href: "/auth/empresa" },
+];
 
 export default function Navbar({
   showCompanyRegister = false,
@@ -26,10 +31,10 @@ export default function Navbar({
   const { data: session, status } = useSession();
   const pathname = usePathname();
   const id = useAuthStore((s) => s.id);
-  const pic = useAuthStore((s) => s.pic);
-  const companyLogo = useAuthStore((s) => s.companyLogo);
+  const unreadNotifications = useAuthStore((s) => s.unreadNotifications);
   const hydrate = useAuthStore((s) => s.hydrate);
   const isCompanyAdmin = session?.user?.role === ROLES.AdministradorEmpresa;
+  const [notifOpen, setNotifOpen] = useState(false);
 
   const handleUserSession = async () => {
     if (id || !session) return;
@@ -55,110 +60,123 @@ export default function Navbar({
   }, [status]);
 
   return (
-    <nav className="sticky top-0 z-50 w-full py-4 flex items-center justify-center bg-white/95 backdrop-blur-md border-b border-slate-100 shadow-md transition-all duration-300">
-      <section className="container">
-        <div className="grid grid-cols-3 gap-3 items-center justify-between">
-          <button
-            type="button"
-            aria-label={session ? "Abrir menú de usuario" : "Abrir menú"}
-            aria-pressed={isAsideOpen}
-            className={`cursor-pointer ${
-              session
-                ? `p-0 rounded-full border-none ring-2 ${
-                    isAsideOpen ? "ring-green-100" : "ring-primary"
-                  } ring-offset-2`
-                : "p-2 rounded border border-gray-200 bg-white shadow hover:bg-gray-50"
-            } focus:outline-none w-fit`}
-            onClick={onHamburgerClick}
-          >
-            {session ? (
-              <Avatar className="size-10">
-                <AvatarImage src={isCompanyAdmin ? companyLogo : pic} />
-                <AvatarFallback>
-                  {isCompanyAdmin ? (
-                    <Building2 className="size-5 text-primary" />
-                  ) : (
-                    getInitials(session.user.fullName)
-                  )}
-                </AvatarFallback>
-              </Avatar>
-            ) : (
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="24"
-                height="24"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="2"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                className="text-primary"
+    <nav className="sticky top-0 z-50 w-full py-3 bg-white/95 backdrop-blur-md border-b border-slate-100 shadow-sm transition-all duration-300">
+      <div className="container flex items-center justify-between gap-4">
+        {/* Left: Logo */}
+        <Link href="/" aria-label="Ir a la página principal" className="shrink-0">
+          <Image
+            src="/logos/logo-empresa.jpg"
+            alt="implica"
+            width={130}
+            height={44}
+            loading="lazy"
+          />
+        </Link>
+
+        {/* Center: Nav links (desktop only) */}
+        <div className="hidden md:flex items-center gap-8">
+          {NAV_LINKS.map((link) => {
+            const isActive =
+              link.href === "/"
+                ? pathname === "/"
+                : pathname.startsWith(link.href);
+            return (
+              <Link
+                key={link.href}
+                href={link.href}
+                className={`text-sm font-medium transition-colors hover:text-primary ${
+                  isActive
+                    ? "text-primary border-b-2 border-primary pb-0.5"
+                    : "text-gray-600"
+                }`}
               >
-                <line x1="3" y1="6" x2="21" y2="6" />
-                <line x1="3" y1="12" x2="21" y2="12" />
-                <line x1="3" y1="18" x2="21" y2="18" />
-              </svg>
-            )}
-          </button>
-
-          <Link
-            href="/"
-            aria-label="Ir a la página principal"
-            className="flex items-center justify-center"
-          >
-            <Image
-              src="/logos/logo-empresa.jpg"
-              alt="Logo de la empresa"
-              width={200}
-              height={66}
-              className=""
-              loading="lazy"
-            />
-          </Link>
-
-          {status !== "loading" && (
-            <div
-              id="navbar-buttons"
-              className="hidden md:flex items-center space-x-2 justify-end"
-            >
-              {session ? null : ( // <Button onClick={Logout}>Cerrar sesión</Button>
-                <>
-                  {!pathname.startsWith("/profile") && (
-                    <>
-                      <Link
-                        href="/auth/email"
-                        className="text-sm btn btn-primary border border-primary px-2 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:border-blue-500 focus-visible:z-10"
-                      >
-                        Crear cuenta
-                      </Link>
-                      {pathname !== "/auth/login" && (
-                        <Link
-                          href="/auth/login"
-                          className="text-sm btn btn-primary border border-primary px-2 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:border-blue-500 focus-visible:z-10"
-                        >
-                          Ingresar
-                        </Link>
-                      )}
-                    </>
-                  )}
-                </>
-              )}
-              {showCompanyRegister && !isCompanyAdmin && (
-                <Link
-                  href="/auth/empresa"
-                  aria-label="Regístrate como empresa"
-                  className="text-sm btn btn-primary border border-primary px-2 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:border-blue-500 focus-visible:z-10"
-                >
-                  Empresa
-                </Link>
-              )}
-            </div>
-          )}
-
-          {/* <SocialLinks /> */}
+                {link.label}
+              </Link>
+            );
+          })}
         </div>
-      </section>
+
+        {/* Right: actions */}
+        {status !== "loading" && (
+          <div className="flex items-center gap-3">
+            {session ? (
+              <>
+                {/* Bell notification */}
+                <div className="relative">
+                  <button
+                    type="button"
+                    aria-label="Notificaciones"
+                    onClick={() => setNotifOpen((prev) => !prev)}
+                    className="relative p-2 rounded-full hover:bg-gray-100 transition-colors cursor-pointer"
+                  >
+                    <Bell className="w-5 h-5 text-gray-600" />
+                    {unreadNotifications > 0 && (
+                      <span className="absolute -top-0.5 -right-0.5 min-w-[18px] h-[18px] bg-primary text-white text-[10px] font-bold rounded-full flex items-center justify-center px-1">
+                        {unreadNotifications > 99 ? "99+" : unreadNotifications}
+                      </span>
+                    )}
+                  </button>
+
+                  <NotificationDropdown
+                    isOpen={notifOpen}
+                    onClose={() => setNotifOpen(false)}
+                  />
+                </div>
+
+                {/* Mi Perfil button */}
+                <button
+                  type="button"
+                  aria-label="Mi perfil"
+                  aria-pressed={isAsideOpen}
+                  onClick={onHamburgerClick}
+                  className="bg-primary hover:bg-primary/90 text-white text-sm font-semibold px-5 py-2 rounded-lg transition-colors cursor-pointer"
+                >
+                  Mi Perfil
+                </button>
+              </>
+            ) : (
+              <>
+                {!pathname.startsWith("/profile") && (
+                  <>
+                    <Link
+                      href="/auth/email"
+                      className="text-sm btn btn-primary border border-primary px-2 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500"
+                    >
+                      Crear cuenta
+                    </Link>
+                    {pathname !== "/auth/login" && (
+                      <Link
+                        href="/auth/login"
+                        className="text-sm btn btn-primary border border-primary px-2 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500"
+                      >
+                        Ingresar
+                      </Link>
+                    )}
+                  </>
+                )}
+                {showCompanyRegister && (
+                  <Link
+                    href="/auth/empresa"
+                    className="text-sm btn btn-primary border border-primary px-2 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500"
+                  >
+                    Empresa
+                  </Link>
+                )}
+                {/* Mobile hamburger for unauthenticated */}
+                <button
+                  type="button"
+                  aria-label="Abrir menú"
+                  aria-pressed={isAsideOpen}
+                  onClick={onHamburgerClick}
+                  className="md:hidden p-2 rounded border border-gray-200 bg-white shadow hover:bg-gray-50 cursor-pointer"
+                >
+                  <Menu className="w-5 h-5 text-primary" />
+                </button>
+              </>
+            )}
+          </div>
+        )}
+      </div>
     </nav>
   );
 }

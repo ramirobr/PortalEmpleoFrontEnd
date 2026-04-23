@@ -1,5 +1,5 @@
 "use client";
-import { UserAuthData } from "@/types/user";
+import { UserAuthData, Notificacion } from "@/types/user";
 import { create } from "zustand";
 
 export type AuthHydratorProps = {
@@ -13,11 +13,16 @@ export type AuthHydratorProps = {
 
 type AuthState = {
   isAuthenticated: boolean;
+  unreadNotifications: number;
+  notifications: Notificacion[];
   hydrate: (data: AuthHydratorProps) => void;
   setPic: (pic?: string) => void;
   setCompanyLogo: (companyLogo?: string) => void;
   setFullName: (fullName: string) => void;
   setProfesion: (profesion: string) => void;
+  setUnreadNotifications: (count: number) => void;
+  setNotifications: (notifications: Notificacion[]) => void;
+  markNotificationRead: (id: string) => void;
   clear: () => void;
 } & AuthHydratorProps & { profesion?: string };
 
@@ -29,12 +34,17 @@ const initalState: Omit<
   | "setCompanyLogo"
   | "setFullName"
   | "setProfesion"
+  | "setUnreadNotifications"
+  | "setNotifications"
+  | "markNotificationRead"
 > = {
   id: undefined,
   fullName: undefined,
   profesion: "",
   role: undefined,
   isAuthenticated: false,
+  unreadNotifications: 0,
+  notifications: [],
   idCurriculum: "",
   pic: "",
   idEmpresa: undefined,
@@ -84,5 +94,21 @@ export const useAuthStore = create<AuthState>((set) => ({
       ...state,
       profesion,
     })),
+  setUnreadNotifications: (count) => set({ unreadNotifications: count }),
+  setNotifications: (notifications) =>
+    set({
+      notifications,
+      unreadNotifications: notifications.filter((n) => !n.esLeida).length,
+    }),
+  markNotificationRead: (id) =>
+    set((state) => {
+      const updated = state.notifications.map((n) =>
+        n.idNotificacion === id ? { ...n, esLeida: true } : n,
+      );
+      return {
+        notifications: updated,
+        unreadNotifications: updated.filter((n) => !n.esLeida).length,
+      };
+    }),
   clear: () => set(initalState),
 }));
