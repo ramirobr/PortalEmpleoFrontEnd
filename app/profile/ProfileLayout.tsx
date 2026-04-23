@@ -149,7 +149,16 @@ export default function ProfileLayout({ children }: Children) {
 
   return (
     <div className="min-h-screen bg-white relative">
-      <Navbar onHamburgerClick={toggleAside} isAsideOpen={isAsideOpen} />
+      <Navbar
+        onHamburgerClick={toggleAside}
+        isAsideOpen={isAsideOpen}
+        logoHref="/profile"
+        navLinks={[
+          { label: "Inicio", href: "/profile" },
+          { label: "Ofertas", href: "/empleos-busqueda" },
+          { label: "Para Empresas", href: "/auth/empresa" },
+        ]}
+      />
       <div className="relative bg-gray-50">
         <AsideMenu
           isOpen={isAsideOpen}

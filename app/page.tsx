@@ -149,6 +149,35 @@ export default async function Home() {
             </div>
           </div>
         </section>
+
+        {/* Testimonials Section */}
+        <section className="w-full py-16 sm:py-20 px-6 bg-background">
+          <div className="max-w-7xl mx-auto">
+            <h2 className="text-3xl md:text-4xl font-display font-extrabold text-slate-900 text-center mb-12 tracking-tight">
+              Lo que dicen de nosotros
+            </h2>
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+              <TestimonialCard
+                quote="Gracias a implica encontré al talento ideal para mi empresa."
+                name="Ana López"
+                role="CEO en Tech Solutions"
+                image="/testimonials/ana_lopez.png"
+              />
+              <TestimonialCard
+                quote="Una herramienta excelente para conectar con clientes como freelancer."
+                name="Diego Ruiz"
+                role="Empleador Independiente"
+                image="/testimonials/elena_soto.png"
+              />
+              <TestimonialCard
+                quote="Conseguí mi trabajo actual de forma rápida y sencilla. Muy recomendado."
+                name="Elena Soto"
+                role="Candidata Contratada"
+                image="/testimonials/elena_soto.png"
+              />
+            </div>
+          </div>
+        </section>
       </main>
       {/* Footer / Bottom Spacing */}
       <footer className="w-full py-12 text-center text-sm border-t border-slate-100 bg-primary text-white">
@@ -181,6 +210,33 @@ function BenefitItem({
         </h4>
         <p className="text-slate-500 leading-relaxed max-w-sm">{description}</p>
       </div>
+    </div>
+  );
+}
+
+function TestimonialCard({
+  quote,
+  name,
+  role,
+  image,
+}: {
+  quote: string;
+  name: string;
+  role: string;
+  image: string;
+}) {
+  return (
+    <div className="flex flex-col bg-white rounded-xl p-6 shadow-sm border border-slate-100 gap-4">
+      <div className="flex items-center gap-4">
+        <div className="relative w-14 h-14 shrink-0 rounded-full overflow-hidden border-2 border-slate-100 shadow-sm">
+          <Image src={image} alt={name} fill className="object-cover" />
+        </div>
+        <div>
+          <p className="font-bold text-primary">{name}</p>
+          <p className="text-xs text-slate-500">{role}</p>
+        </div>
+      </div>
+      <p className="text-slate-600 text-sm leading-relaxed">&ldquo;{quote}&rdquo;</p>
     </div>
   );
 }

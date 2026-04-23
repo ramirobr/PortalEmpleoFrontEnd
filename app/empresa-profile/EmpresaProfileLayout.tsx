@@ -132,8 +132,9 @@ export default function EmpresaProfileLayout({ children }: Children) {
       <Navbar
         onHamburgerClick={toggleAside}
         isAsideOpen={isAsideOpen}
+        logoHref="/empresa-profile"
         navLinks={[
-          { label: "Inicio", href: "/" },
+          { label: "Inicio", href: "/empresa-profile" },
           { label: "Candidatos", href: "/empresa-profile/buscar-candidatos" },
           { label: "Contrataciones", href: "/empresa-profile/postulaciones" },
         ]}

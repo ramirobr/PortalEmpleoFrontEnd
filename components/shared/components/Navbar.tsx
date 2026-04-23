@@ -22,6 +22,7 @@ interface NavbarProps {
   isAsideOpen?: boolean;
   navLinks?: NavLink[];
   profileButtonLabel?: string;
+  logoHref?: string;
 }
 
 const DEFAULT_NAV_LINKS: NavLink[] = [
@@ -36,6 +37,7 @@ export default function Navbar({
   isAsideOpen = false,
   navLinks = DEFAULT_NAV_LINKS,
   profileButtonLabel = "Mi Perfil",
+  logoHref = "/",
 }: NavbarProps) {
   const { data: session, status } = useSession();
   const pathname = usePathname();
@@ -72,7 +74,7 @@ export default function Navbar({
     <nav className="sticky top-0 z-50 w-full py-3 bg-white/95 backdrop-blur-md border-b border-slate-100 shadow-sm transition-all duration-300">
       <div className="container flex items-center justify-between gap-4">
         {/* Left: Logo */}
-        <Link href="/" aria-label="Ir a la página principal" className="shrink-0">
+        <Link href={logoHref} aria-label="Ir a la página principal" className="shrink-0">
           <Image
             src="/logos/logo-empresa.jpg"
             alt="implica"
