@@ -1,6 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
-import { CheckCircle2, TrendingUp, Sparkles, Users, Zap } from "lucide-react";
+import { Sparkles, Users, Zap } from "lucide-react";
 import { auth } from "@/auth";
 
 export default async function Home() {
@@ -8,32 +8,32 @@ export default async function Home() {
 
   const categories = [
     {
-      title: "Buscar Talento",
+      title: "Buscar talento para mi empresa",
       description: "Contrata Personal",
       image: "/categories/buscar_talento.png",
       href: "/auth/empresa",
     },
     {
-      title: "Empleador Independiente",
+      title: "Empleador independiente",
       description: "Busca Personal",
       image: "/categories/empleador_independiente.png",
       href: "/auth/empresa",
     },
     {
-      title: "Buscar Empleo",
-      description: "Trabajo Fijo o Temporal",
+      title: "Buscar empleo",
+      description: "Trabajo fijo tiempo completo o parcial",
       image: "/categories/buscar_empleo.png",
       href: "/empleos-busqueda",
     },
     {
-      title: "Ofrecer Servicios",
-      description: "Ofrece tu trabajo",
+      title: "Servicios profesionales",
+      description: "Ofrece tu trabajo y consigue clientes",
       image: "/categories/ofrecer_servicios.png",
       href: "/auth/email",
     },
     {
-      title: "Servicios Profesionales",
-      description: "Consigue clientes",
+      title: "Pasantías",
+      description: "Estudiantes en busca de experiencia",
       image: "/categories/servicios_profesionales.png",
       href: "/auth/email",
     },
@@ -57,7 +57,7 @@ export default async function Home() {
           {!session && (
             <Link
               href="/auth/login"
-              className="relative group/btn flex items-center justify-center gap-2.5 px-12 py-2.5 bg-linear-to-r from-secondary-container to-secondary text-white font-black text-[11px] uppercase tracking-widest rounded-full hover:shadow-2xl hover:shadow-secondary/30 transition-all duration-500 cursor-pointer overflow-hidden hover:-translate-y-1"
+              className="relative group/btn flex items-center justify-center gap-2.5 px-12 py-2.5 bg-primary text-white font-black text-[11px] uppercase tracking-widest rounded-full hover:bg-primary/90 hover:shadow-2xl hover:shadow-primary/30 transition-all duration-500 cursor-pointer overflow-hidden hover:-translate-y-1"
             >
               <div className="absolute inset-x-0 top-0 h-full w-full bg-white/10 -translate-x-full group-hover/btn:translate-x-full transition-transform duration-1000 skew-x-12" />
               <span className="relative z-10">Iniciar Sesión</span>
@@ -68,6 +68,15 @@ export default async function Home() {
       <main className="min-h-screen bg-background flex flex-col items-center font-body">
         {/* Hero Section */}
         <section className="w-full max-w-7xl px-4 py-12 flex flex-col items-center text-center">
+          {/* Tagline */}
+          <p className="text-2xl md:text-3xl lg:text-4xl font-display font-extrabold text-primary mb-3 leading-tight">
+            Conectando empresas, empleadores y personas en busca de trabajo
+          </p>
+          <p className="text-base md:text-lg text-slate-600 max-w-2xl mb-10 leading-relaxed">
+            Encuentra el talento ideal para tu negocio o la oportunidad laboral
+            que estás buscando
+          </p>
+
           <h1 className="text-4xl md:text-5xl lg:text-6xl font-display font-extrabold text-slate-900 mb-6 tracking-tight">
             ¿Qué estás buscando?
           </h1>
@@ -77,7 +86,7 @@ export default async function Home() {
           </p>
 
           {/* Categories Grid */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-6 w-full px-4 mb-24">
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-6 w-full px-4 mb-12">
             {categories.map((cat, index) => (
               <ProfileCard
                 key={index}
@@ -88,72 +97,15 @@ export default async function Home() {
               />
             ))}
           </div>
-        </section>
 
-        {/* Secondary Hero Section */}
-        <section className="w-full bg-white py-8 sm:py-12 overflow-hidden">
-          <div className="max-w-7xl mx-auto px-6 lg:px-8">
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-16 items-center">
-              {/* Left Content */}
-              <div className="flex flex-col items-start text-left max-w-xl">
-                <div className="inline-flex items-center gap-2 px-2 py-1 rounded-full bg-primary/5 text-primary text-[10px] font-bold uppercase tracking-wider mb-6 border border-primary/10">
-                  <CheckCircle2 className="w-3.5 h-3.5" />
-                  El Catalizador Editorial
-                </div>
-
-                <h2 className="text-4xl lg:text-5xl font-display font-extrabold text-slate-900 leading-[1.1] mb-6">
-                  Conectamos el{" "}
-                  <span className="text-primary italic">talento</span> con la
-                  oportunidad.
-                </h2>
-
-                <p className="text-lg text-slate-500 mb-8 leading-relaxed">
-                  Transforma tu carrera o equipo editorial hoy mismo mediante
-                  nuestra red de curaduría digital avanzada.
-                </p>
-
-                <Link
-                  href="/empleos-busqueda"
-                  className="relative group/btn flex items-center justify-center gap-2.5 px-14 py-3 bg-linear-to-r from-secondary-container to-secondary text-white font-black text-xs uppercase tracking-widest rounded-full hover:shadow-2xl hover:shadow-secondary/40 transition-all duration-500 cursor-pointer overflow-hidden hover:-translate-y-1"
-                >
-                  <div className="absolute inset-x-0 top-0 h-full w-full bg-white/10 -translate-x-full group-hover/btn:translate-x-full transition-transform duration-1000 skew-x-12" />
-                  <span className="relative z-10">ENCUENTRA TU EQUIPO IDEAL</span>
-                </Link>
-              </div>
-
-              {/* Right Visual */}
-              <div className="relative">
-                {/* Vessel Card Decoration */}
-                <div className="absolute -inset-4 bg-slate-100 rounded-xl -rotate-2 scale-[1.02] opacity-50" />
-
-                <div className="relative bg-white p-4 rounded-xl shadow-2xl border border-slate-100 transform rotate-1 hover:rotate-0 transition-transform duration-700">
-                  <div className="relative aspect-4/3 rounded-xl overflow-hidden shadow-inner">
-                    <Image
-                      src="/categories/meeting.png"
-                      alt="Catalizador Editorial Meeting"
-                      fill
-                      className="object-cover transition-transform duration-1000 hover:scale-105"
-                    />
-                  </div>
-
-                  {/* Statistics Overlay */}
-                  <div className="absolute -bottom-4 -left-4 bg-white p-4 rounded-xl shadow-[0_20px_50px_rgba(0,0,0,0.1)] flex items-center gap-3 border border-slate-50 animate-bounce-subtle">
-                    <div className="w-10 h-10 bg-primary-light/10 rounded-xl flex items-center justify-center text-primary-light">
-                      <TrendingUp className="w-6 h-6" />
-                    </div>
-                    <div>
-                      <p className="text-[10px] font-black text-slate-600 uppercase tracking-[0.2em] mb-0.5">
-                        Crecimiento
-                      </p>
-                      <p className="text-xl font-black text-slate-900 leading-none">
-                        +240%
-                      </p>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
+          {/* CTA Button */}
+          <Link
+            href="/empleos-busqueda"
+            className="relative group/btn flex items-center justify-center gap-2.5 px-14 py-3 bg-primary text-white font-black text-xs uppercase tracking-widest rounded-full hover:bg-primary/90 hover:shadow-2xl hover:shadow-primary/40 transition-all duration-500 cursor-pointer overflow-hidden hover:-translate-y-1 mb-16"
+          >
+            <div className="absolute inset-x-0 top-0 h-full w-full bg-white/10 -translate-x-full group-hover/btn:translate-x-full transition-transform duration-1000 skew-x-12" />
+            <span className="relative z-10">ENCUENTRA TU EQUIPO IDEAL</span>
+          </Link>
         </section>
 
         <section className="w-full bg-background py-16 sm:py-20 px-6">

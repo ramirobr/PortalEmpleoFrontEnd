@@ -84,9 +84,10 @@ type FormValues = z.infer<typeof signupSchema>;
 
 type CompanyFormProps = {
   fields: SignUpFieldsResponse | null;
+  loadingFields?: boolean;
 };
 
-export default function EmailSignup({ fields }: CompanyFormProps) {
+export default function EmailSignup({ fields, loadingFields = false }: CompanyFormProps) {
   const [showPassword, setShowPassword] = useState(false);
   const timeoutRef = useRef<NodeJS.Timeout | null>(null);
   const router = useRouter();
@@ -208,9 +209,10 @@ export default function EmailSignup({ fields }: CompanyFormProps) {
                             field.onChange(Number(value))
                           }
                           value={field.value ? String(field.value) : ""}
+                          disabled={loadingFields}
                         >
                           <SelectTrigger id="documento">
-                            <SelectValue placeholder="Tipo" />
+                            <SelectValue placeholder={loadingFields ? "Cargando..." : "Tipo"} />
                           </SelectTrigger>
                           <SelectContent>
                             {fields?.tipo_documento?.map((tipo) => (
@@ -388,9 +390,10 @@ export default function EmailSignup({ fields }: CompanyFormProps) {
                             field.onChange(Number(value))
                           }
                           value={field.value ? String(field.value) : ""}
+                          disabled={loadingFields}
                         >
                           <SelectTrigger id="genero">
-                            <SelectValue placeholder="Género" />
+                            <SelectValue placeholder={loadingFields ? "Cargando..." : "Género"} />
                           </SelectTrigger>
                           <SelectContent>
                             {fields?.genero?.map((genero) => (

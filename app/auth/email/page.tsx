@@ -9,11 +9,16 @@ import EmailSignup from "./PostulantForm";
 
 export default function Page() {
   const [fields, setFields] = useState<SignUpFieldsResponse | null>(null);
+  const [loadingFields, setLoadingFields] = useState(true);
 
   useEffect(() => {
     async function getFields() {
-      const fetchedFields = await fetchSignUpFields();
-      setFields(fetchedFields);
+      try {
+        const fetchedFields = await fetchSignUpFields();
+        setFields(fetchedFields);
+      } finally {
+        setLoadingFields(false);
+      }
     }
     getFields();
   }, []);
@@ -22,7 +27,7 @@ export default function Page() {
     <div className="min-h-screen flex flex-col bg-gray-50">
       <EmailLayout>
         <main className="flex-1 flex flex-col items-center justify-center px-4 py-12">
-          <EmailSignup fields={fields} />
+          <EmailSignup fields={fields} loadingFields={loadingFields} />
         </main>
       </EmailLayout>
       <Footer />
