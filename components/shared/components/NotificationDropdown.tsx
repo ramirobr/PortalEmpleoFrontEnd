@@ -7,6 +7,7 @@ import { es } from "date-fns/locale";
 import { useSession } from "next-auth/react";
 import { useAuthStore } from "@/context/authStore";
 import { fetchApi } from "@/lib/apiClient";
+import { ROLES } from "@/types/auth";
 
 interface NotificationDropdownProps {
   isOpen: boolean;
@@ -22,6 +23,7 @@ export default function NotificationDropdown({
   const unreadNotifications = useAuthStore((s) => s.unreadNotifications);
   const markNotificationRead = useAuthStore((s) => s.markNotificationRead);
   const panelRef = useRef<HTMLDivElement>(null);
+  const isCompanyAdmin = session?.user?.role === ROLES.AdministradorEmpresa;
 
   // Close on outside click
   useEffect(() => {
@@ -48,10 +50,13 @@ export default function NotificationDropdown({
   const markAsRead = async (idNotificacion: string) => {
     if (!session?.user?.accessToken) return;
     try {
-      const response = await fetchApi(
-        `/Notificacion/marcarLeida/${idNotificacion}?esLeida=true`,
-        { method: "PUT", token: session.user.accessToken },
-      );
+      const endpoint = isCompanyAdmin
+        ? `/NotificacionesEmpresa/marcarLeida/${idNotificacion}`
+        : `/Notificacion/marcarLeida/${idNotificacion}?esLeida=true`;
+      const response = await fetchApi(endpoint, {
+        method: "PUT",
+        token: session.user.accessToken,
+      });
       if (response && (response as { isSuccess?: boolean }).isSuccess) {
         markNotificationRead(idNotificacion);
       }

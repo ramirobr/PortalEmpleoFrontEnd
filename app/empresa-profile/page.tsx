@@ -1,104 +1,63 @@
 import { auth } from "@/auth";
 import PostulantesRecientes from "./PostulantesRecientes";
-import NotificacionesEmpresa from "./components/NotificacionesEmpresa";
+import HeroBanner from "./components/HeroBanner";
+import AnunciosSection from "./components/AnunciosSection";
+import EmpresaSidebarWidgets from "./components/EmpresaSidebarWidgets";
+import EmpresaNotifLoader from "./components/EmpresaNotifLoader";
 import { getCompanyDashboardByUserId } from "@/lib/company/dashboard";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import { Briefcase, Users, FileText, Plus, User, Settings } from "lucide-react";
-import Link from "next/link";
+import { getCompanyProfileById } from "@/lib/company/profile";
 
 export default async function EmpresaProfilePage() {
   const session = await auth();
   if (!session || !session.user.idEmpresa) return;
-  const companyDashboard = await getCompanyDashboardByUserId(
-    session.user.idEmpresa,
-    session.user.accessToken,
-  );
+
+  const [companyDashboard, companyProfile] = await Promise.all([
+    getCompanyDashboardByUserId(session.user.idEmpresa, session.user.accessToken),
+    getCompanyProfileById(session.user.idEmpresa, session.user.accessToken),
+  ]);
+
+  const companyName = companyProfile?.nombre || "tu empresa";
+  const cvsRecibidos = companyDashboard?.postulacionesRecibidas ?? 0;
+  const procesosActivos = companyDashboard?.candidatosActivos ?? 0;
+  const ofertasCount = companyDashboard?.ofertarPublicadas ?? 0;
 
   return (
-    <section className="space-y-8 " role="region">
-      <div>
-        <h1 className="text-3xl font-bold text-primary mb-2">
-          Bienvenido a tu Panel de Empresa
-        </h1>
-        <p className="text-gray-500">
-          Gestiona tus ofertas de empleo, revisa postulaciones y administra tu
-          perfil.
-        </p>
-      </div>
-
-      <NotificacionesEmpresa
+    <section className="space-y-6" role="region">
+      {/* Load empresa notifications into the navbar bell */}
+      <EmpresaNotifLoader
         notificaciones={companyDashboard?.notificacionesRecientes || []}
-        notificacionesNoLeidas={companyDashboard?.notificacionesNoLeidas || 0}
-        token={session.user.accessToken}
       />
 
-      <section className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        <Card className="border-l-8 border-l-primary shadow-sm hover:shadow-md transition-all">
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-bold text-primary uppercase tracking-wider">
-              Ofertas Publicadas
-            </CardTitle>
-            <Briefcase className="h-4 w-4 text-primary" />
-          </CardHeader>
-          <CardContent>
-            <div className="text-3xl font-bold text-gray-900">
-              {companyDashboard?.ofertarPublicadas}
-            </div>
-          </CardContent>
-        </Card>
-        <Card className="border-l-8 border-l-primary shadow-sm hover:shadow-md transition-all">
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-bold text-primary uppercase tracking-wider">
-              Candidatos Activos
-            </CardTitle>
-            <Users className="h-4 w-4 text-primary" />
-          </CardHeader>
-          <CardContent>
-            <div className="text-3xl font-bold text-gray-900">
-              {companyDashboard?.candidatosActivos}
-            </div>
-          </CardContent>
-        </Card>
-        <Card className="border-l-8 border-l-primary shadow-sm hover:shadow-md transition-all">
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-bold text-primary uppercase tracking-wider">
-              Postulaciones Recibidas
-            </CardTitle>
-            <FileText className="h-4 w-4 text-primary" />
-          </CardHeader>
-          <CardContent>
-            <div className="text-3xl font-bold text-gray-900">
-              {companyDashboard?.postulacionesRecibidas}
-            </div>
-          </CardContent>
-        </Card>
-      </section>
-      {/* Acciones Rápidas 
-      <section>
-        <h2 className="text-2xl font-semibold mb-4">Acciones Rápidas</h2>
-        <div className="flex flex-wrap gap-4">
-          <Button asChild>
-            <Link href="/empresa-profile/crear-empleo">
-              <Plus className="h-4 w-4" /> Crear Nueva Oferta
-            </Link>
-          </Button>
-          <Button variant="outline" asChild>
-            <Link href="/empresa-profile/perfil">
-              <User className="h-4 w-4" /> Ver Perfil
-            </Link>
-          </Button>
-          <Button variant="outline" asChild>
-            <Link href="/empresa-profile/empleos">
-              <Briefcase className="h-4 w-4" /> Gestionar Empleos
-            </Link>
-          </Button>
+      {/* Hero Banner */}
+      <HeroBanner
+        companyName={companyName}
+        cvsRecibidos={cvsRecibidos}
+        procesosActivos={procesosActivos}
+        anunciosCount={ofertasCount}
+        ofertasActivas={ofertasCount}
+        contrataciones={cvsRecibidos}
+      />
+
+      {/* Main two-column layout */}
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        {/* Left column (2/3) */}
+        <div className="lg:col-span-2 space-y-8">
+          <PostulantesRecientes
+            aplicantes={companyDashboard?.aplicantesRecientes || []}
+          />
+          <AnunciosSection ofertasCount={ofertasCount} />
         </div>
-      </section>*/}
 
-      <PostulantesRecientes
-        aplicantes={companyDashboard?.aplicantesRecientes || []}
-      />
+        {/* Right sidebar (1/3) */}
+        <div className="lg:col-span-1">
+          <EmpresaSidebarWidgets
+            companyProfile={companyProfile ?? null}
+            aplicantesRecientes={companyDashboard?.aplicantesRecientes || []}
+            ofertasCount={ofertasCount}
+            postulacionesCount={cvsRecibidos}
+          />
+        </div>
+      </div>
     </section>
   );
 }

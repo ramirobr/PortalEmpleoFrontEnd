@@ -129,7 +129,16 @@ export default function EmpresaProfileLayout({ children }: Children) {
 
   return (
     <div className="min-h-screen bg-white relative">
-      <Navbar onHamburgerClick={toggleAside} isAsideOpen={isAsideOpen} />
+      <Navbar
+        onHamburgerClick={toggleAside}
+        isAsideOpen={isAsideOpen}
+        navLinks={[
+          { label: "Inicio", href: "/" },
+          { label: "Candidatos", href: "/empresa-profile/buscar-candidatos" },
+          { label: "Contrataciones", href: "/empresa-profile/postulaciones" },
+        ]}
+        profileButtonLabel="Mi Empresa"
+      />
       <div className="flex relative">
         <AsideMenu
           isOpen={isAsideOpen}

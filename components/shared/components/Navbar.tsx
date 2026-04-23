@@ -11,13 +11,20 @@ import { useEffect, useState } from "react";
 import { Bell, Menu } from "lucide-react";
 import NotificationDropdown from "./NotificationDropdown";
 
+interface NavLink {
+  label: string;
+  href: string;
+}
+
 interface NavbarProps {
   showCompanyRegister?: boolean;
   onHamburgerClick?: () => void;
   isAsideOpen?: boolean;
+  navLinks?: NavLink[];
+  profileButtonLabel?: string;
 }
 
-const NAV_LINKS = [
+const DEFAULT_NAV_LINKS: NavLink[] = [
   { label: "Inicio", href: "/" },
   { label: "Ofertas", href: "/empleos-busqueda" },
   { label: "Para Empresas", href: "/auth/empresa" },
@@ -27,6 +34,8 @@ export default function Navbar({
   showCompanyRegister = false,
   onHamburgerClick,
   isAsideOpen = false,
+  navLinks = DEFAULT_NAV_LINKS,
+  profileButtonLabel = "Mi Perfil",
 }: NavbarProps) {
   const { data: session, status } = useSession();
   const pathname = usePathname();
@@ -75,7 +84,7 @@ export default function Navbar({
 
         {/* Center: Nav links (desktop only) */}
         <div className="hidden md:flex items-center gap-8">
-          {NAV_LINKS.map((link) => {
+          {navLinks.map((link) => {
             const isActive =
               link.href === "/"
                 ? pathname === "/"
@@ -131,7 +140,7 @@ export default function Navbar({
                   onClick={onHamburgerClick}
                   className="bg-primary hover:bg-primary/90 text-white text-sm font-semibold px-5 py-2 rounded-lg transition-colors cursor-pointer"
                 >
-                  Mi Perfil
+                  {profileButtonLabel}
                 </button>
               </>
             ) : (
