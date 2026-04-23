@@ -68,6 +68,7 @@ export default async function PublicProfilePage({
   }
 
   const isOwner = session?.user?.id === id;
+  const isEmpresaUser = session?.user?.role === "Administrador Empresa";
   const curriculumUrl = `${process.env.NEXT_PUBLIC_API}/User/${id}/curriculum`;
 
   return (
@@ -76,6 +77,8 @@ export default async function PublicProfilePage({
         user={user}
         isOwner={isOwner}
         curriculumUrl={curriculumUrl}
+        isEmpresaUser={isEmpresaUser}
+        idCandidato={id}
       />
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">

@@ -126,6 +126,7 @@ export interface AplicanteReciente {
     habilidades: string[];
     fotografia?: string;
     fechaAplicacion?: string;
+    email: string;
   };
 }
 
@@ -336,6 +337,7 @@ export interface CandidateSearchResult {
   habilidades: string[];
   idiomas: string[];
   fechaRegistro: string;
+  porcentajePerfilCompletado: number;
 }
 
 export interface CandidateSearchPaginado {

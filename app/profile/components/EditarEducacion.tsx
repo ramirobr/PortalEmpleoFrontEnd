@@ -154,7 +154,7 @@ export default function EditarEducacion({
           educacionItems.map((item, idx) => (
             <div
               key={idx}
-              className="p-4 rounded-lg border border-dashed border-[#dce5e5] flex justify-between my-4"
+              className="p-4 rounded-lg border border-dashed border-border flex justify-between my-4"
             >
               <div>
                 <h4 className="font-bold text-xl">{item.titulo}</h4>

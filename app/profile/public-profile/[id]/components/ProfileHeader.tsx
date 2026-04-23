@@ -3,22 +3,34 @@ import { UserInfoData } from "@/types/user";
 import { Download, Mail, MapPin } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
+import RecomendarDialog from "./RecomendarDialog";
 
 interface ProfileHeaderProps {
   user: UserInfoData;
   isOwner: boolean;
   curriculumUrl: string;
+  isEmpresaUser?: boolean;
+  idCandidato: string;
 }
 
 export default function ProfileHeader({
   user,
   isOwner,
   curriculumUrl,
+  isEmpresaUser,
+  idCandidato,
 }: ProfileHeaderProps) {
+  const nombreCandidato = [
+    user.datosPersonales?.nombre,
+    user.datosPersonales?.apellido,
+  ]
+    .filter(Boolean)
+    .join(" ");
+
   return (
-    <div className="bg-white rounded-2xl shadow-sm overflow-hidden border border-gray-100">
-      <div className="h-32 bg-teal-500/10 w-full relative">
-        <div className="absolute inset-0 bg-[radial-gradient(#14aa9f_1px,transparent_1px)] [background-size:16px_16px] opacity-10"></div>
+    <div className="bg-white rounded-xl shadow-sm overflow-hidden border border-gray-100">
+      <div className="h-32 bg-primary/10 w-full relative">
+        <div className="absolute inset-0 bg-[radial-gradient(var(--primary-container)_1px,transparent_1px)] bg-size-[16px_16px] opacity-10"></div>
       </div>
       <div className="px-8 pb-8">
         <div className="relative flex flex-col md:flex-row items-start md:items-end -mt-12 mb-6 gap-6">
@@ -31,7 +43,7 @@ export default function ProfileHeader({
                     ? "/avatars/user_female.png"
                     : "/avatars/user.png")
                 }
-                alt={`${user.datosPersonales?.nombre} ${user.datosPersonales?.apellido}`}
+                alt={nombreCandidato}
                 width={128}
                 height={128}
                 className="w-full h-full object-cover"
@@ -41,7 +53,7 @@ export default function ProfileHeader({
 
           <div className="flex-1 mt-2 md:mt-0">
             <h1 className="text-3xl font-bold text-gray-900">
-              {user.datosPersonales?.nombre} {user.datosPersonales?.apellido}
+              {nombreCandidato}
             </h1>
             <div className="flex flex-wrap items-center gap-2 text-gray-600 mt-1">
               {/* Job Title */}
@@ -79,10 +91,17 @@ export default function ProfileHeader({
                     Descargar CV
                   </a>
                 </Button>
-                <Button className="flex-1 md:flex-none gap-2 bg-teal-600 hover:bg-teal-700 text-white shadow-sm shadow-teal-200">
-                  <Mail size={18} />
-                  Contactar
-                </Button>
+                {isEmpresaUser ? (
+                  <RecomendarDialog
+                    idUsuario={idCandidato}
+                    nombreCandidato={nombreCandidato}
+                  />
+                ) : (
+                  <Button className="flex-1 md:flex-none gap-2 bg-teal-600 hover:bg-teal-700 text-white shadow-sm shadow-teal-200">
+                    <Mail size={18} />
+                    Contactar
+                  </Button>
+                )}
               </>
             )}
           </div>

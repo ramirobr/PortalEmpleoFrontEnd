@@ -55,7 +55,7 @@ export default function Navbar({
   }, [status]);
 
   return (
-    <nav className="relative py-4 flex items-center justify-center shadow-md z-50 bg-white">
+    <nav className="sticky top-0 z-50 w-full py-4 flex items-center justify-center bg-white/95 backdrop-blur-md border-b border-slate-100 shadow-md transition-all duration-300">
       <section className="container">
         <div className="grid grid-cols-3 gap-3 items-center justify-between">
           <button

@@ -96,6 +96,8 @@ export interface DashboardInfoData {
   totalCertificaciones: number;
   resumenProfesional: string;
   disponibilidad: string;
+  perfilCompletado: number;
+  promedioRecomendaciones: number;
   listaTrabajosAplicados: ListaTrabajosAplicado[];
   notificaciones: Notificacion[];
 }

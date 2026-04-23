@@ -51,6 +51,15 @@ interface PostulacionesListProps {
 export default function PostulacionesList({
   estados = [],
 }: PostulacionesListProps) {
+  const getPhotoSrc = (photo?: string | null) => {
+    if (!photo) return null;
+
+    const normalized = photo.trim();
+    if (!normalized) return null;
+
+    return `data:image/jpeg;base64,${normalized}`;
+  };
+
   const { data: session } = useSession();
   const router = useRouter();
   const params = useSearchParams();
@@ -322,11 +331,7 @@ export default function PostulacionesList({
                     size={48}
                     alt={p.nombreCompleto}
                     className="shrink-0"
-                    src={
-                      p.fotografia
-                        ? `data:image/jpeg;base64,${p.fotografia}`
-                        : null
-                    }
+                    src={getPhotoSrc(p.fotografia)}
                   />
                   <div className="min-w-0">
                     <div className="flex flex-wrap items-center gap-2">
@@ -392,10 +397,12 @@ export default function PostulacionesList({
                 <div className="flex items-center gap-2 shrink-0">
                   <Link
                     href={`/empresa-profile/candidato/${p.idUsuario}`}
-                    className="p-2 rounded-lg bg-sky-50 text-teal-600 hover:bg-teal-600 hover:text-white transition-colors"
-                    title="Ver perfil"
+                    className="inline-flex items-center gap-1.5 px-3 py-2 rounded-lg bg-sky-50 text-teal-700 hover:bg-teal-600 hover:text-white transition-colors text-xs font-semibold"
+                    title="Visualizar CV"
+                    aria-label={`Visualizar CV de ${p.nombreCompleto}`}
                   >
                     <EyeIcon className="w-4 h-4" />
+                    <span>Visualizar CV</span>
                   </Link>
                   <Button
                     size="sm"

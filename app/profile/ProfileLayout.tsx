@@ -14,6 +14,8 @@ import {
   Building2,
   MessageSquareQuote,
   KeyRound,
+  ThumbsUp,
+  FolderOpen,
 } from "lucide-react";
 
 export default function ProfileLayout({ children }: Children) {
@@ -104,6 +106,16 @@ export default function ProfileLayout({ children }: Children) {
       icon: <MessageSquareQuote />,
     },
     {
+      name: "Recomendaciones",
+      href: "/profile/recomendaciones",
+      icon: <ThumbsUp className="w-5 h-5" />,
+    },
+    {
+      name: "Mis Archivos",
+      href: "/profile/archivos",
+      icon: <FolderOpen className="w-5 h-5" />,
+    },
+    {
       name: "Cambiar contraseña",
       href: "/profile/cambiar-contrasena",
       icon: <KeyRound className="w-5 h-5" />,
@@ -143,7 +155,7 @@ export default function ProfileLayout({ children }: Children) {
           isOpen={isAsideOpen}
           onClose={closeAside}
           side="left"
-          className="absolute top-0 left-0 h-full w-80 transform-none bg-[#2f4f4f] shadow-none md:shadow"
+          className="absolute top-0 left-0 h-full w-80 transform-none bg-surface-dark shadow-none md:shadow"
           links={session ? profileLinks : authLinks}
         />
         <main className="w-full flex-1 py-10 flex flex-col justify-between">

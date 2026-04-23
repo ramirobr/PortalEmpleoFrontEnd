@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Inter } from "next/font/google";
+import { Manrope, Plus_Jakarta_Sans } from "next/font/google";
 import "./styles/globals.css";
 import { Toaster } from "@/components/ui/sonner";
 import { auth } from "@/auth";
@@ -7,8 +7,13 @@ import { Providers } from "./providers";
 import AuthHydrator from "@/components/AuthHydrator";
 import { getCurriculumByUserId, getUserPic } from "@/lib/user/info";
 
-const inter = Inter({
-  variable: "--font-inter",
+const manrope = Manrope({
+  variable: "--font-manrope",
+  subsets: ["latin"],
+});
+
+const plusJakartaSans = Plus_Jakarta_Sans({
+  variable: "--font-plus-jakarta-sans",
   subsets: ["latin"],
 });
 
@@ -27,7 +32,7 @@ export default async function RootLayout({
   const picture = await getUserPic(session?.user);
   return (
     <html lang="en">
-      <body className={`${inter.variable} font-primary`}>
+      <body className={`${manrope.variable} ${plusJakartaSans.variable} font-primary`}>
         <Providers session={session}>
           {session && curriculum && (
             <AuthHydrator

@@ -21,6 +21,8 @@ import { useRouter } from "next/navigation";
 import { Controller, useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { z } from "zod";
+import BannerSelector from "./BannerSelector";
+import { useState } from "react";
 
 const crearEmpleoSchema = z
   .object({
@@ -38,6 +40,7 @@ const crearEmpleoSchema = z
       .refine(([min, max]) => max >= min, {
         message: "El salario máximo debe ser mayor o igual al mínimo.",
       }),
+    idArchivoEmpresa: z.string().optional(),
   })
   .refine(
     (data) =>
@@ -61,6 +64,9 @@ export default function CrearEmpleoForm({ fields, initialValues }: FormProps) {
   const { data: session } = useSession();
   const router = useRouter();
   const isEditMode = !!initialValues;
+  const [selectedBannerBase64, setSelectedBannerBase64] = useState<string | null>(
+    null
+  );
 
   const form = useForm<FormData>({
     resolver: zodResolver(crearEmpleoSchema),
@@ -82,6 +88,7 @@ export default function CrearEmpleoForm({ fields, initialValues }: FormProps) {
         initialValues?.salarioBase ?? 800,
         initialValues?.salarioMaximo ?? 2500,
       ] as [number, number],
+      idArchivoEmpresa: initialValues?.idArchivoEmpresa || "",
     },
   });
 
@@ -117,6 +124,9 @@ export default function CrearEmpleoForm({ fields, initialValues }: FormProps) {
       idCiudad: Number(values.idCiudad),
       idNivelEstudio: Number(values.idNivelEstudio),
       idExperiencia: Number(values.idExperiencia),
+      ...(values.idArchivoEmpresa && {
+        idArchivoEmpresa: values.idArchivoEmpresa,
+      }),
     };
 
     const response = await fetchApi(
@@ -431,6 +441,24 @@ export default function CrearEmpleoForm({ fields, initialValues }: FormProps) {
               {errors.requisitos.message}
             </p>
           )}
+        </div>
+
+        {/* Banner Selector */}
+        <div className="md:col-span-2">
+          <Controller
+            name="idArchivoEmpresa"
+            control={control}
+            render={({ field }) => (
+              <BannerSelector
+                idEmpresa={session?.user?.idEmpresa || ""}
+                selectedArchivos={field.value}
+                onSelectArchivo={(idArchivo, base64Data) => {
+                  field.onChange(idArchivo);
+                  setSelectedBannerBase64(base64Data || null);
+                }}
+              />
+            )}
+          />
         </div>
       </div>
 

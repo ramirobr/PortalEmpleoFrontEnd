@@ -15,38 +15,74 @@
   --color-card: var(--card);
   --color-card-foreground: var(--card-foreground);
   --color-primary: var(--primary);
-  --color-primary-foreground: #ffffff;
+  --color-primary-container: var(--primary-container);
+  --color-primary-light: var(--primary-light);
+  --color-primary-deep: var(--primary-deep);
   --color-secondary: var(--secondary);
+  --color-secondary-container: var(--secondary-container);
+  --color-secondary-deep: var(--secondary-deep);
+  --color-secondary-surface: var(--secondary-surface);
   --color-secondary-foreground: #ffffff;
-  --color-muted: var(--gray-light);
+  --color-muted: var(--surface-container-low);
   --color-muted-foreground: var(--gray-dark);
   --color-accent: var(--primary);
   --color-accent-foreground: #ffffff;
-  --color-border: var(--gray-light);
-  --color-input: var(--gray-light);
+  --color-border: var(--outline-variant);
+  --color-input: var(--outline-variant);
   --color-ring: var(--primary);
-  --font-primary: var(--font-primary);
+  --color-surface-dark: var(--surface-dark);
+  --color-surface-highlight: var(--surface-highlight);
+  --color-warning: var(--warning);
+  --color-label-star: var(--label-star);
+  --color-brand-linkedin: var(--brand-linkedin);
+  --color-brand-linkedin-dark: var(--brand-linkedin-dark);
+  --font-display: var(--font-manrope);
+  --font-body: var(--font-plus-jakarta-sans);
+  --font-label: var(--font-plus-jakarta-sans);
+  --shadow-soft: 0px 10px 30px rgba(23, 28, 31, 0.06);
 }
 
 :root {
-  --radius: 0.625rem;
-  --background: #ffffff;
-  --foreground: var(--color-arsenic);
-  --card: #ffffff;
-  --card-foreground: var(--color-arsenic);
-  --primary: #115c6f;
-  --secondary: #2abba7;
-  --gray-light: #eaeff5;
+  --radius: 0.75rem; /* Standard XL radius for structured editorial look */
+  --background: #f6fafe; /* Surface */
+  --foreground: #171c1f; /* On-Surface */
+  --card: #ffffff; /* Surface Container Lowest */
+  --card-foreground: #171c1f;
+
+  /* Primary Palette (Seafoam) */
+  --primary: #006a62;
+  --primary-container: #26a69a;
+  --primary-light: #2abba7;
+  --primary-deep: #004d40;
+
+  /* Secondary Palette (Urgency Orange) */
+  --secondary: #b02e00;
+  --secondary-container: #fe5825;
+  --secondary-deep: #9c2a0c;
+  --secondary-surface: rgba(176, 46, 0, 0.4);
+
+  /* Additional Surface Hierarchy */
+  --surface-dark: #004d40; /* Deep Seafoam Teal for sidebars */
+  --surface-highlight: #fbfdff;
+  --surface-container-low: #f1f5f9;
+  --surface-container-lowest: #ffffff;
+
+  /* Functional / Status */
+  --warning: #f2994a;
+  --label-star: #f8c51c;
+
+  /* Brand Identities */
+  --brand-linkedin: #2867b2;
+  --brand-linkedin-dark: #205081;
+
+  /* Neutral / Borders */
+  --outline-variant: rgba(23, 28, 31, 0.2);
   --gray-dark: #707f8c;
-  --color-arsenic: #424242;
-  --border: #eaeff5;
-  --input: #eaeff5;
-  --ring: #167a93;
-  --font-primary: var(--font-inter), sans-serif;
-  --popover: hsl(0 0% 100%);
-  --popover-foreground: hsl(0 0% 3.9%);
-  --ring: hsl(0 0% 83.1%);
-  --accent: hsl(0 0% 14.9%);
+
+  --font-primary: var(--font-plus-jakarta-sans), sans-serif;
+  --popover: #ffffff;
+  --popover-foreground: #171c1f;
+  --ring: var(--primary);
 }
 
 @layer base {

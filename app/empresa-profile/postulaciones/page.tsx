@@ -1,5 +1,6 @@
 import { fetchAllCatalogsByType } from "@/lib/catalog/fetch";
 import PostulacionesList from "./PostulacionesList";
+import { Suspense } from "react";
 
 export const metadata = {
   title: "Postulaciones | PortalEmpleo",
@@ -18,7 +19,9 @@ export default async function PostulacionesPage() {
           corresponda.
         </p>
       </section>
-      <PostulacionesList estados={estados} />
+      <Suspense fallback={<div className="p-6">Cargando postulaciones...</div>}>
+        <PostulacionesList estados={estados} />
+      </Suspense>
     </>
   );
 }

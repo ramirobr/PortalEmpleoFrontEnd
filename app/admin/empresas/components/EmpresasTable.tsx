@@ -2,13 +2,12 @@
 
 import { AdminEmpresa } from "@/types/admin";
 import { Pencil, Ban, CheckCircle, Trash2, Building2 } from "lucide-react";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import Pill from "@/components/shared/components/Pill";
 import {
   AdminTableEmpty,
   AdminTableLoading,
 } from "../../components/AdminTableStates";
-import { formatDate } from "@/lib/utils";
 
 interface EmpresasTableProps {
   empresas: AdminEmpresa[];
@@ -28,9 +27,11 @@ export default function EmpresasTable({
 
   const getStatusClasses = (status: string) => {
     switch (status.toLowerCase()) {
+      case "activa":
       case "activo":
         return "text-green-600 bg-green-50";
       case "suspendido":
+      case "suspendida":
         return "text-orange-600 bg-orange-50";
       default:
         return "text-gray-600 bg-gray-50";
@@ -40,8 +41,6 @@ export default function EmpresasTable({
   const getPlanClasses = (plan: string) => {
     switch (plan.toLowerCase()) {
       case "premium":
-        return "text-teal-600 bg-teal-50";
-      case "básico":
         return "text-teal-600 bg-teal-50";
       default:
         return "text-gray-600 bg-gray-50";
@@ -109,10 +108,6 @@ export default function EmpresasTable({
               <td className="py-2 px-4">
                 <div className="flex items-center gap-3">
                   <Avatar className="w-10 h-10 rounded-lg">
-                    <AvatarImage
-                      src={empresa.logoUrl}
-                      alt={empresa.nombreEmpresa}
-                    />
                     <AvatarFallback className="rounded-lg bg-gray-200 text-gray-600 text-xs">
                       {empresa.nombreEmpresa.substring(0, 2).toUpperCase()}
                     </AvatarFallback>
@@ -121,14 +116,14 @@ export default function EmpresasTable({
                     <p className="font-semibold text-gray-800">
                       {empresa.nombreEmpresa}
                     </p>
-                    <p className="text-sm text-gray-500">{empresa.rut}</p>
+                    <p className="text-sm text-gray-500">{empresa.numeroDocumento}</p>
                   </div>
                 </div>
               </td>
 
               {/* Fecha Registro */}
               <td className="py-2 px-4 text-gray-600">
-                {formatDate(empresa.fechaRegistro)}
+                {empresa.fechaRegistro}
               </td>
 
               {/* Ofertas Activas */}
@@ -143,22 +138,20 @@ export default function EmpresasTable({
                 <div className="flex flex-col items-center gap-2">
                   <Pill
                     variant="custom"
-                    bgColor={getPlanClasses(empresa.plan.nombre)}
+                    bgColor={getPlanClasses(empresa.plan)}
                     className="w-fit"
                     noButton
                   >
-                    • {empresa.plan.nombre}
+                    • {empresa.plan}
                   </Pill>
-                  {empresa.estado.nombre === "Suspendido" && (
-                    <Pill
-                      variant="custom"
-                      bgColor={getStatusClasses(empresa.estado.nombre)}
-                      className="w-fit"
-                      noButton
-                    >
-                      • {empresa.estado.nombre}
-                    </Pill>
-                  )}
+                  <Pill
+                    variant="custom"
+                    bgColor={getStatusClasses(empresa.estado)}
+                    className="w-fit"
+                    noButton
+                  >
+                    • {empresa.estado}
+                  </Pill>
                 </div>
               </td>
 
@@ -178,14 +171,10 @@ export default function EmpresasTable({
                     type="button"
                     onClick={() => onSuspend(empresa.idEmpresa)}
                     className="p-2 bg-sky-50 text-teal-600 rounded-full hover:bg-teal-600 hover:text-white transition-colors cursor-pointer"
-                    aria-label={`${empresa.estado.nombre === "Activo" ? "Suspender" : "Activar"} ${empresa.nombreEmpresa}`}
-                    title={
-                      empresa.estado.nombre === "Activo"
-                        ? "Suspender"
-                        : "Activar"
-                    }
+                    aria-label={`${empresa.estado.toLowerCase() === "activa" ? "Suspender" : "Activar"} ${empresa.nombreEmpresa}`}
+                    title={empresa.estado.toLowerCase() === "activa" ? "Suspender" : "Activar"}
                   >
-                    {empresa.estado.nombre === "Activo" ? (
+                    {empresa.estado.toLowerCase() === "activa" ? (
                       <Ban className="w-3 h-3" />
                     ) : (
                       <CheckCircle className="w-3 h-3" />

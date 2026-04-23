@@ -46,8 +46,30 @@ export default function JobDetails(job: Job) {
       : `data:image/png;base64,${job.logoEmpresa}`
     : "/logos/company_logo.png";
 
+  // Construir la URL del banner desde base64
+  const bannerSrc = job.bannerEmpresa
+    ? job.bannerEmpresa.startsWith("data:")
+      ? job.bannerEmpresa
+      : `data:image/png;base64,${job.bannerEmpresa}`
+    : null;
+
   return (
     <>
+      {/* Banner */}
+      {bannerSrc && (
+        <section>
+          <div className="relative w-full h-64 md:h-80 lg:h-96 bg-gray-200">
+            <Image
+              src={bannerSrc}
+              alt={`Banner para ${job.titulo}`}
+              fill
+              className="object-cover"
+              unoptimized
+              priority
+            />
+          </div>
+        </section>
+      )}
       <section>
         <div className="container">
           <div className="grid grid-cols-1 md:grid-cols-[2fr_1fr] gap-6">

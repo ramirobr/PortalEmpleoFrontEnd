@@ -4,18 +4,11 @@ import { GenericResponse } from "./user";
 export interface AdminEmpresa {
   idEmpresa: string;
   nombreEmpresa: string;
-  rut: string;
-  logoUrl?: string;
+  numeroDocumento: string;
   fechaRegistro: string;
   ofertasActivas: number;
-  plan: {
-    id: number;
-    nombre: string; // "Premium" | "Básico"
-  };
-  estado: {
-    id: number;
-    nombre: string; // "Activo" | "Suspendido"
-  };
+  plan: string;
+  estado: string;
 }
 
 // Paginated response for admin empresas list
@@ -33,9 +26,9 @@ export interface AdminEmpresasParams {
   pageSize: number;
   currentPage: number;
   sortBy?: string;
-  sortDirection?: "asc" | "desc";
-  search?: string;
-  estado?: string;
+  sortDirection?: string;
+  searchQuery?: string;
+  idEstado?: number;
   plan?: string;
 }
 
@@ -283,3 +276,138 @@ export interface AdminUsuariosParams {
 
 export type UpdateUsuarioStatusResponse = GenericResponse<string>;
 export type DeleteUsuarioResponse = GenericResponse<string>;
+
+// ===== ADMIN CATALOGOS =====
+
+export interface AdminCatalogo {
+  idCatalogo: number;
+  nombre: string;
+  descripcion?: string;
+  tipoCatalogo: string;
+  codigo?: string;
+  valorEntero?: number;
+  valorCadena?: string;
+  orden: number;
+  activo: boolean;
+  idCatalogoPadre?: number;
+}
+
+export type GetAdminCatalogosResponse = GenericResponse<AdminCatalogo[]>;
+export type GetAdminCatalogoByIdResponse = GenericResponse<AdminCatalogo>;
+export type CreateCatalogoResponse = GenericResponse<AdminCatalogo>;
+export type UpdateCatalogoResponse = GenericResponse<AdminCatalogo>;
+export type DeleteCatalogoResponse = GenericResponse<string>;
+
+export interface CatalogoFormValues {
+  nombre: string;
+  descripcion?: string;
+  tipoCatalogo: string;
+  codigo?: string;
+  valorEntero?: number;
+  valorCadena?: string;
+  orden: number;
+  activo: boolean;
+  idCatalogoPadre?: number;
+}
+
+// ===== ARCHIVOS =====
+
+export interface TipoArchivo {
+  idTipoArchivo: number;
+  nombre: string;
+  descripcion?: string;
+}
+
+export type GetTiposArchivoResponse = GenericResponse<TipoArchivo[]>;
+
+export interface CarpetaEmpresa {
+  idCarpetaEmpresa: string;
+  idEmpresa: string;
+  idCarpetaPadre?: string;
+  nombreCarpeta: string;
+  descripcion?: string;
+  fechaCreacion: string;
+}
+
+export interface CarpetaUsuario {
+  idCarpetaUsuario: string;
+  idUsuario: string;
+  idCarpetaPadre?: string;
+  nombreCarpeta: string;
+  descripcion?: string;
+  fechaCreacion: string;
+}
+
+export type GetCarpetasEmpresaResponse = GenericResponse<CarpetaEmpresa[]>;
+export type GetCarpetasUsuarioResponse = GenericResponse<CarpetaUsuario[]>;
+
+export interface ArchivoEmpresa {
+  idArchivoEmpresa: string;
+  idEmpresa: string;
+  idCarpetaEmpresa?: string;
+  nombreArchivo: string;
+  extension?: string;
+  contentType?: string;
+  tamanoBytes?: number;
+  fechaCarga: string;
+  fechaActualizacion?: string;
+  tipoArchivo: string;
+}
+
+export interface ArchivoUsuario {
+  idArchivoUsuario: string;
+  idUsuario: string;
+  idCarpetaUsuario?: string;
+  nombreArchivo: string;
+  extension?: string;
+  contentType?: string;
+  tamanoBytes?: number;
+  fechaCarga: string;
+  fechaActualizacion?: string;
+  tipoArchivo: string;
+}
+
+export type GetArchivosEmpresaResponse = GenericResponse<ArchivoEmpresa[]>;
+export type GetArchivosUsuarioResponse = GenericResponse<ArchivoUsuario[]>;
+
+export interface ArchivoDetalleEmpresa {
+  idArchivoEmpresa: string;
+  nombreArchivo: string;
+  extension?: string;
+  contentType?: string;
+  archivo: string; // base64
+  tamanoBytes?: number;
+  fechaCarga: string;
+}
+
+export interface ArchivoDetalleUsuario {
+  idArchivoUsuario: string;
+  nombreArchivo: string;
+  extension?: string;
+  contentType?: string;
+  archivo: string; // base64
+  tamanoBytes?: number;
+  fechaCarga: string;
+}
+
+export type GetArchivoDetalleEmpresaResponse =
+  GenericResponse<ArchivoDetalleEmpresa>;
+export type GetArchivoDetalleUsuarioResponse =
+  GenericResponse<ArchivoDetalleUsuario>;
+
+export interface CarpetaFormValues {
+  nombreCarpeta: string;
+  descripcion?: string;
+  idCarpetaPadre?: string;
+}
+
+export interface ArchivoUploadFormValues {
+  idTipoArchivo: number;
+  nombreArchivo: string;
+  extension?: string;
+  contentType?: string;
+  idCarpetaDestino?: string;
+  archivoBase64: string;
+}
+
+export type ArchivoActionResponse = GenericResponse<unknown>;

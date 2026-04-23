@@ -14,6 +14,7 @@ import {
   Building,
   KeyRound,
   Search,
+  FolderOpen,
 } from "lucide-react";
 
 export default function EmpresaProfileLayout({ children }: Children) {
@@ -95,6 +96,11 @@ export default function EmpresaProfileLayout({ children }: Children) {
       icon: <Search className="w-5 h-5" />,
     },
     {
+      name: "Mis Archivos",
+      href: "/empresa-profile/archivos",
+      icon: <FolderOpen className="w-5 h-5" />,
+    },
+    {
       name: "Cambiar contraseña",
       href: "/empresa-profile/cambiar-contrasena",
       icon: <KeyRound className="w-5 h-5" />,
@@ -129,11 +135,11 @@ export default function EmpresaProfileLayout({ children }: Children) {
           isOpen={isAsideOpen}
           onClose={closeAside}
           side="left"
-          className="absolute top-0 left-0 h-full w-80 transform-none bg-[#2f4f4f] shadow-none md:shadow"
+          className="absolute top-0 left-0 h-full w-80 transform-none bg-surface-dark shadow-none md:shadow"
           links={session ? empresaLinks : authLinks}
         />
         <main className="w-full py-10 bg-gray-50 md:py-20">
-          <div className="container">{children}</div>
+          <div className="container shrink-0">{children}</div>
         </main>
       </div>
     </div>

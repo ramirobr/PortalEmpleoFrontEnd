@@ -8,7 +8,7 @@ export default function DashboardQuickActions() {
     {
       title: "Tu información",
       description: "Nombre y datos de identificación",
-      icon: <Contact2 className="w-8 h-8 text-gray-600" />,
+      icon: <Contact2 className="w-8 h-8 text-primary" />,
       alert: true,
       link: "/profile/edit#datosPersonales",
     },
@@ -16,7 +16,7 @@ export default function DashboardQuickActions() {
       title: "Dirección",
       description:
         "Dirección de domicilio. Verifícala con una imagen de tu servicio básico",
-      icon: <MapPin className="w-8 h-8 text-gray-600" />,
+      icon: <MapPin className="w-8 h-8 text-primary" />,
       alert: true,
       link: "/profile/edit#planillaServicio",
     },
@@ -24,7 +24,7 @@ export default function DashboardQuickActions() {
       title: "Certificados",
       description:
         "Actualiza todos tus certificados laborales: Antecedentes, médicos y demás",
-      icon: <User className="w-8 h-8 text-gray-600" />,
+      icon: <User className="w-8 h-8 text-primary" />,
       alert: true,
       link: "/profile/edit#certificados",
     },
@@ -36,25 +36,25 @@ export default function DashboardQuickActions() {
         <Link
           key={index}
           href={card.link}
-          className="bg-white rounded-xl border border-gray-100 border-l-8 border-l-primary shadow-sm overflow-hidden flex relative min-h-[160px] group hover:shadow-md transition-shadow cursor-pointer no-underline"
+          className="bg-white rounded-3xl shadow-sm overflow-hidden flex relative min-h-[160px] group hover:shadow-xl hover:-translate-y-1.5 transition-all duration-500 cursor-pointer no-underline border border-slate-50"
         >
-          <div className="flex-1 p-6 relative">
+          <div className="flex-1 p-8 relative">
             {/* Icons row */}
             <div className="flex justify-between items-start mb-6">
               {card.icon}
               {card.alert && (
-                <div className="bg-[#f2994a] rounded-full p-0.5">
-                  <AlertCircle className="w-5 h-5 text-white fill-[#f2994a]" />
+                <div className="bg-warning rounded-full p-0.5">
+                  <AlertCircle className="w-5 h-5 text-white fill-warning" />
                 </div>
               )}
             </div>
 
             {/* Text content */}
             <div>
-              <h3 className="text-[20px] font-medium text-black mb-1">
+              <h3 className="text-xl font-display font-black text-primary mb-2 uppercase tracking-tight group-hover:text-primary-container transition-colors duration-300">
                 {card.title}
               </h3>
-              <p className="text-[14px] text-black leading-tight">
+              <p className="text-sm font-medium text-slate-500 leading-relaxed">
                 {card.description}
               </p>
             </div>

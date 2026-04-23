@@ -15,7 +15,11 @@ interface Props {
   entityName?: string;
 }
 
-export function TopFilters({ total, onToggleFilters, entityName = "empleos" }: Props) {
+export function TopFilters({
+  total,
+  onToggleFilters,
+  entityName = "empleos",
+}: Props) {
   const params = useSearchParams();
   const router = useRouter();
 
@@ -29,7 +33,9 @@ export function TopFilters({ total, onToggleFilters, entityName = "empleos" }: P
   return (
     <div className="flex flex-col md:flex-row justify-between items-start">
       <div className="flex justify-between w-full md:w-auto items-center mb-3 md:mb-0">
-        <p className="font-bold text-lg">{total} {entityName} encontrados</p>
+        <p className="text-3xl font-extrabold text-primary mb-1">
+          {total} {entityName} encontrados
+        </p>
         <button
           onClick={onToggleFilters}
           className="md:hidden flex items-center gap-2 px-3 py-1.5 bg-primary text-white rounded text-sm font-medium"

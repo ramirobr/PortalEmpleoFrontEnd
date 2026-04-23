@@ -165,10 +165,10 @@ export default function EditarExperenciaLaboral({
 
       <div className="grid md:grid-cols-2 gap-4">
         {Experiencias?.length ? (
-          Experiencias.map((item, index) => (
+          Experiencias.map((item) => (
             <div
               key={item.id}
-              className="p-4 rounded-lg border border-dashed border-[#dce5e5] flex justify-between my-4"
+              className="p-4 rounded-lg border border-dashed border-border flex justify-between my-4"
             >
               <div>
                 {item.estaTrabajando && (
