@@ -28,7 +28,7 @@ interface NavbarProps {
 const DEFAULT_NAV_LINKS: NavLink[] = [
   { label: "Inicio", href: "/" },
   { label: "Ofertas", href: "/empleos-busqueda" },
-  { label: "Para Empresas", href: "/auth/empresa" },
+  { label: "Para Empresas", href: "/buscar-candidatos" },
 ];
 
 export default function Navbar({
@@ -85,6 +85,7 @@ export default function Navbar({
         </Link>
 
         {/* Center: Nav links (desktop only) */}
+        {status === "authenticated" && (
         <div className="hidden md:flex items-center gap-8">
           {navLinks.map((link) => {
             const isActive =
@@ -106,6 +107,7 @@ export default function Navbar({
             );
           })}
         </div>
+        )}
 
         {/* Right: actions */}
         {status !== "loading" && (
