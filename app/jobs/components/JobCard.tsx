@@ -91,7 +91,7 @@ export default function JobCard({ job }: JobCardProps) {
       {/* Action Area */}
       <div className="mt-auto">
         <button
-          className="relative group/btn w-full flex items-center justify-center gap-3 px-12 py-2 bg-linear-to-r from-secondary-container to-secondary text-white font-black text-xs uppercase tracking-widest rounded-full transition-all duration-500 cursor-pointer overflow-hidden hover:-translate-y-1"
+          className="relative group/btn w-full flex items-center justify-center gap-3 px-12 py-2 bg-linear-to-r from-primary-container to-primary text-white font-black text-xs uppercase tracking-widest rounded-full transition-all duration-500 cursor-pointer overflow-hidden hover:-translate-y-1"
           onClick={() => router.push(`/jobs/${id}`)}
         >
           <div className="absolute inset-x-0 top-0 h-full w-full bg-white/20 -translate-x-full group-hover/btn:translate-x-full transition-transform duration-1000 skew-x-12" />

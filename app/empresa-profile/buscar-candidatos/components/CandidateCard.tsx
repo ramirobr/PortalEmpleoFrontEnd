@@ -106,7 +106,7 @@ export default function CandidateCard({ candidate }: CandidateCardProps) {
 
       <div className="mt-auto">
         <button
-          className="relative group/btn w-full flex items-center justify-center gap-3 px-12 py-2.5 bg-linear-to-r from-secondary-container to-secondary text-white font-black text-xs uppercase tracking-widest rounded-full hover:shadow-2xl hover:shadow-secondary/30 transition-all duration-500 cursor-pointer overflow-hidden hover:-translate-y-1"
+          className="relative group/btn w-full flex items-center justify-center gap-3 px-12 py-2.5 bg-linear-to-r from-primary-container to-primary text-white font-black text-xs uppercase tracking-widest rounded-full hover:shadow-2xl hover:shadow-primary/30 transition-all duration-500 cursor-pointer overflow-hidden hover:-translate-y-1"
           onClick={() =>
             router.push(`/empresa-profile/candidato/${candidate.idUsuario}`)
           }
