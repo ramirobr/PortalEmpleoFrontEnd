@@ -70,7 +70,7 @@ export default function DashboardHeroBanner({
             />
             <button
               onClick={handleSearch}
-              className="bg-orange-500 hover:bg-orange-600 text-white px-6 py-3 text-sm font-semibold transition-colors cursor-pointer"
+              className="bg-primary hover:bg-primary-deep text-white px-6 py-3 text-sm font-semibold transition-colors cursor-pointer"
             >
               Buscar
             </button>

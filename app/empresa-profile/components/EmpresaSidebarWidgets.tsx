@@ -7,7 +7,8 @@ interface EmpresaSidebarWidgetsProps {
   companyProfile: CompanyProfileData | null;
   aplicantesRecientes: AplicanteReciente[];
   ofertasCount: number;
-  postulacionesCount: number;
+  contrataciones: number;
+  candidatosEnRevision: number;
 }
 
 function calcularPorcentajePerfil(profile: CompanyProfileData | null): number {
@@ -69,26 +70,20 @@ export default function EmpresaSidebarWidgets({
   companyProfile,
   aplicantesRecientes,
   ofertasCount,
-  postulacionesCount,
+  contrataciones,
+  candidatosEnRevision,
 }: EmpresaSidebarWidgetsProps) {
   const profilePct = calcularPorcentajePerfil(companyProfile);
-
-  // Count applicants by status
-  const enRevision = aplicantesRecientes.filter((a) =>
-    a.usuario.estadoAplicacion.nombre.toLowerCase().includes("nuevo") ||
-    a.usuario.estadoAplicacion.nombre.toLowerCase().includes("revision") ||
-    a.usuario.estadoAplicacion.nombre.toLowerCase().includes("revisión")
-  ).length;
 
   const entrevistas = aplicantesRecientes.filter((a) =>
     a.usuario.estadoAplicacion.nombre.toLowerCase().includes("entrevista")
   ).length;
 
   const procesos = [
-    { label: "En revisión", count: enRevision, href: "/empresa-profile/postulaciones" },
+    { label: "En revisión", count: candidatosEnRevision, href: "/empresa-profile/postulaciones" },
     { label: "Entrevistas", count: entrevistas, href: "/empresa-profile/postulaciones" },
     { label: "Ofertas", count: ofertasCount, href: "/empresa-profile/empleos" },
-    { label: "Contratados", count: postulacionesCount, href: "/empresa-profile/postulaciones" },
+    { label: "Contratados", count: contrataciones, href: "/empresa-profile/postulaciones" },
   ];
 
   return (
@@ -106,7 +101,7 @@ export default function EmpresaSidebarWidgets({
           </p>
           <Link
             href="/empresa-profile/perfil"
-            className="w-full flex items-center justify-center py-2.5 bg-secondary-container hover:bg-secondary text-white font-bold text-xs uppercase rounded-lg transition-colors"
+            className="w-full flex items-center justify-center py-2.5 bg-primary hover:bg-primary-deep text-white font-bold text-xs uppercase rounded-lg transition-colors"
           >
             Completar perfil
           </Link>

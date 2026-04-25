@@ -20,6 +20,8 @@ export default async function EmpresaProfilePage() {
   const cvsRecibidos = companyDashboard?.postulacionesRecibidas ?? 0;
   const procesosActivos = companyDashboard?.candidatosActivos ?? 0;
   const ofertasCount = companyDashboard?.ofertarPublicadas ?? 0;
+  const contrataciones = companyDashboard?.contrataciones ?? 0;
+  const candidatosEnRevision = companyDashboard?.candidatosEnRevision ?? 0;
 
   return (
     <section className="space-y-6" role="region">
@@ -35,7 +37,7 @@ export default async function EmpresaProfilePage() {
         procesosActivos={procesosActivos}
         anunciosCount={ofertasCount}
         ofertasActivas={ofertasCount}
-        contrataciones={cvsRecibidos}
+        contrataciones={contrataciones}
       />
 
       {/* Main two-column layout */}
@@ -54,7 +56,8 @@ export default async function EmpresaProfilePage() {
             companyProfile={companyProfile ?? null}
             aplicantesRecientes={companyDashboard?.aplicantesRecientes || []}
             ofertasCount={ofertasCount}
-            postulacionesCount={cvsRecibidos}
+            contrataciones={contrataciones}
+            candidatosEnRevision={candidatosEnRevision}
           />
         </div>
       </div>

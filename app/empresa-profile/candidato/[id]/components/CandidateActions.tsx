@@ -56,7 +56,7 @@ export default function CandidateActions({
         <button
           onClick={handleApprove}
           disabled={isProcessing}
-          className="w-full flex items-center justify-center gap-2 px-4 py-2.5 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed font-medium"
+          className="w-full flex items-center justify-center gap-2 px-4 py-2.5 bg-primary text-white rounded-lg hover:bg-primary-deep transition-colors disabled:opacity-50 disabled:cursor-not-allowed font-medium"
         >
           <CheckIcon className="w-4 h-4" />
           Aprobar Candidato

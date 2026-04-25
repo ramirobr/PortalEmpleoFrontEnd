@@ -257,14 +257,14 @@ export default function OfertasPage() {
                       <div className="flex justify-end gap-2">
                         <Link
                           href={`/jobs/${oferta.idVacante}`}
-                          className="p-2 bg-sky-50 text-teal-600 rounded-full hover:bg-teal-600 hover:text-white transition-colors cursor-pointer"
+                          className="p-2 bg-primary/10 text-primary rounded-full hover:bg-primary hover:text-white transition-colors cursor-pointer"
                           title="Ver Detalle"
                         >
                           <EyeIcon className="w-3 h-3" />
                         </Link>
                         <Link
                           href={`/empresa-profile/empleos/${oferta.idVacante}`}
-                          className="p-2 bg-sky-50 text-teal-600 rounded-full hover:bg-teal-600 hover:text-white transition-colors cursor-pointer"
+                          className="p-2 bg-primary/10 text-primary rounded-full hover:bg-primary hover:text-white transition-colors cursor-pointer"
                           title="Editar"
                         >
                           <EditIcon className="w-3 h-3" />
@@ -272,7 +272,7 @@ export default function OfertasPage() {
                         <button
                           onClick={() => handleDelete(oferta.idVacante)}
                           disabled={deletingId === oferta.idVacante}
-                          className="p-2 bg-sky-50 text-teal-600 rounded-full hover:bg-teal-600 hover:text-white transition-colors cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
+                          className="p-2 bg-primary/10 text-primary rounded-full hover:bg-primary hover:text-white transition-colors cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
                           title="Eliminar"
                         >
                           <TrashIcon className="w-3 h-3" />

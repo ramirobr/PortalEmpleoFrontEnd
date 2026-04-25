@@ -71,15 +71,9 @@ export default function PostulantesRecientes({
 
                 {/* Main info */}
                 <div className="flex-1 min-w-0">
-                  <div className="flex flex-wrap items-start justify-between gap-2">
-                    <h3 className="font-bold text-gray-900 text-base leading-tight">
-                      {aplicante.usuario.nombreCompleto}
-                    </h3>
-                    {/* PERFIL EXCELENTE badge */}
-                    <span className="inline-flex items-center gap-1 px-2.5 py-1 bg-green-600 text-white text-[10px] font-black uppercase rounded-full tracking-wide shrink-0">
-                      ✓ PERFIL EXCELENTE
-                    </span>
-                  </div>
+                  <h3 className="font-bold text-gray-900 text-base leading-tight">
+                    {aplicante.usuario.nombreCompleto}
+                  </h3>
 
                   {habilidad && (
                     <p className="text-sm text-gray-600 mt-0.5">{habilidad}</p>
@@ -109,13 +103,18 @@ export default function PostulantesRecientes({
                   )}
                 </div>
 
-                {/* Ver Perfil button */}
-                <Link
-                  href={`/empresa-profile/candidato/${aplicante.usuario.idUsuario}`}
-                  className="shrink-0 px-5 py-2 bg-secondary-container hover:bg-secondary text-white font-bold text-xs uppercase rounded-lg transition-colors"
-                >
-                  Ver Perfil
-                </Link>
+                {/* Badge + Ver Perfil — columna derecha alineada */}
+                <div className="shrink-0 flex flex-col items-end gap-2">
+                  <span className="inline-flex items-center gap-1 px-2.5 py-1 bg-primary text-white text-[10px] font-black uppercase rounded-full tracking-wide">
+                    ✓ PERFIL EXCELENTE
+                  </span>
+                  <Link
+                    href={`/empresa-profile/candidato/${aplicante.usuario.idUsuario}`}
+                    className="px-5 py-2 bg-primary hover:bg-primary-deep text-white font-bold text-xs uppercase rounded-lg transition-colors"
+                  >
+                    Ver Perfil
+                  </Link>
+                </div>
               </div>
             );
           })}

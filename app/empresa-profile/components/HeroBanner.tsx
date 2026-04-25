@@ -28,7 +28,7 @@ export default function HeroBanner({
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();
     const params = searchTerm.trim()
-      ? `?searchTerm=${encodeURIComponent(searchTerm)}`
+      ? `?q=${encodeURIComponent(searchTerm)}`
       : "";
     router.push(`/empresa-profile/buscar-candidatos${params}`);
   };
@@ -67,12 +67,12 @@ export default function HeroBanner({
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
                 placeholder="Busca candidatos... (marketing, ingeniería, ventas, etc.)"
-                className="w-full pl-10 pr-4 py-2.5 rounded-lg text-sm bg-white text-gray-800 placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-secondary-container"
+                className="w-full pl-10 pr-4 py-2.5 rounded-lg text-sm bg-white text-gray-800 placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-primary"
               />
             </div>
             <button
               type="submit"
-              className="px-5 py-2.5 bg-secondary-container hover:bg-secondary text-white font-bold text-sm rounded-lg transition-colors whitespace-nowrap cursor-pointer"
+              className="px-5 py-2.5 bg-primary hover:bg-primary-deep text-white font-bold text-sm rounded-lg transition-colors whitespace-nowrap cursor-pointer"
             >
               Buscar
             </button>

@@ -141,6 +141,8 @@ export interface CompanyDashboardInfoData {
   ofertarPublicadas: number;
   candidatosActivos: number;
   postulacionesRecibidas: number;
+  contrataciones: number;
+  candidatosEnRevision: number;
   aplicantesRecientes: AplicanteReciente[];
   notificacionesNoLeidas: number;
   notificacionesRecientes: NotificacionEmpresa[];

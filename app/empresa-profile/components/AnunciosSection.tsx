@@ -48,7 +48,7 @@ export default function AnunciosSection({ ofertasCount }: AnunciosSectionProps) 
           </p>
           <Link
             href="/empresa-profile/crear-empleo"
-            className="mt-auto inline-flex items-center justify-center gap-2 px-4 py-2 bg-secondary-container hover:bg-secondary text-white font-bold text-xs uppercase rounded-lg transition-colors"
+            className="mt-auto inline-flex items-center justify-center gap-2 px-4 py-2 bg-primary hover:bg-primary-deep text-white font-bold text-xs uppercase rounded-lg transition-colors"
           >
             <Plus className="size-3.5" />
             Crear Nuevo Anuncio
@@ -59,7 +59,7 @@ export default function AnunciosSection({ ofertasCount }: AnunciosSectionProps) 
       {/* CTA button */}
       <Link
         href="/empresa-profile/buscar-candidatos"
-        className="flex items-center justify-center w-full py-3.5 bg-secondary-container hover:bg-secondary text-white font-bold text-sm uppercase rounded-xl transition-colors shadow-md hover:shadow-lg"
+        className="flex items-center justify-center w-full py-3.5 bg-primary hover:bg-primary-deep text-white font-bold text-sm uppercase rounded-xl transition-colors shadow-md hover:shadow-lg"
       >
         ¡Busca Candidatos Ahora!
       </Link>

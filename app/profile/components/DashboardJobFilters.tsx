@@ -29,8 +29,8 @@ export default function DashboardJobFilters() {
           onClick={() => setActive(f.label)}
           className={`flex items-center gap-2 px-4 py-2 rounded-lg border text-sm font-medium transition-colors cursor-pointer ${
             active === f.label
-              ? "bg-secondary text-white border-secondary"
-              : "bg-white text-gray-700 border-gray-200 hover:border-secondary hover:text-secondary"
+              ? "bg-primary text-white border-primary"
+              : "bg-white text-gray-700 border-gray-200 hover:border-primary hover:text-primary"
           }`}
         >
           {f.icon}
