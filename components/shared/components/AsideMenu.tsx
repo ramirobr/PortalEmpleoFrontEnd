@@ -65,14 +65,14 @@ export default function AsideMenu({
     <>
       {isOpen && (
         <div
-          className="fixed inset-0 bg-black/40 z-30"
+          className="fixed inset-0 bg-black/40 z-70"
           onClick={onClose}
           aria-hidden="true"
         />
       )}
 
       <aside
-        className={`fixed inset-y-0 left-0 z-60 flex h-full flex-col bg-[#2f4f4f] shadow-lg transition-transform duration-300 transform  ${
+        className={`fixed inset-y-0 left-0 z-80 flex h-full flex-col bg-[#2f4f4f] shadow-lg transition-transform duration-300 transform  ${
           isOpen
             ? "translate-x-0"
             : side === "left"

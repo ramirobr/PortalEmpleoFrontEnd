@@ -20,7 +20,7 @@ export function CandidateList({ candidates }: Props) {
   }
 
   return (
-    <div className="grid gap-6 grid-cols-1 sm:grid-cols-2 md:grid-cols-3">
+    <div className="grid gap-6 grid-cols-1 sm:grid-cols-2 xl:grid-cols-3">
       {candidates.map((candidate) => (
         <CandidateCard key={candidate.idUsuario} candidate={candidate} />
       ))}

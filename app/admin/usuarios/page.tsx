@@ -222,7 +222,7 @@ export default function AdminUsuariosPage() {
       {/* Filters */}
       <Card className="mb-6 p-6">
         <div className="flex flex-col gap-4">
-          <div className="flex flex-col md:flex-row gap-4 flex-wrap">
+          <div className="flex flex-col lg:flex-row gap-4 flex-wrap">
             {/* Search */}
             <div className="relative flex-1 min-w-[200px]">
               <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
@@ -246,7 +246,7 @@ export default function AdminUsuariosPage() {
                 setCurrentPage(1);
               }}
             >
-              <SelectTrigger className="w-full md:w-40">
+              <SelectTrigger className="w-full lg:w-40">
                 <SelectValue placeholder="Estado" />
               </SelectTrigger>
               <SelectContent>
@@ -266,7 +266,7 @@ export default function AdminUsuariosPage() {
                 setCurrentPage(1);
               }}
             >
-              <SelectTrigger className="w-full md:w-48">
+              <SelectTrigger className="w-full lg:w-48">
                 <SelectValue placeholder="Rol" />
               </SelectTrigger>
               <SelectContent>
@@ -289,7 +289,7 @@ export default function AdminUsuariosPage() {
                 setCurrentPage(1);
               }}
             >
-              <SelectTrigger className="w-full md:w-40">
+              <SelectTrigger className="w-full lg:w-40">
                 <SelectValue placeholder="Tipo" />
               </SelectTrigger>
               <SelectContent>

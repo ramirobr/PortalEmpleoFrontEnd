@@ -92,9 +92,9 @@ export default function PostulantesTodos({ filters }: PostulantesTodosProps) {
     <div className="p-6">
       {/* Top Search Bar */}
 
-      <div className="flex flex-col md:flex-row gap-6 items-start">
+      <div className="flex flex-col lg:flex-row gap-6 items-start">
         {/* Filter Panel (40%) */}
-        <aside className="w-full md:w-[30%] bg-white p-6 rounded-lg shadow h-fit sticky top-4">
+        <aside className="w-full lg:w-[30%] bg-white p-6 rounded-lg shadow h-fit sticky top-4">
           <div className="mb-6 relative">
             <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
               <svg
@@ -195,7 +195,7 @@ export default function PostulantesTodos({ filters }: PostulantesTodosProps) {
         </aside>
 
         {/* List (70%) */}
-        <div className="w-full md:w-[70%]">
+        <div className="w-full lg:w-[70%]">
           <h2 className="text-xl font-semibold text-gray-900 mb-6">
             Resultados ({totalItems})
           </h2>

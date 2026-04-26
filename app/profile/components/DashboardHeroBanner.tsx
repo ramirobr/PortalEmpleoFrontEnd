@@ -50,7 +50,7 @@ export default function DashboardHeroBanner({
       <div className="relative z-10 flex flex-col lg:flex-row items-start lg:items-center justify-between px-8 py-10 gap-6">
         {/* Left: Welcome text + search */}
         <div className="flex-1 max-w-lg">
-          <h1 className="text-3xl md:text-4xl font-bold text-white mb-2 leading-tight">
+          <h1 className="text-3xl lg:text-4xl font-bold text-white mb-2 leading-tight">
             ¡Bienvenido a tu Perfil, {firstName}!
           </h1>
           <p className="text-white/90 text-base mb-6">

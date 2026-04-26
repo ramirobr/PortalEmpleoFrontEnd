@@ -165,7 +165,7 @@ export default function EmailSignup({ fields, loadingFields = false }: CompanyFo
             onSubmit={form.handleSubmit(onSubmit)}
             className="flex flex-col gap-6"
           >
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 gap-y-8">
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 gap-y-8">
               <FormField
                 control={form.control}
                 name="nombres"
@@ -194,12 +194,12 @@ export default function EmailSignup({ fields, loadingFields = false }: CompanyFo
                 )}
               />
 
-              <div className="col-span-1 md:col-span-2 flex flex-col md:flex-row gap-4">
+              <div className="col-span-1 lg:col-span-2 flex flex-col lg:flex-row gap-4">
                 <FormField
                   control={form.control}
                   name="idTipoDocumento"
                   render={({ field }) => (
-                    <FormItem className="w-full md:w-1/2">
+                    <FormItem className="w-full lg:w-1/2">
                       <FormLabel htmlFor="documento">
                         Tipo de documento *
                       </FormLabel>
@@ -235,7 +235,7 @@ export default function EmailSignup({ fields, loadingFields = false }: CompanyFo
                   control={form.control}
                   name="documento"
                   render={({ field }) => (
-                    <FormItem className="w-full md:w-1/2">
+                    <FormItem className="w-full lg:w-1/2">
                       <FormLabel>Documento *</FormLabel>
                       <FormControl>
                         <Input
@@ -253,12 +253,12 @@ export default function EmailSignup({ fields, loadingFields = false }: CompanyFo
                 />
               </div>
 
-              <div className="col-span-1 md:col-span-2 flex flex-col md:flex-row gap-4">
+              <div className="col-span-1 lg:col-span-2 flex flex-col lg:flex-row gap-4">
                 <FormField
                   control={form.control}
                   name="telefono"
                   render={({ field }) => (
-                    <FormItem className="w-full md:w-1/2">
+                    <FormItem className="w-full lg:w-1/2">
                       <FormLabel htmlFor="telefono">Teléfono *</FormLabel>
                       <FormControl>
                         <Input
@@ -283,7 +283,7 @@ export default function EmailSignup({ fields, loadingFields = false }: CompanyFo
                   control={form.control}
                   name="telefonoMobil"
                   render={({ field }) => (
-                    <FormItem className="w-full md:w-1/2">
+                    <FormItem className="w-full lg:w-1/2">
                       <FormLabel htmlFor="telefonoMobil">
                         Teléfono Móvil
                       </FormLabel>
@@ -305,12 +305,12 @@ export default function EmailSignup({ fields, loadingFields = false }: CompanyFo
                 />
               </div>
 
-              <div className="col-span-1 md:col-span-2 flex flex-col md:flex-row gap-4">
+              <div className="col-span-1 lg:col-span-2 flex flex-col lg:flex-row gap-4">
                 <FormField
                   control={form.control}
                   name="fechaNacimiento"
                   render={({ field }) => (
-                    <FormItem className="col-span-1 md:col-span-2 w-full md:w-1/2">
+                    <FormItem className="col-span-1 lg:col-span-2 w-full lg:w-1/2">
                       <FormLabel>Fecha de nacimiento *</FormLabel>
                       <FormControl>
                         <DatePicker
@@ -326,7 +326,7 @@ export default function EmailSignup({ fields, loadingFields = false }: CompanyFo
                   control={form.control}
                   name="password"
                   render={({ field }) => (
-                    <FormItem className="w-full md:w-1/2">
+                    <FormItem className="w-full lg:w-1/2">
                       <FormLabel>Contraseña *</FormLabel>
                       <FormControl>
                         <div className="relative">
@@ -360,12 +360,12 @@ export default function EmailSignup({ fields, loadingFields = false }: CompanyFo
                 />
               </div>
 
-              <div className="col-span-1 md:col-span-2 flex flex-col md:flex-row gap-4">
+              <div className="col-span-1 lg:col-span-2 flex flex-col lg:flex-row gap-4">
                 <FormField
                   control={form.control}
                   name="confirmPassword"
                   render={({ field }) => (
-                    <FormItem className="col-span-1 md:col-span-2 w-full md:w-1/2">
+                    <FormItem className="col-span-1 lg:col-span-2 w-full lg:w-1/2">
                       <FormLabel>Repetir contraseña *</FormLabel>
                       <FormControl>
                         <Input
@@ -382,7 +382,7 @@ export default function EmailSignup({ fields, loadingFields = false }: CompanyFo
                   control={form.control}
                   name="idGenero"
                   render={({ field }) => (
-                    <FormItem className="w-full md:w-1/2">
+                    <FormItem className="w-full lg:w-1/2">
                       <FormLabel htmlFor="genero">Género *</FormLabel>
                       <FormControl>
                         <Select
@@ -416,7 +416,7 @@ export default function EmailSignup({ fields, loadingFields = false }: CompanyFo
                 control={form.control}
                 name="email"
                 render={({ field }) => (
-                  <FormItem className="w-full col-span-1 md:col-span-2">
+                  <FormItem className="w-full col-span-1 lg:col-span-2">
                     <FormLabel>Email *</FormLabel>
                     <FormControl>
                       <div className="relative">

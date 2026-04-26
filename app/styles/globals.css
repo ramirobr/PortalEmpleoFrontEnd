@@ -4,8 +4,9 @@
 @import "./layout/buttons.css";
 @import "./layout/typography.css";
 @import "tw-animate-css";
+@plugin "@tailwindcss/container-queries";
 
-@theme inline {
+@theme {
   --radius-sm: calc(var(--radius) - 4px);
   --radius-md: calc(var(--radius) - 2px);
   --radius-lg: var(--radius);
@@ -95,3 +96,4 @@
     @apply bg-background text-foreground;
   }
 }
+

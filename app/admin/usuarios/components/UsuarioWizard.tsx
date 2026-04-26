@@ -274,7 +274,7 @@ export default function UsuarioWizard({
         <p className="text-gray-600">Selecciona el tipo de cuenta que mejor se ajuste a tus necesidades</p>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
         <Card
           className={`cursor-pointer transition-all hover:shadow-md ${
             userType === "postulante" ? "ring-2 ring-primary" : ""
@@ -315,7 +315,7 @@ export default function UsuarioWizard({
       </div>
 
       <Form {...postulanteForm}>
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
           <FormField
             control={postulanteForm.control}
             name="nombres"
@@ -441,7 +441,7 @@ export default function UsuarioWizard({
       </div>
 
       <Form {...postulanteForm}>
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
           <FormField
             control={postulanteForm.control}
             name="telefono"
@@ -484,7 +484,7 @@ export default function UsuarioWizard({
             control={postulanteForm.control}
             name="email"
             render={({ field }) => (
-              <FormItem className="md:col-span-2">
+              <FormItem className="lg:col-span-2">
                 <FormLabel>Email *</FormLabel>
                 <FormControl>
                   <Input type="email" placeholder="usuario@email.com" {...field} />
@@ -506,7 +506,7 @@ export default function UsuarioWizard({
 
       <Form {...postulanteForm}>
         <div className="space-y-4">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
             <FormField
               control={postulanteForm.control}
               name="password"
@@ -629,7 +629,7 @@ export default function UsuarioWizard({
       </div>
 
       <Form {...empresaForm}>
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
           <FormField
             control={empresaForm.control}
             name="nombreEmpresa"
@@ -709,7 +709,7 @@ export default function UsuarioWizard({
       </div>
 
       <Form {...empresaForm}>
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
           <FormField
             control={empresaForm.control}
             name="idCiudad"
@@ -754,7 +754,7 @@ export default function UsuarioWizard({
             control={empresaForm.control}
             name="calle"
             render={({ field }) => (
-              <FormItem className="md:col-span-2">
+              <FormItem className="lg:col-span-2">
                 <FormLabel>Calle *</FormLabel>
                 <FormControl>
                   <Input placeholder="Dirección completa" {...field} />
@@ -808,7 +808,7 @@ export default function UsuarioWizard({
       </div>
 
       <Form {...empresaForm}>
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
           <FormField
             control={empresaForm.control}
             name="idIndustria"
@@ -867,7 +867,7 @@ export default function UsuarioWizard({
             control={empresaForm.control}
             name="sitioWeb"
             render={({ field }) => (
-              <FormItem className="md:col-span-2">
+              <FormItem className="lg:col-span-2">
                 <FormLabel>Sitio Web (opcional)</FormLabel>
                 <FormControl>
                   <Input placeholder="https://www.empresa.com" {...field} />
@@ -888,7 +888,7 @@ export default function UsuarioWizard({
       </div>
 
       <Form {...empresaForm}>
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
           <FormField
             control={empresaForm.control}
             name="nombres"

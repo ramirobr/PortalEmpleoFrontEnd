@@ -159,7 +159,7 @@ export default function EditarDatosContacto({
           className=""
           aria-label="Formulario de datos de contacto"
         >
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
             <FormField
               control={form.control}
               name="celular"
@@ -207,7 +207,7 @@ export default function EditarDatosContacto({
               )}
             />
           </div>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
             <FormField
               control={form.control}
               name="email"
@@ -344,7 +344,7 @@ export default function EditarDatosContacto({
 
           <div
             id="planillaServicio"
-            className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8"
+            className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8"
           >
             <FormField
               control={form.control}

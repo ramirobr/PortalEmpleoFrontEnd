@@ -19,7 +19,7 @@ export default function CandidatesContent({
   const [isFiltersOpen, setIsFiltersOpen] = useState(false);
 
   return (
-    <div className="flex flex-col md:flex-row gap-8 relative">
+    <div className="flex flex-col lg:flex-row gap-8 relative">
       <CandidateFilters
         initialFilters={initialFilters}
         filters={filtersItems}
@@ -27,7 +27,7 @@ export default function CandidatesContent({
         onClose={() => setIsFiltersOpen(false)}
       />
       <div
-        className={`fixed inset-0 bg-black/50 z-40 md:hidden transition-opacity duration-300 ${
+        className={`fixed inset-0 bg-black/50 z-40 lg:hidden transition-opacity duration-300 ${
           isFiltersOpen ? "opacity-100" : "opacity-0 pointer-events-none"
         }`}
         onClick={() => setIsFiltersOpen(false)}

@@ -175,9 +175,9 @@ export default function CrearEmpleoForm({ fields, initialValues }: FormProps) {
 
   return (
     <form className="space-y-6" onSubmit={handleSubmit(onSubmit)}>
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         {/* Title */}
-        <div className="md:col-span-2">
+        <div className="lg:col-span-2">
           <label className="block text-sm font-semibold text-gray-700 mb-1">
             Título del Empleo
           </label>
@@ -379,7 +379,7 @@ export default function CrearEmpleoForm({ fields, initialValues }: FormProps) {
         </div>
 
         {/* Salary */}
-        <div className="md:col-span-2">
+        <div className="lg:col-span-2">
           <label className="block text-sm font-semibold text-gray-700 mb-4">
             Rango Salarial (Mensual): ${salarioRange?.[0] ?? 0} - $
             {salarioRange?.[1] ?? 0}
@@ -410,7 +410,7 @@ export default function CrearEmpleoForm({ fields, initialValues }: FormProps) {
         </div>
 
         {/* Description */}
-        <div className="md:col-span-2">
+        <div className="lg:col-span-2">
           <label className="block text-sm font-semibold text-gray-700 mb-1">
             Descripción del Puesto
           </label>
@@ -427,7 +427,7 @@ export default function CrearEmpleoForm({ fields, initialValues }: FormProps) {
         </div>
 
         {/* Requirements */}
-        <div className="md:col-span-2">
+        <div className="lg:col-span-2">
           <label className="block text-sm font-semibold text-gray-700 mb-1">
             Requisitos
           </label>
@@ -444,7 +444,7 @@ export default function CrearEmpleoForm({ fields, initialValues }: FormProps) {
         </div>
 
         {/* Banner Selector */}
-        <div className="md:col-span-2">
+        <div className="lg:col-span-2">
           <Controller
             name="idArchivoEmpresa"
             control={control}

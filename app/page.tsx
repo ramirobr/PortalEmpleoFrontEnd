@@ -4,6 +4,8 @@ import { Sparkles, Users, Zap } from "lucide-react";
 import { auth } from "@/auth";
 import { fetchTestimonials } from "@/lib/testimonials/fetch";
 import Testimonials from "@/components/shared/components/Testimonials";
+import MainLayout from "@/components/shared/layout/MainLayout";
+import Footer from "@/components/shared/components/Footer";
 
 export default async function Home() {
   const session = await auth();
@@ -43,53 +45,29 @@ export default async function Home() {
   ];
 
   return (
-    <>
-      {/* Header / Logo Section */}
-      <header className="sticky top-0 z-50 w-full bg-white/95 backdrop-blur-md border-b border-slate-100 shadow-md transition-all duration-300">
-        <nav className="w-full max-w-7xl px-6 py-4 flex justify-between items-center m-auto">
-          <div className="w-40 sm:w-48">
-            <Image
-              src="/logos/logo-empresa.jpg"
-              alt="Implica Logo"
-              width={200}
-              height={66}
-              className="object-contain"
-              priority
-            />
-          </div>
-          {!session && (
-            <Link
-              href="/auth/login"
-              className="relative group/btn flex items-center justify-center gap-2.5 px-12 py-2.5 bg-primary text-white font-black text-[11px] uppercase tracking-widest rounded-full hover:bg-primary/90 hover:shadow-2xl hover:shadow-primary/30 transition-all duration-500 cursor-pointer overflow-hidden hover:-translate-y-1"
-            >
-              <div className="absolute inset-x-0 top-0 h-full w-full bg-white/10 -translate-x-full group-hover/btn:translate-x-full transition-transform duration-1000 skew-x-12" />
-              <span className="relative z-10">Iniciar Sesión</span>
-            </Link>
-          )}
-        </nav>
-      </header>
+    <MainLayout>
       <main className="min-h-screen bg-background flex flex-col items-center font-body">
         {/* Hero Section */}
         <section className="w-full max-w-7xl px-4 py-12 flex flex-col items-center text-center">
           {/* Tagline */}
-          <p className="text-2xl md:text-3xl lg:text-4xl font-display font-extrabold text-primary mb-3 leading-tight">
+          <p className="text-2xl lg:text-3xl lg:text-4xl font-display font-extrabold text-primary mb-3 leading-tight">
             Conectando empresas, empleadores y personas en busca de trabajo
           </p>
-          <p className="text-base md:text-lg text-slate-600 max-w-2xl mb-10 leading-relaxed">
+          <p className="text-base lg:text-lg text-slate-600 max-w-2xl mb-10 leading-relaxed">
             Encuentra el talento ideal para tu negocio o la oportunidad laboral
             que estás buscando
           </p>
 
-          <h1 className="text-4xl md:text-5xl lg:text-6xl font-display font-extrabold text-slate-900 mb-6 tracking-tight">
+          <h1 className="text-4xl lg:text-5xl lg:text-6xl font-display font-extrabold text-slate-900 mb-6 tracking-tight">
             ¿Qué estás buscando?
           </h1>
-          <p className="text-lg md:text-xl text-slate-500 max-w-2xl mb-16 leading-relaxed">
+          <p className="text-lg lg:text-xl text-slate-500 max-w-2xl mb-16 leading-relaxed">
             Selecciona el perfil que mejor te describa para personalizar tu
             experiencia.
           </p>
 
           {/* Categories Grid */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-6 w-full px-4 mb-12">
+          <div className="grid grid-cols-1 xl:grid-cols-3 lg:grid-cols-5 gap-6 w-full px-4 mb-12">
             {categories.map((cat, index) => (
               <ProfileCard
                 key={index}
@@ -155,14 +133,8 @@ export default async function Home() {
 
         <Testimonials testimonials={testimonials} />
       </main>
-      {/* Footer / Bottom Spacing */}
-      <footer className="w-full py-12 text-center text-sm border-t border-slate-100 bg-primary text-white">
-        <p>
-          &copy; {new Date().getFullYear()} Implica. Todos los derechos
-          reservados.
-        </p>
-      </footer>
-    </>
+      <Footer />
+    </MainLayout>
   );
 }
 

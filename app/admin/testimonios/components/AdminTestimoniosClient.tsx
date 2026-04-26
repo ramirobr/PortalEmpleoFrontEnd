@@ -231,7 +231,7 @@ export default function AdminTestimoniosClient({
       </h1>
 
       {/* Stats Cards */}
-      <div className="grid grid-cols-2 md:grid-cols-5 gap-4 mb-6">
+      <div className="grid grid-cols-2 lg:grid-cols-5 gap-4 mb-6">
         <Card className="p-4 text-center">
           <p className="text-2xl font-bold text-gray-900">
             {counters?.totalTestimonios}
@@ -268,7 +268,7 @@ export default function AdminTestimoniosClient({
       </div>
 
       <Card className="mb-6 p-6">
-        <div className="flex flex-col md:flex-row gap-4">
+        <div className="flex flex-col lg:flex-row gap-4">
           <form
             className="relative flex-1"
             onSubmit={(e) => {
@@ -297,7 +297,7 @@ export default function AdminTestimoniosClient({
               updateParams({ estado: value, page: "1" })
             }
           >
-            <SelectTrigger className="w-full md:w-48">
+            <SelectTrigger className="w-full lg:w-48">
               <SelectValue placeholder="Estado" />
             </SelectTrigger>
             <SelectContent>
@@ -319,7 +319,7 @@ export default function AdminTestimoniosClient({
               updateParams({ calificacion: value, page: "1" })
             }
           >
-            <SelectTrigger className="w-full md:w-48">
+            <SelectTrigger className="w-full lg:w-48">
               <SelectValue placeholder="Calificación" />
             </SelectTrigger>
             <SelectContent>

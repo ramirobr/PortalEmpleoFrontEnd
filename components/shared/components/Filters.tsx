@@ -79,11 +79,11 @@ export function Filters({
   return (
     <aside
       className={`
-        fixed inset-y-0 left-0 z-50 w-64 bg-white shadow-xl transform transition-transform duration-300 ease-in-out md:translate-x-0 md:static md:h-fit md:min-w-[260px] md:max-w-xs md:shadow-none md:bg-transparent overflow-y-auto md:overflow-visible
+        fixed inset-y-0 left-0 z-70 lg:z-40 w-64 bg-white shadow-xl transform transition-transform duration-300 ease-in-out lg:translate-x-0 lg:static lg:h-fit lg:min-w-[260px] lg:max-w-xs lg:shadow-none lg:bg-transparent overflow-y-auto lg:overflow-visible
         ${isOpen ? "translate-x-0" : "-translate-x-full"}
       `}
     >
-      <div className="md:hidden flex justify-end p-4">
+      <div className="lg:hidden flex justify-end p-4">
         <button onClick={onClose} aria-label="Cerrar filtros">
           <svg
             className="w-6 h-6"
@@ -100,7 +100,7 @@ export function Filters({
           </svg>
         </button>
       </div>
-      <div className="rounded-lg md:shadow shadow-none p-6 flex flex-col gap-6 bg-white">
+      <div className="rounded-lg lg:shadow shadow-none p-6 flex flex-col gap-6 bg-white">
         <Input
           placeholder="Buscar..."
           value={SearchQuery}

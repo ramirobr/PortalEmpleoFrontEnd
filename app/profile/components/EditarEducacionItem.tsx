@@ -127,7 +127,7 @@ const EditarEducacionItem: React.FC<EditarEducacionItemProps> = ({
           )}
         />
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-3">
           <FormField
             control={form.control}
             name="fechaInicio"
@@ -166,7 +166,7 @@ const EditarEducacionItem: React.FC<EditarEducacionItemProps> = ({
           />
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-3">
           <FormField
             control={form.control}
             name="idNivelEstudio"

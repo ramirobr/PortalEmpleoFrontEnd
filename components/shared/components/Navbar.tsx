@@ -86,7 +86,7 @@ export default function Navbar({
 
         {/* Center: Nav links (desktop only) */}
         {status === "authenticated" && (
-        <div className="hidden md:flex items-center gap-8">
+        <div className="hidden lg:flex items-center gap-8">
           {navLinks.map((link) => {
             const isActive =
               link.href === "/"
@@ -149,39 +149,41 @@ export default function Navbar({
               </>
             ) : (
               <>
-                {!pathname.startsWith("/profile") && (
-                  <>
-                    <Link
-                      href="/auth/email"
-                      className="text-sm btn btn-primary border border-primary px-2 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500"
-                    >
-                      Crear cuenta
-                    </Link>
-                    {pathname !== "/auth/login" && (
+                <div className="hidden lg:flex items-center gap-3">
+                  {!pathname.startsWith("/profile") && (
+                    <>
                       <Link
-                        href="/auth/login"
+                        href="/auth/email"
                         className="text-sm btn btn-primary border border-primary px-2 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500"
                       >
-                        Ingresar
+                        Crear cuenta
                       </Link>
-                    )}
-                  </>
-                )}
-                {showCompanyRegister && (
-                  <Link
-                    href="/auth/empresa"
-                    className="text-sm btn btn-primary border border-primary px-2 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500"
-                  >
-                    Empresa
-                  </Link>
-                )}
+                      {pathname !== "/auth/login" && (
+                        <Link
+                          href="/auth/login"
+                          className="text-sm btn btn-primary border border-primary px-2 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500"
+                        >
+                          Ingresar
+                        </Link>
+                      )}
+                    </>
+                  )}
+                  {showCompanyRegister && (
+                    <Link
+                      href="/auth/empresa"
+                      className="text-sm btn btn-primary border border-primary px-2 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500"
+                    >
+                      Empresa
+                    </Link>
+                  )}
+                </div>
                 {/* Mobile hamburger for unauthenticated */}
                 <button
                   type="button"
                   aria-label="Abrir menú"
                   aria-pressed={isAsideOpen}
                   onClick={onHamburgerClick}
-                  className="md:hidden p-2 rounded border border-gray-200 bg-white shadow hover:bg-gray-50 cursor-pointer"
+                  className="lg:hidden p-2 rounded border border-gray-200 bg-white shadow hover:bg-gray-50 cursor-pointer"
                 >
                   <Menu className="w-5 h-5 text-primary" />
                 </button>

@@ -34,7 +34,7 @@ export default function DashboardProfileHeader({
   return (
     <div className="flex flex-col gap-8 mb-10 mt-6">
       {/* Top Header Section */}
-      <div className="flex flex-col md:flex-row gap-6 items-start">
+      <div className="flex flex-col lg:flex-row gap-6 items-start">
         {/* Avatar */}
         <div className="w-[140px] h-[140px] rounded-full bg-primary-container shrink-0 flex items-center justify-center overflow-hidden border-4 border-white shadow-sm">
           {userPic ? (

@@ -77,10 +77,10 @@ export default function FavoritosContent({
   }, [favoriteJobs, searchParams, filtersItems]);
 
   return (
-    <div className="flex flex-col md:flex-row gap-8 relative mt-12">
+    <div className="flex flex-col lg:flex-row gap-8 relative mt-12">
       {/* Mobile Overlay */}
       <div
-        className={`fixed inset-0 bg-black/50 z-40 md:hidden transition-opacity duration-300 ${
+        className={`fixed inset-0 bg-black/50 z-40 lg:hidden transition-opacity duration-300 ${
           isFiltersOpen ? "opacity-100" : "opacity-0 pointer-events-none"
         }`}
         onClick={() => setIsFiltersOpen(false)}
@@ -100,7 +100,7 @@ export default function FavoritosContent({
           onToggleFilters={() => setIsFiltersOpen(true)}
         />
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mt-6">
+        <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-6 mt-6">
           {filteredJobs?.length ? (
             filteredJobs?.map((job) => {
               // Handle conditional ID access safely

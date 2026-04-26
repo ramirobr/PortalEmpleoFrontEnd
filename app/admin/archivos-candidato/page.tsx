@@ -317,7 +317,7 @@ export default function AdminArchivosCandidatoPage() {
         <h2 className="text-sm font-semibold text-gray-700 mb-3">
           Seleccionar Candidato
         </h2>
-        <div className="flex flex-col md:flex-row gap-4">
+        <div className="flex flex-col lg:flex-row gap-4">
           <div className="relative flex-1">
             <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
             <Input
@@ -332,7 +332,7 @@ export default function AdminArchivosCandidatoPage() {
             value={selectedCandidatoId}
             onValueChange={setSelectedCandidatoId}
           >
-            <SelectTrigger className="md:w-80">
+            <SelectTrigger className="lg:w-80">
               <SelectValue
                 placeholder={
                   loadingCandidatos

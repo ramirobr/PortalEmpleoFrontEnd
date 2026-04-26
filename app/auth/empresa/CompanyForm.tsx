@@ -150,7 +150,7 @@ export default function CompanyForm({ fields }: CompanyFormProps) {
         >
           <fieldset className="border-0 p-0">
             <legend className="sr-only">Datos de la empresa</legend>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 gap-y-8">
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 gap-y-8">
               <FormField
                 control={form.control}
                 name="nombreEmpresa"
@@ -443,7 +443,7 @@ export default function CompanyForm({ fields }: CompanyFormProps) {
 
           <fieldset className="border-0 p-0">
             <legend className="sr-only">Información de usuario</legend>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 gap-y-8">
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 gap-y-8">
               <FormField
                 control={form.control}
                 name="nombres"

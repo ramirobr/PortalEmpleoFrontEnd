@@ -175,7 +175,7 @@ export default function EditarDatosPersonales({
           onSubmit={form.handleSubmit(handleSubmit)}
           aria-label="Formulario de datos personales"
         >
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
             <FormField
               control={form.control}
               name="nombre"
@@ -213,7 +213,7 @@ export default function EditarDatosPersonales({
               )}
             />
           </div>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-4">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-4">
             <FormField
               control={form.control}
               name="nacimiento"
@@ -248,7 +248,7 @@ export default function EditarDatosPersonales({
               )}
             />
           </div>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-4">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-4">
             <FormField
               control={form.control}
               name="idEstadoCivil"
@@ -312,7 +312,7 @@ export default function EditarDatosPersonales({
               )}
             />
           </div>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-4">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-4">
             <FormField
               control={form.control}
               name="idTipoDocumento"
@@ -370,7 +370,7 @@ export default function EditarDatosPersonales({
             />
           </div>
           {/* Fila 5: Movilidad Propia / Licencia de conducir */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
             <FormField
               control={form.control}
               name="movilidad"

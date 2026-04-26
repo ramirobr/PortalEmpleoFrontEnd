@@ -54,7 +54,7 @@ export default function CompanyProfileCard({
           </div>
         )}
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
           {[
             { icon: Briefcase, label: "Industria", value: profile.industria?.nombre ?? "EDITORIAL / CONSULTORÍA" },
             { icon: Users, label: "Tamaño", value: profile.cantidadEmpleados?.nombre ?? "A DEFINIR" },

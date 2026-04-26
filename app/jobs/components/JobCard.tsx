@@ -24,9 +24,9 @@ export default function JobCard({ job }: JobCardProps) {
       : `${job.ciudad}, ${job.provincia}`;
 
   return (
-    <div className="group bg-white rounded-xl p-8 shadow-sm transition-all duration-500 hover:shadow-xl hover:-translate-y-1.5 flex flex-col h-full border border-slate-50">
+    <div className="@container group bg-white rounded-xl p-8 shadow-sm transition-all duration-500 hover:shadow-xl hover:-translate-y-1.5 flex flex-col h-full border border-slate-50">
       {/* Header Row: Logo & Verified Badge */}
-      <div className="flex justify-between items-start mb-8">
+      <div className="flex flex-col @[width>=300px]:flex-row justify-between items-start mb-8 gap-4 @[width>=300px]:gap-0">
         <div className="relative w-16 h-16 shrink-0">
           {logo ? (
             <Image

@@ -129,11 +129,11 @@ export default function OfertasPage() {
       </div>
 
       <div className="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
-        <div className="p-6 flex flex-col md:flex-row justify-between items-center border-b border-gray-100 gap-4">
+        <div className="p-6 flex flex-col lg:flex-row justify-between items-center border-b border-gray-100 gap-4">
           <h2 className="text-lg font-semibold text-gray-900">
             Mis Ofertas de Empleo
           </h2>
-          <div className="w-full md:w-48">
+          <div className="w-full lg:w-48">
             <Select
               defaultValue="6months"
               value={periodoBusqueda}

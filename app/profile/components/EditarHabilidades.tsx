@@ -207,7 +207,7 @@ export default function EditarHabilidades({
             <Pill
               key={item.id}
               variant="custom"
-              fontSize="text-sm md:text-md"
+              fontSize="text-sm lg:text-md"
               bgColor="gap-2 px-4 py-2 bg-primary/10 text-primary rounded-full border border-primary/20 transition-all hover:bg-primary/20 text-sm font-bold uppercase tracking-wide [&>*]:uppercase"
               textColor="text-green-700 font-bold uppercase"
               removable

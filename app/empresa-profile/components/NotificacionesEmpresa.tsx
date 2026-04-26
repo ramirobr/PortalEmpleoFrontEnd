@@ -68,7 +68,7 @@ export default function NotificacionesEmpresa({
               key={notif.idNotificacion}
               className={`bg-white shadow hover:shadow-md transition-all rounded-xl overflow-hidden p-6 border-l-8 border-l-primary ${notif.esLeida ? "opacity-75" : ""}`}
             >
-              <article className="flex justify-between items-center flex-col md:flex-row gap-4">
+              <article className="flex justify-between items-center flex-col lg:flex-row gap-4">
                 <div className="flex flex-row gap-4 flex-1">
                   <div className="flex items-center justify-center text-primary w-12 h-12 bg-primary/10 shrink-0 rounded-full border border-primary/20">
                     <Send size={20} />

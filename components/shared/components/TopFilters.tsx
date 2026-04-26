@@ -31,14 +31,14 @@ export function TopFilters({
   };
 
   return (
-    <div className="flex flex-col md:flex-row justify-between items-start">
-      <div className="flex justify-between w-full md:w-auto items-center mb-3 md:mb-0">
+    <div className="flex flex-col lg:flex-row justify-between items-start">
+      <div className="flex justify-between w-full lg:w-auto items-center mb-3 lg:mb-0">
         <p className="text-3xl font-extrabold text-primary mb-1">
           {total} {entityName} encontrados
         </p>
         <button
           onClick={onToggleFilters}
-          className="md:hidden flex items-center gap-2 px-3 py-1.5 bg-primary text-white rounded text-sm font-medium"
+          className="lg:hidden flex items-center gap-2 px-3 py-1.5 bg-primary text-white rounded text-sm font-medium"
         >
           <svg
             className="w-4 h-4"
@@ -56,8 +56,8 @@ export function TopFilters({
           Filtrar
         </button>
       </div>
-      <div className="flex items-center gap-4 pb-6 justify-between md:justify-end w-full md:w-auto">
-        <label className="hidden md:block">Ordenar por:</label>
+      <div className="flex items-center gap-4 pb-6 justify-between lg:justify-end w-full lg:w-auto">
+        <label className="hidden lg:block">Ordenar por:</label>
         <Select
           defaultValue={params.get("sort") ?? "recent"}
           onValueChange={(v) => update("sort", v)}
@@ -70,7 +70,7 @@ export function TopFilters({
             <SelectItem value="oldest">Antiguo</SelectItem>
           </SelectContent>
         </Select>
-        <label className="hidden md:block">Items por página:</label>
+        <label className="hidden lg:block">Items por página:</label>
         <Select
           defaultValue={params.get("pageSize") ?? "10"}
           onValueChange={(v) => update("pageSize", v)}

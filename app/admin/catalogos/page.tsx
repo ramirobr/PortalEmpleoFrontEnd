@@ -208,7 +208,7 @@ export default function AdminCatalogosPage() {
 
       {/* Filtros */}
       <Card className="mb-6 p-6">
-        <div className="flex flex-col md:flex-row gap-4">
+        <div className="flex flex-col lg:flex-row gap-4">
           {/* Búsqueda */}
           <div className="relative flex-1">
             <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
@@ -232,7 +232,7 @@ export default function AdminCatalogosPage() {
               setCurrentPage(1);
             }}
           >
-            <SelectTrigger className="w-full md:w-56">
+            <SelectTrigger className="w-full lg:w-56">
               <SelectValue placeholder="Tipo de catálogo" />
             </SelectTrigger>
             <SelectContent>
@@ -253,7 +253,7 @@ export default function AdminCatalogosPage() {
               setCurrentPage(1);
             }}
           >
-            <SelectTrigger className="w-full md:w-48">
+            <SelectTrigger className="w-full lg:w-48">
               <SelectValue placeholder="Estado" />
             </SelectTrigger>
             <SelectContent>

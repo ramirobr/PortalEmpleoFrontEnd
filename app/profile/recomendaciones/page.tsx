@@ -285,7 +285,7 @@ export default function RecomendacionesPage() {
                 </h2>
               </div>
 
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-5">
                 {recomendaciones.map((rec, index) => (
                   <RecomendacionCard
                     key={rec.idRecomendacion}

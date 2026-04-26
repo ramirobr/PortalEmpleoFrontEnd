@@ -87,7 +87,7 @@ export default function CompanyProfileView({
         </CardContent>
       </Card>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
         <Card className="py-6">
           <CardHeader className="pb-3">
             <div className="flex items-center justify-between">
@@ -185,7 +185,7 @@ export default function CompanyProfileView({
         </Card>
 
         {admin && (
-          <Card className="md:col-span-2 py-6">
+          <Card className="lg:col-span-2 py-6">
             <CardHeader className="pb-3">
               <div className="flex items-center justify-between">
                 <CardTitle className="text-base font-semibold">
@@ -200,7 +200,7 @@ export default function CompanyProfileView({
               </div>
             </CardHeader>
             <CardContent className="pt-0">
-              <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+              <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
                 <div className="flex items-center gap-2">
                   <User className="w-4 h-4 text-primary" />
                   <div className="text-sm">

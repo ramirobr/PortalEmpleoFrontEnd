@@ -20,7 +20,7 @@ export default function Testimonials({ testimonials }: TestimonialsProps) {
   return (
     <section className="w-full py-16 sm:py-20 px-6 bg-background">
       <div className="max-w-7xl mx-auto">
-        <h2 className="text-3xl md:text-4xl font-display font-extrabold text-slate-900 text-center mb-12 tracking-tight">
+        <h2 className="text-3xl lg:text-4xl font-display font-extrabold text-slate-900 text-center mb-12 tracking-tight">
           Lo que dicen de nosotros
         </h2>
 

@@ -97,7 +97,7 @@ const EditarExperenciaLaboralItem: React.FC<
         className="space-y-5"
         aria-label="Editar experiencia laboral"
       >
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-3">
           <FormField<EditarExperenciaLaboralItemValues>
             control={form.control}
             name="empresa"
@@ -193,7 +193,7 @@ const EditarExperenciaLaboralItem: React.FC<
           )}
         />
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-3">
           <FormField<EditarExperenciaLaboralItemValues>
             control={form.control}
             name="idPais"
@@ -256,7 +256,7 @@ const EditarExperenciaLaboralItem: React.FC<
           />
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-3">
           <FormField<EditarExperenciaLaboralItemValues>
             control={form.control}
             name="idTipoEmpleo"

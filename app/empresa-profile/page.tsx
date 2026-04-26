@@ -41,7 +41,7 @@ export default async function EmpresaProfilePage() {
       />
 
       {/* Main two-column layout */}
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+      <div className="grid grid-cols-1 xl:grid-cols-3 gap-6">
         {/* Left column (2/3) */}
         <div className="lg:col-span-2 space-y-8">
           <PostulantesRecientes

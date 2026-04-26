@@ -103,7 +103,7 @@ export default function RecomendarDialog({
   return (
     <Dialog open={open} onOpenChange={handleOpenChange}>
       <DialogTrigger asChild>
-        <Button className="flex-1 md:flex-none gap-2 bg-teal-600 hover:bg-teal-700 text-white shadow-sm shadow-teal-200">
+        <Button className="flex-1 lg:flex-none gap-2 bg-teal-600 hover:bg-teal-700 text-white shadow-sm shadow-teal-200">
           <ThumbsUp size={18} />
           Recomendar
         </Button>
