@@ -8,8 +8,9 @@ import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
-import { Bell, Menu } from "lucide-react";
+import { Bell, Menu, User } from "lucide-react";
 import NotificationDropdown from "./NotificationDropdown";
+import { PremiumButton } from "./PremiumButton";
 
 interface NavLink {
   label: string;
@@ -74,7 +75,11 @@ export default function Navbar({
     <nav className="sticky top-0 z-50 w-full py-3 bg-white/95 backdrop-blur-md border-b border-slate-100 shadow-sm transition-all duration-300">
       <div className="container flex items-center justify-between gap-4">
         {/* Left: Logo */}
-        <Link href={logoHref} aria-label="Ir a la página principal" className="shrink-0">
+        <Link
+          href={logoHref}
+          aria-label="Ir a la página principal"
+          className="shrink-0"
+        >
           <Image
             src="/logos/logo-empresa.jpg"
             alt="implica"
@@ -86,27 +91,33 @@ export default function Navbar({
 
         {/* Center: Nav links (desktop only) */}
         {status === "authenticated" && (
-        <div className="hidden lg:flex items-center gap-8">
-          {navLinks.map((link) => {
-            const isActive =
-              link.href === "/"
-                ? pathname === "/"
-                : pathname.startsWith(link.href);
-            return (
-              <Link
-                key={link.href}
-                href={link.href}
-                className={`text-sm font-medium transition-colors hover:text-primary ${
-                  isActive
-                    ? "text-primary border-b-2 border-primary pb-0.5"
-                    : "text-gray-600"
-                }`}
-              >
-                {link.label}
-              </Link>
-            );
-          })}
-        </div>
+          <div className="hidden lg:flex items-center gap-8">
+            {navLinks
+              .filter(
+                (link) =>
+                  link.href !== "/buscar-candidatos" &&
+                  link.href !== "/auth/empresa"
+              )
+              .map((link) => {
+                const isActive =
+                  link.href === "/"
+                    ? pathname === "/"
+                    : pathname.startsWith(link.href);
+                return (
+                  <Link
+                    key={link.href}
+                    href={link.href}
+                    className={`text-sm font-medium transition-colors hover:text-primary ${
+                      isActive
+                        ? "text-primary border-b-2 border-primary pb-0.5"
+                        : "text-gray-600"
+                    }`}
+                  >
+                    {link.label}
+                  </Link>
+                );
+              })}
+          </div>
         )}
 
         {/* Right: actions */}
@@ -137,44 +148,35 @@ export default function Navbar({
                 </div>
 
                 {/* Mi Perfil button */}
-                <button
+                <PremiumButton
                   type="button"
-                  aria-label="Mi perfil"
-                  aria-pressed={isAsideOpen}
                   onClick={onHamburgerClick}
-                  className="bg-primary hover:bg-primary/90 text-white text-sm font-semibold px-5 py-2 rounded-lg transition-colors cursor-pointer"
+                  variant="primary"
+                  size="sm"
+                  icon={<User />}
                 >
                   {profileButtonLabel}
-                </button>
+                </PremiumButton>
               </>
             ) : (
               <>
                 <div className="hidden lg:flex items-center gap-3">
                   {!pathname.startsWith("/profile") && (
                     <>
-                      <Link
-                        href="/auth/email"
-                        className="text-sm btn btn-primary border border-primary px-2 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500"
-                      >
+                      <PremiumButton href="/auth/email" variant="outline" size="sm">
                         Crear cuenta
-                      </Link>
+                      </PremiumButton>
                       {pathname !== "/auth/login" && (
-                        <Link
-                          href="/auth/login"
-                          className="text-sm btn btn-primary border border-primary px-2 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500"
-                        >
+                        <PremiumButton href="/auth/login" variant="primary" size="sm">
                           Ingresar
-                        </Link>
+                        </PremiumButton>
                       )}
                     </>
                   )}
                   {showCompanyRegister && (
-                    <Link
-                      href="/auth/empresa"
-                      className="text-sm btn btn-primary border border-primary px-2 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500"
-                    >
+                    <PremiumButton href="/auth/empresa" variant="secondary" size="sm">
                       Empresa
-                    </Link>
+                    </PremiumButton>
                   )}
                 </div>
                 {/* Mobile hamburger for unauthenticated */}

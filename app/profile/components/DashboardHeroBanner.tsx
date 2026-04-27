@@ -4,6 +4,7 @@ import { Search, Star } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { useAuthStore } from "@/context/authStore";
+import { PremiumButton } from "@/components/shared/components/PremiumButton";
 
 interface DashboardHeroBannerProps {
   userName: string;
@@ -28,23 +29,19 @@ export default function DashboardHeroBanner({
 
   const handleSearch = () => {
     if (searchQuery.trim()) {
-      router.push(`/empleos-busqueda?query=${encodeURIComponent(searchQuery.trim())}`);
+      router.push(
+        `/empleos-busqueda?query=${encodeURIComponent(searchQuery.trim())}`,
+      );
     } else {
       router.push("/empleos-busqueda");
     }
   };
 
   return (
-    <div className="relative w-full overflow-hidden rounded-2xl mb-0" style={{ minHeight: "280px" }}>
+    <div className="relative w-full overflow-hidden mb-0">
       {/* Background image with overlay */}
-      <div
-        className="absolute inset-0 bg-cover bg-center"
-        style={{
-          backgroundImage: "url('/images/hero-city.jpg')",
-          backgroundColor: "#115c6f",
-        }}
-      />
-      <div className="absolute inset-0 bg-primary/75" />
+      <div className="absolute inset-0 bg-cover bg-center" />
+      <div className="absolute inset-0 bg-primary" />
 
       {/* Content */}
       <div className="relative z-10 flex flex-col lg:flex-row items-start lg:items-center justify-between px-8 py-10 gap-6">
@@ -58,22 +55,21 @@ export default function DashboardHeroBanner({
           </p>
 
           {/* Search bar */}
-          <div className="flex items-center bg-white rounded-lg overflow-hidden shadow-md">
-            <Search className="w-5 h-5 text-gray-400 ml-4 shrink-0" />
+          <div className="relative flex items-stretch w-full max-w-lg group h-14">
+            {/* Icon inside input */}
+            <div className="absolute left-6 top-1/2 -translate-y-1/2 z-20 flex items-center pointer-events-none">
+              <Search className="w-5 h-5 text-gray-400 group-focus-within:text-secondary transition-colors" />
+            </div>
+
+            {/* Input field */}
             <input
               type="text"
               placeholder="Buscar empleos..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               onKeyDown={(e) => e.key === "Enter" && handleSearch()}
-              className="flex-1 px-3 py-3 text-gray-700 text-sm outline-none bg-transparent"
+              className="w-full pl-14 pr-6 rounded-full bg-white text-gray-700 text-sm shadow-2xl border-2 border-transparent focus:border-secondary/20 focus:ring-4 focus:ring-secondary/10 transition-all outline-none"
             />
-            <button
-              onClick={handleSearch}
-              className="bg-primary hover:bg-primary-deep text-white px-6 py-3 text-sm font-semibold transition-colors cursor-pointer"
-            >
-              Buscar
-            </button>
           </div>
         </div>
 
@@ -84,7 +80,11 @@ export default function DashboardHeroBanner({
             {userPic ? (
               // eslint-disable-next-line @next/next/no-img-element
               <img
-                src={userPic.startsWith("data:") ? userPic : `data:image/jpeg;base64,${userPic}`}
+                src={
+                  userPic.startsWith("data:")
+                    ? userPic
+                    : `data:image/jpeg;base64,${userPic}`
+                }
                 alt={userName}
                 className="w-full h-full object-cover"
                 onError={(e) => {
@@ -98,7 +98,9 @@ export default function DashboardHeroBanner({
             )}
           </div>
 
-          <p className="text-sm font-bold text-gray-800 text-center mb-2">{userName}</p>
+          <p className="text-sm font-bold text-gray-800 text-center mb-2">
+            {userName}
+          </p>
 
           {/* Nivel de confianza badge */}
           <div className="flex items-center gap-1 bg-secondary/15 text-secondary rounded-full px-3 py-1">

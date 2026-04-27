@@ -11,29 +11,14 @@ type CompanyLayoutProps = {
 };
 
 import { LockKeyholeOpen, UserRoundPlus, Building2 } from "lucide-react";
+import { getAuthLinks } from "@/lib/navigation";
 
 export default function CompanyLayout({ children }: CompanyLayoutProps) {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const toggleMobileMenu = () => setIsMobileMenuOpen((prev) => !prev);
   const closeMobileMenu = () => setIsMobileMenuOpen(false);
 
-  const authLinks: NavLink[] = [
-    {
-      name: "Ingresar",
-      href: "/auth/login",
-      icon: <LockKeyholeOpen />,
-    },
-    {
-      name: "Crear cuenta",
-      href: "/auth/email",
-      icon: <UserRoundPlus />,
-    },
-    {
-      name: "Regístrate como empresa",
-      href: "/auth/empresa",
-      icon: <Building2 />,
-    },
-  ];
+  const authLinks = getAuthLinks();
 
   return (
     <>

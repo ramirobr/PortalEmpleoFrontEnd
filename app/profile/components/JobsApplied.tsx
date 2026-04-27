@@ -30,14 +30,14 @@ export default function JobsApplied({
                           ? "green"
                           : "yellow"
                     }
-                    className="uppercase text-[9px] font-black tracking-[0.2em] px-4 py-1.5 rounded-full"
+                    className="uppercase text-[9px] font-bold tracking-[0.2em] px-4 py-1.5 rounded-full"
                   >
                     {job.estado}
                   </Pill>
                 </div>
                 
                 <div className="mt-2">
-                  <h4 className="font-display font-black text-primary text-xl leading-tight uppercase tracking-tight group-hover:text-primary-container transition-colors duration-300">
+                  <h4 className="font-display font-bold text-primary text-xl leading-tight uppercase tracking-tight group-hover:text-primary-container transition-colors duration-300">
                     {job.titulo}
                   </h4>
                   <p className="text-sm font-bold uppercase tracking-widest text-slate-600 mt-2">

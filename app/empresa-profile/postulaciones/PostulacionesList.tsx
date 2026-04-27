@@ -1,10 +1,21 @@
 "use client";
 
-import Pill from "@/components/shared/components/Pill";
+import { LoadingState } from "@/components/shared/components/LoadingState";
+import { PremiumButton } from "@/components/shared/components/PremiumButton";
+import { SkillPill } from "@/components/shared/components/SkillPill";
+import { StatusBadge } from "@/components/shared/components/StatusBadge";
 import TablePagination from "@/components/shared/components/TablePagination";
 import UserAvatar from "@/components/shared/components/UserAvatar";
-import { EyeIcon, MapPinIcon } from "@/components/shared/icons/Icons";
-import { Button } from "@/components/ui/button";
+import {
+  CalendarIcon,
+  CheckIcon,
+  EyeIcon,
+  MapPinIcon,
+  UsersIcon,
+  BriefcaseIcon,
+  StarIcon,
+  EditIcon,
+} from "@/components/shared/icons/Icons";
 import {
   Dialog,
   DialogContent,
@@ -205,92 +216,76 @@ export default function PostulacionesList({
   return (
     <div className="px-6 pb-6">
       {/* Filtros */}
-      <div className="bg-white rounded-xl border border-gray-200 shadow-sm p-6 mb-6">
-        <h3 className="text-lg font-semibold text-gray-900 mb-4">
+      <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-8 mb-8 transition-all hover:shadow-md">
+        <h3 className="text-sm font-bold text-gray-900 mb-6 flex items-center gap-2 uppercase tracking-wider">
+          <svg className="size-4 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z" /></svg>
           Filtros de búsqueda
         </h3>
-        <div className="flex flex-col lg:flex-row lg:items-end gap-4 lg:gap-6">
+        <div className="flex flex-col lg:flex-row lg:items-end gap-6">
           <div className="flex-1 min-w-0 w-full lg:max-w-md">
-            <label className="block text-sm font-medium text-gray-700 mb-1.5">
-              Buscar
+            <label className="block text-xs font-bold text-gray-500 uppercase tracking-widest mb-2">
+              Buscar Candidato
             </label>
-            <div className="relative">
-              <span className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none">
-                <svg
-                  className="h-5 w-5"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
-                  />
-                </svg>
-              </span>
-              <form
-                className="flex"
-                onSubmit={(e) => {
-                  e.preventDefault();
-                  const formData = new FormData(e.currentTarget);
-                  const search = formData.get("search") as string;
-                  updateParams({ search, page: "1" });
-                }}
-              >
+            <form
+              className="flex gap-2"
+              onSubmit={(e) => {
+                e.preventDefault();
+                const formData = new FormData(e.currentTarget);
+                const search = formData.get("search") as string;
+                updateParams({ search, page: "1" });
+              }}
+            >
+              <div className="relative flex-1">
+                <span className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none">
+                  <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                  </svg>
+                </span>
                 <Input
                   name="search"
-                  placeholder="Nombre, vacante, ubicación o habilidades..."
+                  placeholder="Nombre, vacante o ubicación..."
                   defaultValue={searchQuery}
-                  className="pl-10 h-10 flex-1"
+                  className="pl-10 h-11 bg-gray-50/50 border-gray-100 rounded-xl focus:bg-white transition-all text-sm"
                 />
-                <Button type="submit" className="ml-2 h-10 px-4">
-                  Buscar
-                </Button>
-              </form>
-            </div>
+              </div>
+              <PremiumButton type="submit" variant="primary" size="md">
+                Buscar
+              </PremiumButton>
+            </form>
           </div>
-          <div className="w-full lg:w-44 shrink-0">
-            <label className="block text-sm font-medium text-gray-700 mb-1.5">
+          <div className="w-full lg:w-48 shrink-0">
+            <label className="block text-xs font-bold text-gray-500 uppercase tracking-widest mb-2">
               Estado
             </label>
             <Select
               value={estadoFilter}
-              onValueChange={(value) =>
-                updateParams({ estado: value, page: "1" })
-              }
+              onValueChange={(value) => updateParams({ estado: value, page: "1" })}
             >
-              <SelectTrigger className="h-10">
+              <SelectTrigger className="h-11 bg-gray-50/50 border-gray-100 rounded-xl text-sm">
                 <SelectValue placeholder="Todos" />
               </SelectTrigger>
-              <SelectContent>
+              <SelectContent className="rounded-xl border-gray-100 shadow-xl">
                 <SelectItem value="all">Todos los estados</SelectItem>
                 {estados.map((e) => (
-                  <SelectItem
-                    key={e.idCatalogo}
-                    value={e.idCatalogo.toString()}
-                  >
+                  <SelectItem key={e.idCatalogo} value={e.idCatalogo.toString()}>
                     {e.nombre}
                   </SelectItem>
                 ))}
               </SelectContent>
             </Select>
           </div>
-          <div className="w-full lg:w-52 shrink-0">
-            <label className="block text-sm font-medium text-gray-700 mb-1.5">
-              Vacante
+          <div className="w-full lg:w-56 shrink-0">
+            <label className="block text-xs font-bold text-gray-500 uppercase tracking-widest mb-2">
+              Vacante Específica
             </label>
             <Select
               value={vacanteFilter}
-              onValueChange={(value) =>
-                updateParams({ vacante: value, page: "1" })
-              }
+              onValueChange={(value) => updateParams({ vacante: value, page: "1" })}
             >
-              <SelectTrigger className="h-10">
+              <SelectTrigger className="h-11 bg-gray-50/50 border-gray-100 rounded-xl text-sm">
                 <SelectValue placeholder="Todas" />
               </SelectTrigger>
-              <SelectContent>
+              <SelectContent className="rounded-xl border-gray-100 shadow-xl">
                 <SelectItem value="all">Todas las vacantes</SelectItem>
                 {vacantes.map((v) => (
                   <SelectItem key={v.id} value={v.id}>
@@ -303,115 +298,91 @@ export default function PostulacionesList({
         </div>
       </div>
 
-      {/* Tabla / Lista */}
-      <div className="bg-white rounded-xl border border-gray-200 shadow-sm overflow-hidden">
-        <div className="px-6 py-4 border-b border-gray-200 flex items-center justify-between">
-          <h2 className="text-xl font-semibold text-gray-900">
-            Postulaciones ({totalItems})
+      {/* Lista de Postulaciones */}
+      <div className="bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden transition-all hover:shadow-md">
+        <div className="px-8 py-6 border-b border-gray-100 flex items-center justify-between bg-gray-50/30">
+          <h2 className="text-xl font-bold text-gray-900 flex items-center gap-2">
+            Postulantes Destacados
           </h2>
         </div>
 
         {loading ? (
-          <div className="py-16 text-center text-gray-500">
-            Cargando postulaciones...
-          </div>
+          <LoadingState message="Cargando postulantes..." className="py-24" />
         ) : paginated.length === 0 ? (
-          <div className="py-16 text-center text-gray-500">
-            No hay postulaciones que coincidan con los filtros.
+          <div className="py-24 text-center">
+            <div className="size-16 bg-gray-50 rounded-full flex items-center justify-center mx-auto mb-4">
+              <UsersIcon className="size-8 text-gray-300" />
+            </div>
+            <p className="text-gray-500 font-medium">No hay postulaciones que coincidan con los filtros.</p>
           </div>
         ) : (
           <div className="divide-y divide-gray-100">
             {paginated.map((p) => (
               <div
                 key={p.idAplicacion}
-                className="px-6 py-4 hover:bg-gray-50/80 transition-colors flex flex-col sm:flex-row sm:items-center gap-4"
+                className="px-8 py-8 hover:bg-gray-50/50 transition-all flex flex-col md:flex-row md:items-center gap-8 group"
               >
-                <div className="flex-1 min-w-0 flex gap-4">
+                {/* Avatar with Star Overlay */}
+                <div className="relative shrink-0">
                   <UserAvatar
-                    size={48}
+                    size={80}
                     alt={p.nombreCompleto}
-                    className="shrink-0"
+                    className="rounded-full shadow-sm border-4 border-white bg-teal-50"
                     src={getPhotoSrc(p.fotografia)}
                   />
-                  <div className="min-w-0">
-                    <div className="flex flex-wrap items-center gap-2">
-                      <Link
-                        href={`/empresa-profile/candidato/${p.idUsuario}`}
-                        className="font-semibold text-gray-900 hover:text-primary transition-colors"
-                      >
-                        {p.nombreCompleto}
-                      </Link>
-                      <Pill
-                        variant="custom"
-                        fontSize="text-xs"
-                        bgColor={
-                          p.estadoAplicacion === "Aprobada"
-                            ? "bg-green-100"
-                            : p.estadoAplicacion === "Rechazada"
-                              ? "bg-red-100"
-                              : "bg-amber-100"
-                        }
-                        textColor={
-                          p.estadoAplicacion === "Aprobada"
-                            ? "text-green-700"
-                            : p.estadoAplicacion === "Rechazada"
-                              ? "text-red-700"
-                              : "text-amber-700"
-                        }
-                      >
-                        {p.estadoAplicacion}
-                      </Pill>
-                    </div>
-                    <div className="flex items-center gap-1.5 text-sm text-gray-500 mt-0.5">
-                      <MapPinIcon className="w-3.5 h-3.5 shrink-0" />
-                      <span>{p.ciudadUsuario}</span>
-                    </div>
-                    <p className="text-sm text-gray-600 mt-1 font-medium">
-                      {p.tituloVacante}
-                    </p>
-                    <div className="flex flex-wrap gap-1.5 mt-2">
-                      {p.habilidades.slice(0, 4).map((h) => (
-                        <Pill
-                          key={h}
-                          variant="custom"
-                          fontSize="text-xs"
-                          bgColor="bg-slate-100"
-                          textColor="text-slate-600"
-                        >
-                          {h}
-                        </Pill>
-                      ))}
-                      {p.habilidades.length > 4 && (
-                        <span className="text-xs text-gray-400">
-                          +{p.habilidades.length - 4}
-                        </span>
-                      )}
-                    </div>
+                  <div className="absolute bottom-1 right-1 size-6 bg-[#b24c1e] rounded-full border-2 border-white flex items-center justify-center shadow-md">
+                     <StarIcon className="size-3 text-white" />
                   </div>
                 </div>
-                <div className="flex items-center gap-3 shrink-0 text-sm text-gray-500">
-                  <span title={p.fechaPostulacion}>
-                    {formatLongDate(p.fechaPostulacion)}
-                  </span>
+
+                {/* Info Section */}
+                <div className="min-w-0 flex-1">
+                  <div className="flex flex-wrap items-center gap-3 mb-2">
+                    <h3 className="text-xl font-bold text-gray-900 uppercase tracking-tight">
+                      {p.nombreCompleto}
+                    </h3>
+                    <span className="px-2 py-0.5 bg-orange-50 text-orange-700 text-[10px] font-bold uppercase rounded border border-orange-100">
+                      Nuevo
+                    </span>
+                  </div>
+                  
+                  <p className="text-[#006a62] font-bold text-sm mb-3">
+                    Candidato
+                  </p>
+
+                  <div className="flex flex-wrap items-center gap-4 text-xs font-bold text-gray-400 uppercase tracking-widest">
+                    <span className="flex items-center gap-1.5">
+                      <MapPinIcon className="size-3.5 text-gray-300" />
+                      {p.ciudadUsuario || "Sin ubicación"}
+                    </span>
+                    <span className="flex items-center gap-1.5">
+                      <BriefcaseIcon className="size-3.5 text-gray-300" />
+                      {p.tituloVacante}
+                    </span>
+                  </div>
                 </div>
-                <div className="flex items-center gap-2 shrink-0">
-                  <Link
+
+                {/* Right Side: Status & Button */}
+                <div className="flex flex-col items-end gap-6 shrink-0">
+                  <div className="flex items-center gap-2">
+                    <StatusBadge status={p.estadoAplicacion} className="shadow-none border-none" />
+                    <button 
+                      onClick={() => handleOpenStatusDialog(p)}
+                      className="p-1.5 rounded-full hover:bg-gray-100 text-gray-400 hover:text-primary transition-colors"
+                      title="Cambiar estado"
+                    >
+                      <EditIcon className="size-4" />
+                    </button>
+                  </div>
+                  
+                  <PremiumButton
                     href={`/empresa-profile/candidato/${p.idUsuario}`}
-                    className="inline-flex items-center gap-1.5 px-3 py-2 rounded-lg bg-sky-50 text-teal-700 hover:bg-teal-600 hover:text-white transition-colors text-xs font-semibold"
-                    title="Visualizar CV"
-                    aria-label={`Visualizar CV de ${p.nombreCompleto}`}
-                  >
-                    <EyeIcon className="w-4 h-4" />
-                    <span>Visualizar CV</span>
-                  </Link>
-                  <Button
+                    variant="primary"
                     size="sm"
-                    variant="outline"
-                    onClick={() => handleOpenStatusDialog(p)}
-                    className="text-xs"
+                    className="rounded-full px-8 py-5 h-auto text-xs font-bold uppercase tracking-widest shadow-lg hover:shadow-teal-100 transition-all active:scale-95"
                   >
-                    Cambiar Estado
-                  </Button>
+                    Ver Perfil
+                  </PremiumButton>
                 </div>
               </div>
             ))}
@@ -468,18 +439,24 @@ export default function PostulacionesList({
                 </p>
               )}
             </div>
-            <DialogFooter>
-              <Button variant="outline" onClick={() => setIsDialogOpen(false)}>
-                Cancelar
-              </Button>
-              <Button
-                type="submit"
-                disabled={statusForm.formState.isSubmitting}
+            <DialogFooter className="gap-3 sm:gap-0">
+              <PremiumButton
+                variant="outline"
+                size="md"
+                onClick={() => setIsDialogOpen(false)}
+                className="rounded-xl"
               >
-                {statusForm.formState.isSubmitting
-                  ? "Actualizando..."
-                  : "Guardar"}
-              </Button>
+                Cancelar
+              </PremiumButton>
+              <PremiumButton
+                type="submit"
+                variant="primary"
+                size="md"
+                isLoading={statusForm.formState.isSubmitting}
+                className="rounded-xl min-w-[120px]"
+              >
+                Guardar Cambios
+              </PremiumButton>
             </DialogFooter>
           </form>
         </DialogContent>

@@ -31,36 +31,40 @@ export default function DashboardQuickActions() {
   ];
 
   return (
-    <div className="grid grid-cols-1 xl:grid-cols-3 gap-6 mb-12">
-      {cards.map((card, index) => (
-        <Link
-          key={index}
-          href={card.link}
-          className="bg-white rounded-3xl shadow-sm overflow-hidden flex relative min-h-[160px] group hover:shadow-xl hover:-translate-y-1.5 transition-all duration-500 cursor-pointer no-underline border border-slate-50"
-        >
-          <div className="flex-1 p-8 relative">
-            {/* Icons row */}
-            <div className="flex justify-between items-start mb-6">
-              {card.icon}
-              {card.alert && (
-                <div className="bg-warning rounded-full p-0.5">
-                  <AlertCircle className="w-5 h-5 text-white fill-warning" />
+    <section className="mb-12" aria-label="Acciones rápidas de perfil">
+      <ul className="grid grid-cols-1 xl:grid-cols-3 gap-6">
+        {cards.map((card, index) => (
+          <li key={index}>
+            <Link
+              href={card.link}
+              className="bg-white rounded-3xl shadow-sm overflow-hidden flex relative min-h-[160px] group hover:shadow-xl hover:-translate-y-1.5 transition-all duration-500 cursor-pointer no-underline border border-slate-50 outline-none focus-visible:ring-4 focus-visible:ring-primary/20 h-full"
+              aria-label={`Editar ${card.title}: ${card.description}`}
+            >
+              <div className="flex-1 p-8 relative">
+                {/* Icons row */}
+                <div className="flex justify-between items-start mb-6">
+                  <div aria-hidden="true">{card.icon}</div>
+                  {card.alert && (
+                    <div className="bg-warning rounded-full p-0.5" role="status" aria-label="Requiere atención">
+                      <AlertCircle className="w-5 h-5 text-white fill-warning" aria-hidden="true" />
+                    </div>
+                  )}
                 </div>
-              )}
-            </div>
 
-            {/* Text content */}
-            <div>
-              <h3 className="text-xl font-display font-black text-primary mb-2 uppercase tracking-tight group-hover:text-primary-container transition-colors duration-300">
-                {card.title}
-              </h3>
-              <p className="text-sm font-medium text-slate-500 leading-relaxed">
-                {card.description}
-              </p>
-            </div>
-          </div>
-        </Link>
-      ))}
-    </div>
+                {/* Text content */}
+                <div>
+                  <h3 className="text-xl font-display font-bold text-primary mb-2 uppercase tracking-tight group-hover:text-secondary transition-colors duration-300">
+                    {card.title}
+                  </h3>
+                  <p className="text-sm font-medium text-slate-500 leading-relaxed">
+                    {card.description}
+                  </p>
+                </div>
+              </div>
+            </Link>
+          </li>
+        ))}
+      </ul>
+    </section>
   );
 }

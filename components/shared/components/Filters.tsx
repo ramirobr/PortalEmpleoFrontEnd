@@ -13,6 +13,7 @@ import { PriceRange } from "@/components/shared/components/PriceRange";
 import { useDebouncedValue } from "@/lib/hooks";
 import { FiltersResponse } from "@/types/search";
 import { addSpaces } from "@/lib/utils";
+import { PremiumButton } from "./PremiumButton";
 
 const PRICE_RANGE_MIN = 100;
 const PRICE_RANGE_MAX = 20000;
@@ -254,13 +255,13 @@ export function Filters({
           </Select>
         </div>
 
-        <button
+        <PremiumButton
           type="button"
-          className="btn btn-primary cursor-pointer"
+          className="w-full"
           onClick={clearAll}
         >
           Limpiar filtros
-        </button>
+        </PremiumButton>
       </div>
     </aside>
   );

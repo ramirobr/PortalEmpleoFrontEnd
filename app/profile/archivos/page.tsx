@@ -67,16 +67,24 @@ export default function ArchivosPage() {
 
   // Carpeta dialog
   const [carpetaDialogOpen, setCarpetaDialogOpen] = useState(false);
-  const [editingCarpeta, setEditingCarpeta] = useState<CarpetaUsuario | null>(null);
+  const [editingCarpeta, setEditingCarpeta] = useState<CarpetaUsuario | null>(
+    null,
+  );
   const [submittingCarpeta, setSubmittingCarpeta] = useState(false);
 
   // Archivo dialogs
   const [uploadDialogOpen, setUploadDialogOpen] = useState(false);
   const [submittingArchivo, setSubmittingArchivo] = useState(false);
   const [moverDialogOpen, setMoverDialogOpen] = useState(false);
-  const [movingArchivo, setMovingArchivo] = useState<ArchivoUsuario | null>(null);
-  const [deletingArchivoId, setDeletingArchivoId] = useState<string | null>(null);
-  const [deletingCarpetaId, setDeletingCarpetaId] = useState<string | null>(null);
+  const [movingArchivo, setMovingArchivo] = useState<ArchivoUsuario | null>(
+    null,
+  );
+  const [deletingArchivoId, setDeletingArchivoId] = useState<string | null>(
+    null,
+  );
+  const [deletingCarpetaId, setDeletingCarpetaId] = useState<string | null>(
+    null,
+  );
   const [downloadingId, setDownloadingId] = useState<string | null>(null);
 
   const loadCarpetas = async () => {
@@ -119,7 +127,11 @@ export default function ArchivosPage() {
     setSubmittingCarpeta(true);
     let res;
     if (editingCarpeta) {
-      res = await updateCarpetaUsuario(editingCarpeta.idCarpetaUsuario, data, token);
+      res = await updateCarpetaUsuario(
+        editingCarpeta.idCarpetaUsuario,
+        data,
+        token,
+      );
     } else {
       res = await createCarpetaUsuario(idUsuario, data, token);
     }
@@ -180,7 +192,11 @@ export default function ArchivosPage() {
 
   const handleMoverArchivo = async (idCarpetaDestino: string | null) => {
     if (!movingArchivo) return;
-    const res = await moverArchivoUsuario(movingArchivo.idArchivoUsuario, idCarpetaDestino, token);
+    const res = await moverArchivoUsuario(
+      movingArchivo.idArchivoUsuario,
+      idCarpetaDestino,
+      token,
+    );
     if (res?.isSuccess) {
       toast.success("Archivo movido");
       setMoverDialogOpen(false);
@@ -194,7 +210,11 @@ export default function ArchivosPage() {
     setDownloadingId(archivo.idArchivoUsuario);
     const res = await getArchivoDetalleUsuario(archivo.idArchivoUsuario, token);
     if (res?.isSuccess && res.data) {
-      downloadFileFromBase64(res.data.archivo, res.data.nombreArchivo, res.data.contentType);
+      downloadFileFromBase64(
+        res.data.archivo,
+        res.data.nombreArchivo,
+        res.data.contentType,
+      );
     } else {
       toast.error("Error al descargar archivo");
     }
@@ -203,7 +223,7 @@ export default function ArchivosPage() {
 
   if (loading) {
     return (
-      <div className="flex flex-col gap-8">
+      <div className="flex flex-col gap-8 pt-10">
         <div>
           <h1 className="text-3xl font-bold text-gray-900">Mis Archivos</h1>
         </div>
@@ -212,13 +232,17 @@ export default function ArchivosPage() {
     );
   }
 
-  const parentMap = Object.fromEntries(carpetas.map((c) => [c.idCarpetaUsuario, c.nombreCarpeta]));
+  const parentMap = Object.fromEntries(
+    carpetas.map((c) => [c.idCarpetaUsuario, c.nombreCarpeta]),
+  );
 
   return (
     <div className="flex flex-col gap-6">
       <div>
         <h1 className="text-3xl font-bold text-gray-900">Mis Archivos</h1>
-        <p className="text-gray-500 mt-1">Organiza y gestiona tus documentos personales.</p>
+        <p className="text-gray-500 mt-1">
+          Organiza y gestiona tus documentos personales.
+        </p>
       </div>
 
       {/* Carpetas */}
@@ -230,7 +254,10 @@ export default function ArchivosPage() {
           </h2>
           <Button
             size="sm"
-            onClick={() => { setEditingCarpeta(null); setCarpetaDialogOpen(true); }}
+            onClick={() => {
+              setEditingCarpeta(null);
+              setCarpetaDialogOpen(true);
+            }}
           >
             <Plus className="w-4 h-4 mr-1" />
             Nueva Carpeta
@@ -240,37 +267,58 @@ export default function ArchivosPage() {
           <table className="w-full">
             <thead>
               <tr className="bg-gray-50 border-b border-gray-100">
-                <th className="py-4 px-4 text-left text-xs text-primary font-bold uppercase tracking-wider">Nombre</th>
-                <th className="py-4 px-4 text-left text-xs text-primary font-bold uppercase tracking-wider">Descripción</th>
-                <th className="py-4 px-4 text-left text-xs text-primary font-bold uppercase tracking-wider">Carpeta Padre</th>
-                <th className="py-4 px-4 text-right text-xs text-primary font-bold uppercase tracking-wider">Acciones</th>
+                <th className="py-4 px-4 text-left text-xs text-primary font-bold uppercase tracking-wider">
+                  Nombre
+                </th>
+                <th className="py-4 px-4 text-left text-xs text-primary font-bold uppercase tracking-wider">
+                  Descripción
+                </th>
+                <th className="py-4 px-4 text-left text-xs text-primary font-bold uppercase tracking-wider">
+                  Carpeta Padre
+                </th>
+                <th className="py-4 px-4 text-right text-xs text-primary font-bold uppercase tracking-wider">
+                  Acciones
+                </th>
               </tr>
             </thead>
             <tbody className="divide-y divide-gray-100">
               {carpetas.length === 0 ? (
                 <tr>
-                  <td colSpan={4} className="p-10 text-center text-gray-400 text-sm">
+                  <td
+                    colSpan={4}
+                    className="p-10 text-center text-gray-400 text-sm"
+                  >
                     No hay carpetas creadas aún.
                   </td>
                 </tr>
               ) : (
                 carpetas.map((c) => (
-                  <tr key={c.idCarpetaUsuario} className="hover:bg-gray-50 transition-colors">
+                  <tr
+                    key={c.idCarpetaUsuario}
+                    className="hover:bg-gray-50 transition-colors"
+                  >
                     <td className="py-3 px-4">
                       <span className="flex items-center gap-2 font-medium text-gray-900">
                         <FolderOpen className="w-4 h-4 text-yellow-500 shrink-0" />
                         {c.nombreCarpeta}
                       </span>
                     </td>
-                    <td className="py-3 px-4 text-sm text-gray-500">{c.descripcion ?? "—"}</td>
                     <td className="py-3 px-4 text-sm text-gray-500">
-                      {c.idCarpetaPadre ? parentMap[c.idCarpetaPadre] ?? "—" : "—"}
+                      {c.descripcion ?? "—"}
+                    </td>
+                    <td className="py-3 px-4 text-sm text-gray-500">
+                      {c.idCarpetaPadre
+                        ? (parentMap[c.idCarpetaPadre] ?? "—")
+                        : "—"}
                     </td>
                     <td className="py-3 px-4">
                       <div className="flex justify-end gap-2">
                         <button
                           type="button"
-                          onClick={() => { setEditingCarpeta(c); setCarpetaDialogOpen(true); }}
+                          onClick={() => {
+                            setEditingCarpeta(c);
+                            setCarpetaDialogOpen(true);
+                          }}
                           className="p-2 bg-sky-50 text-teal-600 rounded-full hover:bg-teal-600 hover:text-white transition-colors"
                           title="Editar"
                         >
@@ -278,7 +326,9 @@ export default function ArchivosPage() {
                         </button>
                         <button
                           type="button"
-                          onClick={() => handleDeleteCarpeta(c.idCarpetaUsuario)}
+                          onClick={() =>
+                            handleDeleteCarpeta(c.idCarpetaUsuario)
+                          }
                           disabled={deletingCarpetaId === c.idCarpetaUsuario}
                           className="p-2 bg-sky-50 text-teal-600 rounded-full hover:bg-teal-600 hover:text-white transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
                           title="Eliminar"
@@ -304,24 +354,27 @@ export default function ArchivosPage() {
           </h2>
           <div className="flex items-center gap-3 w-full sm:w-auto">
             {carpetas.length > 0 && (
-              <Select value={selectedCarpetaId} onValueChange={setSelectedCarpetaId}>
+              <Select
+                value={selectedCarpetaId}
+                onValueChange={setSelectedCarpetaId}
+              >
                 <SelectTrigger className="w-48 bg-gray-50 border-gray-200">
                   <SelectValue />
                 </SelectTrigger>
                 <SelectContent>
                   <SelectItem value={ALL}>Todos los archivos</SelectItem>
                   {carpetas.map((c) => (
-                    <SelectItem key={c.idCarpetaUsuario} value={c.idCarpetaUsuario}>
+                    <SelectItem
+                      key={c.idCarpetaUsuario}
+                      value={c.idCarpetaUsuario}
+                    >
                       {c.nombreCarpeta}
                     </SelectItem>
                   ))}
                 </SelectContent>
               </Select>
             )}
-            <Button
-              size="sm"
-              onClick={() => setUploadDialogOpen(true)}
-            >
+            <Button size="sm" onClick={() => setUploadDialogOpen(true)}>
               <Upload className="w-4 h-4 mr-1" />
               Subir Archivo
             </Button>
@@ -331,42 +384,71 @@ export default function ArchivosPage() {
           <table className="w-full">
             <thead>
               <tr className="bg-gray-50 border-b border-gray-100">
-                <th className="py-4 px-4 text-left text-xs text-primary font-bold uppercase tracking-wider">Nombre</th>
-                <th className="py-4 px-4 text-left text-xs text-primary font-bold uppercase tracking-wider">Tipo</th>
-                <th className="py-4 px-4 text-left text-xs text-primary font-bold uppercase tracking-wider">Tamaño</th>
-                <th className="py-4 px-4 text-left text-xs text-primary font-bold uppercase tracking-wider">Carpeta</th>
-                <th className="py-4 px-4 text-left text-xs text-primary font-bold uppercase tracking-wider">Fecha</th>
-                <th className="py-4 px-4 text-right text-xs text-primary font-bold uppercase tracking-wider">Acciones</th>
+                <th className="py-4 px-4 text-left text-xs text-primary font-bold uppercase tracking-wider">
+                  Nombre
+                </th>
+                <th className="py-4 px-4 text-left text-xs text-primary font-bold uppercase tracking-wider">
+                  Tipo
+                </th>
+                <th className="py-4 px-4 text-left text-xs text-primary font-bold uppercase tracking-wider">
+                  Tamaño
+                </th>
+                <th className="py-4 px-4 text-left text-xs text-primary font-bold uppercase tracking-wider">
+                  Carpeta
+                </th>
+                <th className="py-4 px-4 text-left text-xs text-primary font-bold uppercase tracking-wider">
+                  Fecha
+                </th>
+                <th className="py-4 px-4 text-right text-xs text-primary font-bold uppercase tracking-wider">
+                  Acciones
+                </th>
               </tr>
             </thead>
             <tbody className="divide-y divide-gray-100">
               {loadingArchivos ? (
                 <tr>
-                  <td colSpan={6} className="p-10 text-center text-gray-400 text-sm">
+                  <td
+                    colSpan={6}
+                    className="p-10 text-center text-gray-400 text-sm"
+                  >
                     Cargando archivos...
                   </td>
                 </tr>
               ) : archivos.length === 0 ? (
                 <tr>
-                  <td colSpan={6} className="p-10 text-center text-gray-400 text-sm">
+                  <td
+                    colSpan={6}
+                    className="p-10 text-center text-gray-400 text-sm"
+                  >
                     No hay archivos en esta carpeta.
                   </td>
                 </tr>
               ) : (
                 archivos.map((a) => (
-                  <tr key={a.idArchivoUsuario} className="hover:bg-gray-50 transition-colors">
+                  <tr
+                    key={a.idArchivoUsuario}
+                    className="hover:bg-gray-50 transition-colors"
+                  >
                     <td className="py-3 px-4">
                       <span className="flex items-center gap-2 font-medium text-gray-900 text-sm">
                         <FileText className="w-4 h-4 text-primary shrink-0" />
                         {a.nombreArchivo}
                       </span>
                     </td>
-                    <td className="py-3 px-4 text-sm text-gray-600">{a.tipoArchivo}</td>
-                    <td className="py-3 px-4 text-sm text-gray-500">{formatBytes(a.tamanoBytes)}</td>
-                    <td className="py-3 px-4 text-sm text-gray-500">
-                      {a.idCarpetaUsuario ? (parentMap[a.idCarpetaUsuario] ?? "—") : "—"}
+                    <td className="py-3 px-4 text-sm text-gray-600">
+                      {a.tipoArchivo}
                     </td>
-                    <td className="py-3 px-4 text-sm text-gray-500">{a.fechaCarga}</td>
+                    <td className="py-3 px-4 text-sm text-gray-500">
+                      {formatBytes(a.tamanoBytes)}
+                    </td>
+                    <td className="py-3 px-4 text-sm text-gray-500">
+                      {a.idCarpetaUsuario
+                        ? (parentMap[a.idCarpetaUsuario] ?? "—")
+                        : "—"}
+                    </td>
+                    <td className="py-3 px-4 text-sm text-gray-500">
+                      {a.fechaCarga}
+                    </td>
                     <td className="py-3 px-4">
                       <div className="flex justify-end gap-2">
                         <button
@@ -380,7 +462,10 @@ export default function ArchivosPage() {
                         </button>
                         <button
                           type="button"
-                          onClick={() => { setMovingArchivo(a); setMoverDialogOpen(true); }}
+                          onClick={() => {
+                            setMovingArchivo(a);
+                            setMoverDialogOpen(true);
+                          }}
                           className="p-2 bg-sky-50 text-teal-600 rounded-full hover:bg-teal-600 hover:text-white transition-colors"
                           title="Mover"
                         >
@@ -388,7 +473,9 @@ export default function ArchivosPage() {
                         </button>
                         <button
                           type="button"
-                          onClick={() => handleDeleteArchivo(a.idArchivoUsuario)}
+                          onClick={() =>
+                            handleDeleteArchivo(a.idArchivoUsuario)
+                          }
                           disabled={deletingArchivoId === a.idArchivoUsuario}
                           className="p-2 bg-sky-50 text-teal-600 rounded-full hover:bg-teal-600 hover:text-white transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
                           title="Eliminar"

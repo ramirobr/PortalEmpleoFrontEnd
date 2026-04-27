@@ -7,6 +7,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { cn } from "@/lib/utils";
 
 interface TablePaginationProps {
   currentPage: number;
@@ -14,8 +15,9 @@ interface TablePaginationProps {
   totalItems: number;
   itemLabel?: string; // "empresas" | "candidatos" | "usuarios" etc.
   onPageChange: (page: number) => void;
-  onPageSizeChange?: (size: number) => void; // Optional now as it wasn't used in the footer design
+  onPageSizeChange?: (size: number) => void;
   className?: string;
+  showInfo?: boolean;
 }
 
 export default function TablePagination({
@@ -26,6 +28,7 @@ export default function TablePagination({
   onPageChange,
   onPageSizeChange,
   className = "",
+  showInfo = true,
 }: TablePaginationProps) {
   const totalPages = Math.ceil(totalItems / pageSize);
   const startItem = totalItems === 0 ? 0 : (currentPage - 1) * pageSize + 1;
@@ -68,36 +71,42 @@ export default function TablePagination({
     return pages;
   };
 
-  if (totalItems === 0) {
+  if (totalItems === 0 || totalPages <= 1) {
     return null;
   }
 
   // Common button classes
   const buttonBaseClass =
-    "min-w-[40px] h-10 flex items-center justify-center rounded-md text-sm font-medium transition-colors border cursor-pointer";
-  const activeClass = "bg-[#14b8a6] text-white border-[#14b8a6]"; // Turquoise
+    "min-w-[40px] h-10 flex items-center justify-center rounded-xl text-sm font-medium transition-all border cursor-pointer active:scale-95";
+  const activeClass = "bg-primary text-white border-primary shadow-sm"; 
   const inactiveClass =
-    "bg-white text-gray-700 border-gray-200 hover:bg-gray-50";
+    "bg-white text-gray-700 border-gray-100 hover:border-primary/30 hover:text-primary";
   const navButtonClass =
-    "px-4 py-2 rounded-md border border-gray-200 text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed transition-colors cursor-pointer";
+    "px-5 py-2 h-10 flex items-center justify-center rounded-xl border border-gray-100 text-sm font-medium text-gray-700 bg-white hover:border-primary/30 hover:text-primary disabled:opacity-50 disabled:cursor-not-allowed transition-all cursor-pointer active:scale-95 uppercase tracking-wider";
 
   return (
     <div
-      className={`flex flex-col sm:flex-row items-center justify-between gap-4 px-6 py-4 bg-gray-50 border-t border-gray-200 mt-4 ${className}`}
+      className={cn(
+        "flex flex-col sm:flex-row items-center gap-4 px-6 py-5 bg-white transition-all",
+        showInfo ? "justify-between" : "justify-center",
+        className
+      )}
     >
       {/* Items info */}
-      <div className="text-sm text-gray-500 order-2 sm:order-1 h-10 flex items-center">
-        <span>
-          Mostrando{" "}
-          <span className="font-semibold">
-            {startItem} - {endItem}
-          </span>{" "}
-          de <span className="font-semibold">{totalItems}</span> {itemLabel}
-        </span>
-      </div>
+      {showInfo && (
+        <div className="text-sm text-gray-500 order-2 sm:order-1 h-10 flex items-center">
+          <span>
+            Mostrando{" "}
+            <span className="font-medium text-gray-900">
+              {startItem} - {endItem}
+            </span>{" "}
+            de <span className="font-medium text-gray-900">{totalItems}</span> {itemLabel}
+          </span>
+        </div>
+      )}
 
       {/* Page navigation */}
-      <div className="flex items-center gap-2 order-1 sm:order-2">
+      <div className={cn("flex items-center gap-2 order-1 sm:order-2 flex-wrap justify-center")}>
         {/* Previous button */}
         <button
           type="button"
@@ -125,7 +134,7 @@ export default function TablePagination({
             ) : (
               <span
                 key={`ellipsis-${index}`}
-                className="w-10 h-10 flex items-center justify-center text-gray-400"
+                className="w-10 h-10 flex items-center justify-center text-gray-400 font-medium"
               >
                 {page}
               </span>

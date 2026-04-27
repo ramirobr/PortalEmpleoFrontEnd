@@ -37,6 +37,7 @@ import {
 import EditTestimonioDialog from "./EditTestimonioDialog";
 import { deleteTestimonial } from "@/lib/testimonials/fetch";
 import { useSession } from "next-auth/react";
+import TablePagination from "@/components/shared/components/TablePagination";
 
 function TestimonioCard({
   testimonio,
@@ -303,57 +304,15 @@ export default function TestimoniosList({
         </div>
 
         {/* Pagination Controls */}
-        {totalPages > 1 && (
-          <div className="flex flex-col sm:flex-row items-center justify-between gap-4 pt-4">
-            <span className="text-slate-600">
-              Mostrando {(currentPage - 1) * pageSize + 1} -{" "}
-              {Math.min(currentPage * pageSize, totalItems)} de {totalItems}{" "}
-              testimonios
-            </span>
-            <div className="flex items-center justify-center gap-2">
-              <button
-                onClick={() => onPageChange(Math.max(1, currentPage - 1))}
-                disabled={currentPage === 1 || loading}
-                className="px-3 py-1 border rounded bg-white disabled:opacity-50 cursor-pointer hover:bg-gray-50"
-              >
-                Anterior
-              </button>
-
-              <div className="flex items-center gap-2">
-                <span className="text-slate-600">Página</span>
-                <Select
-                  value={String(currentPage)}
-                  onValueChange={(value) => onPageChange(Number(value))}
-                  disabled={loading}
-                >
-                  <SelectTrigger className="w-20">
-                    <SelectValue />
-                  </SelectTrigger>
-                  <SelectContent>
-                    {Array.from({ length: totalPages }, (_, i) => i + 1).map(
-                      (page) => (
-                        <SelectItem key={page} value={String(page)}>
-                          {page}
-                        </SelectItem>
-                      ),
-                    )}
-                  </SelectContent>
-                </Select>
-                <span className="text-slate-600">de {totalPages}</span>
-              </div>
-
-              <button
-                onClick={() =>
-                  onPageChange(Math.min(totalPages, currentPage + 1))
-                }
-                disabled={currentPage >= totalPages || loading}
-                className="px-3 py-1 border rounded bg-white disabled:opacity-50 cursor-pointer hover:bg-gray-50"
-              >
-                Siguiente
-              </button>
-            </div>
-          </div>
-        )}
+        <TablePagination
+          currentPage={currentPage}
+          pageSize={pageSize}
+          totalItems={totalItems}
+          itemLabel="testimonios"
+          onPageChange={onPageChange}
+          onPageSizeChange={onPageSizeChange}
+          className="bg-transparent border-none mt-10"
+        />
       </div>
 
       <Dialog open={deleteDialogOpen} onOpenChange={setDeleteDialogOpen}>

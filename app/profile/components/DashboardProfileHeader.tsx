@@ -1,7 +1,8 @@
 "use client";
 
-import { CheckCircle2, Star } from "lucide-react";
+import { CheckCircle2 } from "lucide-react";
 import Link from "next/link";
+import { StarRating } from "@/components/shared/components/StarRating";
 
 interface DashboardProfileHeaderProps {
   userName: string;
@@ -85,14 +86,7 @@ export default function DashboardProfileHeader({
 
           {/* Stars & Recommendations */}
           <div className="flex items-center gap-1">
-            {[1, 2, 3, 4, 5].map((s) => (
-              <Star
-                key={s}
-                className="w-8 h-8 text-label-star shrink-0"
-                fill={s <= Math.round(promedioRecomendaciones ?? 0) ? "var(--label-star)" : "none"}
-                stroke={s <= Math.round(promedioRecomendaciones ?? 0) ? "none" : "var(--label-star)"}
-              />
-            ))}
+            <StarRating rating={promedioRecomendaciones ?? 0} size={32} />
             <Link
               href="/profile/recomendaciones"
               className="text-primary text-[15px] font-medium ml-3 hover:underline"

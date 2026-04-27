@@ -29,11 +29,11 @@ export default function CompanyProfileCard({
           )}
           <div>
             <div className="flex flex-col sm:flex-row items-center sm:items-baseline gap-4 mb-2">
-              <h2 className="text-3xl font-display font-black text-primary uppercase tracking-tight">{profile.nombre}</h2>
+              <h2 className="text-3xl font-display font-bold text-primary uppercase tracking-tight">{profile.nombre}</h2>
               {profile.estado && (
                 <Pill
                   variant={profile.estado.nombre === "Activo" ? "green" : "yellow"}
-                  className="uppercase text-[9px] font-black tracking-[0.2em] px-4 py-1.5 rounded-full"
+                  className="uppercase text-[9px] font-bold tracking-[0.2em] px-4 py-1.5 rounded-full"
                   noButton
                 >
                   {profile.estado.nombre}
@@ -65,7 +65,7 @@ export default function CompanyProfileCard({
                 <item.icon className="w-7 h-7 text-primary" />
               </div>
               <div className="space-y-1">
-                <p className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-600">{item.label}</p>
+                <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-slate-600">{item.label}</p>
                 <p className="font-bold text-slate-900 tracking-tight">{item.value}</p>
               </div>
             </div>

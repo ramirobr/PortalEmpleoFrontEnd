@@ -1,4 +1,5 @@
 "use client";
+import { Search } from "lucide-react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { Input } from "@/components/ui/input";
 import {
@@ -12,6 +13,7 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import { PriceRange } from "@/components/shared/components/PriceRange";
 import { useDebouncedValue } from "@/lib/hooks";
 import { CandidateSearchFiltersResponse } from "@/types/company";
+import { PremiumButton } from "@/components/shared/components/PremiumButton";
 
 const AGE_MIN = 18;
 const AGE_MAX = 70;
@@ -200,11 +202,23 @@ export function CandidateFilters({
       </div>
 
       <div className="rounded-lg lg:shadow shadow-none p-6 flex flex-col gap-6 bg-white">
-        <Input
-          placeholder="Buscar candidatos..."
-          value={searchQuery}
-          onChange={(e) => setSearchQuery(e.target.value)}
-        />
+        {/* Search bar */}
+        <div className="relative flex items-stretch w-full group h-12">
+          {/* Icon inside input */}
+          <div className="absolute left-4 top-1/2 -translate-y-1/2 z-20 flex items-center pointer-events-none">
+            <Search className="w-4 h-4 text-gray-400 group-focus-within:text-primary transition-colors" />
+          </div>
+
+          {/* Input field */}
+          <input
+            type="text"
+            placeholder="Buscar candidatos..."
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            onKeyDown={(e) => e.key === "Enter" && update("q", searchQuery)}
+            className="w-full pl-10 pr-4 rounded-full bg-white text-gray-700 text-xs shadow-md border-2 border-gray-100 focus:border-primary/20 focus:ring-4 focus:ring-primary/10 transition-all outline-none"
+          />
+        </div>
 
         <div>
           <label className="pb-5 block text-black font-bold">
@@ -328,13 +342,13 @@ export function CandidateFilters({
           </Select>
         </div>
 
-        <button
+        <PremiumButton
           type="button"
-          className="btn btn-primary cursor-pointer"
+          className="w-full"
           onClick={clearAll}
         >
           Limpiar filtros
-        </button>
+        </PremiumButton>
       </div>
     </aside>
   );

@@ -1,14 +1,27 @@
 "use client";
 
+import { LoadingState } from "@/components/shared/components/LoadingState";
+import { PremiumButton } from "@/components/shared/components/PremiumButton";
+import { StatusBadge } from "@/components/shared/components/StatusBadge";
+import { PremiumPageHeader } from "../components/PremiumPageHeader";
 import TablePagination from "@/components/shared/components/TablePagination";
-import Pill from "@/components/shared/components/Pill";
 import {
   BriefcaseIcon,
+  CalendarIcon,
   EditIcon,
   EyeIcon,
   MapPinIcon,
+  PlusIcon,
   TrashIcon,
+  UsersIcon,
 } from "@/components/shared/icons/Icons";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
 import {
   Select,
   SelectContent,
@@ -16,19 +29,12 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-} from "@/components/ui/dialog";
 import { fetchApi } from "@/lib/apiClient";
 import { fetchMisOfertasEmpleo } from "@/lib/company/misOfertas";
 import { fetchAplicantesByVacante } from "@/lib/company/candidates";
 import { formatDate } from "@/lib/utils";
 import { OfertaEmpleo, AplicanteReal } from "@/types/company";
 import { useSession } from "next-auth/react";
-import Link from "next/link";
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
 
@@ -47,9 +53,9 @@ export default function OfertasPage() {
 
   const pageSize = 10;
 
-  // Cargar ofertas de empleo
   useEffect(() => {
     async function cargarOfertas() {
+      if (!session) return;
       setLoading(true);
       const resultado = await fetchMisOfertasEmpleo(
         {
@@ -72,7 +78,7 @@ export default function OfertasPage() {
     }
 
     cargarOfertas();
-  }, [currentPage, periodoBusqueda]);
+  }, [currentPage, periodoBusqueda, session]);
 
   const totalPages = Math.ceil(totalItems / pageSize);
 
@@ -84,11 +90,12 @@ export default function OfertasPage() {
 
   const handlePeriodoChange = (value: string) => {
     setPeriodoBusqueda(value);
-    setCurrentPage(1); // Resetear a la primera página al cambiar el período
+    setCurrentPage(1);
   };
 
   const handleDelete = async (idVacante: string) => {
     if (!session) return;
+    if (!confirm("¿Estás seguro de eliminar esta vacante?")) return;
 
     setDeletingId(idVacante);
     const res = await fetchApi("/Jobs/deleteJob/" + idVacante, {
@@ -97,10 +104,11 @@ export default function OfertasPage() {
     });
     if (!res?.isSuccess) {
       toast.error("Error eliminando oferta");
+      setDeletingId(null);
       return;
     }
-    toast.success("Oferta eliminada exitosamente");
-    setOfertas(ofertas.filter((oferta) => oferta.idVacante !== idVacante));
+    toast.success("Oferta eliminada correctamente");
+    setOfertas(ofertas.filter((o) => o.idVacante !== idVacante));
     setTotalItems(totalItems - 1);
     setDeletingId(null);
   };
@@ -109,42 +117,53 @@ export default function OfertasPage() {
     setSelectedJob(oferta);
     setIsDialogOpen(true);
     setLoadingAplicantes(true);
-    const data = await fetchAplicantesByVacante(oferta.idVacante, session?.user.accessToken);
-    if (data) {
-      setAplicantes(data);
-    } else {
-      setAplicantes([]);
-    }
+    const res = await fetchAplicantesByVacante(
+      oferta.idVacante,
+      session?.user.accessToken,
+    );
+    setAplicantes(res || []);
     setLoadingAplicantes(false);
   };
 
-  const startIndex = (currentPage - 1) * pageSize;
-  const endIndex = Math.min(startIndex + pageSize, totalItems);
-
   return (
-    <div className="container mx-auto px-6 mb-8">
-      <div className="mb-8 mt-6">
-        <h1 className="text-3xl font-bold text-gray-900">Gestionar Empleos</h1>
-        <p className="text-gray-500">¿Listo para retomar el trabajo?</p>
-      </div>
+    <>
+      <PremiumPageHeader
+        title="Mis Ofertas de Empleo"
+        description="Gestiona las vacantes publicadas, monitorea el interés de los candidatos y actualiza el estado de tus procesos de selección."
+      >
+        <PremiumButton href="/empresa-profile/crear-empleo" variant="primary" icon={<PlusIcon className="size-4" />}>
+          Publicar Vacante
+        </PremiumButton>
+      </PremiumPageHeader>
 
-      <div className="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
-        <div className="p-6 flex flex-col lg:flex-row justify-between items-center border-b border-gray-100 gap-4">
-          <h2 className="text-lg font-semibold text-gray-900">
-            Mis Ofertas de Empleo
-          </h2>
-          <div className="w-full lg:w-48">
-            <Select
-              defaultValue="6months"
-              value={periodoBusqueda}
-              onValueChange={handlePeriodoChange}
-            >
-              <SelectTrigger className="bg-gray-50 border-gray-200">
+      <div className="bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden transition-all hover:shadow-md">
+        <div className="px-8 py-6 border-b border-gray-100 bg-gray-50/30 flex flex-col sm:flex-row justify-between items-center gap-4">
+          <div className="flex items-center gap-3">
+             <div className="size-10 bg-primary/10 rounded-xl flex items-center justify-center">
+                <BriefcaseIcon className="size-5 text-primary" />
+             </div>
+             <div>
+                <h2 className="text-sm font-bold text-gray-900 uppercase tracking-wider">
+                  Listado de Vacantes
+                </h2>
+                <p className="text-xs font-bold text-gray-400 uppercase tracking-widest">
+                  {totalItems} Ofertas encontradas
+                </p>
+             </div>
+          </div>
+          
+          <div className="flex items-center gap-3 w-full sm:w-auto">
+            <label className="text-xs font-bold text-gray-400 uppercase tracking-widest shrink-0">Filtrar por:</label>
+            <Select value={periodoBusqueda} onValueChange={handlePeriodoChange}>
+              <SelectTrigger className="w-[180px] h-10 rounded-xl border-gray-100 bg-white text-xs font-bold uppercase tracking-widest">
                 <SelectValue placeholder="Periodo" />
               </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="6months">Últimos 6 Meses</SelectItem>
-                <SelectItem value="12months">Últimos 12 Meses</SelectItem>
+              <SelectContent className="rounded-xl border-gray-100 shadow-xl">
+                <SelectItem value="1month">Último mes</SelectItem>
+                <SelectItem value="3months">Últimos 3 meses</SelectItem>
+                <SelectItem value="6months">Últimos 6 meses</SelectItem>
+                <SelectItem value="1year">Último año</SelectItem>
+                <SelectItem value="all">Todas</SelectItem>
               </SelectContent>
             </Select>
           </div>
@@ -153,130 +172,117 @@ export default function OfertasPage() {
         <div className="overflow-x-auto">
           <table className="w-full">
             <thead>
-              <tr className="bg-gray-50 border-b border-gray-100">
-                <th
-                  scope="col"
-                  className="py-5 px-4 text-left text-xs text-primary font-bold uppercase tracking-wider"
-                >
-                  Título
+              <tr className="bg-gray-50/50 border-b border-gray-100">
+                <th scope="col" className="py-4 px-8 text-left text-xs font-bold text-gray-400 uppercase tracking-[0.2em]">
+                  Título de la Vacante
                 </th>
-                <th
-                  scope="col"
-                  className="py-5 px-4 text-left text-xs text-primary font-bold uppercase tracking-wider"
-                >
-                  Aplicaciones
+                <th scope="col" className="py-4 px-4 text-center text-xs font-bold text-gray-400 uppercase tracking-[0.2em]">
+                  Candidatos
                 </th>
-                <th
-                  scope="col"
-                  className="py-5 px-4 text-left text-xs text-primary font-bold uppercase tracking-wider"
-                >
-                  Creado y Expira
+                <th scope="col" className="py-4 px-4 text-left text-xs font-bold text-gray-400 uppercase tracking-[0.2em]">
+                  Fechas
                 </th>
-                <th
-                  scope="col"
-                  className="py-5 px-4 text-left text-xs text-primary font-bold uppercase tracking-wider"
-                >
+                <th scope="col" className="py-4 px-4 text-center text-xs font-bold text-gray-400 uppercase tracking-[0.2em]">
                   Estado
                 </th>
-                <th
-                  scope="col"
-                  className="py-5 px-4 text-right text-xs text-primary font-bold uppercase tracking-wider"
-                >
-                  Acción
+                <th scope="col" className="py-4 px-8 text-right text-xs font-bold text-gray-400 uppercase tracking-[0.2em]">
+                  Acciones
                 </th>
               </tr>
             </thead>
             <tbody className="divide-y divide-gray-100">
               {loading ? (
                 <tr>
-                  <td colSpan={5} className="p-12 text-center text-gray-500">
-                    <p>Cargando ofertas...</p>
+                  <td colSpan={5}>
+                    <LoadingState message="Cargando tus vacantes..." className="py-20" />
                   </td>
                 </tr>
               ) : ofertas.length === 0 ? (
                 <tr>
-                  <td colSpan={5} className="p-12 text-center text-gray-500">
-                    <p>No hay ofertas de empleo para mostrar</p>
+                  <td colSpan={5} className="py-24 text-center">
+                    <div className="size-16 bg-gray-50 rounded-full flex items-center justify-center mx-auto mb-4">
+                      <BriefcaseIcon className="size-8 text-gray-200" />
+                    </div>
+                    <p className="text-gray-500 font-medium">No hay ofertas de empleo para mostrar.</p>
+                    <PremiumButton href="/empresa-profile/crear-empleo" variant="outline" size="sm" className="mt-4">
+                      Crea tu primera oferta
+                    </PremiumButton>
                   </td>
                 </tr>
               ) : (
                 ofertas.map((oferta) => (
-                  <tr
-                    key={oferta.idVacante}
-                    className="hover:bg-gray-50 transition-colors"
-                  >
-                    <td className="py-2 px-4">
-                      <div className="flex items-start gap-4">
-                        <div>
-                          <h3 className="font-semibold text-gray-900 text-base">
-                            {oferta.tituloPuesto}
-                          </h3>
-                          <div className="flex items-center text-gray-500 text-sm mt-1 gap-4">
-                            <span className="flex items-center gap-1">
-                              <BriefcaseIcon className="w-4 h-4" />
-                              {oferta.empresa.nombre}
-                            </span>
-                            <span className="flex items-center gap-1">
-                              <MapPinIcon className="w-4 h-4" />
-                              {oferta.ubicacion}
-                            </span>
-                          </div>
+                  <tr key={oferta.idVacante} className="group hover:bg-gray-50/50 transition-all">
+                    <td className="py-5 px-8">
+                      <div className="flex flex-col">
+                        <span className="text-base font-bold text-gray-900 group-hover:text-primary transition-colors">
+                          {oferta.tituloPuesto}
+                        </span>
+                        <div className="flex items-center gap-3 mt-1.5">
+                          <span className="flex items-center gap-1 text-xs font-bold text-gray-400 uppercase tracking-widest">
+                            <MapPinIcon className="size-3.5 text-primary/60" />
+                            {oferta.ubicacion}
+                          </span>
                         </div>
                       </div>
                     </td>
-                    <td className="py-2 px-4 text-sm">
+                    <td className="py-5 px-4 text-center">
                       <button
                         onClick={() => handleViewCandidates(oferta)}
-                        className="text-primary hover:text-green-600 hover:underline font-medium transition-colors"
+                        className="inline-flex flex-col items-center group/btn"
                       >
-                        {oferta.totalAplicaciones}
-                        {oferta.totalAplicaciones > 9 && "+"} Postulado
-                        {oferta.totalAplicaciones !== 1 && "s"}
+                        <span className="text-lg font-bold text-gray-900 group-hover/btn:text-primary transition-colors">
+                          {oferta.totalAplicaciones}
+                        </span>
+                        <span className="text-[10px] font-bold text-gray-400 uppercase tracking-widest">
+                          Aplicantes
+                        </span>
                       </button>
                     </td>
-                    <td className="py-2 px-4 text-sm text-gray-500">
-                      <div className="flex flex-col gap-1">
-                        <span>{formatDate(oferta.fechaPublicacion)}</span>
-                        <span>{formatDate(oferta.fechaCierre)}</span>
+                    <td className="py-5 px-4">
+                      <div className="flex flex-col gap-1.5">
+                        <div className="flex items-center gap-2 text-[11px] font-bold text-gray-500 uppercase tracking-wider">
+                           <span className="size-1.5 rounded-full bg-green-400" />
+                           Pub: {formatDate(oferta.fechaPublicacion)}
+                        </div>
+                        <div className="flex items-center gap-2 text-[11px] font-bold text-gray-500 uppercase tracking-wider">
+                           <span className="size-1.5 rounded-full bg-red-400" />
+                           Exp: {formatDate(oferta.fechaCierre)}
+                        </div>
                       </div>
                     </td>
-                    <td className="py-2 px-4">
-                      <span
-                        className={`text-sm font-medium ${
-                          oferta.estadoVacante.nombre === "Activa"
-                            ? "text-green-600"
-                            : oferta.estadoVacante.nombre === "Expirado"
-                              ? "text-red-500"
-                              : "text-gray-500"
-                        }`}
-                      >
-                        {oferta.estadoVacante.nombre}
-                      </span>
+                    <td className="py-5 px-4 text-center">
+                      <StatusBadge status={oferta.estadoVacante.nombre} />
                     </td>
-                    <td className="py-2 px-4">
-                      <div className="flex justify-end gap-2">
-                        <Link
+                    <td className="py-5 px-8">
+                      <div className="flex justify-end gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
+                        <PremiumButton
                           href={`/jobs/${oferta.idVacante}`}
-                          className="p-2 bg-primary/10 text-primary rounded-full hover:bg-primary hover:text-white transition-colors cursor-pointer"
+                          variant="outline"
+                          size="sm"
+                          className="size-9 p-0 rounded-xl"
                           title="Ver Detalle"
                         >
-                          <EyeIcon className="w-3 h-3" />
-                        </Link>
-                        <Link
+                          <EyeIcon className="size-4" />
+                        </PremiumButton>
+                        <PremiumButton
                           href={`/empresa-profile/empleos/${oferta.idVacante}`}
-                          className="p-2 bg-primary/10 text-primary rounded-full hover:bg-primary hover:text-white transition-colors cursor-pointer"
+                          variant="outline"
+                          size="sm"
+                          className="size-9 p-0 rounded-xl"
                           title="Editar"
                         >
-                          <EditIcon className="w-3 h-3" />
-                        </Link>
-                        <button
+                          <EditIcon className="size-4" />
+                        </PremiumButton>
+                        <PremiumButton
+                          variant="outline"
+                          size="sm"
                           onClick={() => handleDelete(oferta.idVacante)}
-                          disabled={deletingId === oferta.idVacante}
-                          className="p-2 bg-primary/10 text-primary rounded-full hover:bg-primary hover:text-white transition-colors cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
+                          isLoading={deletingId === oferta.idVacante}
+                          className="size-9 p-0 rounded-xl text-red-500 hover:text-red-600 hover:bg-red-50 border-red-100 hover:border-red-200"
                           title="Eliminar"
                         >
-                          <TrashIcon className="w-3 h-3" />
-                        </button>
+                          {!deletingId && <TrashIcon className="size-4" />}
+                        </PremiumButton>
                       </div>
                     </td>
                   </tr>
@@ -286,7 +292,6 @@ export default function OfertasPage() {
           </table>
         </div>
 
-        {/* Shared Pagination Component */}
         {!loading && totalItems > 0 && (
           <TablePagination
             currentPage={currentPage}
@@ -294,76 +299,83 @@ export default function OfertasPage() {
             totalItems={totalItems}
             itemLabel="empleos"
             onPageChange={handlePageChange}
-            className="mt-0 rounded-b-xl border-t-0"
+            className="rounded-none border-t border-gray-100"
           />
         )}
       </div>
 
-      {/* Dialog for viewing candidates */}
       <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
-        <DialogContent className="max-w-4xl">
-          <DialogHeader>
-            <DialogTitle>
-              Candidatos para: {selectedJob?.tituloPuesto}
-            </DialogTitle>
-          </DialogHeader>
-          <div className="mt-4">
+        <DialogContent className="max-w-4xl rounded-2xl border-none shadow-2xl p-0 overflow-hidden">
+          <div className="bg-primary px-8 py-6">
+            <DialogHeader>
+              <DialogTitle className="text-white text-2xl font-bold tracking-tight flex items-center gap-3">
+                <UsersIcon className="size-6" />
+                Candidatos para Vacante
+              </DialogTitle>
+              <DialogDescription className="text-white/70 text-sm font-medium">
+                {selectedJob?.tituloPuesto} • {selectedJob?.ubicacion}
+              </DialogDescription>
+            </DialogHeader>
+          </div>
+          
+          <div className="p-8 max-h-[70vh] overflow-y-auto bg-gray-50/50">
             {loadingAplicantes ? (
-              <p className="text-center text-gray-500">Cargando candidatos...</p>
+              <LoadingState message="Buscando aplicantes..." className="py-12" />
+            ) : aplicantes.length === 0 ? (
+              <div className="text-center py-12">
+                <div className="size-16 bg-white rounded-full flex items-center justify-center mx-auto mb-4 shadow-sm border border-gray-100">
+                  <UsersIcon className="size-8 text-gray-200" />
+                </div>
+                <p className="text-gray-500 font-medium italic">No hay candidatos registrados para esta oferta aún.</p>
+              </div>
             ) : (
-              <div className="space-y-4">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 {aplicantes.map((aplicante) => (
                   <div
                     key={aplicante.idAplicacion}
-                    className="bg-white border-primary shadow hover:shadow-md relative border-l-8 border-l-primary rounded-xl transition-all overflow-hidden p-6"
+                    className="bg-white rounded-2xl border border-gray-100 shadow-sm p-6 hover:shadow-md transition-all group flex flex-col"
                   >
-                    <div className="flex justify-between items-start">
-                      <div>
-                        <h3 className="text-xl font-bold text-primary mb-1">
+                    <div className="flex justify-between items-start mb-4">
+                      <div className="min-w-0 flex-1 mr-4">
+                        <h3 className="text-lg font-bold text-gray-900 group-hover:text-primary transition-colors truncate">
                           {aplicante.nombreCompleto}
                         </h3>
-                        <p className="text-sm font-medium text-gray-700">
+                        <p className="text-xs font-bold text-gray-400 uppercase tracking-widest mt-0.5">
                           {aplicante.correoElectronico}
                         </p>
-                        <div className="flex items-center gap-2 text-xs text-gray-500 font-bold uppercase tracking-widest mt-2">
-                           <svg className="w-4 h-4 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" /></svg>
-                           Postulado el {formatDate(aplicante.fechaPostulacion)}
-                        </div>
                       </div>
-                      <Pill
-                         variant={
-                           aplicante.estadoAplicacion === "Postulada"
-                             ? "blue"
-                             : aplicante.estadoAplicacion === "Aprobada"
-                             ? "green"
-                             : aplicante.estadoAplicacion === "Rechazada"
-                             ? "red"
-                             : "yellow"
-                         }
-                         className="uppercase text-[10px] font-extrabold tracking-widest px-4"
-                         noButton
-                      >
-                        {aplicante.estadoAplicacion}
-                      </Pill>
+                      <StatusBadge status={aplicante.estadoAplicacion} className="shrink-0" />
                     </div>
+                    
+                    <div className="flex items-center gap-2 text-xs font-bold text-gray-500 uppercase tracking-widest mt-auto pt-4 border-t border-gray-50">
+                       <CalendarIcon className="size-3.5 text-primary/60" />
+                       Aplicó el {formatDate(aplicante.fechaPostulacion)}
+                    </div>
+                    
                     {aplicante.mensajeCandidato && (
-                      <div className="mt-4 pt-4 border-t border-gray-100">
-                        <p className="text-[10px] font-extrabold uppercase text-gray-400 block mb-1 tracking-wider">Mensaje del candidato</p>
-                        <p className="text-sm text-gray-700 leading-relaxed italic">
-                          &quot;{aplicante.mensajeCandidato}&quot;
-                        </p>
+                      <div className="mt-4 p-4 bg-gray-50 rounded-xl border border-gray-100 italic text-sm text-gray-600 relative">
+                        <span className="absolute -top-2 left-4 px-2 bg-gray-50 text-[10px] font-bold text-gray-400 uppercase tracking-widest">Mensaje</span>
+                        &quot;{aplicante.mensajeCandidato}&quot;
                       </div>
                     )}
+                    
+                    <div className="mt-6 flex gap-2">
+                       <PremiumButton 
+                        href={`/empresa-profile/candidato/${aplicante.idUsuario}`}
+                        variant="primary" 
+                        size="sm" 
+                        className="flex-1"
+                       >
+                         Ver Perfil
+                       </PremiumButton>
+                    </div>
                   </div>
                 ))}
-                {aplicantes.length === 0 && (
-                  <p className="text-center text-gray-500">No hay candidatos para esta oferta.</p>
-                )}
               </div>
             )}
           </div>
         </DialogContent>
       </Dialog>
-    </div>
+    </>
   );
 }

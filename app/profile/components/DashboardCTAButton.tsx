@@ -1,14 +1,18 @@
-import Link from "next/link";
+import { PremiumButton } from "@/components/shared/components/PremiumButton";
+import { Search } from "lucide-react";
 
 export default function DashboardCTAButton() {
   return (
-    <div className="flex justify-center mt-10 mb-4">
-      <Link
+    <div className="flex justify-center mt-12 mb-6">
+      <PremiumButton
         href="/empleos-busqueda"
-        className="bg-primary hover:bg-primary-deep text-white font-bold text-lg px-12 py-4 rounded-full shadow-md transition-colors"
+        variant="primary"
+        size="lg"
+        icon={<Search className="w-5 h-5" />}
+        className="px-14 py-4 text-lg"
       >
         ¡Buscar Ofertas Ahora!
-      </Link>
+      </PremiumButton>
     </div>
   );
 }

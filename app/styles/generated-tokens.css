@@ -1,0 +1,85 @@
+/* 
+  THIS FILE IS AUTO-GENERATED. DO NOT EDIT MANUALLY.
+  Source of truth: design-tokens.json 
+*/
+
+@theme {
+  --color-background: #f6fafe;
+  --color-foreground: #171c1f;
+  --color-card: #ffffff;
+  --color-card-foreground: #171c1f;
+  --color-primary: #006a62;
+  --color-primary-container: #26a69a;
+  --color-primary-light: #2abba7;
+  --color-primary-deep: #004d40;
+  --color-secondary: #b02e00;
+  --color-secondary-container: #fe5825;
+  --color-secondary-deep: #9c2a0c;
+  --color-secondary-surface: rgba(176, 46, 0, 0.4);
+  --color-secondary-foreground: #ffffff;
+  --color-surface-dark: #004d40;
+  --color-surface-highlight: #fbfdff;
+  --color-surface-container-low: #f1f5f9;
+  --color-surface-container-lowest: #ffffff;
+  --color-functional-warning: #f2994a;
+  --color-functional-label-star: #f8c51c;
+  --color-brand-linkedin: #2867b2;
+  --color-brand-linkedin-dark: #205081;
+  --color-gray-light: rgba(23, 28, 31, 0.2);
+  --color-gray-dark: #707f8c;
+  --color-popover: #ffffff;
+  --color-popover-foreground: #171c1f;
+  --color-border: rgba(23, 28, 31, 0.2);
+  --color-input: rgba(23, 28, 31, 0.2);
+  --color-ring: #006a62;
+  --font-display: var(--font-manrope);
+  --font-body: var(--font-plus-jakarta-sans);
+  --font-label: var(--font-plus-jakarta-sans);
+  --font-primary: var(--font-plus-jakarta-sans), sans-serif;
+  --radius: 0.75rem;
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+  --shadow-soft: 0px 10px 30px rgba(23, 28, 31, 0.06);
+}
+
+:root {
+  --background: #f6fafe;
+  --foreground: #171c1f;
+  --card: #ffffff;
+  --card-foreground: #171c1f;
+  --primary: #006a62;
+  --primary-container: #26a69a;
+  --primary-light: #2abba7;
+  --primary-deep: #004d40;
+  --secondary: #b02e00;
+  --secondary-container: #fe5825;
+  --secondary-deep: #9c2a0c;
+  --secondary-surface: rgba(176, 46, 0, 0.4);
+  --secondary-foreground: #ffffff;
+  --surface-dark: #004d40;
+  --surface-highlight: #fbfdff;
+  --surface-container-low: #f1f5f9;
+  --surface-container-lowest: #ffffff;
+  --functional-warning: #f2994a;
+  --functional-label-star: #f8c51c;
+  --brand-linkedin: #2867b2;
+  --brand-linkedin-dark: #205081;
+  --gray-light: rgba(23, 28, 31, 0.2);
+  --gray-dark: #707f8c;
+  --popover: #ffffff;
+  --popover-foreground: #171c1f;
+  --border: rgba(23, 28, 31, 0.2);
+  --input: rgba(23, 28, 31, 0.2);
+  --ring: #006a62;
+  --font-display: var(--font-manrope);
+  --font-body: var(--font-plus-jakarta-sans);
+  --font-label: var(--font-plus-jakarta-sans);
+  --font-primary: var(--font-plus-jakarta-sans), sans-serif;
+  --radius: 0.75rem;
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+}

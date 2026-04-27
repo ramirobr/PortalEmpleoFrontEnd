@@ -1,5 +1,14 @@
+import { PremiumButton } from "@/components/shared/components/PremiumButton";
 import Link from "next/link";
-import { Building2, CheckCircle2, ChevronRight, FileText, Users, Briefcase, Award } from "lucide-react";
+import {
+  Building2,
+  CheckCircle2,
+  ChevronRight,
+  FileText,
+  Users,
+  Briefcase,
+  Award,
+} from "lucide-react";
 import { CompanyProfileData } from "@/types/company";
 import { AplicanteReciente } from "@/types/company";
 
@@ -60,7 +69,9 @@ function CircularProgress({ percentage }: { percentage: number }) {
       </svg>
       <div className="absolute flex flex-col items-center justify-center">
         <Building2 className="size-5 text-primary mb-0.5" />
-        <span className="text-lg font-black text-gray-800 leading-none">{percentage}%</span>
+        <span className="text-lg font-bold text-gray-800 leading-none">
+          {percentage}%
+        </span>
       </div>
     </div>
   );
@@ -76,110 +87,147 @@ export default function EmpresaSidebarWidgets({
   const profilePct = calcularPorcentajePerfil(companyProfile);
 
   const entrevistas = aplicantesRecientes.filter((a) =>
-    a.usuario.estadoAplicacion.nombre.toLowerCase().includes("entrevista")
+    a.usuario.estadoAplicacion.nombre.toLowerCase().includes("entrevista"),
   ).length;
 
   const procesos = [
-    { label: "En revisión", count: candidatosEnRevision, href: "/empresa-profile/postulaciones" },
-    { label: "Entrevistas", count: entrevistas, href: "/empresa-profile/postulaciones" },
-    { label: "Ofertas", count: ofertasCount, href: "/empresa-profile/empleos" },
-    { label: "Contratados", count: contrataciones, href: "/empresa-profile/postulaciones" },
+    {
+      label: "En revisión",
+      count: candidatosEnRevision,
+      href: "/empresa-profile/postulaciones",
+      icon: Users,
+    },
+    {
+      label: "Entrevistas",
+      count: entrevistas,
+      href: "/empresa-profile/postulaciones",
+      icon: Briefcase,
+    },
+    {
+      label: "Ofertas Activas",
+      count: ofertasCount,
+      href: "/empresa-profile/empleos",
+      icon: FileText,
+    },
+    {
+      label: "Contratados",
+      count: contrataciones,
+      href: "/empresa-profile/postulaciones",
+      icon: CheckCircle2,
+    },
   ];
 
   return (
-    <div className="space-y-4">
+    <div className="space-y-6">
       {/* Mi Empresa - Profile completion */}
-      <div className="bg-white rounded-xl border border-gray-100 shadow-sm p-5">
-        <h3 className="text-sm font-bold text-gray-800 mb-4 flex items-center gap-2">
+      <section
+        className="bg-white rounded-2xl border border-gray-100 shadow-sm p-6"
+        aria-labelledby="perfil-empresa-title"
+      >
+        <h3
+          id="perfil-empresa-title"
+          className="text-sm font-bold text-gray-900 mb-6 flex items-center gap-2 uppercase tracking-wider"
+        >
           <Building2 className="size-4 text-primary" />
           Mi Empresa
         </h3>
-        <div className="flex flex-col items-center gap-3">
+        <div className="flex flex-col items-center gap-4">
           <CircularProgress percentage={profilePct} />
-          <p className="text-xs text-gray-500 text-center">
-            Perfil {profilePct >= 80 ? "casi completo" : profilePct >= 50 ? "en progreso" : "incompleto"}
-          </p>
-          <Link
+          <div className="text-center">
+            <p className="text-sm font-bold text-gray-900">
+              Perfil {profilePct}% completo
+            </p>
+            <p className="text-xs text-gray-500 mt-1">
+              {profilePct < 100
+                ? "Completa tu perfil para atraer mejor talento."
+                : "¡Tu perfil está excelente!"}
+            </p>
+          </div>
+          <PremiumButton
             href="/empresa-profile/perfil"
-            className="w-full flex items-center justify-center py-2.5 bg-primary hover:bg-primary-deep text-white font-bold text-xs uppercase rounded-lg transition-colors"
+            variant="primary"
+            className="w-full"
           >
-            Completar perfil
-          </Link>
+            Editar Perfil
+          </PremiumButton>
         </div>
-      </div>
-
-      {/* Mejora tus contrataciones */}
-      <div className="bg-white rounded-xl border border-gray-100 shadow-sm p-5">
-        <h3 className="text-sm font-bold text-gray-800 mb-3 flex items-center gap-2">
-          <Award className="size-4 text-primary" />
-          Mejora tus contrataciones
-        </h3>
-        <ul className="space-y-2.5">
-          {[
-            "Crea ofertas de empleo efectivas",
-            "Optimiza tus entrevistas",
-            "Consejos para atraer talento",
-          ].map((tip) => (
-            <li key={tip} className="flex items-start gap-2 text-sm text-gray-600">
-              <CheckCircle2 className="size-4 text-primary shrink-0 mt-0.5" />
-              {tip}
-            </li>
-          ))}
-        </ul>
-      </div>
-
-      {/* Tus procesos activos - quick links */}
-      <div className="bg-white rounded-xl border border-gray-100 shadow-sm p-5">
-        <h3 className="text-sm font-bold text-gray-800 mb-3 flex items-center gap-2">
-          <FileText className="size-4 text-primary" />
-          Tus procesos activos
-        </h3>
-        <ul className="space-y-2">
-          {[
-            { label: "En revisión", href: "/empresa-profile/postulaciones" },
-            { label: "Entrevistas", href: "/empresa-profile/postulaciones" },
-            { label: "Ofertas", href: "/empresa-profile/empleos" },
-            { label: "Contratados", href: "/empresa-profile/postulaciones" },
-          ].map((item) => (
-            <li key={item.label}>
-              <Link
-                href={item.href}
-                className="flex items-center gap-2 text-sm text-gray-600 hover:text-primary transition-colors"
-              >
-                <ChevronRight className="size-3.5 text-primary" />
-                {item.label}
-              </Link>
-            </li>
-          ))}
-        </ul>
-      </div>
+      </section>
 
       {/* Tus procesos activos - with counts */}
-      <div className="bg-white rounded-xl border border-gray-100 shadow-sm p-5">
-        <h3 className="text-sm font-bold text-gray-800 mb-3 flex items-center gap-2">
+      <section
+        className="bg-white rounded-2xl border border-gray-100 shadow-sm p-6"
+        aria-labelledby="procesos-activos-title"
+      >
+        <h3
+          id="procesos-activos-title"
+          className="text-sm font-bold text-gray-900 mb-4 flex items-center gap-2 uppercase tracking-wider"
+        >
           <FileText className="size-4 text-primary" />
-          Tus procesos activos
+          Procesos Activos
         </h3>
-        <ul className="divide-y divide-gray-50">
+        <ul className="space-y-1">
           {procesos.map((item) => (
             <li key={item.label}>
               <Link
                 href={item.href}
-                className="flex items-center justify-between py-2.5 text-sm text-gray-700 hover:text-primary transition-colors group"
+                className="flex items-center justify-between py-3  rounded-xl text-sm text-gray-700 hover:bg-gray-50 hover:text-primary transition-all group"
               >
-                <div className="flex items-center gap-2">
-                  <FileText className="size-3.5 text-gray-400 group-hover:text-primary transition-colors" />
-                  {item.label}
+                <div className="flex items-center gap-3">
+                  <div className="size-8 rounded-lg bg-gray-50 group-hover:bg-primary/10 flex items-center justify-center transition-colors">
+                    <item.icon className="size-4 text-gray-400 group-hover:text-primary transition-colors" />
+                  </div>
+                  <span className="font-medium">{item.label}</span>
                 </div>
                 <div className="flex items-center gap-2">
-                  <span className="font-bold text-gray-800">{item.count}</span>
-                  <ChevronRight className="size-3.5 text-gray-400 group-hover:text-primary transition-colors" />
+                  <span className="font-bold text-gray-900 bg-gray-100 px-2 py-0.5 rounded text-[12px] group-hover:bg-primary group-hover:text-white transition-colors">
+                    {item.count}
+                  </span>
+                  <ChevronRight className="size-4 text-gray-300 group-hover:text-primary transition-colors" />
                 </div>
               </Link>
             </li>
           ))}
         </ul>
-      </div>
+      </section>
+
+      {/* Tips Section */}
+      <section
+        className="bg-gradient-to-br from-primary to-primary-deep rounded-2xl shadow-lg p-6 text-white"
+        aria-labelledby="tips-title"
+      >
+        <h3
+          id="tips-title"
+          className="text-sm font-bold mb-4 flex items-center gap-2 uppercase tracking-wider"
+        >
+          <Award className="size-4 text-white/80" />
+          Mejora tus procesos
+        </h3>
+        <ul className="space-y-4">
+          {[
+            "Crea ofertas de empleo efectivas",
+            "Optimiza tus entrevistas",
+            "Atrae al mejor talento",
+          ].map((tip) => (
+            <li
+              key={tip}
+              className="flex items-start gap-3 text-xs font-semibold leading-relaxed"
+            >
+              <div className="size-5 rounded-full bg-white/20 flex items-center justify-center shrink-0">
+                <CheckCircle2 className="size-3 text-white" />
+              </div>
+              <span className="pt-0.5">{tip}</span>
+            </li>
+          ))}
+        </ul>
+        <PremiumButton
+          href="/blog"
+          variant="white"
+          size="sm"
+          className="mt-6 w-full"
+        >
+          Ver Consejos →
+        </PremiumButton>
+      </section>
     </div>
   );
 }

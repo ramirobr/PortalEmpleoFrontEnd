@@ -82,7 +82,7 @@ export default async function Home() {
           {/* CTA Button */}
           <Link
             href="/buscar-candidatos"
-            className="relative group/btn flex items-center justify-center gap-2.5 px-14 py-3 bg-primary text-white font-black text-xs uppercase tracking-widest rounded-full hover:bg-primary/90 hover:shadow-2xl hover:shadow-primary/40 transition-all duration-500 cursor-pointer overflow-hidden hover:-translate-y-1 mb-16"
+            className="relative group/btn flex items-center justify-center gap-2.5 px-14 py-3 bg-primary text-white font-bold text-xs uppercase tracking-widest rounded-full hover:bg-primary/90 hover:shadow-2xl hover:shadow-primary/40 transition-all duration-500 cursor-pointer overflow-hidden hover:-translate-y-1 mb-16"
           >
             <div className="absolute inset-x-0 top-0 h-full w-full bg-white/10 -translate-x-full group-hover/btn:translate-x-full transition-transform duration-1000 skew-x-12" />
             <span className="relative z-10">ENCUENTRA TU EQUIPO IDEAL</span>

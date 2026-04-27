@@ -3,6 +3,7 @@ import { Job, RecentJob } from "@/types/jobs";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { Check, MapPin, Clock, Briefcase } from "lucide-react";
+import { PremiumButton } from "@/components/shared/components/PremiumButton";
 
 interface JobCardProps {
   job: Job | RecentJob;
@@ -24,9 +25,9 @@ export default function JobCard({ job }: JobCardProps) {
       : `${job.ciudad}, ${job.provincia}`;
 
   return (
-    <div className="@container group bg-white rounded-xl p-8 shadow-sm transition-all duration-500 hover:shadow-xl hover:-translate-y-1.5 flex flex-col h-full border border-slate-50">
+    <div className="@container/card group bg-white rounded-xl p-8 shadow-sm transition-all duration-500 hover:shadow-xl hover:-translate-y-1.5 flex flex-col h-full border border-slate-50">
       {/* Header Row: Logo & Verified Badge */}
-      <div className="flex flex-col @[width>=300px]:flex-row justify-between items-start mb-8 gap-4 @[width>=300px]:gap-0">
+      <div className="flex flex-col @[300px]/card:flex-row justify-between items-start mb-8 gap-4 @[300px]/card:gap-0">
         <div className="relative w-16 h-16 shrink-0">
           {logo ? (
             <Image
@@ -60,14 +61,14 @@ export default function JobCard({ job }: JobCardProps) {
             </span>
           </div>
           {/* Accent Line Detail */}
-          <div className="w-16 h-1 bg-primary rounded-full opacity-40 ml-auto" />
+          <div className="w-16 h-1 bg-primary rounded-full opacity-40 mr-auto" />
         </div>
       </div>
 
       {/* Main Content */}
       <div className="flex-1 flex flex-col">
         <p className="text-slate-600 font-medium text-sm mb-2">{companyName}</p>
-        <h3 className="text-2xl font-display font-black text-primary uppercase leading-none mb-6 tracking-tight group-hover:text-primary-container transition-colors duration-300">
+        <h3 className="text-2xl font-display font-bold text-primary uppercase leading-none mb-6 tracking-tight group-hover:text-primary-container transition-colors duration-300">
           {title || "Oportunidad Profesional"}
         </h3>
 
@@ -90,13 +91,12 @@ export default function JobCard({ job }: JobCardProps) {
 
       {/* Action Area */}
       <div className="mt-auto">
-        <button
-          className="relative group/btn w-full flex items-center justify-center gap-3 px-12 py-2 bg-linear-to-r from-primary-container to-primary text-white font-black text-xs uppercase tracking-widest rounded-full transition-all duration-500 cursor-pointer overflow-hidden hover:-translate-y-1"
+        <PremiumButton
+          className="w-full"
           onClick={() => router.push(`/jobs/${id}`)}
         >
-          <div className="absolute inset-x-0 top-0 h-full w-full bg-white/20 -translate-x-full group-hover/btn:translate-x-full transition-transform duration-1000 skew-x-12" />
-          <span className="relative z-10 font-bold">Ver Vacante</span>
-        </button>
+          Ver Vacante
+        </PremiumButton>
       </div>
     </div>
   );

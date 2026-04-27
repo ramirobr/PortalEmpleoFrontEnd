@@ -33,6 +33,7 @@ import Navbar from "../../../components/shared/components/Navbar";
 import AsideMenu, {
   NavLink,
 } from "../../../components/shared/components/AsideMenu";
+import { getAuthLinks } from "@/lib/navigation";
 
 const loginSchema = z.object({
   email: z.email("Email inválido"),
@@ -61,23 +62,7 @@ function LoginForm() {
   const toggleMobileMenu = () => setIsMobileMenuOpen((prev) => !prev);
   const closeMobileMenu = () => setIsMobileMenuOpen(false);
 
-  const authLinks: NavLink[] = [
-    {
-      name: "Ingresar",
-      href: "/auth/login",
-      icon: <LockKeyholeOpen />,
-    },
-    {
-      name: "Crear cuenta",
-      href: "/auth/email",
-      icon: <UserRoundPlus />,
-    },
-    {
-      name: "Regístrate como empresa",
-      href: "/auth/empresa",
-      icon: <Building2 />,
-    },
-  ];
+  const authLinks = getAuthLinks();
 
   const handleMouseDown = () => setShowPassword(true);
   const handleMouseUp = () => setShowPassword(false);

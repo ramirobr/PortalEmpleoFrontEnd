@@ -1,6 +1,6 @@
 import { Suspense } from "react";
 import CandidatesContent from "../empresa-profile/buscar-candidatos/components/CandidatesContent";
-import Navbar from "@/components/shared/components/Navbar";
+import MainLayout from "@/components/shared/layout/MainLayout";
 
 type Props = {
   searchParams: Promise<Record<string, string>>;
@@ -26,8 +26,7 @@ export default async function BuscarCandidatosPublicPage({ searchParams }: Props
   };
 
   return (
-    <div className="min-h-screen bg-gray-50">
-      <Navbar />
+    <MainLayout>
       <div className="container mx-auto py-8">
         <div className="mb-8">
           <h1 className="text-3xl font-bold text-gray-900 mb-2">
@@ -45,6 +44,6 @@ export default async function BuscarCandidatosPublicPage({ searchParams }: Props
           />
         </Suspense>
       </div>
-    </div>
+    </MainLayout>
   );
 }

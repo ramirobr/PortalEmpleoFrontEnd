@@ -12,6 +12,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import TablePagination from "@/components/shared/components/TablePagination";
 
 interface PostulantesTodosProps {
   filters: CandidatosSearchFiltersResponse | null;
@@ -226,52 +227,15 @@ export default function PostulantesTodos({ filters }: PostulantesTodosProps) {
           )}
 
           {/* Pagination Controls */}
-          {totalItems > 0 && (
-            <div className="flex justify-center mt-6 gap-2">
-              <button
-                onClick={() => setCurrentPage(Math.max(1, currentPage - 1))}
-                disabled={currentPage === 1 || loading}
-                className="px-3 py-1 border rounded bg-white disabled:opacity-50 cursor-pointer"
-              >
-                Anterior
-              </button>
-              {Array.from(
-                { length: Math.ceil(totalItems / pageSize) },
-                (_, i) => i + 1,
-              )
-                .slice(
-                  Math.max(0, currentPage - 3),
-                  Math.min(Math.ceil(totalItems / pageSize), currentPage + 2),
-                )
-                .map((page) => (
-                  <button
-                    key={page}
-                    onClick={() => setCurrentPage(page)}
-                    disabled={loading}
-                    className={`px-3 py-1 border rounded cursor-pointer ${
-                      currentPage === page
-                        ? "bg-primary text-white"
-                        : "bg-white hover:bg-gray-50"
-                    }`}
-                  >
-                    {page}
-                  </button>
-                ))}
-              <button
-                onClick={() =>
-                  setCurrentPage(
-                    Math.min(Math.ceil(totalItems / pageSize), currentPage + 1),
-                  )
-                }
-                disabled={
-                  currentPage >= Math.ceil(totalItems / pageSize) || loading
-                }
-                className="px-3 py-1 border rounded bg-white disabled:opacity-50 cursor-pointer"
-              >
-                Siguiente
-              </button>
-            </div>
-          )}
+          <TablePagination
+            currentPage={currentPage}
+            pageSize={pageSize}
+            totalItems={totalItems}
+            itemLabel="candidatos"
+            onPageChange={setCurrentPage}
+            showInfo={false}
+            className="bg-transparent border-none mt-10"
+          />
         </div>
       </div>
     </div>

@@ -8,6 +8,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { PremiumButton } from "./PremiumButton";
 
 interface Props {
   total: number;
@@ -36,25 +37,28 @@ export function TopFilters({
         <p className="text-3xl font-extrabold text-primary mb-1">
           {total} {entityName} encontrados
         </p>
-        <button
+        <PremiumButton
           onClick={onToggleFilters}
-          className="lg:hidden flex items-center gap-2 px-3 py-1.5 bg-primary text-white rounded text-sm font-medium"
+          className="lg:hidden"
+          size="sm"
+          icon={
+            <svg
+              className="w-4 h-4"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4"
+              />
+            </svg>
+          }
         >
-          <svg
-            className="w-4 h-4"
-            fill="none"
-            stroke="currentColor"
-            viewBox="0 0 24 24"
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth={2}
-              d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4"
-            />
-          </svg>
           Filtrar
-        </button>
+        </PremiumButton>
       </div>
       <div className="flex items-center gap-4 pb-6 justify-between lg:justify-end w-full lg:w-auto">
         <label className="hidden lg:block">Ordenar por:</label>

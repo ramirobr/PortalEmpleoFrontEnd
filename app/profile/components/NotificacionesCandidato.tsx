@@ -76,7 +76,7 @@ export default function NotificacionesCandidato({
                   <p className="text-slate-900 font-bold text-lg leading-snug tracking-tight">
                     {notif.descripcion}
                   </p>
-                  <p className="text-[10px] text-slate-600 font-black uppercase tracking-[0.2em] flex items-center gap-2 italic">
+                  <p className="text-[10px] text-slate-600 font-bold uppercase tracking-[0.2em] flex items-center gap-2 italic">
                     <Clock className="w-3.5 h-3.5" />
                     {formatDistanceToNow(new Date(notif.fechaCreacion), {
                       addSuffix: true,
@@ -88,7 +88,7 @@ export default function NotificacionesCandidato({
               
               {!notif.esLeida && (
                 <button
-                  className="relative group/btn flex items-center justify-center gap-2.5 px-12 py-2 bg-primary text-white font-black text-xs uppercase tracking-widest rounded-full hover:shadow-2xl hover:shadow-primary/20 transition-all duration-500 cursor-pointer overflow-hidden hover:-translate-y-1 min-w-[200px] w-full lg:w-auto"
+                  className="relative group/btn flex items-center justify-center gap-2.5 px-12 py-2 bg-primary text-white font-bold text-xs uppercase tracking-widest rounded-full hover:shadow-2xl hover:shadow-primary/20 transition-all duration-500 cursor-pointer overflow-hidden hover:-translate-y-1 min-w-[200px] w-full lg:w-auto"
                   onClick={() => markAsRead(notif.idNotificacion)}
                 >
                   <div className="absolute inset-x-0 top-0 h-full w-full bg-white/10 -translate-x-full group-hover/btn:translate-x-full transition-transform duration-1000 skew-x-12" />

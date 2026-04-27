@@ -3,6 +3,7 @@ import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { MapPin, Briefcase, User, Check } from "lucide-react";
 import React from "react";
+import { PremiumButton } from "@/components/shared/components/PremiumButton";
 
 interface CandidateCardProps {
   candidate: CandidateSearchResult;
@@ -15,9 +16,9 @@ export default function CandidateCard({ candidate }: CandidateCardProps) {
   const topSkills = candidate.habilidades.slice(0, 3);
 
   return (
-    <div className="@container group bg-white rounded-xl p-8 shadow-sm transition-all duration-500 hover:shadow-xl hover:-translate-y-1.5 flex flex-col h-full border border-slate-50">
+    <div className="@container/card group bg-white rounded-xl p-8 shadow-sm transition-all duration-500 hover:shadow-xl hover:-translate-y-1.5 flex flex-col h-full border border-slate-50">
       {/* Header Row: Photo & Status */}
-      <div className="flex flex-col @[width>=300px]:flex-row justify-between items-start mb-8 gap-4 @[width>=300px]:gap-0">
+      <div className="flex flex-col @[300px]/card:flex-row justify-between items-start mb-8 gap-4 @[300px]/card:gap-0">
         <div className="relative w-16 h-16 shrink-0">
           {candidate.fotografia ? (
             <Image
@@ -46,10 +47,14 @@ export default function CandidateCard({ candidate }: CandidateCardProps) {
             </span>
           </div>
           {/* Progress Accent Line */}
-          <div className="w-20 h-1 bg-slate-100 rounded-full overflow-hidden ml-auto">
+          <div className="w-20 h-1 bg-slate-100 rounded-full overflow-hidden mr-auto">
             <div
               className={`h-full bg-primary transition-all duration-1000 w-(--completion-pc)`}
-              style={{ "--completion-pc": `${candidate.porcentajePerfilCompletado}%` } as React.CSSProperties}
+              style={
+                {
+                  "--completion-pc": `${candidate.porcentajePerfilCompletado}%`,
+                } as React.CSSProperties
+              }
             />
           </div>
         </div>
@@ -57,7 +62,7 @@ export default function CandidateCard({ candidate }: CandidateCardProps) {
 
       {/* Main Info */}
       <div className="flex-1 flex flex-col">
-        <h3 className="text-2xl font-display font-black text-primary uppercase leading-tight mb-1 tracking-tight group-hover:text-primary-container transition-colors duration-300">
+        <h3 className="text-2xl font-display font-bold text-primary uppercase leading-tight mb-1 tracking-tight group-hover:text-primary-container transition-colors duration-300">
           {candidate.nombreCompleto}
         </h3>
         {candidate.puestoActual && (
@@ -68,23 +73,24 @@ export default function CandidateCard({ candidate }: CandidateCardProps) {
 
         <div className="w-full h-px bg-slate-100 mb-6" />
 
-        <div className="grid grid-cols-2 gap-4 mb-8">
+        <div className="grid grid-cols-2 gap-4 mb-8 text-slate-500">
           <div className="space-y-1">
-            <div className="flex items-center gap-1.5 text-slate-300">
+            <div className="flex items-center gap-1.5 ">
               <MapPin className="w-3 h-3" />
-              <span className="text-[10px] font-bold uppercase tracking-widest">Ubicación</span>
+              <span className="text-sm font-medium">Ubicación</span>
             </div>
             <p className="text-sm font-medium text-slate-600 line-clamp-1">
               {candidate.ciudad}
             </p>
           </div>
           <div className="space-y-1">
-            <div className="flex items-center gap-1.5 text-slate-300">
+            <div className="flex items-center gap-1.5 ">
               <Briefcase className="w-3 h-3" />
-              <span className="text-[10px] font-bold uppercase tracking-widest">Experiencia</span>
+              <span className="text-sm font-medium">Experiencia</span>
             </div>
             <p className="text-sm font-medium text-slate-600 line-clamp-1">
-              {candidate.aniosExperiencia} {candidate.aniosExperiencia === 1 ? "año" : "años"}
+              {candidate.aniosExperiencia}{" "}
+              {candidate.aniosExperiencia === 1 ? "año" : "años"}
             </p>
           </div>
         </div>
@@ -105,16 +111,14 @@ export default function CandidateCard({ candidate }: CandidateCardProps) {
       </div>
 
       <div className="mt-auto">
-        <button
-          className="relative group/btn w-full flex items-center justify-center gap-3 px-12 py-2.5 bg-linear-to-r from-primary-container to-primary text-white font-black text-xs uppercase tracking-widest rounded-full hover:shadow-2xl hover:shadow-primary/30 transition-all duration-500 cursor-pointer overflow-hidden hover:-translate-y-1"
+        <PremiumButton
+          className="w-full"
           onClick={() =>
             router.push(`/empresa-profile/candidato/${candidate.idUsuario}`)
           }
         >
-          <div className="absolute inset-x-0 top-0 h-full w-full bg-white/20 -translate-x-full group-hover/btn:translate-x-full transition-transform duration-1000 skew-x-12" />
-          <User className="size-4 relative z-10" />
-          <span className="relative z-10 text-[11px]">Ver Perfil Completo</span>
-        </button>
+          Ver Perfil
+        </PremiumButton>
       </div>
     </div>
   );
