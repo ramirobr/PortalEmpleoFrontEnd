@@ -31,15 +31,17 @@ export default async function BuscarCandidatosPage({ searchParams }: Props) {
 
   return (
     <div className="min-h-screen bg-gray-50">
-      <div className="container mx-auto py-8">
-        <div className="mb-8">
-          <h1 className="text-3xl font-bold text-gray-900 mb-2">
+      <div className="w-full bg-gradient-to-r from-primary to-primary/70 py-10 px-6 mb-6">
+        <div className="container mx-auto">
+          <h1 className="text-3xl font-bold text-white mb-1">
             Buscar Candidatos
           </h1>
-          <p className="text-gray-600">
+          <p className="text-white/80">
             Encuentra el talento ideal para tu empresa
           </p>
         </div>
+      </div>
+      <div className="container mx-auto py-4">
 
         <Suspense>
           <CandidatesContent

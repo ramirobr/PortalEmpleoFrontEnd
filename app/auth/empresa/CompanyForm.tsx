@@ -18,15 +18,17 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { SearchAutocomplete } from "@/components/ui/search-autocomplete";
 import { SignIn } from "@/lib/auth/signin";
 import { CompanySignUp } from "@/lib/auth/signup";
 import { addSpaces } from "@/lib/utils";
 import { FormFieldsResponse } from "@/types/company";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { ArrowRight, Building2 } from "lucide-react";
+import { ArrowRight, Building2, Eye } from "lucide-react";
 import { useSession } from "next-auth/react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import { useRef, useState } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import z from "zod";
@@ -35,14 +37,14 @@ const schema = z
   .object({
     nombreEmpresa: z.string().min(1, "Nombre de la empresa requerido"),
     razonSocial: z.string().min(1, "Razón social requerida"),
-    idCondicionFiscal: z.number().min(1, "Selecciona una condición fiscal"),
+    idCondicionFiscal: z.number().min(1, "Selecciona un tipo de contribuyente"),
     documento: z
       .string()
       .min(1, "Documento requerido")
       .regex(/^\d+$/, "Documento solo debe contener números"),
     idCiudad: z.number().min(1, "Selecciona una ciudad"),
     calle: z.string().min(1, "Calle requerida"),
-    numeroCasa: z.string().min(1, "Número Casa requerido"),
+    numeroCasa: z.string().min(1, "Nomenclatura requerida"),
     codigoPostal: z
       .string()
       .min(1, "Código postal requerido")
@@ -50,7 +52,17 @@ const schema = z
     telefono: z.string().min(1, "Ingresa un teléfono válido"),
     idIndustria: z.number().min(1, "Selecciona una industria"),
     idCantidadEmpleados: z.number().min(1, "Selecciona cantidad de empleados"),
-    sitioWeb: z.url("Ingresa una URL válida").optional().or(z.literal("")),
+    sitioWeb: z
+      .string()
+      .optional()
+      .refine(
+        (val) =>
+          !val ||
+          /^(https?:\/\/)?(www\.)?[a-zA-Z0-9-]+(\.[a-zA-Z]{2,})+([/?#]\S*)?$/.test(
+            val
+          ),
+        { message: "Ingresa una URL válida (ej: www.miweb.com)" }
+      ),
     nombres: z.string().min(1, "Nombre requerido"),
     apellidos: z.string().min(1, "Apellido requerido"),
     idGenero: z.number().optional(),
@@ -85,6 +97,22 @@ type CompanyFormProps = {
 export default function CompanyForm({ fields }: CompanyFormProps) {
   const router = useRouter();
   const { update } = useSession();
+  const [showPassword, setShowPassword] = useState(false);
+  const [showRepeatPassword, setShowRepeatPassword] = useState(false);
+  const passwordTimeoutRef = useRef<NodeJS.Timeout | null>(null);
+  const repeatPasswordTimeoutRef = useRef<NodeJS.Timeout | null>(null);
+
+  const handlePasswordToggle = (field: "password" | "repeat") => {
+    if (field === "password") {
+      setShowPassword(true);
+      if (passwordTimeoutRef.current) clearTimeout(passwordTimeoutRef.current);
+      passwordTimeoutRef.current = setTimeout(() => setShowPassword(false), 2000);
+    } else {
+      setShowRepeatPassword(true);
+      if (repeatPasswordTimeoutRef.current) clearTimeout(repeatPasswordTimeoutRef.current);
+      repeatPasswordTimeoutRef.current = setTimeout(() => setShowRepeatPassword(false), 2000);
+    }
+  };
   const form = useForm<FormValues>({
     resolver: zodResolver(schema),
     defaultValues: {
@@ -127,7 +155,7 @@ export default function CompanyForm({ fields }: CompanyFormProps) {
       }
       form.reset();
       await update();
-      router.push("/");
+      router.push("/empresa-profile");
     } else {
       toast.error(registerRes?.messages.join("\n"));
     }
@@ -190,7 +218,8 @@ export default function CompanyForm({ fields }: CompanyFormProps) {
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel htmlFor="condicion-fiscal">
-                      Condición fiscal <span className="text-red-500">*</span>
+                      Tipo de Contribuyente{" "}
+                      <span className="text-red-500">*</span>
                     </FormLabel>
                     <FormControl>
                       <Select
@@ -248,26 +277,17 @@ export default function CompanyForm({ fields }: CompanyFormProps) {
                       Ciudad <span className="text-red-500">*</span>
                     </FormLabel>
                     <FormControl>
-                      <Select
-                        onValueChange={(v) =>
-                          form.setValue("idCiudad", parseInt(v))
+                      <SearchAutocomplete<number>
+                        options={
+                          fields?.ciudad?.map((c) => ({
+                            id: c.idCatalogo,
+                            label: c.nombre,
+                          })) ?? []
                         }
-                        defaultValue={field.value?.toString()}
-                      >
-                        <SelectTrigger id="ciudad">
-                          <SelectValue placeholder="Seleccione una opción" />
-                        </SelectTrigger>
-                        <SelectContent>
-                          {fields?.ciudad?.map((ciudad) => (
-                            <SelectItem
-                              key={ciudad.idCatalogo}
-                              value={ciudad.idCatalogo.toString()}
-                            >
-                              {ciudad.nombre}
-                            </SelectItem>
-                          ))}
-                        </SelectContent>
-                      </Select>
+                        value={field.value || undefined}
+                        onChange={(id) => form.setValue("idCiudad", id)}
+                        placeholder="Seleccione una ciudad"
+                      />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -296,7 +316,7 @@ export default function CompanyForm({ fields }: CompanyFormProps) {
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel htmlFor="numeroCasa">
-                      Numero Casa <span className="text-red-500">*</span>
+                      Nomenclatura <span className="text-red-500">*</span>
                     </FormLabel>
                     <FormControl>
                       <Input id="numeroCasa" {...field} />
@@ -359,26 +379,17 @@ export default function CompanyForm({ fields }: CompanyFormProps) {
                       Industria <span className="text-red-500">*</span>
                     </FormLabel>
                     <FormControl>
-                      <Select
-                        onValueChange={(v) =>
-                          form.setValue("idIndustria", parseInt(v))
+                      <SearchAutocomplete<number>
+                        options={
+                          fields?.industria?.map((i) => ({
+                            id: i.idCatalogo,
+                            label: i.nombre,
+                          })) ?? []
                         }
-                        defaultValue={field.value?.toString()}
-                      >
-                        <SelectTrigger id="industria">
-                          <SelectValue placeholder="Seleccione una opción" />
-                        </SelectTrigger>
-                        <SelectContent>
-                          {fields?.industria?.map((industria) => (
-                            <SelectItem
-                              key={industria.idCatalogo}
-                              value={industria.idCatalogo.toString()}
-                            >
-                              {industria.nombre}
-                            </SelectItem>
-                          ))}
-                        </SelectContent>
-                      </Select>
+                        value={field.value || undefined}
+                        onChange={(id) => form.setValue("idIndustria", id)}
+                        placeholder="Seleccione una industria"
+                      />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -443,6 +454,13 @@ export default function CompanyForm({ fields }: CompanyFormProps) {
 
           <fieldset className="border-0 p-0">
             <legend className="sr-only">Información de usuario</legend>
+            <div className="flex items-center gap-3 mb-4">
+              <div className="h-px flex-1 bg-gray-200" />
+              <span className="text-sm font-semibold text-gray-600 whitespace-nowrap">
+                Datos de contacto del responsable del registro
+              </span>
+              <div className="h-px flex-1 bg-gray-200" />
+            </div>
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 gap-y-8">
               <FormField
                 control={form.control}
@@ -539,12 +557,26 @@ export default function CompanyForm({ fields }: CompanyFormProps) {
                       Contraseña <span className="text-red-500">*</span>
                     </FormLabel>
                     <FormControl>
-                      <Input
-                        id="password"
-                        type="password"
-                        {...field}
-                        minLength={7}
-                      />
+                      <div className="relative">
+                        <Input
+                          id="password"
+                          type={showPassword ? "text" : "password"}
+                          className="pr-10"
+                          {...field}
+                          minLength={7}
+                        />
+                        <button
+                          type="button"
+                          aria-label={showPassword ? "Ocultar contraseña" : "Mostrar contraseña"}
+                          className="absolute right-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400 cursor-pointer"
+                          onMouseDown={() => setShowPassword(true)}
+                          onMouseUp={() => setShowPassword(false)}
+                          onMouseLeave={() => setShowPassword(false)}
+                          onClick={() => handlePasswordToggle("password")}
+                        >
+                          <Eye aria-hidden="true" />
+                        </button>
+                      </div>
                     </FormControl>
                     <span className="text-xs text-gray-500 block mt-1">
                       Debe tener 7 dígitos como mínima.
@@ -563,12 +595,26 @@ export default function CompanyForm({ fields }: CompanyFormProps) {
                       Repetir contraseña <span className="text-red-500">*</span>
                     </FormLabel>
                     <FormControl>
-                      <Input
-                        id="repeat-password"
-                        type="password"
-                        {...field}
-                        minLength={7}
-                      />
+                      <div className="relative">
+                        <Input
+                          id="repeat-password"
+                          type={showRepeatPassword ? "text" : "password"}
+                          className="pr-10"
+                          {...field}
+                          minLength={7}
+                        />
+                        <button
+                          type="button"
+                          aria-label={showRepeatPassword ? "Ocultar contraseña" : "Mostrar contraseña"}
+                          className="absolute right-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400 cursor-pointer"
+                          onMouseDown={() => setShowRepeatPassword(true)}
+                          onMouseUp={() => setShowRepeatPassword(false)}
+                          onMouseLeave={() => setShowRepeatPassword(false)}
+                          onClick={() => handlePasswordToggle("repeat")}
+                        >
+                          <Eye aria-hidden="true" />
+                        </button>
+                      </div>
                     </FormControl>
                     <FormMessage />
                   </FormItem>

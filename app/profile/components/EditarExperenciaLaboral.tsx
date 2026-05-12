@@ -233,7 +233,7 @@ export default function EditarExperenciaLaboral({
       </div>
 
       <Dialog open={addModalOpen} onOpenChange={setAddModalOpen}>
-        <DialogContent className="p-8 max-w-md">
+        <DialogContent className="p-6 sm:p-8 w-[calc(100%-2rem)] max-w-lg max-h-[90vh] overflow-y-auto">
           <DialogHeader>
             <DialogTitle className="text-primary font-primary mb-2.5">
               Añadir Experiencia Laboral
@@ -249,7 +249,7 @@ export default function EditarExperenciaLaboral({
       </Dialog>
 
       <Dialog open={!!editModal} onOpenChange={handleCancelEdit}>
-        <DialogContent className="p-8 max-w-md">
+        <DialogContent className="p-6 sm:p-8 w-[calc(100%-2rem)] max-w-lg max-h-[90vh] overflow-y-auto">
           <DialogHeader>
             <DialogTitle className="text-primary font-primary mb-2.5">
               Editar Experiencia Laboral

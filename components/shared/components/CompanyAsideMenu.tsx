@@ -108,9 +108,9 @@ export default function CompanyAsideMenu({
         <div className="flex flex-col items-center py-15  h-full">
           <nav className="flex-1 w-full">
             <ul className="space-y-2">
-              <li id="Home" className={getLinkClass("/")}>
+              <li id="Home" className={getLinkClass(session ? "/empresa-profile" : "/")}>
                 <Link
-                  href="/"
+                  href={session ? "/empresa-profile" : "/"}
                   className="flex items-center w-full h-full"
                   onClick={onClose}
                 >

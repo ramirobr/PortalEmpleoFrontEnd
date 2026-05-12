@@ -40,7 +40,7 @@ export default async function PasanteEmailPage({ searchParams }: Props) {
     <div className="min-h-screen">
       <MainLayout>
         <div className="mx-auto">
-          <Banner />
+          <Banner title="Ofertas de Empleo" />
           <section className="container py-20">
             <div className="mb-8">
               <h1 className="text-3xl font-bold text-gray-900 mb-2">

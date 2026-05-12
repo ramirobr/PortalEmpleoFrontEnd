@@ -54,6 +54,9 @@ const schema = z
     licencia: z.boolean().default(false),
     tipoLicencia: z.array(z.string()).optional(),
     idEstadoCivil: z.number().optional(),
+    idTipoJornadaLaboral: z.number().optional(),
+    telefonoReferencia1: z.string().optional(),
+    telefonoReferencia2: z.string().optional(),
   })
   .superRefine((data, ctx) => {
     const CEDULA = 3580;
@@ -94,6 +97,9 @@ export default function EditarDatosPersonales({
       licencia: user.datosPersonales.licencia,
       tipoLicencia: user.datosPersonales.tipoLicencia,
       idEstadoCivil: user.datosPersonales.idEstadoCivil,
+      idTipoJornadaLaboral: user.datosPersonales.idTipoJornadaLaboral,
+      telefonoReferencia1: user.datosPersonales.telefonoReferencia1 ?? "",
+      telefonoReferencia2: user.datosPersonales.telefonoReferencia2 ?? "",
     },
   });
 
@@ -120,6 +126,9 @@ export default function EditarDatosPersonales({
       licencia: data.licencia,
       idEstadoCivil: data.idEstadoCivil,
       tipoLicencia: data.tipoLicencia,
+      idTipoJornadaLaboral: data.idTipoJornadaLaboral,
+      telefonoReferencia1: data.telefonoReferencia1,
+      telefonoReferencia2: data.telefonoReferencia2,
     };
 
     const res = await fetchApi("/User/update-user", {
@@ -282,6 +291,39 @@ export default function EditarDatosPersonales({
             />
             <FormField
               control={form.control}
+              name="idTipoJornadaLaboral"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel htmlFor="idTipoJornadaLaboral">Tipo de jornada laboral</FormLabel>
+                  <FormControl>
+                    <Select
+                      onValueChange={(value) => field.onChange(value ? Number(value) : undefined)}
+                      value={field.value ? String(field.value) : ""}
+                      disabled={!isEditing}
+                    >
+                      <SelectTrigger id="idTipoJornadaLaboral">
+                        <SelectValue placeholder="Tipo de jornada" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        {fields?.tipo_empleo?.map((jornada) => (
+                          <SelectItem
+                            key={jornada.idCatalogo}
+                            value={jornada.idCatalogo.toString()}
+                          >
+                            {jornada.nombre}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+          </div>
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-4">
+            <FormField
+              control={form.control}
               name="idGenero"
               render={({ field }) => (
                 <FormItem>
@@ -410,8 +452,7 @@ export default function EditarDatosPersonales({
               )}
             />
           </div>
-          {licenciaChecked && (
-            <div className="col-span-2">
+          {licenciaChecked && (            <div className="col-span-2">
               <FormField
                 control={form.control}
                 name="tipoLicencia"
@@ -460,6 +501,34 @@ export default function EditarDatosPersonales({
               />
             </div>
           )}
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-4 mt-4">
+            <FormField
+              control={form.control}
+              name="telefonoReferencia1"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel htmlFor="telefonoReferencia1">Teléfono de referencia 1</FormLabel>
+                  <FormControl>
+                    <Input id="telefonoReferencia1" disabled={!isEditing} placeholder="Opcional" {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="telefonoReferencia2"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel htmlFor="telefonoReferencia2">Teléfono de referencia 2</FormLabel>
+                  <FormControl>
+                    <Input id="telefonoReferencia2" disabled={!isEditing} placeholder="Opcional" {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+          </div>
           {isEditing && (
             <div className="col-span-2 mt-8 flex justify-end">
               <button

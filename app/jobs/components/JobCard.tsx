@@ -4,13 +4,14 @@ import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { Check, MapPin, Clock, Briefcase } from "lucide-react";
 import { PremiumButton } from "@/components/shared/components/PremiumButton";
+import FavoriteButton from "@/components/shared/components/FavoriteButton";
 
 interface JobCardProps {
   job: Job | RecentJob;
   isFavorite?: boolean;
 }
 
-export default function JobCard({ job }: JobCardProps) {
+export default function JobCard({ job, isFavorite = false }: JobCardProps) {
   const router = useRouter();
 
   const id = "idVacante" in job ? job.idVacante : job.id;
@@ -25,7 +26,8 @@ export default function JobCard({ job }: JobCardProps) {
       : `${job.ciudad}, ${job.provincia}`;
 
   return (
-    <div className="@container/card group bg-white rounded-xl p-8 shadow-sm transition-all duration-500 hover:shadow-xl hover:-translate-y-1.5 flex flex-col h-full border border-slate-50">
+    <div className="relative @container/card group bg-white rounded-xl p-8 shadow-sm transition-all duration-500 hover:shadow-xl hover:-translate-y-1.5 flex flex-col h-full border border-slate-50">
+      <FavoriteButton jobId={id} isFavorite={isFavorite} />
       {/* Header Row: Logo & Verified Badge */}
       <div className="flex flex-col @[300px]/card:flex-row justify-between items-start mb-8 gap-4 @[300px]/card:gap-0">
         <div className="relative w-16 h-16 shrink-0">

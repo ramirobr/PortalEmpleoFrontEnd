@@ -32,7 +32,7 @@ export default async function JobsPage({ searchParams }: Props) {
     <div className="min-h-screen">
       <MainLayout>
         <div className="mx-auto">
-          <Banner />
+          <Banner title="Ofertas de Empleo" />
           <section className="container py-20">
             <Suspense>
               <JobsContent

@@ -14,9 +14,9 @@ import { useAuthStore } from "@/context/authStore";
 import { fetchApi } from "@/lib/apiClient";
 import { fileToBase64, getInitials } from "@/lib/utils";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Camera, Pencil, Trash2 } from "lucide-react";
+import { Camera, Pencil, Trash2, Video, X } from "lucide-react";
 import { useSession } from "next-auth/react";
-import React, { useEffect, useRef, useState } from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { z } from "zod";
@@ -29,7 +29,11 @@ type FormValues = z.infer<typeof schema>;
 
 export default function EditarFoto() {
   const [isEditing, setIsEditing] = useState(false);
+  const [showWebcam, setShowWebcam] = useState(false);
+  const [webcamStream, setWebcamStream] = useState<MediaStream | null>(null);
   const fileInputRef = useRef<HTMLInputElement | null>(null);
+  const videoRef = useRef<HTMLVideoElement | null>(null);
+  const canvasRef = useRef<HTMLCanvasElement | null>(null);
   const { data: session } = useSession();
   const fullName = useAuthStore((s) => s.fullName);
   const pic = useAuthStore((s) => s.pic);
@@ -54,6 +58,46 @@ export default function EditarFoto() {
         ? URL.createObjectURL(watchedImage)
         : undefined;
 
+  const stopWebcam = useCallback(() => {
+    webcamStream?.getTracks().forEach((t) => t.stop());
+    setWebcamStream(null);
+    setShowWebcam(false);
+  }, [webcamStream]);
+
+  useEffect(() => {
+    return () => {
+      webcamStream?.getTracks().forEach((t) => t.stop());
+    };
+  }, [webcamStream]);
+
+  useEffect(() => {
+    if (showWebcam && videoRef.current && webcamStream) {
+      videoRef.current.srcObject = webcamStream;
+    }
+  }, [showWebcam, webcamStream]);
+
+  const openWebcam = async () => {
+    try {
+      const stream = await navigator.mediaDevices.getUserMedia({ video: true });
+      setWebcamStream(stream);
+      setShowWebcam(true);
+    } catch {
+      toast.error("No se pudo acceder a la cámara.");
+    }
+  };
+
+  const capturePhoto = () => {
+    if (!videoRef.current || !canvasRef.current) return;
+    const video = videoRef.current;
+    const canvas = canvasRef.current;
+    canvas.width = video.videoWidth;
+    canvas.height = video.videoHeight;
+    canvas.getContext("2d")?.drawImage(video, 0, 0);
+    const base64 = canvas.toDataURL("image/jpeg", 0.85);
+    form.setValue("imagen", base64);
+    stopWebcam();
+  };
+
   async function deteleImage() {
     const res = await fetchApi(
       "/User/delete-user-picture/" + session?.user.id,
@@ -73,7 +117,9 @@ export default function EditarFoto() {
 
   async function onSubmit(data: FormValues) {
     if (!data.imagen || typeof data.imagen === "string") {
-      await deteleImage();
+      if (!data.imagen) {
+        await deteleImage();
+      }
       return;
     }
     const base64Image = await fileToBase64(data.imagen);
@@ -93,6 +139,27 @@ export default function EditarFoto() {
     setPic(base64Image);
     toast.success(res?.data || "Imagen actualizada");
     setIsEditing(false);
+  }
+
+  async function onSubmitWithBase64(data: FormValues) {
+    const imagen = data.imagen;
+    if (typeof imagen === "string" && imagen.startsWith("data:")) {
+      const body = { userId: session?.user.id, base64Image: imagen };
+      const res = await fetchApi("/User/update-user-picture", {
+        method: "PUT",
+        token: session?.user.accessToken,
+        body,
+      });
+      if (!res?.isSuccess) {
+        toast.error("Error actualizando imagen");
+        return;
+      }
+      setPic(imagen);
+      toast.success(res?.data || "Imagen actualizada");
+      setIsEditing(false);
+      return;
+    }
+    await onSubmit(data);
   }
 
   return (
@@ -116,6 +183,7 @@ export default function EditarFoto() {
             type="button"
             onClick={() => {
               setIsEditing(false);
+              stopWebcam();
               form.reset();
             }}
             className="cursor-pointer"
@@ -127,7 +195,7 @@ export default function EditarFoto() {
       </div>
       <Form {...form}>
         <form
-          onSubmit={form.handleSubmit(onSubmit)}
+          onSubmit={form.handleSubmit(onSubmitWithBase64)}
           className="flex flex-col items-center"
         >
           <div className="relative w-24 h-24 mb-2">
@@ -200,8 +268,8 @@ export default function EditarFoto() {
             />
           </div>
 
-          {isEditing && (
-            <div className="mt-10 flex gap-4 items-end">
+          {isEditing && !showWebcam && (
+            <div className="mt-10 flex gap-3 items-center flex-wrap justify-center">
               <button
                 className="btn btn-primary"
                 type="submit"
@@ -212,6 +280,46 @@ export default function EditarFoto() {
                 )}
                 Guardar
               </button>
+              <button
+                type="button"
+                className="btn btn-outline flex items-center gap-2"
+                onClick={openWebcam}
+              >
+                <Video className="w-4 h-4" />
+                Tomar foto
+              </button>
+            </div>
+          )}
+
+          {/* Webcam capture section */}
+          {showWebcam && (
+            <div className="mt-6 w-full flex flex-col items-center gap-4">
+              <video
+                ref={videoRef}
+                autoPlay
+                playsInline
+                muted
+                className="w-full max-w-xs rounded-lg border border-gray-200 bg-black"
+              />
+              <canvas ref={canvasRef} className="hidden" />
+              <div className="flex gap-3">
+                <button
+                  type="button"
+                  className="btn btn-primary flex items-center gap-2"
+                  onClick={capturePhoto}
+                >
+                  <Camera className="w-4 h-4" />
+                  Capturar
+                </button>
+                <button
+                  type="button"
+                  className="btn btn-outline flex items-center gap-2"
+                  onClick={stopWebcam}
+                >
+                  <X className="w-4 h-4" />
+                  Cancelar
+                </button>
+              </div>
             </div>
           )}
         </form>

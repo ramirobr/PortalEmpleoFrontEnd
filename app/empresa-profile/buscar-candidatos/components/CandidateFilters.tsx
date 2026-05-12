@@ -14,6 +14,7 @@ import { PriceRange } from "@/components/shared/components/PriceRange";
 import { useDebouncedValue } from "@/lib/hooks";
 import { CandidateSearchFiltersResponse } from "@/types/company";
 import { PremiumButton } from "@/components/shared/components/PremiumButton";
+import { SearchAutocomplete } from "@/components/ui/search-autocomplete";
 
 const AGE_MIN = 18;
 const AGE_MAX = 70;
@@ -264,42 +265,30 @@ export function CandidateFilters({
 
         <div>
           <label className="text-black font-bold">Provincia</label>
-          <Select
-            value={current("provincia", initialFilters.provincia)}
-            onValueChange={(v) => update("provincia", v)}
-          >
-            <SelectTrigger className="w-full mt-1 max-w-[212px]">
-              <SelectValue placeholder="Todas" />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value=" ">Todas</SelectItem>
-              {provincias.map((provincia) => (
-                <SelectItem key={provincia.idCatalogo} value={provincia.nombre}>
-                  {provincia.nombre}
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
+          <SearchAutocomplete<string>
+            className="w-full mt-1"
+            options={[
+              { id: " ", label: "Todas" },
+              ...provincias.map((p) => ({ id: p.nombre, label: p.nombre })),
+            ]}
+            value={current("provincia", initialFilters.provincia) || undefined}
+            onChange={(v) => update("provincia", v)}
+            placeholder="Todas"
+          />
         </div>
 
         <div>
           <label className="text-black font-bold">Ciudad</label>
-          <Select
-            value={current("ciudad", initialFilters.ciudad)}
-            onValueChange={(v) => update("ciudad", v)}
-          >
-            <SelectTrigger className="w-full mt-1 max-w-[212px]">
-              <SelectValue placeholder="Todas" />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value=" ">Todas</SelectItem>
-              {ciudades.map((ciudad) => (
-                <SelectItem key={ciudad.idCatalogo} value={ciudad.nombre}>
-                  {ciudad.nombre}
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
+          <SearchAutocomplete<string>
+            className="w-full mt-1"
+            options={[
+              { id: " ", label: "Todas" },
+              ...ciudades.map((c) => ({ id: c.nombre, label: c.nombre })),
+            ]}
+            value={current("ciudad", initialFilters.ciudad) || undefined}
+            onChange={(v) => update("ciudad", v)}
+            placeholder="Todas"
+          />
         </div>
 
         <div>

@@ -11,7 +11,7 @@ export default async function JobDetailsPage({ params }: IdProp) {
 
   return (
     <MainLayout>
-      <Banner />
+      <Banner title="Detalle de la Oferta" />
       <div className="py-24 bg-gray-50">
         {job ? (
           <JobDetails {...job} />

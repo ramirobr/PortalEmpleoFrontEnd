@@ -27,6 +27,8 @@ export type Job = {
   numeroVistas: number
   idArchivoEmpresa?: string
   bannerEmpresa?: string
+  inicioLabores?: string
+  aniosExperiencia?: number
 }
 
 export type GetAllJobsResponse = GenericResponse<Jobs>

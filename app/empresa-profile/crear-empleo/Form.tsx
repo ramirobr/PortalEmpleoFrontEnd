@@ -1,5 +1,6 @@
 "use client";
 import { Button } from "@/components/ui/button";
+import { Checkbox } from "@/components/ui/checkbox";
 import { DatePicker } from "@/components/ui/date-picker";
 import { Input } from "@/components/ui/input";
 import {
@@ -9,7 +10,6 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { Slider } from "@/components/ui/slider";
 import { Textarea } from "@/components/ui/textarea";
 import { fetchApi } from "@/lib/apiClient";
 import { parseWeirdDate } from "@/lib/utils";
@@ -23,12 +23,29 @@ import { toast } from "sonner";
 import { z } from "zod";
 import BannerSelector from "./BannerSelector";
 import { useState } from "react";
+import { SearchAutocomplete } from "@/components/ui/search-autocomplete";
+
+const INICIO_LABORES_OPTIONS = [
+  "Inmediato",
+  "En una semana",
+  "En dos semanas",
+  "Fecha específica",
+] as const;
+
+const REQUISITOS_PREDEFINIDOS = [
+  "Buena presencia",
+  "Comunicativo/a",
+  "Proactividad",
+  "Responsabilidad",
+  "Trabajo en equipo",
+  "Puntualidad",
+];
 
 const crearEmpleoSchema = z
   .object({
     tituloPuesto: z.string().min(1, "Requerido"),
     descripcion: z.string().min(1, "Requerido"),
-    requisitos: z.string().min(1, "Requerido"),
+    requisitos: z.string().optional(),
     idCiudad: z.number().min(1, "Selecciona ciudad"),
     idModalidadTrabajo: z.number().min(1, "Selecciona modalidad"),
     idExperiencia: z.number().min(1, "Selecciona experiencia"),
@@ -41,6 +58,10 @@ const crearEmpleoSchema = z
         message: "El salario máximo debe ser mayor o igual al mínimo.",
       }),
     idArchivoEmpresa: z.string().optional(),
+    inicioLabores: z.enum(INICIO_LABORES_OPTIONS).optional(),
+    fechaInicioLabores: z.date().optional(),
+    conExperiencia: z.boolean(),
+    aniosExperiencia: z.number().min(0).max(50).optional(),
   })
   .refine(
     (data) =>
@@ -50,6 +71,14 @@ const crearEmpleoSchema = z
     {
       path: ["fechaCierre"],
       message: "La fecha de cierre debe ser mayor que la fecha de inicio.",
+    },
+  )
+  .refine(
+    (data) =>
+      data.inicioLabores !== "Fecha específica" || !!data.fechaInicioLabores,
+    {
+      path: ["fechaInicioLabores"],
+      message: "Selecciona la fecha de inicio de labores.",
     },
   );
 
@@ -67,6 +96,13 @@ export default function CrearEmpleoForm({ fields, initialValues }: FormProps) {
   const [selectedBannerBase64, setSelectedBannerBase64] = useState<string | null>(
     null
   );
+  const [selectedRequisitos, setSelectedRequisitos] = useState<string[]>([]);
+
+  const toggleRequisito = (req: string) => {
+    setSelectedRequisitos((prev) =>
+      prev.includes(req) ? prev.filter((r) => r !== req) : [...prev, req]
+    );
+  };
 
   const form = useForm<FormData>({
     resolver: zodResolver(crearEmpleoSchema),
@@ -89,6 +125,10 @@ export default function CrearEmpleoForm({ fields, initialValues }: FormProps) {
         initialValues?.salarioMaximo ?? 2500,
       ] as [number, number],
       idArchivoEmpresa: initialValues?.idArchivoEmpresa || "",
+      inicioLabores: undefined,
+      fechaInicioLabores: undefined,
+      conExperiencia: false,
+      aniosExperiencia: undefined,
     },
   });
 
@@ -96,12 +136,13 @@ export default function CrearEmpleoForm({ fields, initialValues }: FormProps) {
     control,
     register,
     handleSubmit,
+    watch,
     formState: { errors, isSubmitting },
     reset,
-    watch,
   } = form;
 
-  const salarioRange = watch("salarioRange");
+  const watchedInicioLabores = watch("inicioLabores");
+  const watchedConExperiencia = watch("conExperiencia");
 
   const onSubmit = async (values: FormData) => {
     if (!session?.user?.idEmpresa) {
@@ -111,11 +152,18 @@ export default function CrearEmpleoForm({ fields, initialValues }: FormProps) {
       return;
     }
 
+    const allRequisitos = [
+      ...selectedRequisitos,
+      ...(values.requisitos ? [values.requisitos] : []),
+    ]
+      .filter(Boolean)
+      .join("\n");
+
     const payload = {
       idEmpresa: session.user.idEmpresa,
       tituloPuesto: values.tituloPuesto,
       descripcion: values.descripcion,
-      requisitos: values.requisitos,
+      requisitos: allRequisitos || values.requisitos,
       salarioBase: values.salarioRange[0],
       salarioMaximo: values.salarioRange[1],
       fechaInicio: values.fechaInicio.toISOString(),
@@ -126,6 +174,14 @@ export default function CrearEmpleoForm({ fields, initialValues }: FormProps) {
       idExperiencia: Number(values.idExperiencia),
       ...(values.idArchivoEmpresa && {
         idArchivoEmpresa: values.idArchivoEmpresa,
+      }),
+      ...(values.inicioLabores && { inicioLabores: values.inicioLabores }),
+      ...(values.fechaInicioLabores && {
+        fechaInicioLabores: values.fechaInicioLabores.toISOString(),
+      }),
+      ...(values.conExperiencia && { conExperiencia: values.conExperiencia }),
+      ...(values.aniosExperiencia !== undefined && {
+        aniosExperiencia: values.aniosExperiencia,
       }),
     };
 
@@ -170,6 +226,10 @@ export default function CrearEmpleoForm({ fields, initialValues }: FormProps) {
       fechaInicio: new Date(),
       fechaCierre: undefined,
       salarioRange: [800, 2500],
+      inicioLabores: undefined,
+      fechaInicioLabores: undefined,
+      conExperiencia: false,
+      aniosExperiencia: undefined,
     });
   };
 
@@ -202,24 +262,17 @@ export default function CrearEmpleoForm({ fields, initialValues }: FormProps) {
             name="idCiudad"
             control={control}
             render={({ field }) => (
-              <Select
-                onValueChange={(value) => field.onChange(Number(value))}
-                value={field.value ? String(field.value) : ""}
-              >
-                <SelectTrigger className="bg-gray-50 border-gray-200">
-                  <SelectValue placeholder="Seleccionar Ciudad" />
-                </SelectTrigger>
-                <SelectContent>
-                  {fields?.ciudad?.map((city) => (
-                    <SelectItem
-                      key={city.idCatalogo}
-                      value={String(city.idCatalogo)}
-                    >
-                      {city.nombre}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
+              <SearchAutocomplete<number>
+                options={
+                  fields?.ciudad?.map((c) => ({
+                    id: c.idCatalogo,
+                    label: c.nombre,
+                  })) ?? []
+                }
+                value={field.value || undefined}
+                onChange={(id) => field.onChange(id)}
+                placeholder="Seleccionar Ciudad"
+              />
             )}
           />
           {errors.idCiudad && (
@@ -380,22 +433,42 @@ export default function CrearEmpleoForm({ fields, initialValues }: FormProps) {
 
         {/* Salary */}
         <div className="lg:col-span-2">
-          <label className="block text-sm font-semibold text-gray-700 mb-4">
-            Rango Salarial (Mensual): ${salarioRange?.[0] ?? 0} - $
-            {salarioRange?.[1] ?? 0}
+          <label className="block text-sm font-semibold text-gray-700 mb-2">
+            Rango Salarial Mensual (USD)
           </label>
           <Controller
             name="salarioRange"
             control={control}
             render={({ field }) => (
-              <Slider
-                min={400}
-                max={5000}
-                step={50}
-                value={field.value}
-                onValueChange={field.onChange}
-                className="py-4"
-              />
+              <div className="flex items-center gap-3">
+                <div className="flex-1">
+                  <label className="text-xs text-gray-500 mb-1 block">Mínimo</label>
+                  <Input
+                    type="number"
+                    min={0}
+                    placeholder="Ej: 800"
+                    value={field.value?.[0] ?? ""}
+                    onChange={(e) =>
+                      field.onChange([Number(e.target.value), field.value?.[1] ?? 0])
+                    }
+                    className="bg-gray-50 border-gray-200"
+                  />
+                </div>
+                <span className="mt-5 text-gray-400 font-bold">—</span>
+                <div className="flex-1">
+                  <label className="text-xs text-gray-500 mb-1 block">Máximo</label>
+                  <Input
+                    type="number"
+                    min={0}
+                    placeholder="Ej: 1500"
+                    value={field.value?.[1] ?? ""}
+                    onChange={(e) =>
+                      field.onChange([field.value?.[0] ?? 0, Number(e.target.value)])
+                    }
+                    className="bg-gray-50 border-gray-200"
+                  />
+                </div>
+              </div>
             )}
           />
           {errors.salarioRange && (
@@ -403,10 +476,6 @@ export default function CrearEmpleoForm({ fields, initialValues }: FormProps) {
               {errors.salarioRange.message as string}
             </p>
           )}
-          <div className="flex justify-between text-xs text-gray-400 mt-1">
-            <span>$400</span>
-            <span>$5000+</span>
-          </div>
         </div>
 
         {/* Description */}
@@ -426,14 +495,119 @@ export default function CrearEmpleoForm({ fields, initialValues }: FormProps) {
           )}
         </div>
 
+        {/* Inicio de Labores */}
+        <div>
+          <label className="block text-sm font-semibold text-gray-700 mb-1">
+            Inicio de Labores
+          </label>
+          <Controller
+            name="inicioLabores"
+            control={control}
+            render={({ field }) => (
+              <Select
+                onValueChange={field.onChange}
+                value={field.value ?? ""}
+              >
+                <SelectTrigger className="bg-gray-50 border-gray-200">
+                  <SelectValue placeholder="Seleccionar inicio" />
+                </SelectTrigger>
+                <SelectContent>
+                  {INICIO_LABORES_OPTIONS.map((op) => (
+                    <SelectItem key={op} value={op}>
+                      {op}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            )}
+          />
+        </div>
+
+        {watchedInicioLabores === "Fecha específica" && (
+          <div>
+            <label className="block text-sm font-semibold text-gray-700 mb-1">
+              Fecha de Inicio de Labores
+            </label>
+            <Controller
+              name="fechaInicioLabores"
+              control={control}
+              render={({ field }) => (
+                <DatePicker value={field.value} onChange={field.onChange} />
+              )}
+            />
+            {errors.fechaInicioLabores && (
+              <p className="text-sm text-red-600 mt-1">
+                {errors.fechaInicioLabores.message}
+              </p>
+            )}
+          </div>
+        )}
+
+        {/* Experiencia Requerida */}
+        <div className="lg:col-span-2 flex flex-col sm:flex-row sm:items-center gap-4">
+          <label className="flex items-center gap-2 text-sm font-semibold text-gray-700 cursor-pointer select-none">
+            <Controller
+              name="conExperiencia"
+              control={control}
+              render={({ field }) => (
+                <Checkbox
+                  checked={field.value}
+                  onCheckedChange={(v) => field.onChange(v === true)}
+                />
+              )}
+            />
+            Requiere experiencia previa
+          </label>
+          {watchedConExperiencia && (
+            <div className="flex items-center gap-2">
+              <label className="text-sm text-gray-600 whitespace-nowrap">
+                Años de experiencia:
+              </label>
+              <Controller
+                name="aniosExperiencia"
+                control={control}
+                render={({ field }) => (
+                  <Input
+                    type="number"
+                    min={0}
+                    max={50}
+                    placeholder="Ej: 2"
+                    className="w-24 bg-gray-50 border-gray-200"
+                    value={field.value ?? ""}
+                    onChange={(e) =>
+                      field.onChange(
+                        e.target.value ? Number(e.target.value) : undefined,
+                      )
+                    }
+                  />
+                )}
+              />
+            </div>
+          )}
+        </div>
+
         {/* Requirements */}
         <div className="lg:col-span-2">
-          <label className="block text-sm font-semibold text-gray-700 mb-1">
+          <label className="block text-sm font-semibold text-gray-700 mb-2">
             Requisitos
           </label>
+          <div className="mb-3 grid grid-cols-2 sm:grid-cols-3 gap-2">
+            {REQUISITOS_PREDEFINIDOS.map((req) => (
+              <label
+                key={req}
+                className="flex items-center gap-2 text-sm cursor-pointer select-none"
+              >
+                <Checkbox
+                  checked={selectedRequisitos.includes(req)}
+                  onCheckedChange={() => toggleRequisito(req)}
+                />
+                {req}
+              </label>
+            ))}
+          </div>
           <Textarea
-            placeholder="Describe de forma clara los requisitos del puesto."
-            className="min-h-[200px] bg-gray-50 border-gray-200 focus:bg-white transition-colors"
+            placeholder="Agrega requisitos adicionales del puesto (opcional)."
+            className="min-h-[120px] bg-gray-50 border-gray-200 focus:bg-white transition-colors"
             {...register("requisitos")}
           />
           {errors.requisitos && (

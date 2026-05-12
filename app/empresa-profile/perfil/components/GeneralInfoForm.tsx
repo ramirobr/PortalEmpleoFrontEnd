@@ -35,6 +35,8 @@ const generalInfoSchema = z.object({
   idCantidadEmpleados: z.number().min(1, "Selecciona la cantidad de empleados"),
   sitioWeb: z.string().optional(),
   idEstadoEmpresa: z.number().min(1, "Selecciona un estado"),
+  tiempoOperacion: z.number().min(0).optional(),
+  certificaciones: z.string().optional(),
 });
 
 type GeneralInfoFormData = z.infer<typeof generalInfoSchema>;
@@ -65,6 +67,8 @@ export function GeneralInfoForm({
       idCantidadEmpleados: companyData.cantidadEmpleados?.id || 0,
       sitioWeb: companyData.sitioWeb || "",
       idEstadoEmpresa: companyData.estado?.id || 0,
+      tiempoOperacion: companyData.tiempoOperacion ?? undefined,
+      certificaciones: companyData.certificaciones || "",
     },
   });
 
@@ -98,6 +102,8 @@ export function GeneralInfoForm({
           razonSocial: data.razonSocial,
           numeroDocumento: data.numeroDocumento,
           sitioWeb: data.sitioWeb,
+          tiempoOperacion: data.tiempoOperacion,
+          certificaciones: data.certificaciones,
           estado: selectedEstado
             ? { id: selectedEstado.idCatalogo, nombre: selectedEstado.nombre }
             : companyData.estado,
@@ -276,6 +282,26 @@ export function GeneralInfoForm({
               id="sitioWeb"
               {...form.register("sitioWeb")}
               placeholder="https://"
+            />
+          </div>
+
+          <div className="space-y-2">
+            <Label htmlFor="tiempoOperacion">Años de operación</Label>
+            <Input
+              id="tiempoOperacion"
+              type="number"
+              min={0}
+              {...form.register("tiempoOperacion", { valueAsNumber: true })}
+              placeholder="Opcional"
+            />
+          </div>
+
+          <div className="space-y-2">
+            <Label htmlFor="certificaciones">Certificaciones</Label>
+            <Input
+              id="certificaciones"
+              {...form.register("certificaciones")}
+              placeholder="Opcional"
             />
           </div>
 

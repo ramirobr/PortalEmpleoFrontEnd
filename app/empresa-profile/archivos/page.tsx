@@ -218,7 +218,11 @@ export default function ArchivosEmpresaPage() {
     <div className="container mx-auto px-6 mb-8 space-y-6">
       <div className="mb-2 mt-6">
         <h1 className="text-3xl font-bold text-gray-900">Mis Archivos</h1>
-        <p className="text-gray-500">Organiza y gestiona los documentos de tu empresa.</p>
+        <p className="text-gray-500 mt-1">
+          Aquí la empresa puede subir documentos que validen sus certificaciones,
+          cumplimiento de estándares ISO, convenios y acuerdos. Los candidatos
+          podrán revisar estos documentos durante el proceso de selección.
+        </p>
       </div>
 
       {/* Carpetas */}

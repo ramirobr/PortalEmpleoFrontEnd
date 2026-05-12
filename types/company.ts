@@ -216,6 +216,8 @@ export interface CompanyProfileData {
   sitioWeb?: string;
   logoUrl?: string;
   descripcion?: string;
+  tiempoOperacion?: number;
+  certificaciones?: string;
   usuarioAdministrador?: UsuarioAdministrador;
 }
 

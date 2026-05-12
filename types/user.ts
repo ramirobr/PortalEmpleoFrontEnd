@@ -16,6 +16,7 @@ export type SignupData = {
   aceptaCondicionesUso: boolean;
   aceptaPoliticaPrivacidad: boolean;
   aceptaNotificaciones: boolean;
+  idTipoJornadaLaboral?: number;
 };
 
 export type GenericResponse<T> = {
@@ -154,6 +155,9 @@ export interface DatosPersonales {
   licencia: boolean;
   tipoLicencia: Array<string>;
   idEstadoCivil: number;
+  idTipoJornadaLaboral?: number;
+  telefonoReferencia1?: string;
+  telefonoReferencia2?: string;
 }
 
 export interface DatosContacto {
@@ -273,6 +277,7 @@ export type HabilidadesResponse = GenericResponse<HabilidadData>;
 export const SIGN_UP_FIELDS = [
   "TIPO_DOCUMENTO",
   "GENERO",
+  "TIPO_EMPLEO",
 ] as const satisfies readonly CatalogTypes[];
 
 export type SignUpFieldsResponse = CatalogFieldsFromTypes<

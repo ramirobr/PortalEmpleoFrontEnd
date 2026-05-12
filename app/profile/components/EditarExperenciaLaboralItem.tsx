@@ -18,6 +18,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { Textarea } from "@/components/ui/textarea";
 import {
   DatosPersonalesFieldsResponse,
   ExperienciaLaboral,
@@ -313,14 +314,13 @@ const EditarExperenciaLaboralItem: React.FC<
           name="descripcion"
           render={({ field }) => (
             <FormItem>
-              <FormLabel htmlFor="editar-descripcion">Descripcion</FormLabel>
+              <FormLabel htmlFor="editar-descripcion">Descripción</FormLabel>
               <FormControl>
-                <Input
+                <Textarea
                   {...field}
                   id="editar-descripcion"
-                  required
-                  type="text"
                   value={field.value as string}
+                  className="min-h-[80px] w-full resize-y"
                 />
               </FormControl>
               <FormMessage />

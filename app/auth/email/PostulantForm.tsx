@@ -62,6 +62,7 @@ const signupSchema = z
       .boolean()
       .refine((v) => v === true, "Debes aceptar la política"),
     aceptaNotificaciones: z.boolean(),
+    idTipoJornadaLaboral: z.number().optional(),
   })
   .refine((data) => data.password === data.confirmPassword, {
     message: "Las contraseñas no coinciden",
@@ -89,7 +90,9 @@ type CompanyFormProps = {
 
 export default function EmailSignup({ fields, loadingFields = false }: CompanyFormProps) {
   const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const timeoutRef = useRef<NodeJS.Timeout | null>(null);
+  const confirmTimeoutRef = useRef<NodeJS.Timeout | null>(null);
   const router = useRouter();
   const { update } = useSession();
   const form = useForm<FormValues>({
@@ -109,6 +112,7 @@ export default function EmailSignup({ fields, loadingFields = false }: CompanyFo
       aceptaCondicionesUso: false,
       aceptaPoliticaPrivacidad: false,
       aceptaNotificaciones: false,
+      idTipoJornadaLaboral: undefined,
     },
   });
 
@@ -120,10 +124,19 @@ export default function EmailSignup({ fields, loadingFields = false }: CompanyFo
     timeoutRef.current = setTimeout(() => setShowPassword(false), 2000);
   };
 
+  const handleConfirmMouseDown = () => setShowConfirmPassword(true);
+  const handleConfirmMouseUp = () => setShowConfirmPassword(false);
+  const handleConfirmClick = () => {
+    setShowConfirmPassword(true);
+    if (confirmTimeoutRef.current) clearTimeout(confirmTimeoutRef.current);
+    confirmTimeoutRef.current = setTimeout(() => setShowConfirmPassword(false), 2000);
+  };
+
   async function onSubmit(formData: FormValues) {
-    const { fechaNacimiento, confirmPassword: _, ...data } = formData;
+    const { fechaNacimiento, confirmPassword: _, idTipoJornadaLaboral, ...data } = formData;
     const signUpData = {
       fechaNacimiento: fechaNacimiento.toISOString(),
+      ...(idTipoJornadaLaboral ? { idTipoJornadaLaboral } : {}),
       ...data,
     };
     const registerRes = await SignUp(signUpData);
@@ -136,14 +149,16 @@ export default function EmailSignup({ fields, loadingFields = false }: CompanyFo
       }
       form.reset();
       await update();
-      router.push("/");
+      router.push("/profile");
+      return;
     }
+
     if (!registerRes) {
       toast.error("Error durante registro");
       return;
     }
 
-    const hasError = Object.keys(registerRes?.messages ?? []).length;
+    const hasError = Object.keys(registerRes.messages ?? []).length;
     if (hasError) {
       toast.error(registerRes.messages[0]);
       console.warn("Errores:", registerRes.messages);
@@ -368,11 +383,25 @@ export default function EmailSignup({ fields, loadingFields = false }: CompanyFo
                     <FormItem className="col-span-1 lg:col-span-2 w-full lg:w-1/2">
                       <FormLabel>Repetir contraseña *</FormLabel>
                       <FormControl>
-                        <Input
-                          type="password"
-                          placeholder="Repite tu contraseña"
-                          {...field}
-                        />
+                        <div className="relative">
+                          <Input
+                            type={showConfirmPassword ? "text" : "password"}
+                            placeholder="Repite tu contraseña"
+                            className="pr-10"
+                            {...field}
+                          />
+                          <button
+                            type="button"
+                            aria-label={showConfirmPassword ? "Ocultar contraseña" : "Mostrar contraseña"}
+                            className="absolute right-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400 cursor-pointer"
+                            onMouseDown={handleConfirmMouseDown}
+                            onMouseUp={handleConfirmMouseUp}
+                            onMouseLeave={handleConfirmMouseUp}
+                            onClick={handleConfirmClick}
+                          >
+                            <Eye aria-hidden="true" />
+                          </button>
+                        </div>
                       </FormControl>
                       <FormMessage />
                     </FormItem>
@@ -412,6 +441,41 @@ export default function EmailSignup({ fields, loadingFields = false }: CompanyFo
                   )}
                 />
               </div>
+
+              <FormField
+                control={form.control}
+                name="idTipoJornadaLaboral"
+                render={({ field }) => (
+                  <FormItem className="w-full col-span-1 lg:col-span-2">
+                    <FormLabel htmlFor="jornada-laboral">Tipo de jornada laboral</FormLabel>
+                    <FormControl>
+                      <Select
+                        onValueChange={(value) =>
+                          field.onChange(value ? Number(value) : undefined)
+                        }
+                        value={field.value ? String(field.value) : ""}
+                        disabled={loadingFields}
+                      >
+                        <SelectTrigger id="jornada-laboral">
+                          <SelectValue placeholder={loadingFields ? "Cargando..." : "Selecciona una jornada"} />
+                        </SelectTrigger>
+                        <SelectContent>
+                          {fields?.tipo_empleo?.map((jornada) => (
+                            <SelectItem
+                              key={jornada.idCatalogo}
+                              value={jornada.idCatalogo.toString()}
+                            >
+                              {jornada.nombre}
+                            </SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+
               <FormField
                 control={form.control}
                 name="email"

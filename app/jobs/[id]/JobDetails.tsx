@@ -13,12 +13,14 @@ import {
   Building,
   Building2,
   Calendar,
+  ExternalLink,
   GraduationCap,
   Mail,
   MapPin,
 } from "lucide-react";
 import { useSession } from "next-auth/react";
 import Image from "next/image";
+import Link from "next/link";
 import { useEffect, useRef } from "react";
 import JobApplyForm from "../components/JobApplyForm";
 
@@ -97,7 +99,7 @@ export default function JobDetails(job: Job) {
                       </p>
                       <p className="text-primary font-medium flex items-center gap-2">
                         <MapPin />
-                        {job.nombreEmpresa}
+                        {job.ciudad}{job.provincia ? `, ${job.provincia}` : ""}
                       </p>
                     </div>
                     <p className="text-primary font-medium flex items-center gap-2">
@@ -185,6 +187,63 @@ export default function JobDetails(job: Job) {
                     </a>
                   </div>
                 </div>
+                {job.inicioLabores && (
+                  <div className="font-bold flex items-center gap-4">
+                    <IconBadge size={32} icon={Briefcase} />
+                    <div>
+                      <p className="text-primary uppercase tracking-wide">
+                        Inicio de labores
+                      </p>
+                      <p className="font-medium text-gray-800">{job.inicioLabores}</p>
+                    </div>
+                  </div>
+                )}
+                {job.aniosExperiencia != null && (
+                  <div className="font-bold flex items-center gap-4">
+                    <IconBadge size={32} icon={Briefcase} />
+                    <div>
+                      <p className="text-primary uppercase tracking-wide">
+                        Años de experiencia
+                      </p>
+                      <p className="font-medium text-gray-800">{job.aniosExperiencia} año{job.aniosExperiencia !== 1 ? "s" : ""}</p>
+                    </div>
+                  </div>
+                )}
+              </Card>
+
+              {/* Sobre la empresa */}
+              <Card className="mt-6">
+                <TituloSubrayado>Sobre la empresa</TituloSubrayado>
+                <div className="flex items-center gap-4 mb-4">
+                  <div className="w-14 h-14 relative shrink-0">
+                    <Image
+                      src={logoSrc}
+                      alt={`Logo de ${job.nombreEmpresa}`}
+                      fill
+                      className="rounded-lg object-cover"
+                      unoptimized
+                    />
+                  </div>
+                  <div>
+                    <p className="font-bold text-gray-900">{job.nombreEmpresa}</p>
+                    {job.correoContacto && (
+                      <a
+                        href={`mailto:${job.correoContacto}`}
+                        className="text-sm text-primary flex items-center gap-1 mt-1"
+                      >
+                        <Mail className="w-3 h-3" />
+                        {job.correoContacto}
+                      </a>
+                    )}
+                  </div>
+                </div>
+                <Link
+                  href={`/empleos-busqueda?empresa=${encodeURIComponent(job.nombreEmpresa)}`}
+                  className="text-sm text-primary font-medium flex items-center gap-1 hover:underline"
+                >
+                  <ExternalLink className="w-4 h-4" />
+                  Ver más empleos de esta empresa
+                </Link>
               </Card>
             </div>
 
