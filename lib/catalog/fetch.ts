@@ -26,6 +26,7 @@ const catalogTypes = [
   "DISPONIBILIDAD",
   "GENERO",
   "ESTADO_CIVIL",
+  "ESTADO_BLOG",
 ] as const;
 
 export type CatalogTypes = typeof catalogTypes[number];

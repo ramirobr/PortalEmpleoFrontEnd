@@ -19,9 +19,11 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { SearchAutocomplete } from "@/components/ui/search-autocomplete";
 import { SignIn } from "@/lib/auth/signin";
 import { SignUp } from "@/lib/auth/signup";
 import { validarCedulaEcuatoriana } from "@/lib/utils";
+import { CatalogsByType } from "@/types/search";
 import { SignUpFieldsResponse } from "@/types/user";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Eye, UserRoundPlus, Mail, ArrowRight } from "lucide-react";
@@ -63,6 +65,8 @@ const signupSchema = z
       .refine((v) => v === true, "Debes aceptar la política"),
     aceptaNotificaciones: z.boolean(),
     idTipoJornadaLaboral: z.number().optional(),
+    idProvincia: z.number().optional(),
+    idCiudad: z.number().optional(),
   })
   .refine((data) => data.password === data.confirmPassword, {
     message: "Las contraseñas no coinciden",
@@ -86,9 +90,11 @@ type FormValues = z.infer<typeof signupSchema>;
 type CompanyFormProps = {
   fields: SignUpFieldsResponse | null;
   loadingFields?: boolean;
+  ciudades?: CatalogsByType[];
+  provincias?: CatalogsByType[];
 };
 
-export default function EmailSignup({ fields, loadingFields = false }: CompanyFormProps) {
+export default function EmailSignup({ fields, loadingFields = false, ciudades = [], provincias = [] }: CompanyFormProps) {
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const timeoutRef = useRef<NodeJS.Timeout | null>(null);
@@ -113,6 +119,8 @@ export default function EmailSignup({ fields, loadingFields = false }: CompanyFo
       aceptaPoliticaPrivacidad: false,
       aceptaNotificaciones: false,
       idTipoJornadaLaboral: undefined,
+      idProvincia: undefined,
+      idCiudad: undefined,
     },
   });
 
@@ -133,10 +141,12 @@ export default function EmailSignup({ fields, loadingFields = false }: CompanyFo
   };
 
   async function onSubmit(formData: FormValues) {
-    const { fechaNacimiento, confirmPassword: _, idTipoJornadaLaboral, ...data } = formData;
+    const { fechaNacimiento, confirmPassword: _, idTipoJornadaLaboral, idProvincia, idCiudad, ...data } = formData;
     const signUpData = {
       fechaNacimiento: fechaNacimiento.toISOString(),
       ...(idTipoJornadaLaboral ? { idTipoJornadaLaboral } : {}),
+      ...(idProvincia ? { idProvincia } : {}),
+      ...(idCiudad ? { idCiudad } : {}),
       ...data,
     };
     const registerRes = await SignUp(signUpData);
@@ -475,6 +485,48 @@ export default function EmailSignup({ fields, loadingFields = false }: CompanyFo
                   </FormItem>
                 )}
               />
+
+              <div className="col-span-1 lg:col-span-2 flex flex-col lg:flex-row gap-4">
+                <FormField
+                  control={form.control}
+                  name="idProvincia"
+                  render={({ field }) => (
+                    <FormItem className="w-full lg:w-1/2">
+                      <FormLabel>Provincia</FormLabel>
+                      <FormControl>
+                        <SearchAutocomplete<number>
+                          options={provincias.map((p) => ({ id: p.idCatalogo, label: p.nombre }))}
+                          value={field.value}
+                          onChange={(val) => {
+                            field.onChange(val);
+                            form.setValue("idCiudad", undefined);
+                          }}
+                          placeholder={loadingFields ? "Cargando..." : "Selecciona provincia"}
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                <FormField
+                  control={form.control}
+                  name="idCiudad"
+                  render={({ field }) => (
+                    <FormItem className="w-full lg:w-1/2">
+                      <FormLabel>Ciudad</FormLabel>
+                      <FormControl>
+                        <SearchAutocomplete<number>
+                          options={ciudades.map((c) => ({ id: c.idCatalogo, label: c.nombre }))}
+                          value={field.value}
+                          onChange={field.onChange}
+                          placeholder={loadingFields ? "Cargando..." : "Selecciona ciudad"}
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+              </div>
 
               <FormField
                 control={form.control}

@@ -2,6 +2,7 @@ import { GenericResponse } from "@/types/user"
 
 export type Job = {
   idVacante: string
+  idEmpresa?: string
   nombreEmpresa: string
   logoEmpresa: string
   titulo: string

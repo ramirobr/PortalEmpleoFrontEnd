@@ -31,6 +31,7 @@ import {
 } from "@/components/ui/select";
 import { CarpetaUsuario, TipoArchivo } from "@/types/admin";
 import { Upload } from "lucide-react";
+import { toast } from "sonner";
 
 const schema = z.object({
   nombreArchivo: z.string().min(1, "El nombre es requerido").max(300),
@@ -44,6 +45,17 @@ const schema = z.object({
 type FormValues = z.infer<typeof schema>;
 
 const NO_FOLDER = "__root__";
+
+function requiresPdf(tipo: TipoArchivo | undefined): boolean {
+  if (!tipo) return false;
+  return (
+    tipo.descripcion?.includes("PDF") ||
+    tipo.descripcion?.includes("pdf") ||
+    tipo.nombre?.toLowerCase().includes("certificado") ||
+    tipo.nombre?.toLowerCase().includes("antecedentes") ||
+    tipo.nombre?.toLowerCase().includes("diploma")
+  ) ?? false;
+}
 
 interface ArchivoUploadDialogProps {
   open: boolean;
@@ -85,7 +97,10 @@ export default function ArchivoUploadDialog({
     },
   });
 
+  const watchedIdTipoArchivo = form.watch("idTipoArchivo");
   const selectedFileName = form.watch("nombreArchivo");
+  const selectedTipo = tiposArchivo.find((t) => t.idTipoArchivo === watchedIdTipoArchivo);
+  const isPdfOnly = requiresPdf(selectedTipo);
 
   useEffect(() => {
     if (open) {
@@ -103,6 +118,13 @@ export default function ArchivoUploadDialog({
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (!file) return;
+
+    if (isPdfOnly && file.type !== "application/pdf") {
+      toast.error("Este tipo de documento solo acepta archivos PDF.");
+      e.target.value = "";
+      return;
+    }
+
     const ext = file.name.includes(".")
       ? "." + file.name.split(".").pop()!.toLowerCase()
       : "";
@@ -146,6 +168,40 @@ export default function ArchivoUploadDialog({
             <div className="space-y-5 py-2">
               <FormField
                 control={form.control}
+                name="idTipoArchivo"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Tipo de Archivo</FormLabel>
+                    <Select
+                      value={field.value ? String(field.value) : ""}
+                      onValueChange={(val) => {
+                        field.onChange(Number(val));
+                        form.setValue("archivoBase64", "");
+                        form.setValue("nombreArchivo", "");
+                        form.setValue("extension", "");
+                        form.setValue("contentType", "");
+                        if (fileInputRef.current) fileInputRef.current.value = "";
+                      }}
+                    >
+                      <FormControl>
+                        <SelectTrigger>
+                          <SelectValue placeholder="Selecciona el tipo..." />
+                        </SelectTrigger>
+                      </FormControl>
+                      <SelectContent>
+                        {tiposArchivo.map((t) => (
+                          <SelectItem key={t.idTipoArchivo} value={String(t.idTipoArchivo)}>
+                            {t.nombre}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
                 name="archivoBase64"
                 render={() => (
                   <FormItem>
@@ -162,7 +218,12 @@ export default function ArchivoUploadDialog({
                           </p>
                         ) : (
                           <p className="text-sm text-gray-500">
-                            Haz clic para seleccionar un archivo
+                            Haz clic para seleccionar{isPdfOnly ? " un archivo PDF" : " un archivo"}
+                          </p>
+                        )}
+                        {isPdfOnly && (
+                          <p className="text-xs text-amber-600 mt-1">
+                            Solo se aceptan archivos en formato PDF
                           </p>
                         )}
                         <input
@@ -170,6 +231,7 @@ export default function ArchivoUploadDialog({
                           type="file"
                           aria-label="Seleccionar archivo"
                           className="hidden"
+                          accept={isPdfOnly ? ".pdf,application/pdf" : undefined}
                           onChange={handleFileChange}
                         />
                       </div>
@@ -187,33 +249,6 @@ export default function ArchivoUploadDialog({
                     <FormControl>
                       <Input placeholder="Nombre del archivo..." {...field} />
                     </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              <FormField
-                control={form.control}
-                name="idTipoArchivo"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Tipo de Archivo</FormLabel>
-                    <Select
-                      value={field.value ? String(field.value) : ""}
-                      onValueChange={(val) => field.onChange(Number(val))}
-                    >
-                      <FormControl>
-                        <SelectTrigger>
-                          <SelectValue placeholder="Selecciona el tipo..." />
-                        </SelectTrigger>
-                      </FormControl>
-                      <SelectContent>
-                        {tiposArchivo.map((t) => (
-                          <SelectItem key={t.idTipoArchivo} value={String(t.idTipoArchivo)}>
-                            {t.nombre}
-                          </SelectItem>
-                        ))}
-                      </SelectContent>
-                    </Select>
                     <FormMessage />
                   </FormItem>
                 )}

@@ -1,0 +1,62 @@
+{
+  "colors": {
+    "background": "#f6fafe",
+    "foreground": "#171c1f",
+    "card": "#ffffff",
+    "card-foreground": "#171c1f",
+    "primary": {
+      "DEFAULT": "#006a62",
+      "container": "#26a69a",
+      "light": "#2abba7",
+      "deep": "#004d40"
+    },
+    "secondary": {
+      "DEFAULT": "#b02e00",
+      "container": "#fe5825",
+      "deep": "#9c2a0c",
+      "surface": "rgba(176, 46, 0, 0.4)",
+      "foreground": "#ffffff"
+    },
+    "surface": {
+      "dark": "#004d40",
+      "highlight": "#fbfdff",
+      "container-low": "#f1f5f9",
+      "container-lowest": "#ffffff"
+    },
+    "functional": {
+      "warning": "#f2994a",
+      "label-star": "#f8c51c"
+    },
+    "brand": {
+      "linkedin": {
+        "DEFAULT": "#2867b2",
+        "dark": "#205081"
+      }
+    },
+    "gray-light": "rgba(23, 28, 31, 0.2)",
+    "gray-dark": "#707f8c",
+    "popover": {
+      "DEFAULT": "#ffffff",
+      "foreground": "#171c1f"
+    },
+    "border": "rgba(23, 28, 31, 0.2)",
+    "input": "rgba(23, 28, 31, 0.2)",
+    "ring": "#006a62"
+  },
+  "fonts": {
+    "display": "var(--font-manrope)",
+    "body": "var(--font-plus-jakarta-sans)",
+    "label": "var(--font-plus-jakarta-sans)",
+    "primary": "var(--font-plus-jakarta-sans), sans-serif"
+  },
+  "radii": {
+    "DEFAULT": "0.75rem",
+    "sm": "calc(var(--radius) - 4px)",
+    "md": "calc(var(--radius) - 2px)",
+    "lg": "var(--radius)",
+    "xl": "calc(var(--radius) + 4px)"
+  },
+  "shadows": {
+    "soft": "0px 10px 30px rgba(23, 28, 31, 0.06)"
+  }
+}

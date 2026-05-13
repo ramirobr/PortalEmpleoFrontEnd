@@ -4,9 +4,11 @@ import TituloSubrayado from "@/components/shared/tituloSubrayado";
 import { Card } from "@/components/ui/card";
 import { useAuthStore } from "@/context/authStore";
 import { addVisitaVacante } from "@/lib/jobs/job";
+import { fetchApi } from "@/lib/apiClient";
 import { timeAgo } from "@/lib/utils";
 import { ROLES } from "@/types/auth";
 import { Job } from "@/types/jobs";
+import { GenericResponse } from "@/types/user";
 import {
   Banknote,
   Briefcase,
@@ -14,6 +16,7 @@ import {
   Building2,
   Calendar,
   ExternalLink,
+  FileText,
   GraduationCap,
   Mail,
   MapPin,
@@ -21,13 +24,22 @@ import {
 import { useSession } from "next-auth/react";
 import Image from "next/image";
 import Link from "next/link";
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import JobApplyForm from "../components/JobApplyForm";
+
+type ArchivoPublico = {
+  idArchivoEmpresa: string;
+  nombreArchivo: string;
+  extension?: string;
+  contentType?: string;
+  tipoArchivo: string;
+};
 
 export default function JobDetails(job: Job) {
   const id = useAuthStore((s) => s.id);
   const { data: session } = useSession();
   const viewedRef = useRef(false);
+  const [archivos, setArchivos] = useState<ArchivoPublico[]>([]);
 
   useEffect(() => {
     if (
@@ -40,6 +52,15 @@ export default function JobDetails(job: Job) {
     viewedRef.current = true;
     addVisitaVacante(job.idVacante, id, session.user.accessToken);
   }, [id, job.idVacante, session]);
+
+  useEffect(() => {
+    if (!job.idEmpresa) return;
+    fetchApi<GenericResponse<ArchivoPublico[]>>(
+      `/Archivos/public-archivos-empresa/${job.idEmpresa}`
+    ).then((res) => {
+      if (res?.data) setArchivos(res.data);
+    });
+  }, [job.idEmpresa]);
 
   // Construir la URL del logo desde base64
   const logoSrc = job.logoEmpresa
@@ -244,6 +265,22 @@ export default function JobDetails(job: Job) {
                   <ExternalLink className="w-4 h-4" />
                   Ver más empleos de esta empresa
                 </Link>
+                {archivos.length > 0 && (
+                  <div className="mt-4">
+                    <p className="text-sm font-semibold text-gray-700 mb-2">Documentos de la empresa</p>
+                    <ul className="space-y-1">
+                      {archivos.map((a) => (
+                        <li key={a.idArchivoEmpresa} className="flex items-center gap-2 text-sm text-gray-600">
+                          <FileText className="w-4 h-4 text-primary shrink-0" />
+                          <span>{a.nombreArchivo}</span>
+                          {a.tipoArchivo && (
+                            <span className="text-xs text-gray-400">({a.tipoArchivo})</span>
+                          )}
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                )}
               </Card>
             </div>
 

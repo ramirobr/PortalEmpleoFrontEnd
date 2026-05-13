@@ -19,6 +19,7 @@ import {
 } from "lucide-react";
 import { useSession } from "next-auth/react";
 import { useState } from "react";
+import MapPicker from "@/components/ui/map-picker";
 import { AdminInfoForm } from "./AdminInfoForm";
 import { ContactInfoForm } from "./ContactInfoForm";
 import { GeneralInfoForm } from "./GeneralInfoForm";
@@ -181,6 +182,13 @@ export default function CompanyProfileView({
                 {companyData.correoContacto || "No especificado"}
               </span>
             </div>
+            {companyData.latitud != null && companyData.longitud != null && (
+              <MapPicker
+                value={{ lat: companyData.latitud, lng: companyData.longitud }}
+                onChange={() => {}}
+                className="w-full h-48 rounded-lg overflow-hidden border mt-1 pointer-events-none"
+              />
+            )}
           </CardContent>
         </Card>
 

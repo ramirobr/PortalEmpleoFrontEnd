@@ -73,6 +73,8 @@ export type CompanySignUpData = {
   aceptaTerminoCondiciones: boolean;
   quieroRecibirNewsLetter: boolean;
   quieroParticiparEncuestas: boolean;
+  latitud?: number;
+  longitud?: number;
 };
 
 // Tipos para ofertas de empleo de la empresa
@@ -218,6 +220,8 @@ export interface CompanyProfileData {
   descripcion?: string;
   tiempoOperacion?: number;
   certificaciones?: string;
+  latitud?: number;
+  longitud?: number;
   usuarioAdministrador?: UsuarioAdministrador;
 }
 

@@ -17,6 +17,8 @@ export type SignupData = {
   aceptaPoliticaPrivacidad: boolean;
   aceptaNotificaciones: boolean;
   idTipoJornadaLaboral?: number;
+  idCiudad?: number;
+  idProvincia?: number;
 };
 
 export type GenericResponse<T> = {

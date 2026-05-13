@@ -19,6 +19,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { SearchAutocomplete } from "@/components/ui/search-autocomplete";
+import MapPicker from "@/components/ui/map-picker";
 import { SignIn } from "@/lib/auth/signin";
 import { CompanySignUp } from "@/lib/auth/signup";
 import { addSpaces } from "@/lib/utils";
@@ -82,6 +83,8 @@ const schema = z
       .refine((v) => v === true, "Debes aceptar los términos"),
     quieroRecibirNewsLetter: z.boolean(),
     quieroParticiparEncuestas: z.boolean(),
+    latitud: z.number().optional(),
+    longitud: z.number().optional(),
   })
   .refine((data) => data.password === data.repeatPassword, {
     path: ["repeatPassword"],
@@ -137,6 +140,8 @@ export default function CompanyForm({ fields }: CompanyFormProps) {
       aceptaTerminoCondiciones: true,
       quieroRecibirNewsLetter: true,
       quieroParticiparEncuestas: true,
+      latitud: undefined,
+      longitud: undefined,
     },
     mode: "onBlur",
   });
@@ -341,6 +346,31 @@ export default function CompanyForm({ fields }: CompanyFormProps) {
                   </FormItem>
                 )}
               />
+
+              <FormItem>
+                <FormLabel>
+                  Ubicación en el mapa{" "}
+                  <span className="text-gray-400 font-normal">(opcional)</span>
+                </FormLabel>
+                <FormControl>
+                  <MapPicker
+                    value={
+                      form.watch("latitud") != null && form.watch("longitud") != null
+                        ? { lat: form.watch("latitud")!, lng: form.watch("longitud")! }
+                        : null
+                    }
+                    onChange={(coords) => {
+                      form.setValue("latitud", coords.lat);
+                      form.setValue("longitud", coords.lng);
+                    }}
+                  />
+                </FormControl>
+                {(form.watch("latitud") != null) && (
+                  <p className="text-xs text-gray-500 mt-1">
+                    Lat: {form.watch("latitud")?.toFixed(6)}, Lng: {form.watch("longitud")?.toFixed(6)}
+                  </p>
+                )}
+              </FormItem>
 
               <FormField
                 control={form.control}
