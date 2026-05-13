@@ -347,7 +347,7 @@ export default function CompanyForm({ fields }: CompanyFormProps) {
                 )}
               />
 
-              <FormItem>
+              <FormItem className="lg:col-span-2">
                 <FormLabel>
                   Ubicación en el mapa{" "}
                   <span className="text-gray-400 font-normal">(opcional)</span>
