@@ -96,7 +96,10 @@ export default function CrearEmpleoForm({ fields, initialValues }: FormProps) {
   const [selectedBannerBase64, setSelectedBannerBase64] = useState<string | null>(
     null
   );
-  const [selectedRequisitos, setSelectedRequisitos] = useState<string[]>([]);
+  const [selectedRequisitos, setSelectedRequisitos] = useState<string[]>(() => {
+    if (!initialValues?.requisitos) return [];
+    return initialValues.requisitos.split("\n").filter((r) => REQUISITOS_PREDEFINIDOS.includes(r));
+  });
 
   const toggleRequisito = (req: string) => {
     setSelectedRequisitos((prev) =>
@@ -125,10 +128,12 @@ export default function CrearEmpleoForm({ fields, initialValues }: FormProps) {
         initialValues?.salarioMaximo ?? 2500,
       ] as [number, number],
       idArchivoEmpresa: initialValues?.idArchivoEmpresa || "",
-      inicioLabores: undefined,
+      inicioLabores: (INICIO_LABORES_OPTIONS as readonly string[]).includes(initialValues?.inicioLabores ?? "")
+        ? (initialValues!.inicioLabores as typeof INICIO_LABORES_OPTIONS[number])
+        : undefined,
       fechaInicioLabores: undefined,
-      conExperiencia: false,
-      aniosExperiencia: undefined,
+      conExperiencia: initialValues?.aniosExperiencia != null,
+      aniosExperiencia: initialValues?.aniosExperiencia ?? undefined,
     },
   });
 
@@ -215,6 +220,7 @@ export default function CrearEmpleoForm({ fields, initialValues }: FormProps) {
       router.push("/empresa-profile/empleos");
       return;
     }
+    setSelectedRequisitos([]);
     reset({
       tituloPuesto: "",
       descripcion: "",

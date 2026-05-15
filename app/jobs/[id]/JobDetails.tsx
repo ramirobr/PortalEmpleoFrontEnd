@@ -15,6 +15,8 @@ import {
   Building,
   Building2,
   Calendar,
+  CheckCircle2,
+  Clock,
   ExternalLink,
   FileText,
   GraduationCap,
@@ -136,7 +138,46 @@ export default function JobDetails(job: Job) {
               </Card>
               <Card>
                 <TituloSubrayado>Requisitos</TituloSubrayado>
-                <div>{job.requisitos}</div>
+                {job.requisitos ? (
+                  (() => {
+                    const lineas = job.requisitos.split("\n").map((l) => l.trim()).filter(Boolean);
+                    const predefinidos = [
+                      "Buena presencia", "Comunicativo/a", "Proactividad",
+                      "Responsabilidad", "Trabajo en equipo", "Puntualidad",
+                    ];
+                    const badges = lineas.filter((l) => predefinidos.includes(l));
+                    const extras = lineas.filter((l) => !predefinidos.includes(l));
+                    return (
+                      <div className="space-y-3">
+                        {badges.length > 0 && (
+                          <div className="flex flex-wrap gap-2">
+                            {badges.map((b) => (
+                              <span
+                                key={b}
+                                className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-primary/10 text-primary text-sm font-medium"
+                              >
+                                <CheckCircle2 className="w-3.5 h-3.5" />
+                                {b}
+                              </span>
+                            ))}
+                          </div>
+                        )}
+                        {extras.length > 0 && (
+                          <ul className="space-y-1">
+                            {extras.map((e, i) => (
+                              <li key={i} className="flex items-start gap-2 text-sm text-gray-700">
+                                <span className="mt-1.5 w-1.5 h-1.5 rounded-full bg-primary shrink-0" />
+                                {e}
+                              </li>
+                            ))}
+                          </ul>
+                        )}
+                      </div>
+                    );
+                  })()
+                ) : (
+                  <p className="text-sm text-gray-500">Sin requisitos especificados.</p>
+                )}
               </Card>
             </div>
             <div>
@@ -210,12 +251,16 @@ export default function JobDetails(job: Job) {
                 </div>
                 {job.inicioLabores && (
                   <div className="font-bold flex items-center gap-4">
-                    <IconBadge size={32} icon={Briefcase} />
+                    <IconBadge size={32} icon={Clock} />
                     <div>
                       <p className="text-primary uppercase tracking-wide">
                         Inicio de labores
                       </p>
-                      <p className="font-medium text-gray-800">{job.inicioLabores}</p>
+                      <p className="font-medium text-gray-800">
+                        {job.inicioLabores === "Fecha específica" && job.fechaInicioLabores
+                          ? `${job.inicioLabores}: ${job.fechaInicioLabores}`
+                          : job.inicioLabores}
+                      </p>
                     </div>
                   </div>
                 )}

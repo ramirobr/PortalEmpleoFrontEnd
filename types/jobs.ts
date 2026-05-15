@@ -29,6 +29,7 @@ export type Job = {
   idArchivoEmpresa?: string
   bannerEmpresa?: string
   inicioLabores?: string
+  fechaInicioLabores?: string
   aniosExperiencia?: number
 }
 
