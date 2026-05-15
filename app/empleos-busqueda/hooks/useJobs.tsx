@@ -27,6 +27,7 @@ export function useJobs(token?: string, initialFilters?: Record<string, string>)
   const modalidad = getNumericParam(searchParams.get("modalidad") ?? initialFilters?.modalidad ?? null);
   const empresa = searchParams.get("empresa") || initialFilters?.empresa || undefined;
   const experience = getNumericParam(searchParams.get("experience") ?? initialFilters?.experience ?? null);
+  const jornadaLaboral = getNumericParam(searchParams.get("jornada") ?? initialFilters?.jornada ?? null);
   const role = searchParams.get("role") ?? initialFilters?.role ?? undefined;
 
   useEffect(() => {
@@ -46,6 +47,7 @@ export function useJobs(token?: string, initialFilters?: Record<string, string>)
         idCiudad: ciudad,
         idExperiencia: experience,
         idModalidadTrabajo: modalidad,
+        idTipoJornadaLaboral: jornadaLaboral,
         idFiltroFechas: fechas,
       };
 
@@ -80,6 +82,7 @@ export function useJobs(token?: string, initialFilters?: Record<string, string>)
     modalidad,
     empresa,
     experience,
+    jornadaLaboral,
     token,
     role,
   ]);

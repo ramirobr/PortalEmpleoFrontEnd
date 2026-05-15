@@ -9,6 +9,7 @@ export type AuthHydratorProps = {
   idEmpresa?: string;
   companyLogo?: string;
   profesion?: string;
+  idTipoJornadaLaboral?: number;
 } & Omit<Partial<UserAuthData>, "userId">;
 
 type AuthState = {
@@ -49,6 +50,7 @@ const initalState: Omit<
   pic: "",
   idEmpresa: undefined,
   companyLogo: undefined,
+  idTipoJornadaLaboral: undefined,
 };
 
 export const useAuthStore = create<AuthState>((set) => ({
@@ -62,6 +64,7 @@ export const useAuthStore = create<AuthState>((set) => ({
     idEmpresa,
     companyLogo,
     profesion,
+    idTipoJornadaLaboral,
   }) =>
     set({
       isAuthenticated: true,
@@ -73,6 +76,7 @@ export const useAuthStore = create<AuthState>((set) => ({
       idEmpresa,
       companyLogo,
       profesion,
+      idTipoJornadaLaboral,
     }),
   setPic: (pic) =>
     set((state) => ({

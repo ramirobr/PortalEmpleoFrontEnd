@@ -11,6 +11,8 @@ export type Job = {
   nivelEstudios: string
   experiencia: string
   modalidad: string
+  jornadaLaboral?: string
+  idTipoJornadaLaboral?: number
   estado: string
   ciudad: string
   idCiudad: number

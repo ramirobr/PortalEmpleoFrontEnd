@@ -255,6 +255,29 @@ export function Filters({
           </Select>
         </div>
 
+        <div>
+          <label className="text-black font-bold">Jornada Laboral</label>
+          <Select
+            value={current("jornada", initialFilters.jornada)}
+            onValueChange={(v) => update("jornada", v)}
+          >
+            <SelectTrigger className="w-full mt-1 max-w-[212px]">
+              <SelectValue placeholder="Todas" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value=" ">Todas</SelectItem>
+              {filters?.tipo_empleo?.map((jornada) => (
+                <SelectItem
+                  key={jornada.idCatalogo}
+                  value={jornada.idCatalogo.toString()}
+                >
+                  {addSpaces(jornada.nombre)}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+        </div>
+
         <PremiumButton
           type="button"
           className="w-full"

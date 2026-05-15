@@ -31,6 +31,7 @@ export const CREAR_EMPLEO_FILTERS = [
   "MODALIDAD_TRABAJO",
   "EXPERIENCIA",
   "NIVEL_ESTUDIO",
+  "TIPO_EMPLEO",
 ] as const satisfies readonly CatalogTypes[];
 
 export type CrearEmpleoFiltersResponse = CatalogFieldsFromTypes<

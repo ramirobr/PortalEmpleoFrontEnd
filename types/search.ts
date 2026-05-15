@@ -31,6 +31,7 @@ export const FILTERS = [
   "FILTRO_FECHAS",
   "EXPERIENCIA",
   "MODALIDAD_TRABAJO",
+  "TIPO_EMPLEO",
   "PROVINCIA",
   "CIUDAD",
 ] as const satisfies readonly CatalogTypes[];

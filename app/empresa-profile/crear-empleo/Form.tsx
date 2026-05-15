@@ -50,6 +50,7 @@ const crearEmpleoSchema = z
     idModalidadTrabajo: z.number().min(1, "Selecciona modalidad"),
     idExperiencia: z.number().min(1, "Selecciona experiencia"),
     idNivelEstudio: z.number().min(1, "Selecciona nivel"),
+    idTipoJornadaLaboral: z.number().optional(),
     fechaInicio: z.date("Requerido"),
     fechaCierre: z.date("Requerido"),
     salarioRange: z
@@ -117,6 +118,7 @@ export default function CrearEmpleoForm({ fields, initialValues }: FormProps) {
       idModalidadTrabajo: initialValues?.idModalidad,
       idExperiencia: initialValues?.idExperiencia,
       idNivelEstudio: initialValues?.idNivelEstudio,
+      idTipoJornadaLaboral: initialValues?.idTipoJornadaLaboral,
       fechaInicio: initialValues?.fechaPublicacion
         ? parseWeirdDate(initialValues.fechaPublicacion)
         : new Date(),
@@ -177,6 +179,7 @@ export default function CrearEmpleoForm({ fields, initialValues }: FormProps) {
       idCiudad: Number(values.idCiudad),
       idNivelEstudio: Number(values.idNivelEstudio),
       idExperiencia: Number(values.idExperiencia),
+      ...(values.idTipoJornadaLaboral && { idTipoJornadaLaboral: Number(values.idTipoJornadaLaboral) }),
       ...(values.idArchivoEmpresa && {
         idArchivoEmpresa: values.idArchivoEmpresa,
       }),
@@ -229,6 +232,7 @@ export default function CrearEmpleoForm({ fields, initialValues }: FormProps) {
       idModalidadTrabajo: undefined,
       idExperiencia: undefined,
       idNivelEstudio: undefined,
+      idTipoJornadaLaboral: undefined,
       fechaInicio: new Date(),
       fechaCierre: undefined,
       salarioRange: [800, 2500],
@@ -322,6 +326,37 @@ export default function CrearEmpleoForm({ fields, initialValues }: FormProps) {
               {errors.idModalidadTrabajo.message}
             </p>
           )}
+        </div>
+
+        {/* Jornada Laboral */}
+        <div>
+          <label className="block text-sm font-semibold text-gray-700 mb-1">
+            Jornada Laboral
+          </label>
+          <Controller
+            name="idTipoJornadaLaboral"
+            control={control}
+            render={({ field }) => (
+              <Select
+                onValueChange={(value) => field.onChange(Number(value))}
+                value={field.value ? String(field.value) : ""}
+              >
+                <SelectTrigger className="bg-gray-50 border-gray-200">
+                  <SelectValue placeholder="Seleccionar Jornada" />
+                </SelectTrigger>
+                <SelectContent>
+                  {fields?.tipo_empleo?.map((jornada) => (
+                    <SelectItem
+                      key={jornada.idCatalogo}
+                      value={String(jornada.idCatalogo)}
+                    >
+                      {jornada.nombre}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            )}
+          />
         </div>
 
         {/* Experience */}

@@ -40,6 +40,7 @@ export type LoginData = {
   tokenExpireIn: Date;
   refreshToken: string;
   idEmpresa?: string;
+  idTipoJornadaLaboral?: number;
 };
 
 export type UserAuthData = Omit<

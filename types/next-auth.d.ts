@@ -12,6 +12,7 @@ declare module "next-auth" {
     refreshToken: string;
     tokenExpireIn: Date;
     idEmpresa?: string;
+    idTipoJornadaLaboral?: number;
   }
 
   interface Session {
@@ -29,5 +30,6 @@ declare module "next-auth/jwt" {
     refreshToken: string;
     tokenExpireIn: Date;
     idEmpresa?: string;
+    idTipoJornadaLaboral?: number;
   }
 }
