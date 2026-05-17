@@ -28,24 +28,23 @@ export default function AdminCandidatosPage() {
 
   // Fetch candidatos (using mock data for now)
   useEffect(() => {
+    let cancelled = false;
+    let timerId: ReturnType<typeof setTimeout>;
     const fetchCandidatos = async () => {
       setLoading(true);
-      // TODO: Replace with real API call when available
-      // const response = await getAdminCandidatos(
-      //   { pageSize, currentPage, search, estado: estadoFilter },
-      //   session?.user?.accessToken
-      // );
-      // if (response?.isSuccess) {
-      //   setCandidatos(response.data.data);
-      // }
-
-      // Using mock data for development
-      await new Promise((resolve) => setTimeout(resolve, 500));
+      await new Promise<void>((resolve) => {
+        timerId = setTimeout(resolve, 500);
+      });
+      if (cancelled) return;
       setCandidatos(mockCandidatos);
       setLoading(false);
     };
 
     fetchCandidatos();
+    return () => {
+      cancelled = true;
+      clearTimeout(timerId);
+    };
   }, [session, currentPage, pageSize]);
 
   // Filter candidatos based on search and filters
@@ -103,8 +102,8 @@ export default function AdminCandidatosPage() {
 
   return (
     <div>
-      <h1 className="text-3xl font-bold mb-6 flex items-center gap-3">
-        <Users className="w-8 h-8 text-primary" />
+      <h1 className="text-3xl font-semibold mb-6 flex items-center gap-3">
+        <Users className="size-8 text-primary" />
         Gestionar Candidatos
       </h1>
 
@@ -113,7 +112,7 @@ export default function AdminCandidatosPage() {
         <div className="flex flex-col lg:flex-row gap-4">
           {/* Search */}
           <div className="relative flex-1">
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 size-4 text-zinc-400" />
             <Input
               type="text"
               placeholder="Buscar por nombre o email..."
@@ -164,7 +163,7 @@ export default function AdminCandidatosPage() {
           totalItems={totalItems}
           itemLabel="candidatos"
           onPageChange={setCurrentPage}
-          className="rounded-b-xl border-t border-gray-100"
+          className="rounded-b-xl border-t border-zinc-100"
         />
       </Card>
     </div>

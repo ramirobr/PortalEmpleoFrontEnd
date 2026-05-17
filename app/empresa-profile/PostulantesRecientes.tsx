@@ -23,7 +23,7 @@ export default function PostulantesRecientes({
       <div className="flex items-center justify-between mb-4">
         <h2
           id="postulantes-destacados-title"
-          className="text-xl font-bold text-gray-800"
+          className="text-xl font-semibold text-zinc-800"
         >
           Postulantes Destacados
         </h2>
@@ -36,7 +36,7 @@ export default function PostulantesRecientes({
       </div>
 
       {destacados.length === 0 ? (
-        <p className="text-center text-gray-500 py-8 bg-white rounded-xl border border-gray-100">
+        <p className="text-center text-zinc-500 py-8 bg-white rounded-xl border border-zinc-100">
           No hay postulantes recientes
         </p>
       ) : (
@@ -54,7 +54,7 @@ export default function PostulantesRecientes({
             return (
               <div
                 key={aplicante.usuario.idAplicacion}
-                className="bg-white rounded-xl border border-gray-100 shadow-sm hover:shadow-lg transition-all p-5 flex flex-col sm:flex-row items-start sm:items-center gap-5 group"
+                className="bg-white rounded-xl border border-zinc-100 shadow-sm hover:shadow-lg transition-all p-5 flex flex-col sm:flex-row items-start sm:items-center gap-5 group"
               >
                 {/* Avatar with status ring */}
                 <div className="relative shrink-0">
@@ -78,7 +78,7 @@ export default function PostulantesRecientes({
                 {/* Main info */}
                 <div className="flex-1 min-w-0">
                   <div className="flex items-center gap-2 mb-1">
-                    <h3 className="font-bold text-gray-900 text-lg leading-tight truncate">
+                    <h3 className="font-semibold text-zinc-900 text-lg leading-tight truncate">
                       {aplicante.usuario.nombreCompleto}
                     </h3>
                     <span className="hidden sm:inline-flex items-center px-2 py-0.5 bg-secondary/10 text-secondary text-[12px] font-bold uppercase rounded-full">
@@ -90,14 +90,14 @@ export default function PostulantesRecientes({
                     {habilidad || "Candidato"}
                   </p>
 
-                  <div className="flex flex-wrap items-center gap-x-4 gap-y-2 text-xs text-gray-500">
+                  <div className="flex flex-wrap items-center gap-x-4 gap-y-2 text-xs text-zinc-500">
                     <span className="flex items-center gap-1.5" aria-label={`Ubicación: ${aplicante.usuario.ubicacion}`}>
-                      <MapPin className="size-3.5 text-gray-400" />
+                      <MapPin className="size-3.5 text-zinc-400" />
                       {aplicante.usuario.ubicacion}
                     </span>
                     {habilidad2 && (
                       <span className="flex items-center gap-1.5" aria-label={`Especialidad: ${habilidad2}`}>
-                        <Briefcase className="size-3.5 text-gray-400" />
+                        <Briefcase className="size-3.5 text-zinc-400" />
                         {habilidad2}
                       </span>
                     )}
@@ -108,7 +108,7 @@ export default function PostulantesRecientes({
                 <div className="shrink-0 w-full sm:w-auto flex sm:flex-col items-center sm:items-end gap-3 mt-4 sm:mt-0">
                   {(() => {
                     const status = aplicante.usuario.estadoAplicacion.nombre.toLowerCase();
-                    let badgeStyles = "bg-gray-100 text-gray-700 border-gray-200"; // Default
+                    let badgeStyles = "bg-zinc-100 text-zinc-700 border-zinc-200"; // Default
                     
                     if (status.includes("entrevista")) badgeStyles = "bg-purple-50 text-purple-700 border-purple-100";
                     if (status.includes("revisión") || status.includes("proceso")) badgeStyles = "bg-blue-50 text-blue-700 border-blue-100";

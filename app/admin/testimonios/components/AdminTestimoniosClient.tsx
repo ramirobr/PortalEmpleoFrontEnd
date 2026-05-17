@@ -212,10 +212,10 @@ export default function AdminTestimoniosClient({
         {[1, 2, 3, 4, 5].map((star) => (
           <Star
             key={star}
-            className={`w-5 h-5 ${
+            className={`size-5 ${
               star <= rating
                 ? "fill-yellow-400 text-yellow-400"
-                : "fill-gray-200 text-gray-200"
+                : "fill-zinc-200 text-zinc-200"
             }`}
           />
         ))}
@@ -225,45 +225,45 @@ export default function AdminTestimoniosClient({
 
   return (
     <div>
-      <h1 className="text-3xl font-bold mb-6 flex items-center gap-3">
-        <MessageSquare className="w-8 h-8 text-primary" />
+      <h1 className="text-3xl font-semibold mb-6 flex items-center gap-3">
+        <MessageSquare className="size-8 text-primary" />
         Gestionar Testimonios
       </h1>
 
       {/* Stats Cards */}
       <div className="grid grid-cols-2 lg:grid-cols-5 gap-4 mb-6">
         <Card className="p-4 text-center">
-          <p className="text-2xl font-bold text-gray-900">
+          <p className="text-2xl font-bold text-zinc-900">
             {counters?.totalTestimonios}
           </p>
-          <p className="text-sm text-gray-500">Total</p>
+          <p className="text-sm text-zinc-500">Total</p>
         </Card>
         <Card className="p-4 text-center">
           <p className="text-2xl font-bold text-green-600">
             {counters?.totalTestimoniosPublicados}
           </p>
-          <p className="text-sm text-gray-500">Aprobados</p>
+          <p className="text-sm text-zinc-500">Aprobados</p>
         </Card>
         <Card className="p-4 text-center">
           <p className="text-2xl font-bold text-yellow-600">
             {counters?.totalTestimoniosEnRevision}
           </p>
-          <p className="text-sm text-gray-500">Pendientes</p>
+          <p className="text-sm text-zinc-500">Pendientes</p>
         </Card>
         <Card className="p-4 text-center">
           <p className="text-2xl font-bold text-red-600">
             {counters?.totalTestimoniosRechazados}
           </p>
-          <p className="text-sm text-gray-500">Rechazados</p>
+          <p className="text-sm text-zinc-500">Rechazados</p>
         </Card>
         <Card className="p-4 text-center">
           <div className="flex items-center justify-center gap-1">
             <p className="text-2xl font-bold text-yellow-500">
               {counters?.calificacionPromedio}
             </p>
-            <Star className="w-5 h-5 fill-yellow-400 text-yellow-400" />
+            <Star className="size-5 fill-yellow-400 text-yellow-400" />
           </div>
-          <p className="text-sm text-gray-500">Promedio</p>
+          <p className="text-sm text-zinc-500">Promedio</p>
         </Card>
       </div>
 
@@ -278,7 +278,7 @@ export default function AdminTestimoniosClient({
               updateParams({ search, page: "1" });
             }}
           >
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 size-4 text-zinc-400" />
             <Input
               name="search"
               type="text"
@@ -353,7 +353,7 @@ export default function AdminTestimoniosClient({
           onPageSizeChange={(size) =>
             updateParams({ pageSize: size.toString(), page: "1" })
           }
-          className="rounded-b-xl border-t border-gray-100"
+          className="rounded-b-xl border-t border-zinc-100"
         />
       </Card>
 
@@ -369,7 +369,7 @@ export default function AdminTestimoniosClient({
           {selectedTestimonio && (
             <div className="space-y-4 mt-4">
               <div className="flex items-center gap-4">
-                <Avatar className="w-14 h-14 border border-gray-200">
+                <Avatar className="size-14 border border-zinc-200">
                   <AvatarImage
                     src={selectedTestimonio.candidato.fotoUrl}
                     alt={selectedTestimonio.candidato.nombreCompleto}
@@ -379,30 +379,30 @@ export default function AdminTestimoniosClient({
                   </AvatarFallback>
                 </Avatar>
                 <div>
-                  <h3 className="font-semibold text-gray-900">
+                  <h3 className="font-semibold text-zinc-900">
                     {selectedTestimonio.candidato.nombreCompleto}
                   </h3>
-                  <p className="text-sm text-gray-600">
+                  <p className="text-sm text-zinc-600">
                     {selectedTestimonio.cargo} en {selectedTestimonio.empresa}
                   </p>
-                  <p className="text-xs text-gray-400">
+                  <p className="text-xs text-zinc-400">
                     {selectedTestimonio.candidato.email}
                   </p>
                 </div>
               </div>
 
               <div className="flex items-center gap-2">
-                <span className="text-sm text-gray-600">Calificación:</span>
+                <span className="text-sm text-zinc-600">Calificación:</span>
                 {renderStars(selectedTestimonio.calificacion)}
               </div>
 
-              <div className="bg-gray-50 rounded-lg p-4">
-                <p className="text-gray-700 italic">
+              <div className="bg-zinc-50 rounded-lg p-4">
+                <p className="text-zinc-700 italic">
                   &quot;{selectedTestimonio.testimonioDetalle}&quot;
                 </p>
               </div>
 
-              <div className="flex justify-between text-sm text-gray-500 pt-2 border-t">
+              <div className="flex justify-between text-sm text-zinc-500 pt-2 border-t">
                 <span>
                   Fecha: {formatDate(selectedTestimonio.fechaCreacion)}
                 </span>

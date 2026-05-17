@@ -46,12 +46,12 @@ export default function FavoriteButton({
       aria-label={favorite ? "Remover de favoritos" : "Agregar a favoritos"}
     >
       <Heart
-        className={`w-6 h-6 transition-colors ${
+        className={`size-6 transition-colors ${
           !isLoggedIn
-            ? "text-gray-400 fill-gray-400"
+            ? "text-zinc-400 fill-zinc-400"
             : favorite
               ? "text-primary fill-primary"
-              : "text-gray-400"
+              : "text-zinc-400"
         }`}
       />
     </button>

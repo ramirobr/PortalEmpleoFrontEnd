@@ -14,8 +14,10 @@ type Props = {
 
 export default async function JobsPage({ searchParams }: Props) {
   const session = await auth();
-  const params = await searchParams;
-  const filtersItems = await fetchFilters();
+  const [params, filtersItems] = await Promise.all([
+    searchParams,
+    fetchFilters(),
+  ]);
   const filters = {
     page: params.page ?? "1",
     pageSize: params.pageSize ?? "10",
@@ -32,7 +34,6 @@ export default async function JobsPage({ searchParams }: Props) {
     <div className="min-h-screen">
       <MainLayout>
         <div className="mx-auto">
-          <Banner title="Ofertas de Empleo" />
           <section className="container py-20">
             <Suspense>
               <JobsContent

@@ -42,7 +42,7 @@ export function PriceRange({
         onValueCommit={handleCommit}
       />
 
-      <div className="flex justify-between text-sm text-gray-700">
+      <div className="flex justify-between text-sm text-zinc-700">
         <span>${range[0]}</span>
         <span>${range[1]}</span>
       </div>

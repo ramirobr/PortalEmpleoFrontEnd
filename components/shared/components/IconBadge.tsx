@@ -17,7 +17,7 @@ export default function IconBadge({
   return (
     <div
       className={cn(
-        "flex items-center justify-center text-primary w-9 h-9 lg:w-12 lg:h-12 bg-primary/10 shrink-0",
+        "flex items-center justify-center text-primary size-9 lg:w-12 lg:h-12 bg-primary/10 shrink-0",
         variant === "square" && "rounded-lg",
         variant === "rounded" && "rounded-full m-auto",
         className,
@@ -25,7 +25,7 @@ export default function IconBadge({
     >
       <Icon
         className={cn(
-          "shrink-0 w-6 h-6",
+          "shrink-0 size-6",
           size ? `md:w-[${size}px] lg:h-[${size}px]` : "lg:w-8 lg:h-8",
         )}
       />

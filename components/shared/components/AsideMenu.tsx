@@ -65,7 +65,7 @@ export default function AsideMenu({
     <>
       {isOpen && (
         <div
-          className="fixed inset-0 bg-black/40 z-70"
+          className="fixed inset-0 bg-zinc-950/40 z-70"
           onClick={onClose}
           aria-hidden="true"
         />

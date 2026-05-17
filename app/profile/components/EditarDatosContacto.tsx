@@ -17,6 +17,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { SearchAutocomplete } from "@/components/ui/search-autocomplete";
 import { fetchApi } from "@/lib/apiClient";
 import { DatosPersonalesFieldsResponse, UserInfoData } from "@/types/user";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -129,7 +130,7 @@ export default function EditarDatosContacto({
   return (
     <Card className="p-6">
       <div className="flex justify-between items-center mb-10">
-        <h2 className="text-2xl font-bold text-primary flex items-center gap-2">
+        <h2 className="text-2xl font-semibold text-primary flex items-center gap-2">
           <Phone width={25} height={25} className="text-primary" />
           Información de contacto
         </h2>
@@ -285,25 +286,19 @@ export default function EditarDatosContacto({
                 <FormItem>
                   <FormLabel htmlFor="Ciudad">Ciudad</FormLabel>
                   <FormControl>
-                    <Select
-                      onValueChange={(value) => field.onChange(Number(value))}
-                      value={field.value ? String(field.value) : ""}
+                    <SearchAutocomplete<number>
+                      options={
+                        fields?.ciudad?.map((c) => ({
+                          id: c.idCatalogo,
+                          label: c.nombre,
+                        })) ?? []
+                      }
+                      value={field.value || undefined}
+                      onChange={(id) => field.onChange(id)}
+                      placeholder="Selecciona una ciudad"
+                      searchPlaceholder="Buscar ciudad..."
                       disabled={!isEditing}
-                    >
-                      <SelectTrigger id="Ciudad">
-                        <SelectValue placeholder="Ciudad" />
-                      </SelectTrigger>
-                      <SelectContent>
-                        {fields?.ciudad?.map((ciudad) => (
-                          <SelectItem
-                            key={ciudad.idCatalogo}
-                            value={ciudad.idCatalogo.toString()}
-                          >
-                            {ciudad.nombre}
-                          </SelectItem>
-                        ))}
-                      </SelectContent>
-                    </Select>
+                    />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -352,7 +347,7 @@ export default function EditarDatosContacto({
               render={({ field }) => (
                 <FormItem className="flex flex-col">
                   <FormLabel htmlFor="planillaServicioInput">
-                    <h2 className="text-2xl font-bold text-primary flex items-center gap-2">
+                    <h2 className="text-2xl font-semibold text-primary flex items-center gap-2">
                       <FileText
                         width={25}
                         height={25}
@@ -410,7 +405,7 @@ export default function EditarDatosContacto({
                           )}
                         </>
                       ) : (
-                        <div className="flex items-center gap-2 text-gray-600 italic">
+                        <div className="flex items-center gap-2 text-zinc-600 italic">
                           {field.value ? (
                             <span className="flex items-center gap-2 text-primary font-medium non-italic">
                               <FileText width={20} height={20} />
@@ -423,7 +418,7 @@ export default function EditarDatosContacto({
                       )}
                     </div>
                   </FormControl>
-                  <div className="text-[12px] text-gray-500 mt-1">
+                  <div className="text-[12px] text-zinc-500 mt-1">
                     Límite: 100kb (JPG o PDF)
                   </div>
                   <FormMessage />
@@ -440,7 +435,7 @@ export default function EditarDatosContacto({
                 disabled={form.formState.isSubmitting}
               >
                 {form.formState.isSubmitting && (
-                  <span className="animate-spin h-4 w-4 border-2 border-t-transparent rounded-full mr-2" />
+                  <span className="animate-spin size-4 border-2 border-t-transparent rounded-full mr-2" />
                 )}
                 Guardar
               </button>

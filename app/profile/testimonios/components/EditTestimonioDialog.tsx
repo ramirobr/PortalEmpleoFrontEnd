@@ -177,7 +177,7 @@ export default function EditTestimonioDialog({
                   </FormControl>
                   <div className="flex justify-between">
                     <FormMessage />
-                    <span className="text-xs text-gray-500">
+                    <span className="text-xs text-zinc-500">
                       {field.value?.length || 0}/500 caracteres
                     </span>
                   </div>
@@ -205,10 +205,10 @@ export default function EditTestimonioDialog({
                         >
                           <Star
                             className={cn(
-                              "w-8 h-8 transition-colors",
+                              "size-8 transition-colors",
                               (hoveredStar || watchCalificacion) >= star
                                 ? "fill-yellow-400 text-yellow-400"
-                                : "text-gray-300",
+                                : "text-zinc-300",
                             )}
                           />
                         </button>
@@ -232,7 +232,7 @@ export default function EditTestimonioDialog({
               <Button type="submit" disabled={isSubmitting}>
                 {isSubmitting ? (
                   <>
-                    <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                    <Loader2 className="size-4 mr-2 animate-spin" />
                     Guardando
                   </>
                 ) : (

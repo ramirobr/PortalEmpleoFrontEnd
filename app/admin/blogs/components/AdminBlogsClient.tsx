@@ -179,8 +179,8 @@ export default function AdminBlogsClient({
   return (
     <div>
       <div className="flex items-center justify-between mb-6">
-        <h1 className="text-3xl font-bold flex items-center gap-3">
-          <FileText className="w-8 h-8 text-primary" />
+        <h1 className="text-3xl font-semibold flex items-center gap-3">
+          <FileText className="size-8 text-primary" />
           Gestionar Blogs
         </h1>
         <Button
@@ -190,7 +190,7 @@ export default function AdminBlogsClient({
           }}
           className="flex items-center gap-2"
         >
-          <Plus className="w-4 h-4" />
+          <Plus className="size-4" />
           Nuevo artículo
         </Button>
       </div>
@@ -198,28 +198,28 @@ export default function AdminBlogsClient({
       {/* Stats */}
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
         <Card className="p-4 text-center">
-          <p className="text-2xl font-bold text-gray-900">
+          <p className="text-2xl font-bold text-zinc-900">
             {counters?.totalBlogs ?? 0}
           </p>
-          <p className="text-sm text-gray-500">Total</p>
+          <p className="text-sm text-zinc-500">Total</p>
         </Card>
         <Card className="p-4 text-center">
           <p className="text-2xl font-bold text-green-600">
             {counters?.totalBlogsPublicados ?? 0}
           </p>
-          <p className="text-sm text-gray-500">Publicados</p>
+          <p className="text-sm text-zinc-500">Publicados</p>
         </Card>
         <Card className="p-4 text-center">
           <p className="text-2xl font-bold text-yellow-600">
             {counters?.totalBlogsBorrador ?? 0}
           </p>
-          <p className="text-sm text-gray-500">Borradores</p>
+          <p className="text-sm text-zinc-500">Borradores</p>
         </Card>
         <Card className="p-4 text-center">
-          <p className="text-2xl font-bold text-gray-500">
+          <p className="text-2xl font-bold text-zinc-500">
             {counters?.totalBlogsArchivados ?? 0}
           </p>
-          <p className="text-sm text-gray-500">Archivados</p>
+          <p className="text-sm text-zinc-500">Archivados</p>
         </Card>
       </div>
 
@@ -234,7 +234,7 @@ export default function AdminBlogsClient({
               updateUrlParams({ search: fd.get("search") as string, page: "1" });
             }}
           >
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 size-4 text-zinc-400" />
             <Input
               name="search"
               defaultValue={searchQuery}
@@ -314,10 +314,10 @@ export default function AdminBlogsClient({
             <DialogDescription>{selectedBlog?.resumen}</DialogDescription>
           </DialogHeader>
           {selectedBlog && (
-            <div className="space-y-4 text-sm text-gray-700">
+            <div className="space-y-4 text-sm text-zinc-700">
               <div>
                 <span className="font-semibold">Slug: </span>
-                <code className="bg-gray-100 px-1.5 py-0.5 rounded text-xs">
+                <code className="bg-zinc-100 px-1.5 py-0.5 rounded text-xs">
                   {selectedBlog.slug}
                 </code>
               </div>
@@ -334,7 +334,7 @@ export default function AdminBlogsClient({
                   </a>
                 </div>
               )}
-              <div className="whitespace-pre-line border rounded-lg p-4 bg-gray-50 max-h-72 overflow-y-auto text-sm leading-relaxed">
+              <div className="whitespace-pre-line border rounded-lg p-4 bg-zinc-50 max-h-72 overflow-y-auto text-sm leading-relaxed">
                 {selectedBlog.contenido}
               </div>
             </div>

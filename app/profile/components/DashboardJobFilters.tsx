@@ -13,22 +13,22 @@ import Link from "next/link";
 const FILTERS = [
   {
     label: "Tiempo Completo",
-    icon: <Clock className="w-4 h-4" />,
+    icon: <Clock className="size-4" />,
     query: "tiempo-completo",
   },
   {
     label: "Medio Tiempo",
-    icon: <Heart className="w-4 h-4" />,
+    icon: <Heart className="size-4" />,
     query: "medio-tiempo",
   },
   {
     label: "Teletrabajo",
-    icon: <Monitor className="w-4 h-4" />,
+    icon: <Monitor className="size-4" />,
     query: "teletrabajo",
   },
   {
     label: "Pasantías",
-    icon: <GraduationCap className="w-4 h-4" />,
+    icon: <GraduationCap className="size-4" />,
     query: "pasantia",
   },
 ];
@@ -49,7 +49,7 @@ export default function DashboardJobFilters() {
             className={`flex items-center gap-2 px-4 py-2 rounded-lg border text-sm font-medium transition-colors cursor-pointer outline-none focus-visible:ring-2 focus-visible:ring-primary ${
               active === f.label
                 ? "bg-primary text-white border-primary"
-                : "bg-white text-gray-700 border-gray-200 hover:border-primary hover:text-primary"
+                : "bg-white text-zinc-700 border-zinc-200 hover:border-primary hover:text-primary"
             }`}
             aria-label={`Filtrar por ${f.label}`}
           >
@@ -66,7 +66,7 @@ export default function DashboardJobFilters() {
           aria-label="Ver todas las opciones de búsqueda"
         >
           Ver más
-          <ChevronRight className="w-4 h-4" aria-hidden="true" />
+          <ChevronRight className="size-4" aria-hidden="true" />
         </Link>
       </li>
     </ul>

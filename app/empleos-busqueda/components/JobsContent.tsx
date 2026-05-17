@@ -27,7 +27,7 @@ export default function JobsContent({
         onClose={() => setIsFiltersOpen(false)}
       />
       <div
-        className={`fixed inset-0 bg-black/50 z-60 lg:hidden transition-opacity duration-300 ${
+        className={`fixed inset-0 bg-zinc-950/50 z-60 lg:hidden transition-opacity duration-300 ${
           isFiltersOpen ? "opacity-100" : "opacity-0 pointer-events-none"
         }`}
         onClick={() => setIsFiltersOpen(false)}

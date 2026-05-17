@@ -120,7 +120,7 @@ export default function UsuarioForm({
           )}
         />
 
-        <div className="text-sm text-gray-600 bg-gray-50 p-3 rounded">
+        <div className="text-sm text-zinc-600 bg-zinc-50 p-3 rounded">
           <p><strong>Tipo de usuario:</strong> {usuario.tipoUsuario === "admin" ? "Administrador" : usuario.tipoUsuario === "empresa" ? "Empresa" : "Postulante"}</p>
           <p><strong>Rol:</strong> {usuario.rol.nombre}</p>
           <p><strong>Fecha de registro:</strong> {usuario.fechaRegistro}</p>

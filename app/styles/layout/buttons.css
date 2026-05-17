@@ -9,7 +9,7 @@
     @apply bg-secondary text-white hover:bg-secondary/80 transition;
   }
   .btn-gray {
-    @apply bg-gray-100 hover:bg-gray-200 text-gray-700;
+    @apply bg-zinc-100 hover:bg-zinc-200 text-zinc-700;
   }
   .btn-white {
     @apply bg-white hover:bg-white text-black border-white;

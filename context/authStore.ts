@@ -24,6 +24,7 @@ type AuthState = {
   setUnreadNotifications: (count: number) => void;
   setNotifications: (notifications: Notificacion[]) => void;
   markNotificationRead: (id: string) => void;
+  removeNotification: (id: string) => void;
   clear: () => void;
 } & AuthHydratorProps & { profesion?: string };
 
@@ -38,6 +39,7 @@ const initalState: Omit<
   | "setUnreadNotifications"
   | "setNotifications"
   | "markNotificationRead"
+  | "removeNotification"
 > = {
   id: undefined,
   fullName: undefined,
@@ -109,6 +111,14 @@ export const useAuthStore = create<AuthState>((set) => ({
       const updated = state.notifications.map((n) =>
         n.idNotificacion === id ? { ...n, esLeida: true } : n,
       );
+      return {
+        notifications: updated,
+        unreadNotifications: updated.filter((n) => !n.esLeida).length,
+      };
+    }),
+  removeNotification: (id) =>
+    set((state) => {
+      const updated = state.notifications.filter((n) => n.idNotificacion !== id);
       return {
         notifications: updated,
         unreadNotifications: updated.filter((n) => !n.esLeida).length,

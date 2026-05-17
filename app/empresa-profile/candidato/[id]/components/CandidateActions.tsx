@@ -49,7 +49,7 @@ export default function CandidateActions({
 
   return (
     <div className="bg-white rounded-lg shadow p-6">
-      <h3 className="text-lg font-semibold text-gray-900 mb-4">Acciones</h3>
+      <h3 className="text-lg font-semibold text-zinc-900 mb-4">Acciones</h3>
 
       <div className="space-y-3">
         {/* Approve Button */}
@@ -58,7 +58,7 @@ export default function CandidateActions({
           disabled={isProcessing}
           className="w-full flex items-center justify-center gap-2 px-4 py-2.5 bg-primary text-white rounded-lg hover:bg-primary-deep transition-colors disabled:opacity-50 disabled:cursor-not-allowed font-medium"
         >
-          <CheckIcon className="w-4 h-4" />
+          <CheckIcon className="size-4" />
           Aprobar Candidato
         </button>
 
@@ -68,7 +68,7 @@ export default function CandidateActions({
           disabled={isProcessing}
           className="w-full flex items-center justify-center gap-2 px-4 py-2.5 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed font-medium"
         >
-          <XCircleIcon className="w-4 h-4" />
+          <XCircleIcon className="size-4" />
           Rechazar Candidato
         </button>
 
@@ -78,7 +78,7 @@ export default function CandidateActions({
           className="w-full flex items-center justify-center gap-2 px-4 py-2.5 bg-primary text-white rounded-lg hover:bg-primary/90 transition-colors font-medium"
         >
           <svg
-            className="w-4 h-4"
+            className="size-4"
             fill="none"
             stroke="currentColor"
             viewBox="0 0 24 24"
@@ -96,10 +96,10 @@ export default function CandidateActions({
         {/* Send Message Button */}
         <button
           onClick={handleSendMessage}
-          className="w-full flex items-center justify-center gap-2 px-4 py-2.5 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors font-medium"
+          className="w-full flex items-center justify-center gap-2 px-4 py-2.5 border border-zinc-300 text-zinc-700 rounded-lg hover:bg-zinc-50 transition-colors font-medium"
         >
           <svg
-            className="w-4 h-4"
+            className="size-4"
             fill="none"
             stroke="currentColor"
             viewBox="0 0 24 24"
@@ -116,14 +116,14 @@ export default function CandidateActions({
       </div>
 
       {/* Additional Actions */}
-      <div className="mt-4 pt-4 border-t border-gray-100">
+      <div className="mt-4 pt-4 border-t border-zinc-100">
         <div className="flex gap-2">
           <button
-            className="flex-1 flex items-center justify-center gap-1 px-3 py-2 text-sm text-gray-600 hover:text-primary hover:bg-gray-50 rounded-lg transition-colors"
+            className="flex-1 flex items-center justify-center gap-1 px-3 py-2 text-sm text-zinc-600 hover:text-primary hover:bg-zinc-50 rounded-lg transition-colors"
             title="Añadir a favoritos"
           >
             <svg
-              className="w-4 h-4"
+              className="size-4"
               fill="none"
               stroke="currentColor"
               viewBox="0 0 24 24"
@@ -138,11 +138,11 @@ export default function CandidateActions({
             Guardar
           </button>
           <button
-            className="flex-1 flex items-center justify-center gap-1 px-3 py-2 text-sm text-gray-600 hover:text-primary hover:bg-gray-50 rounded-lg transition-colors"
+            className="flex-1 flex items-center justify-center gap-1 px-3 py-2 text-sm text-zinc-600 hover:text-primary hover:bg-zinc-50 rounded-lg transition-colors"
             title="Imprimir perfil"
           >
             <svg
-              className="w-4 h-4"
+              className="size-4"
               fill="none"
               stroke="currentColor"
               viewBox="0 0 24 24"
@@ -157,11 +157,11 @@ export default function CandidateActions({
             Imprimir
           </button>
           <button
-            className="flex-1 flex items-center justify-center gap-1 px-3 py-2 text-sm text-gray-600 hover:text-primary hover:bg-gray-50 rounded-lg transition-colors"
+            className="flex-1 flex items-center justify-center gap-1 px-3 py-2 text-sm text-zinc-600 hover:text-primary hover:bg-zinc-50 rounded-lg transition-colors"
             title="Compartir perfil"
           >
             <svg
-              className="w-4 h-4"
+              className="size-4"
               fill="none"
               stroke="currentColor"
               viewBox="0 0 24 24"

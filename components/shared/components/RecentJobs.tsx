@@ -9,7 +9,7 @@ export type RecentJobsProps = {
 
 const RecentJobs = ({ jobs, favJobsByUser }: RecentJobsProps) => {
   return (
-    <section className="w-full  py-10 bg-gray-50 lg:py-20">
+    <section className="w-full  py-10 bg-zinc-50 lg:py-20">
       <div className="container">
         <h2 className="section-title">Trabajos Recientes</h2>
         <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 lg:grid-cols-4  gap-6">

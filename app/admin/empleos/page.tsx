@@ -95,8 +95,8 @@ export default function AdminEmpleosPage() {
 
   return (
     <div>
-      <h1 className="text-3xl font-bold mb-6 flex items-center gap-3">
-        <Briefcase className="w-8 h-8 text-primary" />
+      <h1 className="text-3xl font-semibold mb-6 flex items-center gap-3">
+        <Briefcase className="size-8 text-primary" />
         Gestionar Empleos
       </h1>
 
@@ -105,7 +105,7 @@ export default function AdminEmpleosPage() {
         <div className="flex flex-col lg:flex-row gap-4">
           {/* Search */}
           <div className="relative flex-1">
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 size-4 text-zinc-400" />
             <Input
               type="text"
               placeholder="Buscar por título o empresa..."
@@ -161,7 +161,7 @@ export default function AdminEmpleosPage() {
           totalItems={totalItems}
           itemLabel="empleos"
           onPageChange={setCurrentPage}
-          className="rounded-b-xl border-t border-gray-100"
+          className="rounded-b-xl border-t border-zinc-100"
         />
       </Card>
     </div>

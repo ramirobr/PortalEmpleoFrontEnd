@@ -19,8 +19,8 @@ export default async function EmpresaProfilePage() {
   if (!companyDashboard) {
     return (
       <div className="flex flex-col items-center justify-center min-h-[400px] text-center px-4">
-        <h1 className="text-2xl font-bold text-gray-800">No se pudo cargar el perfil</h1>
-        <p className="text-gray-500 mt-2">Por favor, intenta de nuevo más tarde.</p>
+        <h1 className="text-2xl font-semibold text-zinc-800">No se pudo cargar el perfil</h1>
+        <p className="text-zinc-500 mt-2">Por favor, intenta de nuevo más tarde.</p>
       </div>
     );
   }

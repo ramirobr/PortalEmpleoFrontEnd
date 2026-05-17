@@ -14,8 +14,8 @@ export function AdminTableEmpty({
   description,
 }: AdminTableEmptyProps) {
   return (
-    <div className="flex flex-col items-center justify-center py-12 text-gray-500">
-      <Icon className="w-12 h-12 mb-3 text-gray-300" />
+    <div className="flex flex-col items-center justify-center py-12 text-zinc-500">
+      <Icon className="size-12 mb-3 text-zinc-300" />
       <p className="text-lg font-medium">{title}</p>
       {description && <p className="text-sm">{description}</p>}
     </div>
@@ -31,8 +31,8 @@ export function AdminTableLoading({
 }: AdminTableLoadingProps) {
   return (
     <div className="flex items-center justify-center py-12">
-      <Loader2 className="w-8 h-8 animate-spin text-primary" />
-      <span className="ml-2 text-gray-500">{message}</span>
+      <Loader2 className="size-8 animate-spin text-primary" />
+      <span className="ml-2 text-zinc-500">{message}</span>
     </div>
   );
 }

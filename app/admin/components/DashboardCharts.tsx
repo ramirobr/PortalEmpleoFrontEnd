@@ -30,11 +30,11 @@ export function SimpleBarChart({
                 style={{ height: `${heightPercentage}%` }}
               ></div>
               {/* Tooltip */}
-              <div className="absolute -top-10 opacity-0 group-hover:opacity-100 transition-opacity bg-black text-white text-xs py-1 px-2 rounded pointer-events-none whitespace-nowrap z-10">
+              <div className="absolute -top-10 opacity-0 group-hover:opacity-100 transition-opacity bg-zinc-950 text-white text-xs py-1 px-2 rounded pointer-events-none whitespace-nowrap z-10">
                 ${(item.amount / 1000000).toFixed(1)}M
               </div>
             </div>
-            <span className="text-xs text-gray-400 mt-2">{item.month}</span>
+            <span className="text-xs text-zinc-400 mt-2">{item.month}</span>
           </div>
         );
       })}
@@ -114,7 +114,7 @@ export function DualLineChart({ data, height = 200 }: DualLineChartProps) {
       {/* X Axis Labels */}
       <div className="absolute bottom-[-24px] w-full flex justify-between px-1">
         {data.map((d, i) => (
-          <span key={i} className="text-xs text-gray-400 w-8 text-center">
+          <span key={i} className="text-xs text-zinc-400 w-8 text-center">
             {d.month}
           </span>
         ))}
@@ -123,12 +123,12 @@ export function DualLineChart({ data, height = 200 }: DualLineChartProps) {
       {/* Legend */}
       <div className="absolute top-[-30px] right-0 flex gap-4">
         <div className="flex items-center gap-1.5">
-          <div className="w-3 h-3 rounded-full bg-blue-500"></div>
-          <span className="text-xs text-gray-500">Candidatos</span>
+          <div className="size-3 rounded-full bg-blue-500"></div>
+          <span className="text-xs text-zinc-500">Candidatos</span>
         </div>
         <div className="flex items-center gap-1.5">
-          <div className="w-3 h-3 rounded-full bg-purple-500"></div>
-          <span className="text-xs text-gray-500">Empresas</span>
+          <div className="size-3 rounded-full bg-purple-500"></div>
+          <span className="text-xs text-zinc-500">Empresas</span>
         </div>
       </div>
     </div>

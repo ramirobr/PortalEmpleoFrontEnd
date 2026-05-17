@@ -86,7 +86,7 @@ function TestimonioCard({
             className="w-fit"
             noButton
           >
-            <EstadoIcon className="w-4 h-4" />
+            <EstadoIcon className="size-4" />
             {testimonio.estadoTestimonio || estado.label}
           </Pill>
           <div className="flex items-center gap-6">
@@ -100,7 +100,7 @@ function TestimonioCard({
               <Pencil
                 width={20}
                 height={20}
-                className="text-gray-500 hover:text-primary transition-colors"
+                className="text-zinc-500 hover:text-primary transition-colors"
               />
             </button>
             <button
@@ -113,7 +113,7 @@ function TestimonioCard({
               <Trash2
                 width={20}
                 height={20}
-                className="text-gray-500 hover:text-primary transition-colors"
+                className="text-zinc-500 hover:text-primary transition-colors"
               />
             </button>
           </div>
@@ -126,7 +126,7 @@ function TestimonioCard({
         </div>
 
         {/* Testimonio */}
-        <p className="text-gray-600 leading-relaxed">
+        <p className="text-zinc-600 leading-relaxed">
           &ldquo;{testimonio.testimonioDetalle}&rdquo;
         </p>
         {/* Footer con calificación y fecha */}
@@ -136,15 +136,15 @@ function TestimonioCard({
               <Star
                 key={star}
                 className={cn(
-                  "w-5 h-5",
+                  "size-5",
                   star <= testimonio.calificacion
                     ? "fill-yellow-400 text-yellow-400"
-                    : "text-gray-300",
+                    : "text-zinc-300",
                 )}
               />
             ))}
           </div>
-          <span className="text-slate-600">
+          <span className="text-zinc-600">
             {new Date(testimonio.fechaTestimonio).toLocaleDateString("es-ES", {
               year: "numeric",
               month: "long",
@@ -241,8 +241,8 @@ export default function TestimoniosList({
   if (loading) {
     return (
       <Card className="p-8">
-        <div className="flex flex-col items-center gap-3 text-gray-500">
-          <Loader2 className="w-8 h-8 animate-spin text-primary" />
+        <div className="flex flex-col items-center gap-3 text-zinc-500">
+          <Loader2 className="size-8 animate-spin text-primary" />
           <p className="text-sm">Cargando testimonios...</p>
         </div>
       </Card>
@@ -252,9 +252,9 @@ export default function TestimoniosList({
   if (testimonios.length === 0) {
     return (
       <Card className="p-8 text-center">
-        <div className="flex flex-col items-center gap-3 text-gray-500">
-          <Star className="w-12 h-12 text-gray-300" />
-          <h3 className="text-lg font-medium text-gray-600">
+        <div className="flex flex-col items-center gap-3 text-zinc-500">
+          <Star className="size-12 text-zinc-300" />
+          <h3 className="text-lg font-medium text-zinc-600">
             Aún no tienes testimonios
           </h3>
           <p className="text-sm">
@@ -270,11 +270,11 @@ export default function TestimoniosList({
     <>
       <div className="space-y-6 mt-10">
         <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
-          <h3 className="text-xl font-semibold text-gray-800">
+          <h3 className="text-xl font-semibold text-zinc-800">
             Items ({totalItems})
           </h3>
           <div className="flex items-center gap-2">
-            <span className="text-slate-600">Mostrar:</span>
+            <span className="text-zinc-600">Mostrar:</span>
             <Select
               value={String(pageSize)}
               onValueChange={handlePageSizeChange}
@@ -288,7 +288,7 @@ export default function TestimoniosList({
                 <SelectItem value="50">50</SelectItem>
               </SelectContent>
             </Select>
-            <span className="text-slate-600">por página</span>
+            <span className="text-zinc-600">por página</span>
           </div>
         </div>
 
@@ -335,7 +335,7 @@ export default function TestimoniosList({
             <Button onClick={handleDeleteConfirm} disabled={isDeleting}>
               {isDeleting ? (
                 <>
-                  <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                  <Loader2 className="size-4 mr-2 animate-spin" />
                   Eliminando...
                 </>
               ) : (

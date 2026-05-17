@@ -126,7 +126,7 @@ export default function CarpetaFormDialog({
                   <FormItem>
                     <FormLabel>
                       Descripción{" "}
-                      <span className="text-gray-400 font-normal">(opcional)</span>
+                      <span className="text-zinc-400 font-normal">(opcional)</span>
                     </FormLabel>
                     <FormControl>
                       <Textarea
@@ -148,7 +148,7 @@ export default function CarpetaFormDialog({
                     <FormItem>
                       <FormLabel>
                         Subcarpeta de{" "}
-                        <span className="text-gray-400 font-normal">(opcional)</span>
+                        <span className="text-zinc-400 font-normal">(opcional)</span>
                       </FormLabel>
                       <Select
                         value={field.value ?? NO_PARENT}

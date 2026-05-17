@@ -136,29 +136,29 @@ export default function OfertasPage() {
         </PremiumButton>
       </PremiumPageHeader>
 
-      <div className="bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden transition-all hover:shadow-md">
-        <div className="px-8 py-6 border-b border-gray-100 bg-gray-50/30 flex flex-col sm:flex-row justify-between items-center gap-4">
+      <div className="bg-white rounded-2xl border border-zinc-100 shadow-sm overflow-hidden transition-all hover:shadow-md">
+        <div className="px-8 py-6 border-b border-zinc-100 bg-zinc-50/30 flex flex-col sm:flex-row justify-between items-center gap-4">
           <div className="flex items-center gap-3">
              <div className="size-10 bg-primary/10 rounded-xl flex items-center justify-center">
                 <BriefcaseIcon className="size-5 text-primary" />
              </div>
              <div>
-                <h2 className="text-sm font-bold text-gray-900 uppercase tracking-wider">
+                <h2 className="text-sm font-semibold text-zinc-900 uppercase tracking-wider">
                   Listado de Vacantes
                 </h2>
-                <p className="text-xs font-bold text-gray-400 uppercase tracking-widest">
+                <p className="text-xs font-bold text-zinc-400 uppercase tracking-widest">
                   {totalItems} Ofertas encontradas
                 </p>
              </div>
           </div>
           
           <div className="flex items-center gap-3 w-full sm:w-auto">
-            <label className="text-xs font-bold text-gray-400 uppercase tracking-widest shrink-0">Filtrar por:</label>
+            <label className="text-xs font-bold text-zinc-400 uppercase tracking-widest shrink-0">Filtrar por:</label>
             <Select value={periodoBusqueda} onValueChange={handlePeriodoChange}>
-              <SelectTrigger className="w-[180px] h-10 rounded-xl border-gray-100 bg-white text-xs font-bold uppercase tracking-widest">
+              <SelectTrigger className="w-[180px] h-10 rounded-xl border-zinc-100 bg-white text-xs font-bold uppercase tracking-widest">
                 <SelectValue placeholder="Periodo" />
               </SelectTrigger>
-              <SelectContent className="rounded-xl border-gray-100 shadow-xl">
+              <SelectContent className="rounded-xl border-zinc-100 shadow-xl">
                 <SelectItem value="1month">Último mes</SelectItem>
                 <SelectItem value="3months">Últimos 3 meses</SelectItem>
                 <SelectItem value="6months">Últimos 6 meses</SelectItem>
@@ -172,25 +172,25 @@ export default function OfertasPage() {
         <div className="overflow-x-auto">
           <table className="w-full">
             <thead>
-              <tr className="bg-gray-50/50 border-b border-gray-100">
-                <th scope="col" className="py-4 px-8 text-left text-xs font-bold text-gray-400 uppercase tracking-[0.2em]">
+              <tr className="bg-zinc-50/50 border-b border-zinc-100">
+                <th scope="col" className="py-4 px-8 text-left text-xs font-bold text-zinc-400 uppercase tracking-[0.2em]">
                   Título de la Vacante
                 </th>
-                <th scope="col" className="py-4 px-4 text-center text-xs font-bold text-gray-400 uppercase tracking-[0.2em]">
+                <th scope="col" className="p-4 text-center text-xs font-bold text-zinc-400 uppercase tracking-[0.2em]">
                   Candidatos
                 </th>
-                <th scope="col" className="py-4 px-4 text-left text-xs font-bold text-gray-400 uppercase tracking-[0.2em]">
+                <th scope="col" className="p-4 text-left text-xs font-bold text-zinc-400 uppercase tracking-[0.2em]">
                   Fechas
                 </th>
-                <th scope="col" className="py-4 px-4 text-center text-xs font-bold text-gray-400 uppercase tracking-[0.2em]">
+                <th scope="col" className="p-4 text-center text-xs font-bold text-zinc-400 uppercase tracking-[0.2em]">
                   Estado
                 </th>
-                <th scope="col" className="py-4 px-8 text-right text-xs font-bold text-gray-400 uppercase tracking-[0.2em]">
+                <th scope="col" className="py-4 px-8 text-right text-xs font-bold text-zinc-400 uppercase tracking-[0.2em]">
                   Acciones
                 </th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-gray-100">
+            <tbody className="divide-y divide-zinc-100">
               {loading ? (
                 <tr>
                   <td colSpan={5}>
@@ -200,10 +200,10 @@ export default function OfertasPage() {
               ) : ofertas.length === 0 ? (
                 <tr>
                   <td colSpan={5} className="py-24 text-center">
-                    <div className="size-16 bg-gray-50 rounded-full flex items-center justify-center mx-auto mb-4">
-                      <BriefcaseIcon className="size-8 text-gray-200" />
+                    <div className="size-16 bg-zinc-50 rounded-full flex items-center justify-center mx-auto mb-4">
+                      <BriefcaseIcon className="size-8 text-zinc-200" />
                     </div>
-                    <p className="text-gray-500 font-medium">No hay ofertas de empleo para mostrar.</p>
+                    <p className="text-zinc-500 font-medium">No hay ofertas de empleo para mostrar.</p>
                     <PremiumButton href="/empresa-profile/crear-empleo" variant="outline" size="sm" className="mt-4">
                       Crea tu primera oferta
                     </PremiumButton>
@@ -211,14 +211,14 @@ export default function OfertasPage() {
                 </tr>
               ) : (
                 ofertas.map((oferta) => (
-                  <tr key={oferta.idVacante} className="group hover:bg-gray-50/50 transition-all">
+                  <tr key={oferta.idVacante} className="group hover:bg-zinc-50/50 transition-all">
                     <td className="py-5 px-8">
                       <div className="flex flex-col">
-                        <span className="text-base font-bold text-gray-900 group-hover:text-primary transition-colors">
+                        <span className="text-base font-bold text-zinc-900 group-hover:text-primary transition-colors">
                           {oferta.tituloPuesto}
                         </span>
                         <div className="flex items-center gap-3 mt-1.5">
-                          <span className="flex items-center gap-1 text-xs font-bold text-gray-400 uppercase tracking-widest">
+                          <span className="flex items-center gap-1 text-xs font-bold text-zinc-400 uppercase tracking-widest">
                             <MapPinIcon className="size-3.5 text-primary/60" />
                             {oferta.ubicacion}
                           </span>
@@ -230,21 +230,21 @@ export default function OfertasPage() {
                         onClick={() => handleViewCandidates(oferta)}
                         className="inline-flex flex-col items-center group/btn"
                       >
-                        <span className="text-lg font-bold text-gray-900 group-hover/btn:text-primary transition-colors">
+                        <span className="text-lg font-bold text-zinc-900 group-hover/btn:text-primary transition-colors">
                           {oferta.totalAplicaciones}
                         </span>
-                        <span className="text-[10px] font-bold text-gray-400 uppercase tracking-widest">
+                        <span className="text-[10px] font-bold text-zinc-400 uppercase tracking-widest">
                           Aplicantes
                         </span>
                       </button>
                     </td>
                     <td className="py-5 px-4">
                       <div className="flex flex-col gap-1.5">
-                        <div className="flex items-center gap-2 text-[11px] font-bold text-gray-500 uppercase tracking-wider">
+                        <div className="flex items-center gap-2 text-[11px] font-bold text-zinc-500 uppercase tracking-wider">
                            <span className="size-1.5 rounded-full bg-green-400" />
                            Pub: {formatDate(oferta.fechaPublicacion)}
                         </div>
-                        <div className="flex items-center gap-2 text-[11px] font-bold text-gray-500 uppercase tracking-wider">
+                        <div className="flex items-center gap-2 text-[11px] font-bold text-zinc-500 uppercase tracking-wider">
                            <span className="size-1.5 rounded-full bg-red-400" />
                            Exp: {formatDate(oferta.fechaCierre)}
                         </div>
@@ -299,7 +299,7 @@ export default function OfertasPage() {
             totalItems={totalItems}
             itemLabel="empleos"
             onPageChange={handlePageChange}
-            className="rounded-none border-t border-gray-100"
+            className="rounded-none border-t border-zinc-100"
           />
         )}
       </div>
@@ -318,43 +318,43 @@ export default function OfertasPage() {
             </DialogHeader>
           </div>
           
-          <div className="p-8 max-h-[70vh] overflow-y-auto bg-gray-50/50">
+          <div className="p-8 max-h-[70vh] overflow-y-auto bg-zinc-50/50">
             {loadingAplicantes ? (
               <LoadingState message="Buscando aplicantes..." className="py-12" />
             ) : aplicantes.length === 0 ? (
               <div className="text-center py-12">
-                <div className="size-16 bg-white rounded-full flex items-center justify-center mx-auto mb-4 shadow-sm border border-gray-100">
-                  <UsersIcon className="size-8 text-gray-200" />
+                <div className="size-16 bg-white rounded-full flex items-center justify-center mx-auto mb-4 shadow-sm border border-zinc-100">
+                  <UsersIcon className="size-8 text-zinc-200" />
                 </div>
-                <p className="text-gray-500 font-medium italic">No hay candidatos registrados para esta oferta aún.</p>
+                <p className="text-zinc-500 font-medium italic">No hay candidatos registrados para esta oferta aún.</p>
               </div>
             ) : (
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 {aplicantes.map((aplicante) => (
                   <div
                     key={aplicante.idAplicacion}
-                    className="bg-white rounded-2xl border border-gray-100 shadow-sm p-6 hover:shadow-md transition-all group flex flex-col"
+                    className="bg-white rounded-2xl border border-zinc-100 shadow-sm p-6 hover:shadow-md transition-all group flex flex-col"
                   >
                     <div className="flex justify-between items-start mb-4">
                       <div className="min-w-0 flex-1 mr-4">
-                        <h3 className="text-lg font-bold text-gray-900 group-hover:text-primary transition-colors truncate">
+                        <h3 className="text-lg font-semibold text-zinc-900 group-hover:text-primary transition-colors truncate">
                           {aplicante.nombreCompleto}
                         </h3>
-                        <p className="text-xs font-bold text-gray-400 uppercase tracking-widest mt-0.5">
+                        <p className="text-xs font-bold text-zinc-400 uppercase tracking-widest mt-0.5">
                           {aplicante.correoElectronico}
                         </p>
                       </div>
                       <StatusBadge status={aplicante.estadoAplicacion} className="shrink-0" />
                     </div>
                     
-                    <div className="flex items-center gap-2 text-xs font-bold text-gray-500 uppercase tracking-widest mt-auto pt-4 border-t border-gray-50">
+                    <div className="flex items-center gap-2 text-xs font-bold text-zinc-500 uppercase tracking-widest mt-auto pt-4 border-t border-zinc-50">
                        <CalendarIcon className="size-3.5 text-primary/60" />
                        Aplicó el {formatDate(aplicante.fechaPostulacion)}
                     </div>
                     
                     {aplicante.mensajeCandidato && (
-                      <div className="mt-4 p-4 bg-gray-50 rounded-xl border border-gray-100 italic text-sm text-gray-600 relative">
-                        <span className="absolute -top-2 left-4 px-2 bg-gray-50 text-[10px] font-bold text-gray-400 uppercase tracking-widest">Mensaje</span>
+                      <div className="mt-4 p-4 bg-zinc-50 rounded-xl border border-zinc-100 italic text-sm text-zinc-600 relative">
+                        <span className="absolute -top-2 left-4 px-2 bg-zinc-50 text-[10px] font-bold text-zinc-400 uppercase tracking-widest">Mensaje</span>
                         &quot;{aplicante.mensajeCandidato}&quot;
                       </div>
                     )}

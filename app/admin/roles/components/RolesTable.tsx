@@ -35,9 +35,9 @@ export default function RolesTable({
       case "activo":
         return "text-green-600 bg-green-50";
       case "inactivo":
-        return "text-gray-600 bg-gray-100";
+        return "text-zinc-600 bg-zinc-100";
       default:
-        return "text-gray-600 bg-gray-50";
+        return "text-zinc-600 bg-zinc-50";
     }
   };
 
@@ -69,64 +69,64 @@ export default function RolesTable({
     <div className="overflow-x-auto">
       <table className="w-full">
         <thead>
-          <tr className="bg-gray-50 border-b border-gray-200">
+          <tr className="bg-zinc-50 border-b border-zinc-200">
             <th
               scope="col"
-              className="text-left py-5 px-4 text-sm font-semibold text-gray-500 uppercase tracking-wider"
+              className="text-left py-5 px-4 text-sm font-semibold text-zinc-500 uppercase tracking-wider"
             >
               Rol
             </th>
             <th
               scope="col"
-              className="text-left py-5 px-4 text-sm font-semibold text-gray-500 uppercase tracking-wider"
+              className="text-left py-5 px-4 text-sm font-semibold text-zinc-500 uppercase tracking-wider"
             >
               Descripción
             </th>
             <th
               scope="col"
-              className="text-center py-5 px-4 text-sm font-semibold text-gray-500 uppercase tracking-wider"
+              className="text-center py-5 px-4 text-sm font-semibold text-zinc-500 uppercase tracking-wider"
             >
               Permisos
             </th>
             <th
               scope="col"
-              className="text-center py-5 px-4 text-sm font-semibold text-gray-500 uppercase tracking-wider"
+              className="text-center py-5 px-4 text-sm font-semibold text-zinc-500 uppercase tracking-wider"
             >
               Usuarios
             </th>
             <th
               scope="col"
-              className="text-center py-5 px-4 text-sm font-semibold text-gray-500 uppercase tracking-wider"
+              className="text-center py-5 px-4 text-sm font-semibold text-zinc-500 uppercase tracking-wider"
             >
               Estado
             </th>
             <th
               scope="col"
-              className="text-left py-5 px-4 text-sm font-semibold text-gray-500 uppercase tracking-wider"
+              className="text-left py-5 px-4 text-sm font-semibold text-zinc-500 uppercase tracking-wider"
             >
               Última Actualización
             </th>
             <th
               scope="col"
-              className="text-center py-5 px-4 text-sm font-semibold text-gray-500 uppercase tracking-wider"
+              className="text-center py-5 px-4 text-sm font-semibold text-zinc-500 uppercase tracking-wider"
             >
               Acciones
             </th>
           </tr>
         </thead>
-        <tbody className="divide-y divide-gray-100">
+        <tbody className="divide-y divide-zinc-100">
           {roles.map((role) => (
-            <tr key={role.idRol} className="hover:bg-gray-50 transition-colors">
+            <tr key={role.idRol} className="hover:bg-zinc-50 transition-colors">
               {/* Role Name */}
-              <td className="py-4 px-4">
+              <td className="p-4">
                 <div className="flex items-center gap-3">
-                  <div className="w-10 h-10 rounded-lg bg-primary/10 flex items-center justify-center">
-                    <Shield className="w-5 h-5 text-primary" />
+                  <div className="size-10 rounded-lg bg-primary/10 flex items-center justify-center">
+                    <Shield className="size-5 text-primary" />
                   </div>
                   <div>
-                    <p className="font-semibold text-gray-900">{role.nombre}</p>
+                    <p className="font-semibold text-zinc-900">{role.nombre}</p>
                     {isSystemRole(role.nombre) && (
-                      <span className="text-xs text-gray-500">
+                      <span className="text-xs text-zinc-500">
                         Rol del sistema
                       </span>
                     )}
@@ -135,14 +135,14 @@ export default function RolesTable({
               </td>
 
               {/* Description */}
-              <td className="py-4 px-4">
-                <p className="text-sm text-gray-600 max-w-xs truncate">
+              <td className="p-4">
+                <p className="text-sm text-zinc-600 max-w-xs truncate">
                   {role.descripcion}
                 </p>
               </td>
 
               {/* Permissions Count */}
-              <td className="py-4 px-4 text-center">
+              <td className="p-4 text-center">
                 <TooltipProvider>
                   <Tooltip>
                     <TooltipTrigger asChild>
@@ -166,27 +166,27 @@ export default function RolesTable({
               </td>
 
               {/* Users Count */}
-              <td className="py-4 px-4 text-center">
-                <div className="flex items-center justify-center gap-1.5 text-gray-600">
-                  <Users className="w-4 h-4" />
+              <td className="p-4 text-center">
+                <div className="flex items-center justify-center gap-1.5 text-zinc-600">
+                  <Users className="size-4" />
                   <span className="font-medium">{role.usuariosAsignados}</span>
                 </div>
               </td>
 
               {/* Status */}
-              <td className="py-4 px-4 text-center">
+              <td className="p-4 text-center">
                 <Pill className={getStatusClasses(role.estado.nombre)}>
                   {role.estado.nombre}
                 </Pill>
               </td>
 
               {/* Last Updated */}
-              <td className="py-4 px-4 text-sm text-gray-500">
+              <td className="p-4 text-sm text-zinc-500">
                 {formatDate(role.fechaActualizacion)}
               </td>
 
               {/* Actions */}
-              <td className="py-4 px-4">
+              <td className="p-4">
                 <div className="flex items-center justify-center gap-2">
                   {/* Edit */}
                   <button
@@ -194,7 +194,7 @@ export default function RolesTable({
                     className="p-2 rounded-lg hover:bg-blue-50 text-blue-600 transition-colors"
                     title="Editar rol"
                   >
-                    <Pencil className="w-4 h-4" />
+                    <Pencil className="size-4" />
                   </button>
 
                   {/* Toggle Status */}
@@ -211,7 +211,7 @@ export default function RolesTable({
                         : "Activar rol"
                     }
                   >
-                    <Power className="w-4 h-4" />
+                    <Power className="size-4" />
                   </button>
 
                   {/* Delete - Only for non-system roles */}
@@ -221,7 +221,7 @@ export default function RolesTable({
                       className="p-2 rounded-lg hover:bg-red-50 text-red-600 transition-colors"
                       title="Eliminar rol"
                     >
-                      <Trash2 className="w-4 h-4" />
+                      <Trash2 className="size-4" />
                     </button>
                   )}
                 </div>

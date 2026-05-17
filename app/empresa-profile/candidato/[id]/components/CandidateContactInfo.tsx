@@ -11,9 +11,9 @@ export default function CandidateContactInfo({
 }: CandidateContactInfoProps) {
   return (
     <div className="bg-white rounded-lg shadow p-6">
-      <h3 className="text-lg font-semibold text-gray-900 mb-4 flex items-center gap-2">
+      <h3 className="text-lg font-semibold text-zinc-900 mb-4 flex items-center gap-2">
         <svg
-          className="w-5 h-5 text-primary"
+          className="size-5 text-primary"
           fill="none"
           stroke="currentColor"
           viewBox="0 0 24 24"
@@ -33,7 +33,7 @@ export default function CandidateContactInfo({
         <div className="flex items-start gap-3">
           <div className="p-2 bg-blue-50 rounded-lg">
             <svg
-              className="w-4 h-4 text-blue-600"
+              className="size-4 text-blue-600"
               fill="none"
               stroke="currentColor"
               viewBox="0 0 24 24"
@@ -47,7 +47,7 @@ export default function CandidateContactInfo({
             </svg>
           </div>
           <div>
-            <p className="text-xs text-gray-500 uppercase tracking-wide">
+            <p className="text-xs text-zinc-500 uppercase tracking-wide">
               Email
             </p>
             <a
@@ -63,7 +63,7 @@ export default function CandidateContactInfo({
         <div className="flex items-start gap-3">
           <div className="p-2 bg-green-50 rounded-lg">
             <svg
-              className="w-4 h-4 text-green-600"
+              className="size-4 text-green-600"
               fill="none"
               stroke="currentColor"
               viewBox="0 0 24 24"
@@ -77,12 +77,12 @@ export default function CandidateContactInfo({
             </svg>
           </div>
           <div>
-            <p className="text-xs text-gray-500 uppercase tracking-wide">
+            <p className="text-xs text-zinc-500 uppercase tracking-wide">
               Teléfono
             </p>
             <a
               href={`tel:${datosContacto.telefono}`}
-              className="text-sm font-medium text-gray-900 hover:text-primary"
+              className="text-sm font-medium text-zinc-900 hover:text-primary"
             >
               {datosContacto.telefono}
             </a>
@@ -93,7 +93,7 @@ export default function CandidateContactInfo({
         <div className="flex items-start gap-3">
           <div className="p-2 bg-purple-50 rounded-lg">
             <svg
-              className="w-4 h-4 text-purple-600"
+              className="size-4 text-purple-600"
               fill="none"
               stroke="currentColor"
               viewBox="0 0 24 24"
@@ -107,12 +107,12 @@ export default function CandidateContactInfo({
             </svg>
           </div>
           <div>
-            <p className="text-xs text-gray-500 uppercase tracking-wide">
+            <p className="text-xs text-zinc-500 uppercase tracking-wide">
               Celular
             </p>
             <a
               href={`tel:${datosContacto.celular}`}
-              className="text-sm font-medium text-gray-900 hover:text-primary"
+              className="text-sm font-medium text-zinc-900 hover:text-primary"
             >
               {datosContacto.celular}
             </a>
@@ -123,7 +123,7 @@ export default function CandidateContactInfo({
         <div className="flex items-start gap-3">
           <div className="p-2 bg-orange-50 rounded-lg">
             <svg
-              className="w-4 h-4 text-orange-600"
+              className="size-4 text-orange-600"
               fill="none"
               stroke="currentColor"
               viewBox="0 0 24 24"
@@ -143,13 +143,13 @@ export default function CandidateContactInfo({
             </svg>
           </div>
           <div>
-            <p className="text-xs text-gray-500 uppercase tracking-wide">
+            <p className="text-xs text-zinc-500 uppercase tracking-wide">
               Dirección
             </p>
-            <p className="text-sm font-medium text-gray-900">
+            <p className="text-sm font-medium text-zinc-900">
               {datosContacto.direccion}
             </p>
-            <p className="text-sm text-gray-500">
+            <p className="text-sm text-zinc-500">
               {datosContacto.ciudad}, {datosContacto.provincia},{" "}
               {datosContacto.pais}
             </p>

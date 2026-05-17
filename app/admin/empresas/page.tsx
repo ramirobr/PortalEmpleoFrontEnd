@@ -76,8 +76,8 @@ export default function AdminEmpresasPage() {
 
   return (
     <div>
-      <h1 className="text-3xl font-bold mb-6 flex items-center gap-3">
-        <Building2 className="w-8 h-8 text-primary" />
+      <h1 className="text-3xl font-semibold mb-6 flex items-center gap-3">
+        <Building2 className="size-8 text-primary" />
         Gestionar Empresas
       </h1>
 
@@ -86,7 +86,7 @@ export default function AdminEmpresasPage() {
         <div className="flex flex-col lg:flex-row gap-4">
           {/* Search */}
           <div className="relative flex-1">
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 size-4 text-zinc-400" />
             <Input
               type="text"
               placeholder="Buscar por nombre o RUT..."
@@ -157,7 +157,7 @@ export default function AdminEmpresasPage() {
           totalItems={totalItems}
           itemLabel="empresas"
           onPageChange={setCurrentPage}
-          className="rounded-b-xl border-t border-gray-100"
+          className="rounded-b-xl border-t border-zinc-100"
         />
       </Card>
     </div>

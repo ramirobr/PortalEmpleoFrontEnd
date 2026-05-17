@@ -63,7 +63,7 @@ export default function MoverArchivoCandidatoDialog({
         </DialogHeader>
 
         <div className="py-4">
-          <label className="text-sm font-medium text-gray-700 mb-2 block">
+          <label className="text-sm font-medium text-zinc-700 mb-2 block">
             Carpeta Destino
           </label>
           <Select value={selectedCarpeta} onValueChange={setSelectedCarpeta}>
@@ -73,14 +73,14 @@ export default function MoverArchivoCandidatoDialog({
             <SelectContent>
               <SelectItem value={ROOT}>
                 <span className="flex items-center gap-2">
-                  <FolderOpen className="w-4 h-4 text-gray-400" />
+                  <FolderOpen className="size-4 text-zinc-400" />
                   Raíz (sin carpeta)
                 </span>
               </SelectItem>
               {carpetas.map((c) => (
                 <SelectItem key={c.idCarpetaUsuario} value={c.idCarpetaUsuario}>
                   <span className="flex items-center gap-2">
-                    <FolderOpen className="w-4 h-4 text-yellow-500" />
+                    <FolderOpen className="size-4 text-yellow-500" />
                     {c.nombreCarpeta}
                   </span>
                 </SelectItem>

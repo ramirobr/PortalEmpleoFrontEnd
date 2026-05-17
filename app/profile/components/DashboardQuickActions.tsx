@@ -8,7 +8,7 @@ export default function DashboardQuickActions() {
     {
       title: "Tu información",
       description: "Nombre y datos de identificación",
-      icon: <Contact2 className="w-8 h-8 text-primary" />,
+      icon: <Contact2 className="size-8 text-primary" />,
       alert: true,
       link: "/profile/edit#datosPersonales",
     },
@@ -16,7 +16,7 @@ export default function DashboardQuickActions() {
       title: "Dirección",
       description:
         "Dirección de domicilio. Verifícala con una imagen de tu servicio básico",
-      icon: <MapPin className="w-8 h-8 text-primary" />,
+      icon: <MapPin className="size-8 text-primary" />,
       alert: true,
       link: "/profile/edit#planillaServicio",
     },
@@ -24,7 +24,7 @@ export default function DashboardQuickActions() {
       title: "Certificados",
       description:
         "Actualiza todos tus certificados laborales: Antecedentes, médicos y demás",
-      icon: <User className="w-8 h-8 text-primary" />,
+      icon: <User className="size-8 text-primary" />,
       alert: true,
       link: "/profile/edit#certificados",
     },
@@ -37,7 +37,7 @@ export default function DashboardQuickActions() {
           <li key={index}>
             <Link
               href={card.link}
-              className="bg-white rounded-3xl shadow-sm overflow-hidden flex relative min-h-[160px] group hover:shadow-xl hover:-translate-y-1.5 transition-all duration-500 cursor-pointer no-underline border border-slate-50 outline-none focus-visible:ring-4 focus-visible:ring-primary/20 h-full"
+              className="bg-white rounded-3xl shadow-sm overflow-hidden flex relative min-h-[160px] group hover:shadow-xl hover:-translate-y-1.5 transition-all duration-500 cursor-pointer no-underline border border-zinc-50 outline-none focus-visible:ring-4 focus-visible:ring-primary/20 h-full"
               aria-label={`Editar ${card.title}: ${card.description}`}
             >
               <div className="flex-1 p-8 relative">
@@ -46,17 +46,17 @@ export default function DashboardQuickActions() {
                   <div aria-hidden="true">{card.icon}</div>
                   {card.alert && (
                     <div className="bg-warning rounded-full p-0.5" role="status" aria-label="Requiere atención">
-                      <AlertCircle className="w-5 h-5 text-white fill-warning" aria-hidden="true" />
+                      <AlertCircle className="size-5 text-white fill-warning" aria-hidden="true" />
                     </div>
                   )}
                 </div>
 
                 {/* Text content */}
                 <div>
-                  <h3 className="text-xl font-display font-bold text-primary mb-2 uppercase tracking-tight group-hover:text-secondary transition-colors duration-300">
+                  <h3 className="text-xl font-display font-semibold text-primary mb-2 uppercase tracking-tight group-hover:text-secondary transition-colors duration-300">
                     {card.title}
                   </h3>
-                  <p className="text-sm font-medium text-slate-500 leading-relaxed">
+                  <p className="text-sm font-medium text-zinc-500 leading-relaxed">
                     {card.description}
                   </p>
                 </div>

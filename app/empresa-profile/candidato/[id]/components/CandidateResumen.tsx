@@ -7,9 +7,9 @@ interface CandidateResumenProps {
 export default function CandidateResumen({ resumen }: CandidateResumenProps) {
   return (
     <div className="bg-white rounded-lg shadow p-6">
-      <h3 className="text-lg font-semibold text-gray-900 mb-4 flex items-center gap-2">
+      <h3 className="text-lg font-semibold text-zinc-900 mb-4 flex items-center gap-2">
         <svg
-          className="w-5 h-5 text-primary"
+          className="size-5 text-primary"
           fill="none"
           stroke="currentColor"
           viewBox="0 0 24 24"
@@ -23,7 +23,7 @@ export default function CandidateResumen({ resumen }: CandidateResumenProps) {
         </svg>
         Resumen Profesional
       </h3>
-      <p className="text-gray-700 leading-relaxed whitespace-pre-line">
+      <p className="text-zinc-700 leading-relaxed whitespace-pre-line">
         {resumen}
       </p>
     </div>

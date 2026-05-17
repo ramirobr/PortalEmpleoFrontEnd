@@ -101,7 +101,7 @@ function LoginForm() {
   }
 
   return (
-    <div className="min-h-screen flex flex-col bg-gray-50">
+    <div className="min-h-screen flex flex-col bg-zinc-50">
       <Navbar
         showCompanyRegister={true}
         onHamburgerClick={toggleMobileMenu}
@@ -117,14 +117,14 @@ function LoginForm() {
       <main className="flex-1 flex flex-col items-center justify-center px-4 py-12">
         <Card className="w-full max-w-md p-6 flex flex-col gap-6 shadow-md">
           <CardContent className="flex flex-col gap-6">
-            <div className="w-12 h-12 bg-primary/10 rounded-full flex items-center justify-center text-primary m-auto">
+            <div className="size-12 bg-primary/10 rounded-full flex items-center justify-center text-primary m-auto">
               <LockKeyholeOpen className="w-7 h-" />
             </div>
             <div className="text-center mb-5">
-              <h2 className="text-black text-2xl font-bold ">
+              <h2 className="text-black text-2xl font-semibold ">
                 Bienvenido de nuevo
               </h2>
-              <p className="mt-2 text-gray-600">
+              <p className="mt-2 text-zinc-600">
                 Inicia sesión para gestionar tus candidaturas
               </p>
             </div>
@@ -141,7 +141,7 @@ function LoginForm() {
                       <FormLabel>Correo electrónico *</FormLabel>
                       <FormControl>
                         <div className="relative">
-                          <Mail className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 w-5 h-5" />
+                          <Mail className="absolute left-3 top-1/2 -translate-y-1/2 text-zinc-400 size-5" />
                           <Input
                             {...field}
                             type="email"
@@ -177,7 +177,7 @@ function LoginForm() {
                                 ? "Ocultar contraseña"
                                 : "Mostrar contraseña"
                             }
-                            className="absolute right-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400 cursor-pointer"
+                            className="absolute right-3 top-1/2 -translate-y-1/2 size-5 text-zinc-400 cursor-pointer"
                             onMouseDown={handleMouseDown}
                             onMouseUp={handleMouseUp}
                             onMouseLeave={handleMouseUp}
@@ -205,7 +205,7 @@ function LoginForm() {
                   disabled={form.formState.isSubmitting}
                 >
                   {form.formState.isSubmitting && (
-                    <span className="animate-spin h-4 w-4 border-2 border-t-transparent rounded-full mr-2" />
+                    <span className="animate-spin size-4 border-2 border-t-transparent rounded-full mr-2" />
                   )}
                   Iniciar Sesión
                   <ArrowRight className="ml-2" />
@@ -238,7 +238,7 @@ export default function LoginPage() {
   return (
     <Suspense 
       fallback={
-        <div className="min-h-screen flex items-center justify-center bg-gray-50">
+        <div className="min-h-screen flex items-center justify-center bg-zinc-50">
           <Loader size={48} />
         </div>
       }

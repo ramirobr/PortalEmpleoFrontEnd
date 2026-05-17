@@ -47,12 +47,12 @@ export default function PaginatedApplicantList({
 
   return (
     <div className="bg-white p-6 rounded-lg shadow mt-6">
-      <h2 className="text-xl font-semibold text-gray-900 mb-6">{title}</h2>
+      <h2 className="text-xl font-semibold text-zinc-900 mb-6">{title}</h2>
 
       <div className="mb-6 relative">
         <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
           <svg
-            className="h-5 w-5 text-gray-400"
+            className="size-5 text-zinc-400"
             xmlns="http://www.w3.org/2000/svg"
             viewBox="0 0 20 20"
             fill="currentColor"
@@ -73,7 +73,7 @@ export default function PaginatedApplicantList({
             setSearchQuery(e.target.value);
             setCurrentPage(1);
           }}
-          className="w-full pl-10 pr-4 py-2 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
+          className="w-full pl-10 pr-4 py-2 rounded-lg border border-zinc-300 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
         />
       </div>
 
@@ -104,7 +104,7 @@ export default function PaginatedApplicantList({
               className={`px-3 py-1 border rounded cursor-pointer ${
                 currentPage === page
                   ? "bg-primary text-white"
-                  : "bg-white hover:bg-gray-50"
+                  : "bg-white hover:bg-zinc-50"
               }`}
             >
               {page}

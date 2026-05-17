@@ -5,7 +5,6 @@ import { DashboardInfoData } from "@/types/user";
 import { useAuthStore } from "@/context/authStore";
 import DashboardHeroBanner from "./DashboardHeroBanner";
 import DashboardStatsBanner from "./DashboardStatsBanner";
-import DashboardJobFilters from "./DashboardJobFilters";
 import DashboardEmpleosDestacados from "./DashboardEmpleosDestacados";
 import DashboardEmplosMasBuscados from "./DashboardEmplosMasBuscados";
 import DashboardCTAButton from "./DashboardCTAButton";
@@ -43,9 +42,7 @@ export default function ProfileDashboardContainer({
 
       {/* Rest of content back inside normal padding */}
       <div className="px-8">
-        {/* Job type filter pills */}
-        <DashboardJobFilters />
-
+       
         {/* Two-column job sections */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mt-4">
           <DashboardEmpleosDestacados

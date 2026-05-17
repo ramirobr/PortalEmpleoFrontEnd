@@ -85,10 +85,10 @@ export default function TestimoniosPage() {
     return (
       <div className="flex flex-col gap-8">
         <TituloSubrayado>
-          <MessageSquareQuote className="w-8 h-8 text-primary" />
+          <MessageSquareQuote className="size-8 text-primary" />
           Mis Testimonios
         </TituloSubrayado>
-        <p className="slate-700 mt-2.5">Cargando testimonios...</p>
+        <p className="zinc-700 mt-2.5">Cargando testimonios...</p>
       </div>
     );
   }
@@ -97,11 +97,11 @@ export default function TestimoniosPage() {
     <div className="flex flex-col gap-8">
       <div>
         <TituloSubrayado>
-          <MessageSquareQuote className="w-8 h-8 text-primary" />
+          <MessageSquareQuote className="size-8 text-primary" />
           Mis Testimonios
         </TituloSubrayado>
 
-        <p className="slate-700">
+        <p className="zinc-700">
           Comparte tu experiencia usando PortalEmpleo. Tu testimonio puede
           ayudar a otros usuarios a conocer los beneficios de nuestra
           plataforma.

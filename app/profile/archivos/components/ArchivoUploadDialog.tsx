@@ -208,16 +208,16 @@ export default function ArchivoUploadDialog({
                     <FormLabel>Archivo</FormLabel>
                     <FormControl>
                       <div
-                        className="border-2 border-dashed border-gray-200 rounded-lg p-6 text-center cursor-pointer hover:border-primary/50 transition-colors"
+                        className="border-2 border-dashed border-zinc-200 rounded-lg p-6 text-center cursor-pointer hover:border-primary/50 transition-colors"
                         onClick={() => fileInputRef.current?.click()}
                       >
-                        <Upload className="w-8 h-8 text-gray-400 mx-auto mb-2" />
+                        <Upload className="size-8 text-zinc-400 mx-auto mb-2" />
                         {selectedFileName ? (
-                          <p className="text-sm font-medium text-gray-700">
+                          <p className="text-sm font-medium text-zinc-700">
                             {selectedFileName}
                           </p>
                         ) : (
-                          <p className="text-sm text-gray-500">
+                          <p className="text-sm text-zinc-500">
                             Haz clic para seleccionar{isPdfOnly ? " un archivo PDF" : " un archivo"}
                           </p>
                         )}
@@ -261,7 +261,7 @@ export default function ArchivoUploadDialog({
                     <FormItem>
                       <FormLabel>
                         Carpeta{" "}
-                        <span className="text-gray-400 font-normal">(opcional)</span>
+                        <span className="text-zinc-400 font-normal">(opcional)</span>
                       </FormLabel>
                       <Select
                         value={field.value ?? NO_FOLDER}

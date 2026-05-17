@@ -92,10 +92,10 @@ export default function TestimonioForm({ onSuccess }: TestimonioFormProps) {
       <Card className="p-6">
         <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
           <div>
-            <h3 className="text-lg font-semibold text-gray-800">
+            <h3 className="text-lg font-semibold text-zinc-800">
               ¿Quieres compartir tu experiencia?
             </h3>
-            <p className="text-slate-600">
+            <p className="text-zinc-600">
               Tu testimonio ayuda a otros usuarios a conocer PortalEmpleo
             </p>
           </div>
@@ -106,7 +106,7 @@ export default function TestimonioForm({ onSuccess }: TestimonioFormProps) {
             type="button"
             onClick={() => setIsOpen(true)}
           >
-            <Plus className="w-5 h-5" />
+            <Plus className="size-5" />
             Agregar
           </button>
         </div>
@@ -168,7 +168,7 @@ export default function TestimonioForm({ onSuccess }: TestimonioFormProps) {
                 </FormControl>
                 <div className="flex justify-between">
                   <FormMessage />
-                  <span className="text-xs text-gray-500">
+                  <span className="text-xs text-zinc-500">
                     {field.value?.length || 0}/500 caracteres
                   </span>
                 </div>
@@ -196,10 +196,10 @@ export default function TestimonioForm({ onSuccess }: TestimonioFormProps) {
                       >
                         <Star
                           className={cn(
-                            "w-8 h-8 transition-colors",
+                            "size-8 transition-colors",
                             (hoveredStar || watchCalificacion) >= star
                               ? "fill-yellow-400 text-yellow-400"
-                              : "text-gray-300",
+                              : "text-zinc-300",
                           )}
                         />
                       </button>
@@ -223,7 +223,7 @@ export default function TestimonioForm({ onSuccess }: TestimonioFormProps) {
             <Button type="submit" disabled={form.formState.isSubmitting}>
               {form.formState.isSubmitting ? (
                 <>
-                  <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                  <Loader2 className="size-4 mr-2 animate-spin" />
                   Enviando...
                 </>
               ) : (

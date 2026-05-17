@@ -18,6 +18,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { SearchAutocomplete } from "@/components/ui/search-autocomplete";
 import { Textarea } from "@/components/ui/textarea";
 import {
   DatosPersonalesFieldsResponse,
@@ -232,24 +233,18 @@ const EditarExperenciaLaboralItem: React.FC<
               <FormItem>
                 <FormLabel htmlFor="edit-ciudad">Ciudad</FormLabel>
                 <FormControl>
-                  <Select
-                    onValueChange={(v) => field.onChange(parseInt(v))}
-                    defaultValue={field.value?.toString()}
-                  >
-                    <SelectTrigger id="edit-ciudad">
-                      <SelectValue placeholder="Seleccione una ciudad" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      {fields?.ciudad?.map((ciudad) => (
-                        <SelectItem
-                          key={ciudad.idCatalogo}
-                          value={ciudad.idCatalogo.toString()}
-                        >
-                          {ciudad.nombre}
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
+                  <SearchAutocomplete<number>
+                    options={
+                      fields?.ciudad?.map((c) => ({
+                        id: c.idCatalogo,
+                        label: c.nombre,
+                      })) ?? []
+                    }
+                    value={(field.value as number) || undefined}
+                    onChange={(id) => field.onChange(id)}
+                    placeholder="Seleccione una ciudad"
+                    searchPlaceholder="Buscar ciudad..."
+                  />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -334,7 +329,7 @@ const EditarExperenciaLaboralItem: React.FC<
           </Button>
           <Button type="submit" disabled={form.formState.isSubmitting}>
             {form.formState.isSubmitting && (
-              <span className="animate-spin h-4 w-4 border-2 border-t-transparent rounded-full" />
+              <span className="animate-spin size-4 border-2 border-t-transparent rounded-full" />
             )}
             Guardar
           </Button>

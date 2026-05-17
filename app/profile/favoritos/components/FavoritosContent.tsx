@@ -80,7 +80,7 @@ export default function FavoritosContent({
     <div className="flex flex-col lg:flex-row gap-8 relative mt-12">
       {/* Mobile Overlay */}
       <div
-        className={`fixed inset-0 bg-black/50 z-40 lg:hidden transition-opacity duration-300 ${
+        className={`fixed inset-0 bg-zinc-950/50 z-40 lg:hidden transition-opacity duration-300 ${
           isFiltersOpen ? "opacity-100" : "opacity-0 pointer-events-none"
         }`}
         onClick={() => setIsFiltersOpen(false)}

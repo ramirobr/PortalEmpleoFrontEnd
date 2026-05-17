@@ -89,21 +89,21 @@ export default function BannerSelector({
   return (
     <div className="space-y-4">
       <div>
-        <label className="block text-sm font-semibold text-gray-700 mb-1">
+        <label className="block text-sm font-semibold text-zinc-700 mb-1">
           Banner del Empleo
         </label>
-        <p className="text-xs text-gray-500 mb-3">
+        <p className="text-xs text-zinc-500 mb-3">
           Selecciona una imagen de los archivos de tu empresa para mostrar como
           banner en el detalle del empleo.
         </p>
 
         <Select value={selectedId || ""} onValueChange={handleSelectArchivo}>
-          <SelectTrigger className="bg-gray-50 border-gray-200">
+          <SelectTrigger className="bg-zinc-50 border-zinc-200">
             <SelectValue placeholder="Seleccionar imagen..." />
           </SelectTrigger>
           <SelectContent>
             {archivos.length === 0 ? (
-              <div className="p-2 text-sm text-gray-500">
+              <div className="p-2 text-sm text-zinc-500">
                 {loading ? "Cargando..." : "No hay imágenes disponibles"}
               </div>
             ) : (
@@ -124,7 +124,7 @@ export default function BannerSelector({
       {selectedBanner && (
         <Card className="p-4">
           <div className="flex items-start justify-between mb-3">
-            <h3 className="text-sm font-semibold text-gray-700">
+            <h3 className="text-sm font-semibold text-zinc-700">
               Vista previa del banner
             </h3>
             <Button
@@ -134,10 +134,10 @@ export default function BannerSelector({
               onClick={handleClear}
               className="p-1 h-auto hover:bg-red-50"
             >
-              <X className="w-4 h-4 text-red-600" />
+              <X className="size-4 text-red-600" />
             </Button>
           </div>
-          <div className="relative w-full h-40 bg-gray-100 rounded-lg overflow-hidden">
+          <div className="relative w-full h-40 bg-zinc-100 rounded-lg overflow-hidden">
             <Image
               src={
                 selectedBanner.startsWith("data:")

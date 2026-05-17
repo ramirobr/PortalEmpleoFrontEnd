@@ -38,11 +38,11 @@ export default function EmpleosTable({
       case "activa":
         return "text-green-600 bg-green-50";
       case "cerrada":
-        return "text-gray-600 bg-gray-100";
+        return "text-zinc-600 bg-zinc-100";
       case "pendiente":
         return "text-yellow-600 bg-amber-100";
       default:
-        return "text-gray-600 bg-gray-50";
+        return "text-zinc-600 bg-zinc-50";
     }
   };
 
@@ -64,40 +64,40 @@ export default function EmpleosTable({
     <div className="overflow-x-auto">
       <table className="w-full">
         <thead>
-          <tr className="bg-gray-50 border-b border-gray-200">
+          <tr className="bg-zinc-50 border-b border-zinc-200">
             <th
               scope="col"
-              className="text-left py-5 px-4 text-sm font-semibold text-gray-500 uppercase tracking-wider"
+              className="text-left py-5 px-4 text-sm font-semibold text-zinc-500 uppercase tracking-wider"
             >
               Empleo
             </th>
             <th
               scope="col"
-              className="text-left py-5 px-4 text-sm font-semibold text-gray-500 uppercase tracking-wider"
+              className="text-left py-5 px-4 text-sm font-semibold text-zinc-500 uppercase tracking-wider"
             >
               Empresa
             </th>
             <th
               scope="col"
-              className="text-left py-5 px-4 text-sm font-semibold text-gray-500 uppercase tracking-wider"
+              className="text-left py-5 px-4 text-sm font-semibold text-zinc-500 uppercase tracking-wider"
             >
               Fecha Publicación
             </th>
             <th
               scope="col"
-              className="text-center py-5 px-4 text-sm font-semibold text-gray-500 uppercase tracking-wider"
+              className="text-center py-5 px-4 text-sm font-semibold text-zinc-500 uppercase tracking-wider"
             >
               Postulantes
             </th>
             <th
               scope="col"
-              className="text-center py-5 px-4 text-sm font-semibold text-gray-500 uppercase tracking-wider"
+              className="text-center py-5 px-4 text-sm font-semibold text-zinc-500 uppercase tracking-wider"
             >
               Estado
             </th>
             <th
               scope="col"
-              className="text-center py-5 px-4 text-sm font-semibold text-gray-500 uppercase tracking-wider"
+              className="text-center py-5 px-4 text-sm font-semibold text-zinc-500 uppercase tracking-wider"
             >
               Acciones
             </th>
@@ -107,15 +107,15 @@ export default function EmpleosTable({
           {empleos.map((empleo) => (
             <tr
               key={empleo.idVacante}
-              className="border-b border-gray-100 hover:bg-gray-50 transition-colors"
+              className="border-b border-zinc-100 hover:bg-zinc-50 transition-colors"
             >
               {/* Empleo */}
               <td className="py-2 px-4">
                 <div>
-                  <p className="font-semibold text-gray-800">{empleo.tituloPuesto}</p>
-                  <div className="flex items-center gap-2 mt-1 text-xs text-gray-500">
+                  <p className="font-semibold text-zinc-800">{empleo.tituloPuesto}</p>
+                  <div className="flex items-center gap-2 mt-1 text-xs text-zinc-500">
                     <span className="flex items-center gap-1">
-                      <MapPin className="w-3 h-3" />
+                      <MapPin className="size-3" />
                       {empleo.ubicacion}
                     </span>
                     <span>•</span>
@@ -127,26 +127,26 @@ export default function EmpleosTable({
               {/* Empresa */}
               <td className="py-2 px-4">
                 <div className="flex items-center gap-2">
-                  <Avatar className="w-8 h-8 rounded-lg">
-                    <AvatarFallback className="rounded-lg bg-gray-200 text-gray-600 text-xs">
+                  <Avatar className="size-8 rounded-lg">
+                    <AvatarFallback className="rounded-lg bg-zinc-200 text-zinc-600 text-xs">
                       {empleo.empresa.substring(0, 2).toUpperCase()}
                     </AvatarFallback>
                   </Avatar>
-                  <span className="text-sm font-medium text-gray-700">
+                  <span className="text-sm font-medium text-zinc-700">
                     {empleo.empresa}
                   </span>
                 </div>
               </td>
 
               {/* Fecha Publicación */}
-              <td className="py-2 px-4 text-gray-600">
+              <td className="py-2 px-4 text-zinc-600">
                 {empleo.fechaPublicacion}
               </td>
 
               {/* Postulantes */}
               <td className="py-2 px-4 text-center">
                 <div className="inline-flex items-center gap-1 px-2 py-1 rounded-full bg-blue-50 text-blue-700 text-xs font-medium">
-                  <Users className="w-3 h-3" />
+                  <Users className="size-3" />
                   {empleo.postulantes}
                 </div>
               </td>
@@ -175,7 +175,7 @@ export default function EmpleosTable({
                     aria-label={`Editar ${empleo.tituloPuesto}`}
                     title="Editar vacante"
                   >
-                    <Pencil className="w-3 h-3" />
+                    <Pencil className="size-3" />
                   </button>
                   <button
                     type="button"
@@ -187,9 +187,9 @@ export default function EmpleosTable({
                     }
                   >
                     {empleo.estado === "Activa" ? (
-                      <Ban className="w-3 h-3" />
+                      <Ban className="size-3" />
                     ) : (
-                      <CheckCircle className="w-3 h-3" />
+                      <CheckCircle className="size-3" />
                     )}
                   </button>
                   <button
@@ -199,7 +199,7 @@ export default function EmpleosTable({
                     aria-label={`Eliminar ${empleo.tituloPuesto}`}
                     title="Eliminar vacante"
                   >
-                    <Trash2 className="w-3 h-3" />
+                    <Trash2 className="size-3" />
                   </button>
                 </div>
               </td>

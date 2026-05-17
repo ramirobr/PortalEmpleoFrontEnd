@@ -58,23 +58,23 @@ export default function AdminUsuariosPage() {
 
   // Fetch usuarios (using mock data for now)
   useEffect(() => {
+    let cancelled = false;
+    let timerId: ReturnType<typeof setTimeout>;
     const fetchUsuarios = async () => {
       setLoading(true);
-      // TODO: Replace with real API call when available
-      // const response = await getAdminUsuarios(
-      //   { pageSize, currentPage, search, estado: estadoFilter, rol: rolFilter, tipoUsuario: tipoFilter },
-      //   session?.user?.accessToken
-      // );
-      // if (response?.isSuccess) {
-      //   setUsuarios(response.data.data);
-      // }
-
-      await new Promise((resolve) => setTimeout(resolve, 500));
+      await new Promise<void>((resolve) => {
+        timerId = setTimeout(resolve, 500);
+      });
+      if (cancelled) return;
       setUsuarios(getMockUsuarios());
       setLoading(false);
     };
 
     fetchUsuarios();
+    return () => {
+      cancelled = true;
+      clearTimeout(timerId);
+    };
   }, [session, currentPage, pageSize]);
 
   // Filter usuarios based on search and filters
@@ -205,8 +205,8 @@ export default function AdminUsuariosPage() {
   return (
     <div>
       <div className="flex justify-between items-center mb-6">
-        <h1 className="text-3xl font-bold flex items-center gap-3">
-          <UserCircle className="w-8 h-8 text-primary" />
+        <h1 className="text-3xl font-semibold flex items-center gap-3">
+          <UserCircle className="size-8 text-primary" />
           Gestionar Usuarios
         </h1>
         <Button
@@ -214,7 +214,7 @@ export default function AdminUsuariosPage() {
           className="flex items-center gap-2"
           onClick={handleCreate}
         >
-          <Plus className="w-4 h-4" />
+          <Plus className="size-4" />
           Nuevo usuario
         </Button>
       </div>
@@ -225,7 +225,7 @@ export default function AdminUsuariosPage() {
           <div className="flex flex-col lg:flex-row gap-4 flex-wrap">
             {/* Search */}
             <div className="relative flex-1 min-w-[200px]">
-              <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
+              <Search className="absolute left-3 top-1/2 -translate-y-1/2 size-4 text-zinc-400" />
               <Input
                 type="text"
                 placeholder="Buscar por nombre, email o rol..."
@@ -318,7 +318,7 @@ export default function AdminUsuariosPage() {
           totalItems={totalItems}
           itemLabel="usuarios"
           onPageChange={setCurrentPage}
-          className="rounded-b-xl border-t border-gray-100"
+          className="rounded-b-xl border-t border-zinc-100"
         />
       </Card>
 
@@ -357,7 +357,7 @@ export default function AdminUsuariosPage() {
             <DialogTitle>¿Eliminar usuario?</DialogTitle>
           </DialogHeader>
           <div className="py-4">
-            <p className="text-sm text-gray-600">
+            <p className="text-sm text-zinc-600">
               Esta acción no se puede deshacer. Se eliminará permanentemente el
               usuario{" "}
               <strong>{usuarioToDelete?.nombreCompleto}</strong> y todos sus

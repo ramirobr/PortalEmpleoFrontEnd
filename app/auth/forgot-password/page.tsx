@@ -98,7 +98,7 @@ export default function ForgotPasswordPage() {
   }
 
   return (
-    <div className="min-h-screen flex flex-col bg-gray-50">
+    <div className="min-h-screen flex flex-col bg-zinc-50">
       <Navbar
         showCompanyRegister={true}
         onHamburgerClick={toggleMobileMenu}
@@ -114,15 +114,15 @@ export default function ForgotPasswordPage() {
       <main className="flex-1 flex flex-col items-center justify-center px-4 py-12">
         <Card className="w-full max-w-md p-6 flex flex-col gap-6 shadow-md">
           <CardContent className="flex flex-col gap-6">
-            <div className="w-12 h-12 bg-primary/10 rounded-full flex items-center justify-center text-primary m-auto">
-              <KeyRound className="w-7 h-7" />
+            <div className="size-12 bg-primary/10 rounded-full flex items-center justify-center text-primary m-auto">
+              <KeyRound className="size-7" />
             </div>
 
             <div className="text-center mb-2">
-              <h2 className="text-black text-2xl font-bold">
+              <h2 className="text-black text-2xl font-semibold">
                 ¿Olvidaste tu contraseña?
               </h2>
-              <p className="mt-2 text-gray-600">
+              <p className="mt-2 text-zinc-600">
                 No te preocupes, ingresa tu correo electrónico y te enviaremos
                 las instrucciones para restablecerla.
               </p>
@@ -141,7 +141,7 @@ export default function ForgotPasswordPage() {
                       <FormLabel>Correo electrónico *</FormLabel>
                       <FormControl>
                         <div className="relative">
-                          <Mail className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 w-5 h-5" />
+                          <Mail className="absolute left-3 top-1/2 -translate-y-1/2 text-zinc-400 size-5" />
                           <Input
                             {...field}
                             type="email"
@@ -161,7 +161,7 @@ export default function ForgotPasswordPage() {
                   disabled={form.formState.isSubmitting}
                 >
                   {form.formState.isSubmitting && (
-                    <span className="animate-spin h-4 w-4 border-2 border-t-transparent rounded-full mr-2" />
+                    <span className="animate-spin size-4 border-2 border-t-transparent rounded-full mr-2" />
                   )}
                   Enviar instrucciones
                   <ArrowRight className="ml-2" />
@@ -171,7 +171,7 @@ export default function ForgotPasswordPage() {
                   href="/auth/login"
                   className="mt-3 text-center text-primary font-semibold text-sm hover:underline flex items-center justify-center gap-1"
                 >
-                  <ArrowLeft className="w-4 h-4" />
+                  <ArrowLeft className="size-4" />
                   Volver al inicio de sesión
                 </Link>
               </form>

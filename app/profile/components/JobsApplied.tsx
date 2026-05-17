@@ -13,14 +13,14 @@ export default function JobsApplied({
 }: JobsAppliedProps) {
   return (
     <section className="mt-10">
-      <h3 className="text-lg font-bold mb-4 text-gray-800">
+      <h3 className="text-lg font-semibold mb-4 text-zinc-800">
         Postulaciones Recientes
       </h3>
       <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-6">
         {listaTrabajosAplicados?.length ? (
           listaTrabajosAplicados.map((job) => (
             <Link href={`/jobs/${job.id}`} key={job.id} className="block group">
-              <div className="bg-white rounded-3xl shadow-sm hover:shadow-xl transition-all duration-500 p-8 flex flex-col gap-4 relative h-full border border-slate-50 group-hover:-translate-y-1">
+              <div className="bg-white rounded-3xl shadow-sm hover:shadow-xl transition-all duration-500 p-8 flex flex-col gap-4 relative h-full border border-zinc-50 group-hover:-translate-y-1">
                 <div className="flex justify-between items-start">
                   <Pill
                     variant={
@@ -37,15 +37,15 @@ export default function JobsApplied({
                 </div>
                 
                 <div className="mt-2">
-                  <h4 className="font-display font-bold text-primary text-xl leading-tight uppercase tracking-tight group-hover:text-primary-container transition-colors duration-300">
+                  <h4 className="font-display font-semibold text-primary text-xl leading-tight uppercase tracking-tight group-hover:text-primary-container transition-colors duration-300">
                     {job.titulo}
                   </h4>
-                  <p className="text-sm font-bold uppercase tracking-widest text-slate-600 mt-2">
+                  <p className="text-sm font-bold uppercase tracking-widest text-zinc-600 mt-2">
                     {job.empresa}
                   </p>
                 </div>
 
-                <div className="mt-auto pt-6 flex items-center gap-2 text-[11px] text-slate-600 font-bold uppercase tracking-wider border-t border-slate-100 italic">
+                <div className="mt-auto pt-6 flex items-center gap-2 text-[11px] text-zinc-600 font-bold uppercase tracking-wider border-t border-zinc-100 italic">
                    Aplicado {formatDistanceToNow(new Date(job.fechaAplicacion), { addSuffix: true, locale: es })}
                 </div>
               </div>

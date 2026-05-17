@@ -11,3 +11,11 @@ export function useDebouncedValue(value: string, delay = 300) {
 
   return debounced;
 }
+
+export function useHasMounted() {
+  const [hasMounted, setHasMounted] = useState(false);
+  useEffect(() => {
+    setHasMounted(true);
+  }, []);
+  return hasMounted;
+}

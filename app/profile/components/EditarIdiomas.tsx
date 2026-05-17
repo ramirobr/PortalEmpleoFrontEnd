@@ -186,7 +186,7 @@ export default function EditarIdiomas({
   return (
     <Card className="p-6">
       <div className="flex justify-between items-center">
-        <h2 className="text-2xl font-bold text-primary flex items-center gap-2">
+        <h2 className="text-2xl font-semibold text-primary flex items-center gap-2">
           <Languages width={25} height={25} className="text-primary" />
           Idiomas
         </h2>
@@ -207,7 +207,7 @@ export default function EditarIdiomas({
           idiomas.map((item) => (
             <div
               key={item.id}
-              className="flex gap-10 items-center justify-between p-3 rounded-lg  bg-gray-50 border border-gray-light"
+              className="flex gap-10 items-center justify-between p-3 rounded-lg  bg-zinc-50 border border-gray-light"
             >
               <button
                 type="button"
@@ -229,7 +229,7 @@ export default function EditarIdiomas({
               </button>
               <button
                 id="borrar-idioma"
-                className="cursor-pointer text-gray-400 hover:text-gray-600 transition-colors mt-1"
+                className="cursor-pointer text-zinc-400 hover:text-zinc-600 transition-colors mt-1"
                 aria-label={`Borrar idioma: ${item.nombre}`}
                 type="button"
                 onClick={() => requestDelete(item.id)}
@@ -434,7 +434,7 @@ const AddIdiomaForm: React.FC<AddIdiomaFormProps> = ({
           </Button>
           <Button type="submit" disabled={form.formState.isSubmitting}>
             {form.formState.isSubmitting && (
-              <span className="animate-spin h-4 w-4 border-2 border-t-transparent rounded-full" />
+              <span className="animate-spin size-4 border-2 border-t-transparent rounded-full" />
             )}
             Guardar
           </Button>
@@ -573,7 +573,7 @@ const EditIdiomaForm: React.FC<EditIdiomaFormProps> = ({
           </Button>
           <Button type="submit" disabled={form.formState.isSubmitting}>
             {form.formState.isSubmitting && (
-              <span className="animate-spin h-4 w-4 border-2 border-t-transparent rounded-full" />
+              <span className="animate-spin size-4 border-2 border-t-transparent rounded-full" />
             )}
             Guardar
           </Button>

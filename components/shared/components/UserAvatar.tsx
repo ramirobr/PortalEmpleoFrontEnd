@@ -20,7 +20,7 @@ export default function UserAvatar({
 
   return (
     <div
-      className={`rounded-full bg-gray-200 overflow-hidden flex items-center justify-center ${className}`}
+      className={`rounded-full bg-zinc-200 overflow-hidden flex items-center justify-center ${className}`}
       style={{ width: size, height: size }}
     >
       <Image

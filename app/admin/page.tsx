@@ -19,8 +19,11 @@ import Pill from "@/components/shared/components/Pill";
 import Link from "next/link";
 import { AdminTableLoading } from "./components/AdminTableStates";
 
+import { useHasMounted } from "@/lib/hooks";
+
 export default function AdminDashboardPage() {
   const { data: session } = useSession();
+  const hasMounted = useHasMounted();
   const [loading, setLoading] = useState(true);
   const [kpis, setKpis] = useState<AdminDashboardData | null>(null);
   const [empresasRecientes, setEmpresasRecientes] = useState<AdminEmpresa[]>([]);
@@ -48,9 +51,9 @@ export default function AdminDashboardPage() {
   return (
     <div className="space-y-6">
       <div className="flex justify-between items-center">
-        <h1 className="text-3xl font-bold">Dashboard</h1>
-        <div className="text-sm text-gray-500">
-          Última actualización: {new Date().toLocaleDateString()}
+        <h1 className="text-3xl font-semibold">Dashboard</h1>
+        <div className="text-sm text-zinc-500">
+          Última actualización: {hasMounted ? new Date().toLocaleDateString() : "--/--/----"}
         </div>
       </div>
 
@@ -97,19 +100,19 @@ export default function AdminDashboardPage() {
               {empresasRecientes.map((empresa) => (
                 <div
                   key={empresa.idEmpresa}
-                  className="flex items-center justify-between p-3 rounded-lg hover:bg-gray-50 transition-colors"
+                  className="flex items-center justify-between p-3 rounded-lg hover:bg-zinc-50 transition-colors"
                 >
                   <div className="flex items-center gap-3">
-                    <Avatar className="w-10 h-10 rounded-lg">
-                      <AvatarFallback className="rounded-lg bg-gray-200 text-gray-600 text-xs">
+                    <Avatar className="size-10 rounded-lg">
+                      <AvatarFallback className="rounded-lg bg-zinc-200 text-zinc-600 text-xs">
                         {empresa.nombreEmpresa.substring(0, 2).toUpperCase()}
                       </AvatarFallback>
                     </Avatar>
                     <div>
-                      <p className="font-medium text-sm text-gray-900">
+                      <p className="font-medium text-sm text-zinc-900">
                         {empresa.nombreEmpresa}
                       </p>
-                      <p className="text-xs text-gray-500">{empresa.numeroDocumento}</p>
+                      <p className="text-xs text-zinc-500">{empresa.numeroDocumento}</p>
                     </div>
                   </div>
                   <Pill
@@ -117,7 +120,7 @@ export default function AdminDashboardPage() {
                     bgColor={
                       empresa.plan === "Premium"
                         ? "bg-teal-50 text-teal-600"
-                        : "bg-gray-100 text-gray-600"
+                        : "bg-zinc-100 text-zinc-600"
                     }
                     className="w-fit scale-90"
                     noButton
@@ -146,28 +149,28 @@ export default function AdminDashboardPage() {
               {empleosRecientes.map((empleo) => (
                 <div
                   key={empleo.idVacante}
-                  className="flex items-center justify-between p-3 rounded-lg hover:bg-gray-50 transition-colors"
+                  className="flex items-center justify-between p-3 rounded-lg hover:bg-zinc-50 transition-colors"
                 >
                   <div>
-                    <p className="font-medium text-sm text-gray-900">
+                    <p className="font-medium text-sm text-zinc-900">
                       {empleo.tituloPuesto}
                     </p>
-                    <div className="flex items-center gap-2 mt-0.5 text-xs text-gray-500">
-                      <span className="font-medium text-gray-700">
+                    <div className="flex items-center gap-2 mt-0.5 text-xs text-zinc-500">
+                      <span className="font-medium text-zinc-700">
                         {empleo.empresa}
                       </span>
                       <span>•</span>
                       <span className="flex items-center gap-0.5">
-                        <MapPin className="w-3 h-3" />
+                        <MapPin className="size-3" />
                         {empleo.ubicacion}
                       </span>
                     </div>
                   </div>
                   <div className="text-right">
-                    <span className="text-xs font-semibold text-gray-900 block">
+                    <span className="text-xs font-semibold text-zinc-900 block">
                       {empleo.postulantes}
                     </span>
-                    <span className="text-[10px] text-gray-500">posts</span>
+                    <span className="text-[10px] text-zinc-500">posts</span>
                   </div>
                 </div>
               ))}

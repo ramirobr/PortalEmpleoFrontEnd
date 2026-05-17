@@ -178,11 +178,11 @@ export default function EmailSignup({ fields, loadingFields = false, ciudades = 
   return (
     <Card className="w-full max-w-2xl">
       <CardContent className="px-6 flex flex-col gap-6">
-        <div className="w-12 h-12 bg-primary/10 rounded-full flex items-center justify-center text-primary m-auto">
+        <div className="size-12 bg-primary/10 rounded-full flex items-center justify-center text-primary m-auto">
           <UserRoundPlus />
         </div>
         <div className="text-center mb-5">
-          <h2 className="text-black text-2xl font-bold ">Crea tu cuenta</h2>
+          <h2 className="text-black text-2xl font-semibold ">Crea tu cuenta</h2>
           <p className="mt-2">Únete a nuestra comunidad de profesionales</p>
         </div>
         <Form {...form}>
@@ -297,7 +297,7 @@ export default function EmailSignup({ fields, loadingFields = false, ciudades = 
                           }
                         />
                       </FormControl>
-                      <span className="text-xs text-gray-500 ml-2">
+                      <span className="text-xs text-zinc-500 ml-2">
                         Ej. 991234567
                       </span>
                       <FormMessage />
@@ -369,7 +369,7 @@ export default function EmailSignup({ fields, loadingFields = false, ciudades = 
                                 ? "Ocultar contraseña"
                                 : "Mostrar contraseña"
                             }
-                            className="absolute right-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400"
+                            className="absolute right-3 top-1/2 -translate-y-1/2 size-5 text-zinc-400"
                             onMouseDown={handleMouseDown}
                             onMouseUp={handleMouseUp}
                             onMouseLeave={handleMouseUp}
@@ -403,7 +403,7 @@ export default function EmailSignup({ fields, loadingFields = false, ciudades = 
                           <button
                             type="button"
                             aria-label={showConfirmPassword ? "Ocultar contraseña" : "Mostrar contraseña"}
-                            className="absolute right-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400 cursor-pointer"
+                            className="absolute right-3 top-1/2 -translate-y-1/2 size-5 text-zinc-400 cursor-pointer"
                             onMouseDown={handleConfirmMouseDown}
                             onMouseUp={handleConfirmMouseUp}
                             onMouseLeave={handleConfirmMouseUp}
@@ -536,7 +536,7 @@ export default function EmailSignup({ fields, loadingFields = false, ciudades = 
                     <FormLabel>Email *</FormLabel>
                     <FormControl>
                       <div className="relative">
-                        <Mail className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 w-5 h-5" />
+                        <Mail className="absolute left-3 top-1/2 -translate-y-1/2 text-zinc-400 size-5" />
                         <Input
                           type="email"
                           placeholder="Ingresa tu email"
@@ -634,7 +634,7 @@ export default function EmailSignup({ fields, loadingFields = false, ciudades = 
               disabled={form.formState.isSubmitting}
             >
               {form.formState.isSubmitting && (
-                <span className="animate-spin h-4 w-4 border-2 border-t-transparent rounded-full" />
+                <span className="animate-spin size-4 border-2 border-t-transparent rounded-full" />
               )}
               Crear cuenta
               <ArrowRight />

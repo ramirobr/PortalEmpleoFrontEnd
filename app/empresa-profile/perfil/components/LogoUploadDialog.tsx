@@ -132,15 +132,15 @@ export function LogoUploadDialog({
             <img
               src={companyLogo}
               alt={`Logo de ${companyName}`}
-              className="w-16 h-16 rounded-lg object-cover"
+              className="size-16 rounded-lg object-cover"
             />
           ) : (
-            <div className="w-16 h-16 rounded-lg bg-primary/10 flex items-center justify-center">
-              <Building2 className="w-8 h-8 text-primary" />
+            <div className="size-16 rounded-lg bg-primary/10 flex items-center justify-center">
+              <Building2 className="size-8 text-primary" />
             </div>
           )}
-          <div className="absolute inset-0 bg-black/50 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
-            <Camera className="w-5 h-5 text-white" />
+          <div className="absolute inset-0 bg-zinc-950/50 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+            <Camera className="size-5 text-white" />
           </div>
         </button>
       </DialogTrigger>
@@ -154,11 +154,11 @@ export function LogoUploadDialog({
               <img
                 src={companyLogo}
                 alt="Vista previa del logo"
-                className="w-32 h-32 rounded-lg object-cover border"
+                className="size-32 rounded-lg object-cover border"
               />
             ) : (
-              <div className="w-32 h-32 rounded-lg bg-primary/10 flex items-center justify-center border">
-                <Building2 className="w-16 h-16 text-primary" />
+              <div className="size-32 rounded-lg bg-primary/10 flex items-center justify-center border">
+                <Building2 className="size-16 text-primary" />
               </div>
             )}
             <input
@@ -173,7 +173,7 @@ export function LogoUploadDialog({
                 variant="outline"
                 onClick={() => fileInputRef.current?.click()}
               >
-                <Camera className="w-4 h-4 mr-2" />
+                <Camera className="size-4 mr-2" />
                 Seleccionar imagen
               </Button>
               {companyLogo && (
@@ -182,11 +182,11 @@ export function LogoUploadDialog({
                   onClick={handleDeleteLogo}
                   disabled={isSaving}
                 >
-                  <Trash2 className="w-4 h-4" />
+                  <Trash2 className="size-4" />
                 </Button>
               )}
             </div>
-            <p className="text-xs text-gray-500 text-center">
+            <p className="text-xs text-zinc-500 text-center">
               Formatos permitidos: JPG, PNG, GIF. Tamaño máximo: 5MB
             </p>
           </div>
@@ -199,7 +199,7 @@ export function LogoUploadDialog({
               disabled={isSaving || !selectedLogoFile}
             >
               {isSaving && (
-                <span className="animate-spin h-4 w-4 border-2 border-t-transparent rounded-full mr-2" />
+                <span className="animate-spin size-4 border-2 border-t-transparent rounded-full mr-2" />
               )}
               {isSaving ? "Guardando" : "Guardar"}
             </Button>

@@ -17,24 +17,24 @@ export default function ProfileSidebar({ user }: ProfileSidebarProps) {
     <div className="space-y-6">
       {/* Summary */}
       {user.resumen && (
-        <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
+        <div className="bg-white rounded-xl shadow-sm border border-zinc-100 p-6">
           <div className="flex items-center gap-2 mb-4 text-teal-600 font-bold">
             <div className="p-1.5 bg-teal-50 rounded-lg">
-              <FileText className="w-4 h-4" />
+              <FileText className="size-4" />
             </div>
             <h3>Resumen</h3>
           </div>
-          <p className="text-sm text-gray-600 leading-relaxed">
+          <p className="text-sm text-zinc-600 leading-relaxed">
             {user.resumen}
           </p>
         </div>
       )}
 
       {/* Skills */}
-      <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6">
+      <div className="bg-white rounded-2xl shadow-sm border border-zinc-100 p-6">
         <div className="flex items-center gap-2 mb-4 text-teal-600 font-bold">
           <div className="p-1.5 bg-teal-50 rounded-lg">
-            <Zap className="w-4 h-4" />
+            <Zap className="size-4" />
           </div>
           <h3>Habilidades principales</h3>
         </div>
@@ -53,15 +53,15 @@ export default function ProfileSidebar({ user }: ProfileSidebarProps) {
 
       {/* Social Links */}
       {(user.linkedin || user.github || user.website) && (
-        <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
-          <h3 className="font-bold text-gray-900 mb-4">Redes Profesionales</h3>
+        <div className="bg-white rounded-xl shadow-sm border border-zinc-100 p-6">
+          <h3 className="font-semibold text-zinc-900 mb-4">Redes Profesionales</h3>
           <div className="space-y-4">
             {user.linkedin && (
               <a
                 href={user.linkedin}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="flex items-center gap-3 text-sm text-gray-600 hover:text-teal-600 transition-colors"
+                className="flex items-center gap-3 text-sm text-zinc-600 hover:text-teal-600 transition-colors"
                 aria-label={`LinkedIn de ${user.datosPersonales?.nombre}`}
               >
                 <Linkedin size={18} />
@@ -75,7 +75,7 @@ export default function ProfileSidebar({ user }: ProfileSidebarProps) {
                 href={user.github}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="flex items-center gap-3 text-sm text-gray-600 hover:text-teal-600 transition-colors"
+                className="flex items-center gap-3 text-sm text-zinc-600 hover:text-teal-600 transition-colors"
                 aria-label={`GitHub de ${user.datosPersonales?.nombre}`}
               >
                 <Github size={18} />
@@ -87,7 +87,7 @@ export default function ProfileSidebar({ user }: ProfileSidebarProps) {
                 href={user.website}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="flex items-center gap-3 text-sm text-gray-600 hover:text-teal-600 transition-colors"
+                className="flex items-center gap-3 text-sm text-zinc-600 hover:text-teal-600 transition-colors"
                 aria-label={`Website de ${user.datosPersonales?.nombre}`}
               >
                 <Globe size={18} />
@@ -104,11 +104,11 @@ export default function ProfileSidebar({ user }: ProfileSidebarProps) {
           <CheckCircle2 size={20} className="fill-teal-100" />
           <h3>Estado de búsqueda</h3>
         </div>
-        <p className="text-sm text-gray-600 mb-4">
+        <p className="text-sm text-zinc-600 mb-4">
           {user.availabilityStatus || "En búsqueda activa"}
         </p>
         <div className="inline-flex items-center gap-2 px-3 py-1 bg-teal-100 text-teal-700 rounded-full text-xs font-bold">
-          <span className="w-1.5 h-1.5 rounded-full bg-teal-600 animate-pulse"></span>
+          <span className="size-1.5 rounded-full bg-teal-600 animate-pulse"></span>
           ACTIVO AHORA
         </div>
       </div>

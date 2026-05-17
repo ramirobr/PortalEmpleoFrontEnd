@@ -89,7 +89,7 @@ export default function JobApplyForm({
               <FormItem>
                 <FormLabel
                   htmlFor="message"
-                  className="text-sm font-medium text-gray-500"
+                  className="text-sm font-medium text-zinc-500"
                 >
                   Mensaje
                 </FormLabel>
@@ -114,7 +114,7 @@ export default function JobApplyForm({
               disabled={form.formState.isSubmitting}
             >
               {form.formState.isSubmitting && (
-                <span className="animate-spin h-4 w-4 border-2 border-t-transparent rounded-full" />
+                <span className="animate-spin size-4 border-2 border-t-transparent rounded-full" />
               )}
               {form.formState.isSubmitting
                 ? "Enviando..."

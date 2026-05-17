@@ -20,17 +20,17 @@ export default function Testimonials({ testimonials }: TestimonialsProps) {
   return (
     <section className="w-full py-16 sm:py-20 px-6 bg-background">
       <div className="max-w-7xl mx-auto">
-        <h2 className="text-3xl lg:text-4xl font-display font-extrabold text-slate-900 text-center mb-12 tracking-tight">
+        <h2 className="text-3xl lg:text-4xl font-display font-semibold text-zinc-900 text-center mb-12 tracking-tight">
           Lo que dicen de nosotros
         </h2>
 
         <div className="relative">
           {/* Nav buttons */}
-          <button className="testimonials-prev absolute -left-4 top-1/2 -translate-y-1/2 z-10 w-10 h-10 rounded-full bg-white border border-slate-200 shadow-md flex items-center justify-center text-primary hover:bg-primary hover:text-white transition-colors duration-200 disabled:opacity-30">
-            <ChevronLeft className="w-5 h-5" />
+          <button className="testimonials-prev absolute -left-4 top-1/2 -translate-y-1/2 z-10 size-10 rounded-full bg-white border border-zinc-200 shadow-md flex items-center justify-center text-primary hover:bg-primary hover:text-white transition-colors duration-200 disabled:opacity-30">
+            <ChevronLeft className="size-5" />
           </button>
-          <button className="testimonials-next absolute -right-4 top-1/2 -translate-y-1/2 z-10 w-10 h-10 rounded-full bg-white border border-slate-200 shadow-md flex items-center justify-center text-primary hover:bg-primary hover:text-white transition-colors duration-200 disabled:opacity-30">
-            <ChevronRight className="w-5 h-5" />
+          <button className="testimonials-next absolute -right-4 top-1/2 -translate-y-1/2 z-10 size-10 rounded-full bg-white border border-zinc-200 shadow-md flex items-center justify-center text-primary hover:bg-primary hover:text-white transition-colors duration-200 disabled:opacity-30">
+            <ChevronRight className="size-5" />
           </button>
 
           <Swiper
@@ -51,9 +51,9 @@ export default function Testimonials({ testimonials }: TestimonialsProps) {
           >
             {testimonials.map((t) => (
               <SwiperSlide key={t.idTestimonio} className="h-auto">
-                <div className="flex flex-col bg-white rounded-xl p-6 shadow-sm border border-slate-100 gap-4 h-full">
+                <div className="flex flex-col bg-white rounded-xl p-6 shadow-sm border border-zinc-100 gap-4 h-full">
                   <div className="flex items-center gap-4">
-                    <div className="relative w-14 h-14 shrink-0 rounded-full overflow-hidden border-2 border-slate-100 shadow-sm bg-slate-100">
+                    <div className="relative size-14 shrink-0 rounded-full overflow-hidden border-2 border-zinc-100 shadow-sm bg-zinc-100">
                       {t.foto ? (
                         <Image
                           src={`data:image/jpeg;base64,${t.foto.trim()}`}
@@ -63,7 +63,7 @@ export default function Testimonials({ testimonials }: TestimonialsProps) {
                           unoptimized
                         />
                       ) : (
-                        <div className="w-full h-full flex items-center justify-center text-slate-400 text-xl font-bold">
+                        <div className="w-full h-full flex items-center justify-center text-zinc-400 text-xl font-bold">
                           {t.nombreCompleto.charAt(0).toUpperCase()}
                         </div>
                       )}
@@ -71,7 +71,7 @@ export default function Testimonials({ testimonials }: TestimonialsProps) {
                     <div>
                       <p className="font-bold text-primary">{t.nombreCompleto}</p>
                       {(t.cargo || t.empresa) && (
-                        <p className="text-xs text-slate-500">
+                        <p className="text-xs text-zinc-500">
                           {[t.cargo, t.empresa].filter(Boolean).join(" en ")}
                         </p>
                       )}
@@ -82,12 +82,12 @@ export default function Testimonials({ testimonials }: TestimonialsProps) {
                     {Array.from({ length: 5 }).map((_, i) => (
                       <Star
                         key={i}
-                        className={`w-4 h-4 ${i < t.calificacion ? "fill-amber-400 text-amber-400" : "text-slate-200"}`}
+                        className={`size-4 ${i < t.calificacion ? "fill-amber-400 text-amber-400" : "text-zinc-200"}`}
                       />
                     ))}
                   </div>
 
-                  <p className="text-slate-600 text-sm leading-relaxed flex-1">
+                  <p className="text-zinc-600 text-sm leading-relaxed flex-1">
                     &ldquo;{t.testimonioDetalle}&rdquo;
                   </p>
                 </div>

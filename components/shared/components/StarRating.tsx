@@ -45,7 +45,7 @@ export function StarRating({
               "shrink-0 transition-colors duration-300",
               isFilled 
                 ? "text-functional-label-star fill-functional-label-star" 
-                : "text-gray-200 fill-none",
+                : "text-zinc-200 fill-none",
               starClassName
             )}
             aria-hidden="true"

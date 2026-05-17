@@ -33,7 +33,7 @@ export default function SignIn() {
   ];
 
   return (
-    <div className="min-h-screen flex flex-col bg-gray-50">
+    <div className="min-h-screen flex flex-col bg-zinc-50">
       <Navbar
         onHamburgerClick={toggleMobileMenu}
         isAsideOpen={isMobileMenuOpen}
@@ -50,20 +50,20 @@ export default function SignIn() {
           Crea tu cuenta y comienza a buscar empleo
         </h2>
         <div className="w-full max-w-md flex flex-col gap-4">
-          <button className="cursor-pointer flex items-center justify-center gap-2 w-full py-3 rounded bg-white border border-gray-300 font-semibold text-base text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-500 mb-2">
+          <button className="cursor-pointer flex items-center justify-center gap-2 w-full py-3 rounded bg-white border border-zinc-300 font-semibold text-base text-zinc-700 hover:bg-zinc-50 focus:outline-none focus:ring-2 focus:ring-blue-500 mb-2">
             Acceder con Google
           </button>
           <button className="cursor-pointer flex items-center justify-center gap-2 w-full py-3 rounded bg-brand-linkedin text-white font-semibold text-base hover:bg-brand-linkedin-dark focus:outline-none focus:ring-2 focus:ring-blue-500 mb-2">
             Acceder con Linkedin
           </button>
           <div className="flex items-center my-4">
-            <hr className="flex-1 border-gray-300" />
-            <span className="mx-4 text-gray-500 font-semibold">o</span>
-            <hr className="flex-1 border-gray-300" />
+            <hr className="flex-1 border-zinc-300" />
+            <span className="mx-4 text-zinc-500 font-semibold">o</span>
+            <hr className="flex-1 border-zinc-300" />
           </div>
           <a
             href="/auth/email"
-            className="flex items-center gap-2 px-4 py-3 rounded border border-gray-300 bg-white text-gray-800 font-medium text-lg shadow hover:bg-gray-100 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-400"
+            className="flex items-center gap-2 px-4 py-3 rounded border border-zinc-300 bg-white text-zinc-800 font-medium text-lg shadow hover:bg-zinc-100 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-400"
           >
             <span className="text-2xl">✉️</span>
             Continuar con correo electrónico
@@ -88,7 +88,7 @@ export default function SignIn() {
               />
             </a>
           </div>
-          <div className="flex justify-center gap-6 text-2xl text-gray-400 mt-4">
+          <div className="flex justify-center gap-6 text-2xl text-zinc-400 mt-4">
             <a
               href="https://facebook.com"
               aria-label="Facebook"

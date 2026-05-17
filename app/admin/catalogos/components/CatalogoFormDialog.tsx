@@ -221,7 +221,7 @@ export default function CatalogoFormDialog({
                     <FormItem>
                       <FormLabel>
                         Descripción{" "}
-                        <span className="text-gray-400 font-normal">
+                        <span className="text-zinc-400 font-normal">
                           (opcional)
                         </span>
                       </FormLabel>
@@ -247,7 +247,7 @@ export default function CatalogoFormDialog({
                       <FormItem>
                         <FormLabel>
                           Código{" "}
-                          <span className="text-gray-400 font-normal">
+                          <span className="text-zinc-400 font-normal">
                             (opcional)
                           </span>
                         </FormLabel>
@@ -293,7 +293,7 @@ export default function CatalogoFormDialog({
                       <FormItem>
                         <FormLabel>
                           Valor Entero{" "}
-                          <span className="text-gray-400 font-normal">
+                          <span className="text-zinc-400 font-normal">
                             (opcional)
                           </span>
                         </FormLabel>
@@ -324,7 +324,7 @@ export default function CatalogoFormDialog({
                       <FormItem>
                         <FormLabel>
                           Valor Cadena{" "}
-                          <span className="text-gray-400 font-normal">
+                          <span className="text-zinc-400 font-normal">
                             (opcional)
                           </span>
                         </FormLabel>
@@ -346,7 +346,7 @@ export default function CatalogoFormDialog({
                       <FormItem>
                         <FormLabel>
                           Catálogo Padre{" "}
-                          <span className="text-gray-400 font-normal">
+                          <span className="text-zinc-400 font-normal">
                             (opcional)
                           </span>
                         </FormLabel>
@@ -393,7 +393,7 @@ export default function CatalogoFormDialog({
                     <FormItem className="flex items-center justify-between rounded-lg border p-4">
                       <div>
                         <FormLabel className="text-base">Estado activo</FormLabel>
-                        <p className="text-sm text-gray-500">
+                        <p className="text-sm text-zinc-500">
                           Las entradas inactivas no aparecen en los formularios
                         </p>
                       </div>

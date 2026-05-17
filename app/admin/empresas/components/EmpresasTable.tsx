@@ -34,7 +34,7 @@ export default function EmpresasTable({
       case "suspendida":
         return "text-orange-600 bg-orange-50";
       default:
-        return "text-gray-600 bg-gray-50";
+        return "text-zinc-600 bg-zinc-50";
     }
   };
 
@@ -43,7 +43,7 @@ export default function EmpresasTable({
       case "premium":
         return "text-teal-600 bg-teal-50";
       default:
-        return "text-gray-600 bg-gray-50";
+        return "text-zinc-600 bg-zinc-50";
     }
   };
 
@@ -65,34 +65,34 @@ export default function EmpresasTable({
     <div className="overflow-x-auto">
       <table className="w-full">
         <thead>
-          <tr className="bg-gray-50 border-b border-gray-200">
+          <tr className="bg-zinc-50 border-b border-zinc-200">
             <th
               scope="col"
-              className="text-left py-5 px-4 text-sm font-semibold text-gray-500 uppercase tracking-wider"
+              className="text-left py-5 px-4 text-sm font-semibold text-zinc-500 uppercase tracking-wider"
             >
               Empresa
             </th>
             <th
               scope="col"
-              className="text-left py-5 px-4 text-sm font-semibold text-gray-500 uppercase tracking-wider"
+              className="text-left py-5 px-4 text-sm font-semibold text-zinc-500 uppercase tracking-wider"
             >
               Fecha Registro
             </th>
             <th
               scope="col"
-              className="text-center py-5 px-4 text-sm font-semibold text-gray-500 uppercase tracking-wider"
+              className="text-center py-5 px-4 text-sm font-semibold text-zinc-500 uppercase tracking-wider"
             >
               Ofertas Activas
             </th>
             <th
               scope="col"
-              className="text-center py-5 px-4 text-sm font-semibold text-gray-500 uppercase tracking-wider"
+              className="text-center py-5 px-4 text-sm font-semibold text-zinc-500 uppercase tracking-wider"
             >
               Plan / Estatus
             </th>
             <th
               scope="col"
-              className="text-center py-5 px-4 text-sm font-semibold text-gray-500 uppercase tracking-wider"
+              className="text-center py-5 px-4 text-sm font-semibold text-zinc-500 uppercase tracking-wider"
             >
               Acciones
             </th>
@@ -102,33 +102,33 @@ export default function EmpresasTable({
           {empresas.map((empresa) => (
             <tr
               key={empresa.idEmpresa}
-              className="border-b border-gray-100 hover:bg-gray-50 transition-colors"
+              className="border-b border-zinc-100 hover:bg-zinc-50 transition-colors"
             >
               {/* Empresa */}
               <td className="py-2 px-4">
                 <div className="flex items-center gap-3">
-                  <Avatar className="w-10 h-10 rounded-lg">
-                    <AvatarFallback className="rounded-lg bg-gray-200 text-gray-600 text-xs">
+                  <Avatar className="size-10 rounded-lg">
+                    <AvatarFallback className="rounded-lg bg-zinc-200 text-zinc-600 text-xs">
                       {empresa.nombreEmpresa.substring(0, 2).toUpperCase()}
                     </AvatarFallback>
                   </Avatar>
                   <div>
-                    <p className="font-semibold text-gray-800">
+                    <p className="font-semibold text-zinc-800">
                       {empresa.nombreEmpresa}
                     </p>
-                    <p className="text-sm text-gray-500">{empresa.numeroDocumento}</p>
+                    <p className="text-sm text-zinc-500">{empresa.numeroDocumento}</p>
                   </div>
                 </div>
               </td>
 
               {/* Fecha Registro */}
-              <td className="py-2 px-4 text-gray-600">
+              <td className="py-2 px-4 text-zinc-600">
                 {empresa.fechaRegistro}
               </td>
 
               {/* Ofertas Activas */}
               <td className="py-2 px-4 text-center">
-                <span className="font-semibold text-gray-700">
+                <span className="font-semibold text-zinc-700">
                   {empresa.ofertasActivas}
                 </span>
               </td>
@@ -165,7 +165,7 @@ export default function EmpresasTable({
                     aria-label={`Editar ${empresa.nombreEmpresa}`}
                     title="Editar empresa"
                   >
-                    <Pencil className="w-3 h-3" />
+                    <Pencil className="size-3" />
                   </button>
                   <button
                     type="button"
@@ -175,9 +175,9 @@ export default function EmpresasTable({
                     title={empresa.estado.toLowerCase() === "activa" ? "Suspender" : "Activar"}
                   >
                     {empresa.estado.toLowerCase() === "activa" ? (
-                      <Ban className="w-3 h-3" />
+                      <Ban className="size-3" />
                     ) : (
-                      <CheckCircle className="w-3 h-3" />
+                      <CheckCircle className="size-3" />
                     )}
                   </button>
                   <button
@@ -187,7 +187,7 @@ export default function EmpresasTable({
                     aria-label={`Eliminar ${empresa.nombreEmpresa}`}
                     title="Eliminar empresa"
                   >
-                    <Trash2 className="w-3 h-3" />
+                    <Trash2 className="size-3" />
                   </button>
                 </div>
               </td>

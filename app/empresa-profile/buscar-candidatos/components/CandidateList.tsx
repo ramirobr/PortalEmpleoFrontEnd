@@ -9,10 +9,10 @@ export function CandidateList({ candidates }: Props) {
   if (candidates.length === 0) {
     return (
       <div className="flex flex-col items-center justify-center py-12 text-center">
-        <p className="text-lg text-slate-600 mb-2">
+        <p className="text-lg text-zinc-600 mb-2">
           No se encontraron candidatos
         </p>
-        <p className="text-sm text-slate-500">
+        <p className="text-sm text-zinc-500">
           Intenta ajustar los filtros de búsqueda
         </p>
       </div>

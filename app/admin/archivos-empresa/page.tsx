@@ -311,19 +311,19 @@ export default function AdminArchivosEmpresaPage() {
 
   return (
     <div>
-      <h1 className="text-3xl font-bold flex items-center gap-3 mb-6">
-        <Building2 className="w-8 h-8 text-primary" />
+      <h1 className="text-3xl font-semibold flex items-center gap-3 mb-6">
+        <Building2 className="size-8 text-primary" />
         Archivos de Empresas
       </h1>
 
       {/* Empresa selector */}
       <Card className="mb-6 p-6">
-        <h2 className="text-sm font-semibold text-gray-700 mb-3">
+        <h2 className="text-sm font-semibold text-zinc-700 mb-3">
           Seleccionar Empresa
         </h2>
         <div className="flex flex-col lg:flex-row gap-4">
           <div className="relative flex-1">
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 size-4 text-zinc-400" />
             <Input
               type="text"
               placeholder="Buscar empresa..."
@@ -355,7 +355,7 @@ export default function AdminArchivosEmpresaPage() {
           </Select>
         </div>
         {selectedEmpresa && (
-          <p className="text-sm text-gray-500 mt-2">
+          <p className="text-sm text-zinc-500 mt-2">
             RUC/NIT:{" "}
             <span className="font-medium">{selectedEmpresa.numeroDocumento}</span>
             {" · "}Plan:{" "}
@@ -370,7 +370,7 @@ export default function AdminArchivosEmpresaPage() {
           <div className="mb-6">
             <div className="flex justify-between items-center mb-3">
               <h2 className="text-xl font-semibold flex items-center gap-2">
-                <FolderOpen className="w-5 h-5 text-yellow-600" />
+                <FolderOpen className="size-5 text-yellow-600" />
                 Carpetas
               </h2>
               <Button
@@ -379,7 +379,7 @@ export default function AdminArchivosEmpresaPage() {
                 onClick={handleCreateCarpeta}
                 className="flex items-center gap-2"
               >
-                <Plus className="w-4 h-4" />
+                <Plus className="size-4" />
                 Nueva Carpeta
               </Button>
             </div>
@@ -397,7 +397,7 @@ export default function AdminArchivosEmpresaPage() {
           <div>
             <div className="flex justify-between items-center mb-3">
               <h2 className="text-xl font-semibold flex items-center gap-2">
-                <FileText className="w-5 h-5 text-blue-600" />
+                <FileText className="size-5 text-blue-600" />
                 Archivos
               </h2>
               <Button
@@ -405,7 +405,7 @@ export default function AdminArchivosEmpresaPage() {
                 onClick={() => setIsUploadOpen(true)}
                 className="flex items-center gap-2"
               >
-                <Upload className="w-4 h-4" />
+                <Upload className="size-4" />
                 Subir Archivo
               </Button>
             </div>
@@ -413,7 +413,7 @@ export default function AdminArchivosEmpresaPage() {
             {/* Folder filter */}
             <Card className="mb-3 p-4">
               <div className="flex items-center gap-3">
-                <FolderOpen className="w-4 h-4 text-gray-400 shrink-0" />
+                <FolderOpen className="size-4 text-zinc-400 shrink-0" />
                 <Select
                   value={selectedCarpetaId}
                   onValueChange={handleCarpetaFilterChange}

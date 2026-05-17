@@ -7,8 +7,10 @@ import { Suspense } from "react";
 
 export default async function AdminTestimoniosPage() {
   const session = await auth();
-  const estados = await fetchAllCatalogsByType("ESTADO_APLICACION");
-  const counters = await getTestimonialCounters(session?.user.accessToken);
+  const [estados, counters] = await Promise.all([
+    fetchAllCatalogsByType("ESTADO_APLICACION"),
+    getTestimonialCounters(session?.user.accessToken),
+  ]);
 
   return (
     <Suspense fallback={<div>Cargando testimonios...</div>}>

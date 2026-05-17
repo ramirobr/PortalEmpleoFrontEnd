@@ -41,69 +41,69 @@ export default function CatalogosTable({
     <div className="overflow-x-auto">
       <table className="w-full">
         <thead>
-          <tr className="bg-gray-50 border-b border-gray-200">
+          <tr className="bg-zinc-50 border-b border-zinc-200">
             <th
               scope="col"
-              className="text-left py-5 px-4 text-sm font-semibold text-gray-500 uppercase tracking-wider"
+              className="text-left py-5 px-4 text-sm font-semibold text-zinc-500 uppercase tracking-wider"
             >
               Nombre
             </th>
             <th
               scope="col"
-              className="text-left py-5 px-4 text-sm font-semibold text-gray-500 uppercase tracking-wider"
+              className="text-left py-5 px-4 text-sm font-semibold text-zinc-500 uppercase tracking-wider"
             >
               Tipo
             </th>
             <th
               scope="col"
-              className="text-left py-5 px-4 text-sm font-semibold text-gray-500 uppercase tracking-wider"
+              className="text-left py-5 px-4 text-sm font-semibold text-zinc-500 uppercase tracking-wider"
             >
               Descripción
             </th>
             <th
               scope="col"
-              className="text-center py-5 px-4 text-sm font-semibold text-gray-500 uppercase tracking-wider"
+              className="text-center py-5 px-4 text-sm font-semibold text-zinc-500 uppercase tracking-wider"
             >
               Código
             </th>
             <th
               scope="col"
-              className="text-center py-5 px-4 text-sm font-semibold text-gray-500 uppercase tracking-wider"
+              className="text-center py-5 px-4 text-sm font-semibold text-zinc-500 uppercase tracking-wider"
             >
               Orden
             </th>
             <th
               scope="col"
-              className="text-center py-5 px-4 text-sm font-semibold text-gray-500 uppercase tracking-wider"
+              className="text-center py-5 px-4 text-sm font-semibold text-zinc-500 uppercase tracking-wider"
             >
               Estado
             </th>
             <th
               scope="col"
-              className="text-center py-5 px-4 text-sm font-semibold text-gray-500 uppercase tracking-wider"
+              className="text-center py-5 px-4 text-sm font-semibold text-zinc-500 uppercase tracking-wider"
             >
               Acciones
             </th>
           </tr>
         </thead>
-        <tbody className="divide-y divide-gray-100">
+        <tbody className="divide-y divide-zinc-100">
           {catalogos.map((catalogo) => (
             <tr
               key={catalogo.idCatalogo}
-              className="hover:bg-gray-50 transition-colors"
+              className="hover:bg-zinc-50 transition-colors"
             >
               {/* Nombre */}
-              <td className="py-4 px-4">
+              <td className="p-4">
                 <div className="flex items-center gap-3">
-                  <div className="w-9 h-9 rounded-lg bg-primary/10 flex items-center justify-center shrink-0">
-                    <BookOpen className="w-4 h-4 text-primary" />
+                  <div className="size-9 rounded-lg bg-primary/10 flex items-center justify-center shrink-0">
+                    <BookOpen className="size-4 text-primary" />
                   </div>
                   <div>
-                    <p className="font-semibold text-gray-900">
+                    <p className="font-semibold text-zinc-900">
                       {catalogo.nombre}
                     </p>
                     {catalogo.idCatalogoPadre && (
-                      <span className="text-xs text-gray-400">
+                      <span className="text-xs text-zinc-400">
                         Subcategoría de #{catalogo.idCatalogoPadre}
                       </span>
                     )}
@@ -112,46 +112,46 @@ export default function CatalogosTable({
               </td>
 
               {/* Tipo */}
-              <td className="py-4 px-4">
+              <td className="p-4">
                 <span className="inline-flex items-center px-2.5 py-1 rounded-md bg-blue-50 text-blue-700 text-xs font-medium">
                   {catalogo.tipoCatalogo}
                 </span>
               </td>
 
               {/* Descripción */}
-              <td className="py-4 px-4">
-                <p className="text-sm text-gray-600 max-w-xs truncate">
+              <td className="p-4">
+                <p className="text-sm text-zinc-600 max-w-xs truncate">
                   {catalogo.descripcion || (
-                    <span className="text-gray-400 italic">Sin descripción</span>
+                    <span className="text-zinc-400 italic">Sin descripción</span>
                   )}
                 </p>
               </td>
 
               {/* Código */}
-              <td className="py-4 px-4 text-center">
+              <td className="p-4 text-center">
                 {catalogo.codigo ? (
-                  <span className="inline-flex items-center justify-center px-3 py-1 bg-gray-100 text-gray-700 rounded-full text-xs font-mono">
+                  <span className="inline-flex items-center justify-center px-3 py-1 bg-zinc-100 text-zinc-700 rounded-full text-xs font-mono">
                     {catalogo.codigo}
                   </span>
                 ) : (
-                  <span className="text-gray-400 text-sm">—</span>
+                  <span className="text-zinc-400 text-sm">—</span>
                 )}
               </td>
 
               {/* Orden */}
-              <td className="py-4 px-4 text-center">
-                <span className="inline-flex items-center justify-center w-8 h-8 rounded-full bg-gray-100 text-gray-700 text-sm font-medium">
+              <td className="p-4 text-center">
+                <span className="inline-flex items-center justify-center size-8 rounded-full bg-zinc-100 text-zinc-700 text-sm font-medium">
                   {catalogo.orden}
                 </span>
               </td>
 
               {/* Estado */}
-              <td className="py-4 px-4 text-center">
+              <td className="p-4 text-center">
                 <Pill
                   className={
                     catalogo.activo
                       ? "text-green-600 bg-green-50"
-                      : "text-gray-600 bg-gray-100"
+                      : "text-zinc-600 bg-zinc-100"
                   }
                 >
                   {catalogo.activo ? "Activo" : "Inactivo"}
@@ -159,7 +159,7 @@ export default function CatalogosTable({
               </td>
 
               {/* Acciones */}
-              <td className="py-4 px-4">
+              <td className="p-4">
                 <div className="flex items-center justify-center gap-2">
                   {/* Editar */}
                   <button
@@ -167,7 +167,7 @@ export default function CatalogosTable({
                     className="p-2 rounded-lg hover:bg-blue-50 text-blue-600 transition-colors"
                     title="Editar entrada"
                   >
-                    <Pencil className="w-4 h-4" />
+                    <Pencil className="size-4" />
                   </button>
 
                   {/* Activar/Desactivar */}
@@ -180,7 +180,7 @@ export default function CatalogosTable({
                     }`}
                     title={catalogo.activo ? "Desactivar" : "Activar"}
                   >
-                    <Power className="w-4 h-4" />
+                    <Power className="size-4" />
                   </button>
 
                   {/* Eliminar */}
@@ -189,7 +189,7 @@ export default function CatalogosTable({
                     className="p-2 rounded-lg hover:bg-red-50 text-red-600 transition-colors"
                     title="Eliminar entrada"
                   >
-                    <Trash2 className="w-4 h-4" />
+                    <Trash2 className="size-4" />
                   </button>
                 </div>
               </td>

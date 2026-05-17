@@ -16,3 +16,11 @@ export const marcarNotificacionEmpresaLeida = async (idNotificacion: string, tok
   });
   return json;
 };
+
+export const eliminarNotificacionEmpresa = async (idNotificacion: string, token?: string) => {
+  const json = await fetchApi<GenericResponse<null>>(`/NotificacionesEmpresa/eliminar/${idNotificacion}`, {
+    method: "DELETE",
+    token
+  });
+  return json;
+};

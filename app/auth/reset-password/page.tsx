@@ -124,7 +124,7 @@ function ResetPasswordForm() {
   // Verificar si tenemos los parámetros necesarios
   if (!email || !token) {
     return (
-      <div className="min-h-screen flex flex-col bg-gray-50">
+      <div className="min-h-screen flex flex-col bg-zinc-50">
         <Navbar
           showCompanyRegister={true}
           onHamburgerClick={toggleMobileMenu}
@@ -140,15 +140,15 @@ function ResetPasswordForm() {
         <main className="flex-1 flex flex-col items-center justify-center px-4 py-12">
           <Card className="w-full max-w-md p-6 flex flex-col gap-6 shadow-md">
             <CardContent className="flex flex-col gap-6 items-center text-center">
-              <div className="w-16 h-16 bg-red-100 rounded-full flex items-center justify-center text-red-600">
-                <ShieldCheck className="w-10 h-10" />
+              <div className="size-16 bg-red-100 rounded-full flex items-center justify-center text-red-600">
+                <ShieldCheck className="size-10" />
               </div>
 
               <div>
-                <h2 className="text-black text-2xl font-bold mb-2">
+                <h2 className="text-black text-2xl font-semibold mb-2">
                   Enlace inválido
                 </h2>
-                <p className="text-gray-600">
+                <p className="text-zinc-600">
                   El enlace para restablecer tu contraseña es inválido o ha
                   expirado. Por favor, solicita uno nuevo.
                 </p>
@@ -197,7 +197,7 @@ function ResetPasswordForm() {
   // Pantalla de éxito
   if (isSuccess) {
     return (
-      <div className="min-h-screen flex flex-col bg-gray-50">
+      <div className="min-h-screen flex flex-col bg-zinc-50">
         <Navbar
           showCompanyRegister={true}
           onHamburgerClick={toggleMobileMenu}
@@ -213,15 +213,15 @@ function ResetPasswordForm() {
         <main className="flex-1 flex flex-col items-center justify-center px-4 py-12">
           <Card className="w-full max-w-md p-6 flex flex-col gap-6 shadow-md">
             <CardContent className="flex flex-col gap-6 items-center text-center">
-              <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center text-green-600">
-                <CheckCircle className="w-10 h-10" />
+              <div className="size-16 bg-green-100 rounded-full flex items-center justify-center text-green-600">
+                <CheckCircle className="size-10" />
               </div>
 
               <div>
-                <h2 className="text-black text-2xl font-bold mb-2">
+                <h2 className="text-black text-2xl font-semibold mb-2">
                   ¡Contraseña actualizada!
                 </h2>
-                <p className="text-gray-600">
+                <p className="text-zinc-600">
                   Tu contraseña ha sido restablecida exitosamente. Serás
                   redirigido al inicio de sesión en unos segundos.
                 </p>
@@ -229,7 +229,7 @@ function ResetPasswordForm() {
 
               <Link href="/auth/login" className="w-full mt-4">
                 <Button className="w-full">
-                  <ArrowLeft className="w-4 h-4 mr-2" />
+                  <ArrowLeft className="size-4 mr-2" />
                   Ir al inicio de sesión
                 </Button>
               </Link>
@@ -242,7 +242,7 @@ function ResetPasswordForm() {
   }
 
   return (
-    <div className="min-h-screen flex flex-col bg-gray-50">
+    <div className="min-h-screen flex flex-col bg-zinc-50">
       <Navbar
         showCompanyRegister={true}
         onHamburgerClick={toggleMobileMenu}
@@ -258,15 +258,15 @@ function ResetPasswordForm() {
       <main className="flex-1 flex flex-col items-center justify-center px-4 py-12">
         <Card className="w-full max-w-md p-6 flex flex-col gap-6 shadow-md">
           <CardContent className="flex flex-col gap-6">
-            <div className="w-12 h-12 bg-primary/10 rounded-full flex items-center justify-center text-primary m-auto">
-              <ShieldCheck className="w-7 h-7" />
+            <div className="size-12 bg-primary/10 rounded-full flex items-center justify-center text-primary m-auto">
+              <ShieldCheck className="size-7" />
             </div>
 
             <div className="text-center mb-2">
-              <h2 className="text-black text-2xl font-bold">
+              <h2 className="text-black text-2xl font-semibold">
                 Crea una nueva contraseña
               </h2>
-              <p className="mt-2 text-gray-600">
+              <p className="mt-2 text-zinc-600">
                 Ingresa tu nueva contraseña para la cuenta asociada a{" "}
                 <span className="font-semibold text-primary">{email}</span>
               </p>
@@ -297,7 +297,7 @@ function ResetPasswordForm() {
                       <FormLabel>Nueva contraseña *</FormLabel>
                       <FormControl>
                         <div className="relative">
-                          <Lock className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 w-5 h-5" />
+                          <Lock className="absolute left-3 top-1/2 -translate-y-1/2 text-zinc-400 size-5" />
                           <Input
                             {...field}
                             type={showPassword ? "text" : "password"}
@@ -311,7 +311,7 @@ function ResetPasswordForm() {
                                 ? "Ocultar contraseña"
                                 : "Mostrar contraseña"
                             }
-                            className="absolute right-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400 cursor-pointer"
+                            className="absolute right-3 top-1/2 -translate-y-1/2 size-5 text-zinc-400 cursor-pointer"
                             onMouseDown={() => handleMouseDown("password")}
                             onMouseUp={() => handleMouseUp("password")}
                             onMouseLeave={() => handleMouseUp("password")}
@@ -334,7 +334,7 @@ function ResetPasswordForm() {
                       <FormLabel>Confirmar contraseña *</FormLabel>
                       <FormControl>
                         <div className="relative">
-                          <Lock className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 w-5 h-5" />
+                          <Lock className="absolute left-3 top-1/2 -translate-y-1/2 text-zinc-400 size-5" />
                           <Input
                             {...field}
                             type={showConfirmPassword ? "text" : "password"}
@@ -348,7 +348,7 @@ function ResetPasswordForm() {
                                 ? "Ocultar contraseña"
                                 : "Mostrar contraseña"
                             }
-                            className="absolute right-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400 cursor-pointer"
+                            className="absolute right-3 top-1/2 -translate-y-1/2 size-5 text-zinc-400 cursor-pointer"
                             onMouseDown={() => handleMouseDown("confirm")}
                             onMouseUp={() => handleMouseUp("confirm")}
                             onMouseLeave={() => handleMouseUp("confirm")}
@@ -369,7 +369,7 @@ function ResetPasswordForm() {
                   disabled={form.formState.isSubmitting}
                 >
                   {form.formState.isSubmitting && (
-                    <span className="animate-spin h-4 w-4 border-2 border-t-transparent rounded-full mr-2" />
+                    <span className="animate-spin size-4 border-2 border-t-transparent rounded-full mr-2" />
                   )}
                   Restablecer contraseña
                 </Button>
@@ -378,7 +378,7 @@ function ResetPasswordForm() {
                   href="/auth/login"
                   className="mt-3 text-center text-primary font-semibold text-sm hover:underline flex items-center justify-center gap-1"
                 >
-                  <ArrowLeft className="w-4 h-4" />
+                  <ArrowLeft className="size-4" />
                   Volver al inicio de sesión
                 </Link>
               </form>
@@ -396,7 +396,7 @@ export default function ResetPasswordPage() {
     <Suspense
       fallback={
         <div className="min-h-screen flex items-center justify-center">
-          <span className="animate-spin h-8 w-8 border-4 border-primary border-t-transparent rounded-full" />
+          <span className="animate-spin size-8 border-4 border-primary border-t-transparent rounded-full" />
         </div>
       }
     >

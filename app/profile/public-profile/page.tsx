@@ -10,7 +10,7 @@ export default async function PublicProfileIndexPage() {
 
   return (
     <div className="flex items-center justify-center h-screen">
-      <p className="text-2xl text-gray-600">
+      <p className="text-2xl text-zinc-600">
         Debes iniciar sesión para ver tu perfil público.
       </p>
     </div>

@@ -80,9 +80,9 @@ export default function TablePagination({
     "min-w-[40px] h-10 flex items-center justify-center rounded-xl text-sm font-medium transition-all border cursor-pointer active:scale-95";
   const activeClass = "bg-primary text-white border-primary shadow-sm"; 
   const inactiveClass =
-    "bg-white text-gray-700 border-gray-100 hover:border-primary/30 hover:text-primary";
+    "bg-white text-zinc-700 border-zinc-100 hover:border-primary/30 hover:text-primary";
   const navButtonClass =
-    "px-5 py-2 h-10 flex items-center justify-center rounded-xl border border-gray-100 text-sm font-medium text-gray-700 bg-white hover:border-primary/30 hover:text-primary disabled:opacity-50 disabled:cursor-not-allowed transition-all cursor-pointer active:scale-95 uppercase tracking-wider";
+    "px-5 py-2 h-10 flex items-center justify-center rounded-xl border border-zinc-100 text-sm font-medium text-zinc-700 bg-white hover:border-primary/30 hover:text-primary disabled:opacity-50 disabled:cursor-not-allowed transition-all cursor-pointer active:scale-95 uppercase tracking-wider";
 
   return (
     <div
@@ -94,13 +94,13 @@ export default function TablePagination({
     >
       {/* Items info */}
       {showInfo && (
-        <div className="text-sm text-gray-500 order-2 sm:order-1 h-10 flex items-center">
+        <div className="text-sm text-zinc-500 order-2 sm:order-1 h-10 flex items-center">
           <span>
             Mostrando{" "}
-            <span className="font-medium text-gray-900">
+            <span className="font-medium text-zinc-900">
               {startItem} - {endItem}
             </span>{" "}
-            de <span className="font-medium text-gray-900">{totalItems}</span> {itemLabel}
+            de <span className="font-medium text-zinc-900">{totalItems}</span> {itemLabel}
           </span>
         </div>
       )}
@@ -134,7 +134,7 @@ export default function TablePagination({
             ) : (
               <span
                 key={`ellipsis-${index}`}
-                className="w-10 h-10 flex items-center justify-center text-gray-400 font-medium"
+                className="size-10 flex items-center justify-center text-zinc-400 font-medium"
               >
                 {page}
               </span>

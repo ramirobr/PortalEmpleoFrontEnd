@@ -9,15 +9,22 @@ export default async function JobDetailsPage({ params }: IdProp) {
   const { id } = await params;
   const job = await fetchJobById(id);
 
+  // Construir la URL del banner desde base64
+  const bannerSrc = job?.bannerEmpresa
+    ? job.bannerEmpresa.startsWith("data:")
+      ? job.bannerEmpresa
+      : `data:image/png;base64,${job.bannerEmpresa}`
+    : null;
+
   return (
     <MainLayout>
-      <Banner title="Detalle de la Oferta" />
-      <div className="py-24 bg-gray-50">
+      <Banner title="Detalle de la Oferta" source={bannerSrc ?? undefined} alt={`Banner para ${job?.titulo}`} />
+      <div className="py-24 bg-zinc-50">
         {job ? (
           <JobDetails {...job} />
         ) : (
           <div className="h-[50vh]">
-            <h1 className="text-2xl font-bold mb-4 text-red-600">
+            <h1 className="text-2xl font-semibold mb-4 text-red-600">
               Trabajo no encontrado
             </h1>
           </div>

@@ -5,14 +5,8 @@ import { useSession } from "next-auth/react";
 import ApplicantCard from "@/components/shared/components/ApplicantCard";
 import { fetchCandidatesList, type Candidate } from "@/lib/company/candidates";
 import { CandidatosSearchFiltersResponse } from "@/types/company";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
 import TablePagination from "@/components/shared/components/TablePagination";
+import { SearchAutocomplete } from "@/components/ui/search-autocomplete";
 
 interface PostulantesTodosProps {
   filters: CandidatosSearchFiltersResponse | null;
@@ -99,7 +93,7 @@ export default function PostulantesTodos({ filters }: PostulantesTodosProps) {
           <div className="mb-6 relative">
             <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
               <svg
-                className="h-5 w-5 text-gray-400"
+                className="size-5 text-zinc-400"
                 xmlns="http://www.w3.org/2000/svg"
                 viewBox="0 0 20 20"
                 fill="currentColor"
@@ -121,10 +115,10 @@ export default function PostulantesTodos({ filters }: PostulantesTodosProps) {
                 setSearchQuery(e.target.value);
                 setCurrentPage(1); // Reset to first page on search
               }}
-              className="w-full pl-10 pr-4 py-2 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
+              className="w-full pl-10 pr-4 py-2 rounded-lg border border-zinc-300 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
             />
           </div>
-          <h3 className="text-lg font-semibold mb-4 text-primary border-b border-gray-100 pb-2">
+          <h3 className="text-lg font-semibold mb-4 text-primary border-b border-zinc-100 pb-2">
             Filtros
           </h3>
 
@@ -133,56 +127,46 @@ export default function PostulantesTodos({ filters }: PostulantesTodosProps) {
               <label className="block text-sm font-medium text-black mb-1">
                 Provincia
               </label>
-              <Select
+              <SearchAutocomplete<string>
+                options={[
+                  { id: "", label: "Todas" },
+                  ...(filters?.provincia?.map((p) => ({
+                    id: p.idCatalogo.toString(),
+                    label: p.nombre,
+                  })) ?? []),
+                ]}
                 value={provincia}
-                onValueChange={(value) => {
+                onChange={(value) => {
                   setProvincia(value);
                   setCiudad("");
                   setCurrentPage(1);
                 }}
-              >
-                <SelectTrigger className="w-full">
-                  <SelectValue placeholder="Todas" />
-                </SelectTrigger>
-                <SelectContent>
-                  {filters?.provincia?.map((prov) => (
-                    <SelectItem
-                      key={prov.idCatalogo}
-                      value={prov.idCatalogo.toString()}
-                    >
-                      {prov.nombre}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
+                placeholder="Todas"
+                searchPlaceholder="Buscar provincia..."
+              />
             </div>
 
             <div>
               <label className="block text-sm font-medium text-black mb-1">
                 Ciudad
               </label>
-              <Select
+              <SearchAutocomplete<string>
+                options={[
+                  { id: "", label: "Todas" },
+                  ...(filters?.ciudad?.map((c) => ({
+                    id: c.idCatalogo.toString(),
+                    label: c.nombre,
+                  })) ?? []),
+                ]}
                 value={ciudad}
-                onValueChange={(value) => {
+                onChange={(value) => {
                   setCiudad(value);
                   setCurrentPage(1);
                 }}
                 disabled={!provincia}
-              >
-                <SelectTrigger className="w-full">
-                  <SelectValue placeholder="Todas" />
-                </SelectTrigger>
-                <SelectContent>
-                  {filters?.ciudad?.map((ciudad) => (
-                    <SelectItem
-                      key={ciudad.idCatalogo}
-                      value={ciudad.idCatalogo.toString()}
-                    >
-                      {ciudad.nombre}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
+                placeholder="Todas"
+                searchPlaceholder="Buscar ciudad..."
+              />
             </div>
 
             <button
@@ -197,12 +181,12 @@ export default function PostulantesTodos({ filters }: PostulantesTodosProps) {
 
         {/* List (70%) */}
         <div className="w-full lg:w-[70%]">
-          <h2 className="text-xl font-semibold text-gray-900 mb-6">
+          <h2 className="text-xl font-semibold text-zinc-900 mb-6">
             Resultados ({totalItems})
           </h2>
           {loading ? (
             <div className="flex justify-center items-center py-8">
-              <p className="text-gray-500">Cargando candidatos...</p>
+              <p className="text-zinc-500">Cargando candidatos...</p>
             </div>
           ) : candidatos.length > 0 ? (
             <div className="grid gap-6 grid-cols-1 sm:grid-cols-2">
@@ -222,7 +206,7 @@ export default function PostulantesTodos({ filters }: PostulantesTodosProps) {
             </div>
           ) : (
             <div className="flex justify-center items-center py-8">
-              <p className="text-gray-500">No hay candidatos disponibles</p>
+              <p className="text-zinc-500">No hay candidatos disponibles</p>
             </div>
           )}
 

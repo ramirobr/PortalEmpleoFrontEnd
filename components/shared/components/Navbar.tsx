@@ -72,7 +72,7 @@ export default function Navbar({
   }, [status]);
 
   return (
-    <nav className="sticky top-0 z-50 w-full py-3 bg-white/95 backdrop-blur-md border-b border-slate-100 shadow-sm transition-all duration-300">
+    <nav className="sticky top-0 z-50 w-full py-3 bg-white/95 backdrop-blur-md border-b border-zinc-100 shadow-sm transition-all duration-300">
       <div className="container flex items-center justify-between gap-4">
         {/* Left: Logo */}
         <Link
@@ -110,7 +110,7 @@ export default function Navbar({
                     className={`text-sm font-medium transition-colors hover:text-primary ${
                       isActive
                         ? "text-primary border-b-2 border-primary pb-0.5"
-                        : "text-gray-600"
+                        : "text-zinc-600"
                     }`}
                   >
                     {link.label}
@@ -131,9 +131,9 @@ export default function Navbar({
                     type="button"
                     aria-label="Notificaciones"
                     onClick={() => setNotifOpen((prev) => !prev)}
-                    className="relative p-2 rounded-full hover:bg-gray-100 transition-colors cursor-pointer"
+                    className="relative p-2 rounded-full hover:bg-zinc-100 transition-colors cursor-pointer"
                   >
-                    <Bell className="w-5 h-5 text-gray-600" />
+                    <Bell className="size-5 text-zinc-600" />
                     {unreadNotifications > 0 && (
                       <span className="absolute -top-0.5 -right-0.5 min-w-[18px] h-[18px] bg-primary text-white text-[10px] font-bold rounded-full flex items-center justify-center px-1">
                         {unreadNotifications > 99 ? "99+" : unreadNotifications}
@@ -185,9 +185,9 @@ export default function Navbar({
                   aria-label="Abrir menú"
                   aria-pressed={isAsideOpen}
                   onClick={onHamburgerClick}
-                  className="lg:hidden p-2 rounded border border-gray-200 bg-white shadow hover:bg-gray-50 cursor-pointer"
+                  className="lg:hidden p-2 rounded border border-zinc-200 bg-white shadow hover:bg-zinc-50 cursor-pointer"
                 >
-                  <Menu className="w-5 h-5 text-primary" />
+                  <Menu className="size-5 text-primary" />
                 </button>
               </>
             )}

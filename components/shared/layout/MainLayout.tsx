@@ -42,7 +42,7 @@ export default function MainLayout({ children }: Children) {
   }
 
   return (
-    <div className="min-h-screen flex flex-col bg-gray-50">
+    <div className="min-h-screen flex flex-col bg-zinc-50">
       <Navbar
         onHamburgerClick={toggleMobileMenu}
         isAsideOpen={isMobileMenuOpen}

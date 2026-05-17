@@ -155,7 +155,7 @@ export default function EditarDatosPersonales({
   return (
     <Card id="datosPersonales" className="p-6">
       <div className="flex justify-between items-center mb-10">
-        <h2 className="text-2xl font-bold text-primary flex items-center gap-2">
+        <h2 className="text-2xl font-semibold text-primary flex items-center gap-2">
           <UserRound width={25} height={25} className="text-primary" />
           Información personal
         </h2>
@@ -538,7 +538,7 @@ export default function EditarDatosPersonales({
                 disabled={form.formState.isSubmitting}
               >
                 {form.formState.isSubmitting && (
-                  <span className="animate-spin h-4 w-4 border-2 border-t-transparent rounded-full mr-2" />
+                  <span className="animate-spin size-4 border-2 border-t-transparent rounded-full mr-2" />
                 )}
                 Guardar
               </button>

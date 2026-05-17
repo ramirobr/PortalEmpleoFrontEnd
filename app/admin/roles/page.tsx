@@ -32,24 +32,23 @@ export default function AdminRolesPage() {
 
   // Fetch roles (using mock data for now)
   useEffect(() => {
+    let cancelled = false;
+    let timerId: ReturnType<typeof setTimeout>;
     const fetchRoles = async () => {
       setLoading(true);
-      // TODO: Replace with real API call when available
-      // const response = await getAdminRoles(
-      //   { pageSize, currentPage, search, estado: estadoFilter },
-      //   session?.user?.accessToken
-      // );
-      // if (response?.isSuccess) {
-      //   setRoles(response.data.data);
-      // }
-
-      // Using mock data for development
-      await new Promise((resolve) => setTimeout(resolve, 500));
+      await new Promise<void>((resolve) => {
+        timerId = setTimeout(resolve, 500);
+      });
+      if (cancelled) return;
       setRoles(mockRoles);
       setLoading(false);
     };
 
     fetchRoles();
+    return () => {
+      cancelled = true;
+      clearTimeout(timerId);
+    };
   }, [session, currentPage, pageSize]);
 
   // Filter roles based on search and filters
@@ -158,12 +157,12 @@ export default function AdminRolesPage() {
   return (
     <div>
       <div className="flex justify-between items-center mb-6">
-        <h1 className="text-3xl font-bold flex items-center gap-3">
-          <Shield className="w-8 h-8 text-primary" />
+        <h1 className="text-3xl font-semibold flex items-center gap-3">
+          <Shield className="size-8 text-primary" />
           Gestionar Roles
         </h1>
         <Button onClick={handleCreate} className="flex items-center gap-2">
-          <Plus className="w-4 h-4" />
+          <Plus className="size-4" />
           Nuevo Rol
         </Button>
       </div>
@@ -173,7 +172,7 @@ export default function AdminRolesPage() {
         <div className="flex flex-col lg:flex-row gap-4">
           {/* Search */}
           <div className="relative flex-1">
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 size-4 text-zinc-400" />
             <Input
               type="text"
               placeholder="Buscar por nombre o descripción..."
@@ -223,7 +222,7 @@ export default function AdminRolesPage() {
           totalItems={totalItems}
           itemLabel="roles"
           onPageChange={setCurrentPage}
-          className="rounded-b-xl border-t border-gray-100"
+          className="rounded-b-xl border-t border-zinc-100"
         />
       </Card>
 

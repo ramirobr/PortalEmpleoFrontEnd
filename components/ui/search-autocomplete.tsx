@@ -1,14 +1,12 @@
 "use client";
 
-import { useState } from "react";
-import { Check, ChevronsUpDown } from "lucide-react";
+import * as React from "react";
+import { Check, ChevronsUpDown, X } from "lucide-react";
 import { cn } from "@/lib/utils";
-import { Button } from "@/components/ui/button";
 import {
   Command,
   CommandEmpty,
   CommandGroup,
-  CommandInput,
   CommandItem,
   CommandList,
 } from "@/components/ui/command";
@@ -17,15 +15,18 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
+import { Input } from "@/components/ui/input";
 
-type Option<T extends string | number> = { id: T; label: string };
+export type Option<T extends string | number> = { id: T; label: string };
 
 type Props<T extends string | number> = {
   options: Option<T>[];
   value?: T;
   onChange: (id: T) => void;
   placeholder?: string;
+  searchPlaceholder?: string; // Kept for backward compatibility
   className?: string;
+  disabled?: boolean;
 };
 
 export function SearchAutocomplete<T extends string | number>({
@@ -33,63 +34,115 @@ export function SearchAutocomplete<T extends string | number>({
   value,
   onChange,
   placeholder = "Selecciona una opción",
+  searchPlaceholder,
   className,
+  disabled,
 }: Props<T>) {
-  const [open, setOpen] = useState(false);
-  const selected = options.find((o) => o.id === value);
+  const [open, setOpen] = React.useState(false);
+  const [inputValue, setInputValue] = React.useState("");
+
+  const displayPlaceholder = searchPlaceholder || placeholder;
+
+  const selectedOption = React.useMemo(
+    () => options.find((opt) => opt.id === value),
+    [options, value]
+  );
+
+  // Sync input value with selected option when not open
+  React.useEffect(() => {
+    if (!open) {
+      setInputValue(selectedOption?.label ?? "");
+    }
+  }, [selectedOption, open]);
+
+  const filteredOptions = React.useMemo(() => {
+    if (!inputValue || (selectedOption && inputValue === selectedOption.label)) {
+      return options;
+    }
+    return options.filter((opt) =>
+      opt.label.toLowerCase().includes(inputValue.toLowerCase())
+    );
+  }, [options, inputValue, selectedOption]);
+
+  const handleSelect = (option: Option<T>) => {
+    setInputValue(option.label);
+    onChange(option.id);
+    setOpen(false);
+  };
+
+  const handleClear = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    setInputValue("");
+    // We don't have a 'null' or 'undefined' in the type T, 
+    // but usually these are IDs. If it's a number, 0 might be invalid.
+    // To be safe, we only allow clearing if T allows it or we pass a generic type.
+    // For now, we'll just open the list.
+    setOpen(true);
+  };
 
   return (
-    <Popover open={open} onOpenChange={setOpen}>
-      <PopoverTrigger asChild>
-        <Button
-          variant="outline"
-          role="combobox"
-          type="button"
-          aria-expanded={open}
-          className={cn(
-            "w-full justify-between font-normal bg-gray-50 border-gray-200 hover:bg-gray-100",
-            className,
-          )}
-        >
-          {selected ? (
-            selected.label
-          ) : (
-            <span className="text-gray-500">{placeholder}</span>
-          )}
-          <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
-        </Button>
-      </PopoverTrigger>
-      <PopoverContent
-        className="p-0 w-[--radix-popover-trigger-width]"
-        align="start"
-      >
-        <Command>
-          <CommandInput placeholder="Buscar..." />
-          <CommandList>
-            <CommandEmpty>Sin resultados.</CommandEmpty>
-            <CommandGroup>
-              {options.map((option) => (
-                <CommandItem
-                  key={option.id}
-                  value={option.label}
-                  onSelect={() => {
-                    onChange(option.id);
-                    setOpen(false);
-                  }}
+    <div className={cn("relative w-full", className)}>
+      <Popover open={open} onOpenChange={setOpen}>
+        <PopoverTrigger asChild>
+          <div className="relative w-full group">
+            <Input
+              disabled={disabled}
+              placeholder={displayPlaceholder}
+              value={inputValue}
+              onChange={(e) => {
+                setInputValue(e.target.value);
+                if (!open) setOpen(true);
+              }}
+              onFocus={() => setOpen(true)}
+              className="h-13 bg-surface-highlight border-gray-light hover:bg-surface-container-low pr-10 focus:bg-white transition-all font-normal text-foreground"
+            />
+            <div className="absolute right-3 top-1/2 -translate-y-1/2 flex items-center gap-1">
+              {inputValue && !disabled && (
+                <button
+                  type="button"
+                  onClick={handleClear}
+                  className="p-1 hover:bg-zinc-100 rounded-full text-gray-dark transition-colors"
                 >
-                  <Check
-                    className={cn(
-                      "mr-2 h-4 w-4",
-                      value === option.id ? "opacity-100" : "opacity-0",
-                    )}
-                  />
-                  {option.label}
-                </CommandItem>
-              ))}
-            </CommandGroup>
-          </CommandList>
-        </Command>
-      </PopoverContent>
-    </Popover>
+                  <X className="size-3.5 opacity-50" />
+                </button>
+              )}
+              <ChevronsUpDown className="size-4 text-gray-dark opacity-50" />
+            </div>
+          </div>
+        </PopoverTrigger>
+        <PopoverContent
+          className="p-0 w-[--radix-popover-trigger-width] overflow-hidden"
+          align="start"
+          onOpenAutoFocus={(e) => e.preventDefault()}
+        >
+          <Command className="w-full" shouldFilter={false}>
+            <CommandList className="max-h-[300px]">
+              <CommandEmpty className="py-6 text-center text-sm text-gray-dark">
+                Sin resultados.
+              </CommandEmpty>
+              <CommandGroup>
+                {filteredOptions.slice(0, 100).map((option) => (
+                  <CommandItem
+                    key={option.id}
+                    value={option.label}
+                    onSelect={() => handleSelect(option)}
+                    className="cursor-pointer"
+                  >
+                    <Check
+                      className={cn(
+                        "mr-2 size-4",
+                        value === option.id ? "opacity-100" : "opacity-0"
+                      )}
+                    />
+                    <span className="truncate">{option.label}</span>
+                  </CommandItem>
+                ))}
+              </CommandGroup>
+            </CommandList>
+          </Command>
+        </PopoverContent>
+      </Popover>
+    </div>
   );
 }
+

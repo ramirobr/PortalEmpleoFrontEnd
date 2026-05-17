@@ -28,10 +28,12 @@ export default async function RootLayout({
   children: React.ReactNode;
 }) {
   const session = await auth();
-  const curriculum = await getCurriculumByUserId(session?.user);
-  const picture = await getUserPic(session?.user);
+  const [curriculum, picture] = await Promise.all([
+    getCurriculumByUserId(session?.user),
+    getUserPic(session?.user),
+  ]);
   return (
-    <html lang="en">
+    <html lang="en" suppressHydrationWarning>
       <body className={`${manrope.variable} ${plusJakartaSans.variable} font-primary`}>
         <Providers session={session}>
           {session && curriculum && (

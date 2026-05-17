@@ -216,14 +216,14 @@ export default function PostulacionesList({
   return (
     <div className="px-6 pb-6">
       {/* Filtros */}
-      <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-8 mb-8 transition-all hover:shadow-md">
-        <h3 className="text-sm font-bold text-gray-900 mb-6 flex items-center gap-2 uppercase tracking-wider">
+      <div className="bg-white rounded-2xl border border-zinc-100 shadow-sm p-8 mb-8 transition-all hover:shadow-md">
+        <h3 className="text-sm font-semibold text-zinc-900 mb-6 flex items-center gap-2 uppercase tracking-wider">
           <svg className="size-4 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z" /></svg>
           Filtros de búsqueda
         </h3>
         <div className="flex flex-col lg:flex-row lg:items-end gap-6">
           <div className="flex-1 min-w-0 w-full lg:max-w-md">
-            <label className="block text-xs font-bold text-gray-500 uppercase tracking-widest mb-2">
+            <label className="block text-xs font-bold text-zinc-500 uppercase tracking-widest mb-2">
               Buscar Candidato
             </label>
             <form
@@ -236,8 +236,8 @@ export default function PostulacionesList({
               }}
             >
               <div className="relative flex-1">
-                <span className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none">
-                  <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <span className="absolute left-3 top-1/2 -translate-y-1/2 text-zinc-400 pointer-events-none">
+                  <svg className="size-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
                   </svg>
                 </span>
@@ -245,7 +245,7 @@ export default function PostulacionesList({
                   name="search"
                   placeholder="Nombre, vacante o ubicación..."
                   defaultValue={searchQuery}
-                  className="pl-10 h-11 bg-gray-50/50 border-gray-100 rounded-xl focus:bg-white transition-all text-sm"
+                  className="pl-10 h-11 bg-zinc-50/50 border-zinc-100 rounded-xl focus:bg-white transition-all text-sm"
                 />
               </div>
               <PremiumButton type="submit" variant="primary" size="md">
@@ -254,17 +254,17 @@ export default function PostulacionesList({
             </form>
           </div>
           <div className="w-full lg:w-48 shrink-0">
-            <label className="block text-xs font-bold text-gray-500 uppercase tracking-widest mb-2">
+            <label className="block text-xs font-bold text-zinc-500 uppercase tracking-widest mb-2">
               Estado
             </label>
             <Select
               value={estadoFilter}
               onValueChange={(value) => updateParams({ estado: value, page: "1" })}
             >
-              <SelectTrigger className="h-11 bg-gray-50/50 border-gray-100 rounded-xl text-sm">
+              <SelectTrigger className="h-11 bg-zinc-50/50 border-zinc-100 rounded-xl text-sm">
                 <SelectValue placeholder="Todos" />
               </SelectTrigger>
-              <SelectContent className="rounded-xl border-gray-100 shadow-xl">
+              <SelectContent className="rounded-xl border-zinc-100 shadow-xl">
                 <SelectItem value="all">Todos los estados</SelectItem>
                 {estados.map((e) => (
                   <SelectItem key={e.idCatalogo} value={e.idCatalogo.toString()}>
@@ -275,17 +275,17 @@ export default function PostulacionesList({
             </Select>
           </div>
           <div className="w-full lg:w-56 shrink-0">
-            <label className="block text-xs font-bold text-gray-500 uppercase tracking-widest mb-2">
+            <label className="block text-xs font-bold text-zinc-500 uppercase tracking-widest mb-2">
               Vacante Específica
             </label>
             <Select
               value={vacanteFilter}
               onValueChange={(value) => updateParams({ vacante: value, page: "1" })}
             >
-              <SelectTrigger className="h-11 bg-gray-50/50 border-gray-100 rounded-xl text-sm">
+              <SelectTrigger className="h-11 bg-zinc-50/50 border-zinc-100 rounded-xl text-sm">
                 <SelectValue placeholder="Todas" />
               </SelectTrigger>
-              <SelectContent className="rounded-xl border-gray-100 shadow-xl">
+              <SelectContent className="rounded-xl border-zinc-100 shadow-xl">
                 <SelectItem value="all">Todas las vacantes</SelectItem>
                 {vacantes.map((v) => (
                   <SelectItem key={v.id} value={v.id}>
@@ -299,9 +299,9 @@ export default function PostulacionesList({
       </div>
 
       {/* Lista de Postulaciones */}
-      <div className="bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden transition-all hover:shadow-md">
-        <div className="px-8 py-6 border-b border-gray-100 flex items-center justify-between bg-gray-50/30">
-          <h2 className="text-xl font-bold text-gray-900 flex items-center gap-2">
+      <div className="bg-white rounded-2xl border border-zinc-100 shadow-sm overflow-hidden transition-all hover:shadow-md">
+        <div className="px-8 py-6 border-b border-zinc-100 flex items-center justify-between bg-zinc-50/30">
+          <h2 className="text-xl font-semibold text-zinc-900 flex items-center gap-2">
             Postulantes Destacados
           </h2>
         </div>
@@ -310,17 +310,17 @@ export default function PostulacionesList({
           <LoadingState message="Cargando postulantes..." className="py-24" />
         ) : paginated.length === 0 ? (
           <div className="py-24 text-center">
-            <div className="size-16 bg-gray-50 rounded-full flex items-center justify-center mx-auto mb-4">
-              <UsersIcon className="size-8 text-gray-300" />
+            <div className="size-16 bg-zinc-50 rounded-full flex items-center justify-center mx-auto mb-4">
+              <UsersIcon className="size-8 text-zinc-300" />
             </div>
-            <p className="text-gray-500 font-medium">No hay postulaciones que coincidan con los filtros.</p>
+            <p className="text-zinc-500 font-medium">No hay postulaciones que coincidan con los filtros.</p>
           </div>
         ) : (
-          <div className="divide-y divide-gray-100">
+          <div className="divide-y divide-zinc-100">
             {paginated.map((p) => (
               <div
                 key={p.idAplicacion}
-                className="px-8 py-8 hover:bg-gray-50/50 transition-all flex flex-col md:flex-row md:items-center gap-8 group"
+                className="p-8 hover:bg-zinc-50/50 transition-all flex flex-col md:flex-row md:items-center gap-8 group"
               >
                 {/* Avatar with Star Overlay */}
                 <div className="relative shrink-0">
@@ -338,7 +338,7 @@ export default function PostulacionesList({
                 {/* Info Section */}
                 <div className="min-w-0 flex-1">
                   <div className="flex flex-wrap items-center gap-3 mb-2">
-                    <h3 className="text-xl font-bold text-gray-900 uppercase tracking-tight">
+                    <h3 className="text-xl font-semibold text-zinc-900 uppercase tracking-tight">
                       {p.nombreCompleto}
                     </h3>
                     <span className="px-2 py-0.5 bg-orange-50 text-orange-700 text-[10px] font-bold uppercase rounded border border-orange-100">
@@ -350,13 +350,13 @@ export default function PostulacionesList({
                     Candidato
                   </p>
 
-                  <div className="flex flex-wrap items-center gap-4 text-xs font-bold text-gray-400 uppercase tracking-widest">
+                  <div className="flex flex-wrap items-center gap-4 text-xs font-bold text-zinc-400 uppercase tracking-widest">
                     <span className="flex items-center gap-1.5">
-                      <MapPinIcon className="size-3.5 text-gray-300" />
+                      <MapPinIcon className="size-3.5 text-zinc-300" />
                       {p.ciudadUsuario || "Sin ubicación"}
                     </span>
                     <span className="flex items-center gap-1.5">
-                      <BriefcaseIcon className="size-3.5 text-gray-300" />
+                      <BriefcaseIcon className="size-3.5 text-zinc-300" />
                       {p.tituloVacante}
                     </span>
                   </div>
@@ -368,7 +368,7 @@ export default function PostulacionesList({
                     <StatusBadge status={p.estadoAplicacion} className="shadow-none border-none" />
                     <button 
                       onClick={() => handleOpenStatusDialog(p)}
-                      className="p-1.5 rounded-full hover:bg-gray-100 text-gray-400 hover:text-primary transition-colors"
+                      className="p-1.5 rounded-full hover:bg-zinc-100 text-zinc-400 hover:text-primary transition-colors"
                       title="Cambiar estado"
                     >
                       <EditIcon className="size-4" />
@@ -412,7 +412,7 @@ export default function PostulacionesList({
           </DialogHeader>
           <form onSubmit={statusForm.handleSubmit(handleUpdateStatus)}>
             <div className="py-4">
-              <label className="block text-sm font-medium text-gray-700 mb-2">
+              <label className="block text-sm font-medium text-zinc-700 mb-2">
                 Estado
               </label>
               <Select

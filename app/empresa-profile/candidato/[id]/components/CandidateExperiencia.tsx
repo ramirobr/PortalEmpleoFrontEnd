@@ -4,6 +4,8 @@ import { ExperienciaLaboral } from "@/types/user";
 import { BriefcaseIcon } from "@/components/shared/icons/Icons";
 import { formatDate } from "@/lib/utils";
 
+import { useHasMounted } from "@/lib/hooks";
+
 interface CandidateExperienciaProps {
   experiencias: ExperienciaLaboral[];
 }
@@ -36,12 +38,13 @@ function calculateDuration(
 export default function CandidateExperiencia({
   experiencias,
 }: CandidateExperienciaProps) {
+  const hasMounted = useHasMounted();
   return (
     <div className="bg-white rounded-lg shadow p-6">
-      <h3 className="text-lg font-semibold text-gray-900 mb-4 flex items-center gap-2">
-        <BriefcaseIcon className="w-5 h-5 text-primary" />
+      <h3 className="text-lg font-semibold text-zinc-900 mb-4 flex items-center gap-2">
+        <BriefcaseIcon className="size-5 text-primary" />
         Experiencia Laboral
-        <span className="ml-auto text-sm font-normal text-gray-500">
+        <span className="ml-auto text-sm font-normal text-zinc-500">
           {experiencias.length} registros
         </span>
       </h3>
@@ -52,28 +55,28 @@ export default function CandidateExperiencia({
             key={exp.id}
             className={`relative pl-6 ${
               index !== experiencias.length - 1
-                ? "pb-6 border-l-2 border-gray-200"
+                ? "pb-6 border-l-2 border-zinc-200"
                 : ""
             }`}
           >
             {/* Timeline dot */}
             <div
-              className={`absolute left-0 top-0 w-3 h-3 rounded-full -translate-x-[7px] ${
+              className={`absolute left-0 top-0 size-3 rounded-full -translate-x-[7px] ${
                 exp.estaTrabajando
                   ? "bg-primary ring-4 ring-primary/20"
-                  : "bg-gray-300"
+                  : "bg-zinc-300"
               }`}
             />
 
             <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-2">
               <div>
-                <h4 className="font-semibold text-gray-900">{exp.puesto}</h4>
+                <h4 className="font-semibold text-zinc-900">{exp.puesto}</h4>
                 <p className="text-sm text-primary font-medium">{exp.empresa}</p>
                 <div className="flex flex-wrap gap-2 mt-1">
                   {exp.pais && (
-                    <span className="inline-flex items-center text-xs text-gray-500">
+                    <span className="inline-flex items-center text-xs text-zinc-500">
                       <svg
-                        className="w-3 h-3 mr-1"
+                        className="size-3 mr-1"
                         fill="none"
                         stroke="currentColor"
                         viewBox="0 0 24 24"
@@ -95,18 +98,18 @@ export default function CandidateExperiencia({
                     </span>
                   )}
                   {exp.sector && (
-                    <span className="px-2 py-0.5 bg-gray-100 text-gray-600 text-xs rounded">
+                    <span className="px-2 py-0.5 bg-zinc-100 text-zinc-600 text-xs rounded">
                       {exp.sector}
                     </span>
                   )}
                 </div>
               </div>
-              <div className="text-sm text-gray-500 whitespace-nowrap text-right">
+              <div className="text-sm text-zinc-500 whitespace-nowrap text-right">
                 <div>
                   {formatDate(exp.fechaInicio)} - {formatDate(exp.fechaFin)}
                 </div>
-                <div className="text-xs text-gray-400">
-                  {calculateDuration(exp.fechaInicio, exp.fechaFin)}
+                <div className="text-xs text-zinc-400">
+                  {hasMounted ? calculateDuration(exp.fechaInicio, exp.fechaFin) : "Cargando..."}
                 </div>
                 {exp.estaTrabajando && (
                   <span className="inline-block mt-1 px-2 py-0.5 bg-green-100 text-green-700 text-xs rounded">
@@ -117,7 +120,7 @@ export default function CandidateExperiencia({
             </div>
 
             {exp.descripcion && (
-              <p className="text-sm text-gray-600 mt-3 leading-relaxed">
+              <p className="text-sm text-zinc-600 mt-3 leading-relaxed">
                 {exp.descripcion}
               </p>
             )}

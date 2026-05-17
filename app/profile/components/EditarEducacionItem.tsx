@@ -218,7 +218,7 @@ const EditarEducacionItem: React.FC<EditarEducacionItemProps> = ({
           </Button>
           <Button type="submit" disabled={form.formState.isSubmitting}>
             {form.formState.isSubmitting && (
-              <span className="animate-spin h-4 w-4 border-2 border-t-transparent rounded-full" />
+              <span className="animate-spin size-4 border-2 border-t-transparent rounded-full" />
             )}
             Guardar
           </Button>

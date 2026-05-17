@@ -12,9 +12,9 @@ export default function CandidateEducacion({
 }: CandidateEducacionProps) {
   return (
     <div className="bg-white rounded-lg shadow p-6">
-      <h3 className="text-lg font-semibold text-gray-900 mb-4 flex items-center gap-2">
+      <h3 className="text-lg font-semibold text-zinc-900 mb-4 flex items-center gap-2">
         <svg
-          className="w-5 h-5 text-primary"
+          className="size-5 text-primary"
           fill="none"
           stroke="currentColor"
           viewBox="0 0 24 24"
@@ -29,7 +29,7 @@ export default function CandidateEducacion({
           />
         </svg>
         Educación
-        <span className="ml-auto text-sm font-normal text-gray-500">
+        <span className="ml-auto text-sm font-normal text-zinc-500">
           {educaciones.length} registros
         </span>
       </h3>
@@ -40,30 +40,30 @@ export default function CandidateEducacion({
             key={edu.id}
             className={`relative pl-6 ${
               index !== educaciones.length - 1
-                ? "pb-6 border-l-2 border-gray-200"
+                ? "pb-6 border-l-2 border-zinc-200"
                 : ""
             }`}
           >
             {/* Timeline dot */}
             <div
-              className={`absolute left-0 top-0 w-3 h-3 rounded-full -translate-x-[7px] ${
+              className={`absolute left-0 top-0 size-3 rounded-full -translate-x-[7px] ${
                 edu.estaCursando
                   ? "bg-primary ring-4 ring-primary/20"
-                  : "bg-gray-300"
+                  : "bg-zinc-300"
               }`}
             />
 
             <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-2">
               <div>
-                <h4 className="font-semibold text-gray-900">{edu.titulo}</h4>
-                <p className="text-sm text-gray-600">{edu.institucion}</p>
+                <h4 className="font-semibold text-zinc-900">{edu.titulo}</h4>
+                <p className="text-sm text-zinc-600">{edu.institucion}</p>
                 {edu.periodo && (
-                  <span className="inline-block mt-1 px-2 py-0.5 bg-gray-100 text-gray-600 text-xs rounded">
+                  <span className="inline-block mt-1 px-2 py-0.5 bg-zinc-100 text-zinc-600 text-xs rounded">
                     {edu.periodo}
                   </span>
                 )}
               </div>
-              <div className="text-sm text-gray-500 whitespace-nowrap">
+              <div className="text-sm text-zinc-500 whitespace-nowrap">
                 {formatDate(edu.fechaInicio)} - {formatDate(edu.fechaFin)}
                 {edu.estaCursando && (
                   <span className="ml-2 px-2 py-0.5 bg-green-100 text-green-700 text-xs rounded">
@@ -74,7 +74,7 @@ export default function CandidateEducacion({
             </div>
 
             {edu.descripcion && (
-              <p className="text-sm text-gray-600 mt-2">{edu.descripcion}</p>
+              <p className="text-sm text-zinc-600 mt-2">{edu.descripcion}</p>
             )}
           </div>
         ))}

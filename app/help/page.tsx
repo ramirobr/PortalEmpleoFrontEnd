@@ -41,10 +41,10 @@ export default function HelpPage() {
 
   return (
     <MainLayout>
-      <div className="min-h-screen bg-gray-50">
+      <div className="min-h-screen bg-zinc-50">
         <div className="bg-gradient-to-br from-primary to-primary-deep py-14 text-white">
           <div className="container text-center">
-            <h1 className="text-4xl font-extrabold mb-3">Solicitud de Ayuda</h1>
+            <h1 className="text-4xl font-semibold mb-3">Solicitud de Ayuda</h1>
             <p className="text-white/80 text-base max-w-xl mx-auto">
               ¿Tienes algún problema o consulta? Completa el formulario y te responderemos a
               la brevedad.
@@ -77,9 +77,9 @@ export default function HelpPage() {
               <div className="bg-primary/5 rounded-2xl p-5 border border-primary/10">
                 <div className="flex items-center gap-2 mb-2">
                   <HelpCircle className="size-5 text-primary" />
-                  <span className="font-semibold text-gray-800">Preguntas frecuentes</span>
+                  <span className="font-semibold text-zinc-800">Preguntas frecuentes</span>
                 </div>
-                <p className="text-sm text-gray-600">
+                <p className="text-sm text-zinc-600">
                   Antes de escribirnos, revisa si tu consulta ya tiene respuesta en nuestra
                   sección de preguntas frecuentes.
                 </p>
@@ -87,14 +87,14 @@ export default function HelpPage() {
             </div>
 
             {/* Form */}
-            <div className="lg:col-span-2 bg-white rounded-2xl shadow-sm border border-gray-100 p-8">
+            <div className="lg:col-span-2 bg-white rounded-2xl shadow-sm border border-zinc-100 p-8">
               {enviado ? (
                 <div className="flex flex-col items-center justify-center h-full py-12 text-center">
                   <CheckCircle className="size-16 text-green-500 mb-4" />
-                  <h2 className="text-2xl font-bold text-gray-900 mb-2">
+                  <h2 className="text-2xl font-semibold text-zinc-900 mb-2">
                     ¡Solicitud enviada!
                   </h2>
-                  <p className="text-gray-500 max-w-sm">
+                  <p className="text-zinc-500 max-w-sm">
                     Hemos recibido tu solicitud. Nuestro equipo te contactará en las próximas 24
                     a 48 horas hábiles.
                   </p>
@@ -108,7 +108,7 @@ export default function HelpPage() {
                 </div>
               ) : (
                 <>
-                  <h2 className="text-xl font-bold text-gray-900 mb-6">
+                  <h2 className="text-xl font-semibold text-zinc-900 mb-6">
                     Formulario de contacto
                   </h2>
                   <form onSubmit={handleSubmit} className="space-y-5">
@@ -190,13 +190,13 @@ function ContactCard({
   sub: string;
 }) {
   return (
-    <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-5">
+    <div className="bg-white rounded-2xl border border-zinc-100 shadow-sm p-5">
       <div className="flex items-center gap-3 mb-1">
         {icon}
-        <span className="font-semibold text-gray-800 text-sm">{title}</span>
+        <span className="font-semibold text-zinc-800 text-sm">{title}</span>
       </div>
-      <p className="text-gray-900 font-medium text-sm ml-8">{detail}</p>
-      <p className="text-gray-400 text-xs ml-8">{sub}</p>
+      <p className="text-zinc-900 font-medium text-sm ml-8">{detail}</p>
+      <p className="text-zinc-400 text-xs ml-8">{sub}</p>
     </div>
   );
 }

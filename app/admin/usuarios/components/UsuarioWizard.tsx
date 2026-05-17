@@ -21,6 +21,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { SearchAutocomplete } from "@/components/ui/search-autocomplete";
 import { UsuarioFormData } from "@/lib/admin/adminUsuarios";
 import { validarCedulaEcuatoriana } from "@/lib/utils";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -247,18 +248,18 @@ export default function UsuarioWizard({
       {Array.from({ length: totalSteps }, (_, i) => (
         <div key={i} className="flex items-center">
           <div
-            className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-medium ${
+            className={`size-8 rounded-full flex items-center justify-center text-sm font-medium ${
               i + 1 <= currentStep
                 ? "bg-primary text-white"
-                : "bg-gray-200 text-gray-600"
+                : "bg-zinc-200 text-zinc-600"
             }`}
           >
-            {i + 1 <= currentStep ? <Check className="w-4 h-4" /> : i + 1}
+            {i + 1 <= currentStep ? <Check className="size-4" /> : i + 1}
           </div>
           {i < totalSteps - 1 && (
             <div
               className={`w-12 h-0.5 mx-2 ${
-                i + 1 < currentStep ? "bg-primary" : "bg-gray-200"
+                i + 1 < currentStep ? "bg-primary" : "bg-zinc-200"
               }`}
             />
           )}
@@ -271,7 +272,7 @@ export default function UsuarioWizard({
     <div className="space-y-6">
       <div className="text-center">
         <h3 className="text-lg font-semibold mb-2">¿Qué tipo de usuario deseas crear?</h3>
-        <p className="text-gray-600">Selecciona el tipo de cuenta que mejor se ajuste a tus necesidades</p>
+        <p className="text-zinc-600">Selecciona el tipo de cuenta que mejor se ajuste a tus necesidades</p>
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
@@ -282,9 +283,9 @@ export default function UsuarioWizard({
           onClick={() => handleUserTypeSelect("postulante")}
         >
           <CardContent className="p-6 text-center">
-            <User className="w-12 h-12 mx-auto mb-4 text-blue-600" />
+            <User className="size-12 mx-auto mb-4 text-blue-600" />
             <h4 className="font-semibold mb-2">Postulante</h4>
-            <p className="text-sm text-gray-600">
+            <p className="text-sm text-zinc-600">
               Para personas que buscan empleo y oportunidades laborales
             </p>
           </CardContent>
@@ -297,9 +298,9 @@ export default function UsuarioWizard({
           onClick={() => handleUserTypeSelect("empresa")}
         >
           <CardContent className="p-6 text-center">
-            <Building2 className="w-12 h-12 mx-auto mb-4 text-green-600" />
+            <Building2 className="size-12 mx-auto mb-4 text-green-600" />
             <h4 className="font-semibold mb-2">Empresa</h4>
-            <p className="text-sm text-gray-600">
+            <p className="text-sm text-zinc-600">
               Para empresas que buscan publicar ofertas de trabajo
             </p>
           </CardContent>
@@ -526,7 +527,7 @@ export default function UsuarioWizard({
                         onClick={() => setShowPassword(!showPassword)}
                         title={showPassword ? "Ocultar contraseña" : "Mostrar contraseña"}
                       >
-                        <Eye className="w-4 h-4 text-gray-400" />
+                        <Eye className="size-4 text-zinc-400" />
                       </button>
                     </div>
                   </FormControl>
@@ -716,21 +717,19 @@ export default function UsuarioWizard({
             render={({ field }) => (
               <FormItem>
                 <FormLabel>Ciudad *</FormLabel>
-                <Select
-                  onValueChange={(value) => field.onChange(Number(value))}
-                  value={field.value ? String(field.value) : ""}
-                >
-                  <FormControl>
-                    <SelectTrigger>
-                      <SelectValue placeholder="Selecciona ciudad" />
-                    </SelectTrigger>
-                  </FormControl>
-                  <SelectContent>
-                    <SelectItem value="1">Quito</SelectItem>
-                    <SelectItem value="2">Guayaquil</SelectItem>
-                    <SelectItem value="3">Cuenca</SelectItem>
-                  </SelectContent>
-                </Select>
+                <FormControl>
+                  <SearchAutocomplete<number>
+                    options={[
+                      { id: 1, label: "Quito" },
+                      { id: 2, label: "Guayaquil" },
+                      { id: 3, label: "Cuenca" },
+                    ]}
+                    value={field.value || undefined}
+                    onChange={(id) => field.onChange(id)}
+                    placeholder="Selecciona ciudad"
+                    searchPlaceholder="Buscar ciudad..."
+                  />
+                </FormControl>
                 <FormMessage />
               </FormItem>
             )}
@@ -976,7 +975,7 @@ export default function UsuarioWizard({
                       onClick={() => setShowPassword(!showPassword)}
                       title={showPassword ? "Ocultar contraseña" : "Mostrar contraseña"}
                     >
-                      <Eye className="w-4 h-4 text-gray-400" />
+                      <Eye className="size-4 text-zinc-400" />
                     </button>
                   </div>
                 </FormControl>
@@ -1095,7 +1094,7 @@ export default function UsuarioWizard({
     <Card className="w-full max-w-4xl mx-auto">
       <CardHeader>
         <CardTitle className="flex items-center gap-3">
-          <UserRoundPlus className="w-6 h-6 text-primary" />
+          <UserRoundPlus className="size-6 text-primary" />
           Crear Nuevo Usuario
         </CardTitle>
       </CardHeader>
@@ -1109,14 +1108,14 @@ export default function UsuarioWizard({
             onClick={currentStep === 1 ? onCancel : handleBack}
             disabled={loading}
           >
-            <ArrowLeft className="w-4 h-4 mr-2" />
+            <ArrowLeft className="size-4 mr-2" />
             {currentStep === 1 ? "Cancelar" : "Atrás"}
           </Button>
 
           {currentStep < totalSteps ? (
             <Button onClick={handleNext} disabled={loading}>
               Siguiente
-              <ArrowRight className="w-4 h-4 ml-2" />
+              <ArrowRight className="size-4 ml-2" />
             </Button>
           ) : (
             <Button onClick={handleFinalSubmit} disabled={loading}>

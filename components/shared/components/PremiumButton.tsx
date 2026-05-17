@@ -36,7 +36,7 @@ export const PremiumButton = React.forwardRef<
       secondary:
         "bg-linear-to-r from-secondary-container to-secondary text-white hover:shadow-secondary/30",
       outline: "border-2 border-primary text-primary hover:bg-primary/5",
-      white: "bg-white text-primary hover:bg-slate-50 shadow-sm",
+      white: "bg-white text-primary hover:bg-zinc-50 shadow-sm",
     };
 
     const sizeStyles = {
@@ -53,7 +53,7 @@ export const PremiumButton = React.forwardRef<
         )}
 
         {isLoading ? (
-          <span className="animate-spin rounded-full h-4 w-4 border-2 border-current border-t-transparent relative z-10" />
+          <span className="animate-spin rounded-full size-4 border-2 border-current border-t-transparent relative z-10" />
         ) : (
           <span className="relative z-10 flex items-center justify-center gap-3 w-full">
             {icon && iconPosition === "left" && (

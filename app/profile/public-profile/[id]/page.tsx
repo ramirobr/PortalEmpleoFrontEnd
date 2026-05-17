@@ -20,12 +20,11 @@ export default async function PublicProfilePage({
   const { id } = await params;
   const session = await auth();
 
-  const user = await getCandidateInfoById(id, session?.user?.accessToken || "");
-  const profilePic = await getCandidatePicById(
-    id,
-    session?.user?.accessToken || "",
-  );
-  const catalogs = await fetchDatosPersonalesFields();
+  const [user, profilePic, catalogs] = await Promise.all([
+    getCandidateInfoById(id, session?.user?.accessToken || ""),
+    getCandidatePicById(id, session?.user?.accessToken || ""),
+    fetchDatosPersonalesFields(),
+  ]);
 
   if (user) {
     if (profilePic) {
@@ -60,7 +59,7 @@ export default async function PublicProfilePage({
   if (!user) {
     return (
       <div className="flex items-center justify-center h-screen">
-        <p className="text-2xl text-gray-600">
+        <p className="text-2xl text-zinc-600">
           No se encontró el perfil del usuario.
         </p>
       </div>

@@ -13,8 +13,10 @@ export default async function ProfilePage() {
   const dashboard = await getDashboardInfoByUserId(id, accessToken);
   if (!dashboard) return;
 
-  const userPic = await getUserPic(session.user);
-  const userInfo = await getUserInfoByUserId(session.user);
+  const [userPic, userInfo] = await Promise.all([
+    getUserPic(session.user),
+    getUserInfoByUserId(session.user),
+  ]);
 
   // Derive professional title from summary or first experience if possible
   const profession =

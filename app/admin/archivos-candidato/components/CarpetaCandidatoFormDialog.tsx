@@ -128,7 +128,7 @@ export default function CarpetaCandidatoFormDialog({
                   <FormItem>
                     <FormLabel>
                       Descripción{" "}
-                      <span className="text-gray-400 font-normal">(opcional)</span>
+                      <span className="text-zinc-400 font-normal">(opcional)</span>
                     </FormLabel>
                     <FormControl>
                       <Textarea
@@ -151,7 +151,7 @@ export default function CarpetaCandidatoFormDialog({
                     <FormItem>
                       <FormLabel>
                         Carpeta Padre{" "}
-                        <span className="text-gray-400 font-normal">(opcional)</span>
+                        <span className="text-zinc-400 font-normal">(opcional)</span>
                       </FormLabel>
                       <Select
                         value={field.value ?? NO_PARENT}

@@ -13,8 +13,10 @@ type Props = {
 
 export default async function PasanteEmailPage({ searchParams }: Props) {
   const session = await auth();
-  const params = await searchParams;
-  const filtersItems = await fetchFilters();
+  const [params, filtersItems] = await Promise.all([
+    searchParams,
+    fetchFilters(),
+  ]);
   
   const role = params.role;
   const filters: Record<string, string> = {
@@ -43,12 +45,12 @@ export default async function PasanteEmailPage({ searchParams }: Props) {
           <Banner title="Ofertas de Empleo" />
           <section className="container py-20">
             <div className="mb-8">
-              <h1 className="text-3xl font-bold text-gray-900 mb-2">
+              <h1 className="text-3xl font-semibold text-zinc-900 mb-2">
                 {role === "pasante" ? "Empleos para Pasantes" : 
                  role === "horas" ? "Trabajo por Horas" : 
                  "Búsqueda de Empleos"}
               </h1>
-              <p className="text-gray-600">
+              <p className="text-zinc-600">
                 {role === "pasante" ? "Encuentra las mejores oportunidades para iniciar tu carrera profesional." : 
                  role === "horas" ? "Oportunidades flexibles ajustadas a tu tiempo." : 
                  "Explora todas nuestras vacantes disponibles."}

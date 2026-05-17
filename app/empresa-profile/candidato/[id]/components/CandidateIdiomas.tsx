@@ -20,9 +20,9 @@ function getNivelPercentage(nivel: string): number {
 export default function CandidateIdiomas({ idiomas }: CandidateIdiomasProps) {
   return (
     <div className="bg-white rounded-lg shadow p-6">
-      <h3 className="text-lg font-semibold text-gray-900 mb-4 flex items-center gap-2">
+      <h3 className="text-lg font-semibold text-zinc-900 mb-4 flex items-center gap-2">
         <svg
-          className="w-5 h-5 text-primary"
+          className="size-5 text-primary"
           fill="none"
           stroke="currentColor"
           viewBox="0 0 24 24"
@@ -43,12 +43,12 @@ export default function CandidateIdiomas({ idiomas }: CandidateIdiomasProps) {
           return (
             <div key={idioma.id}>
               <div className="flex justify-between items-center mb-1">
-                <span className="text-sm font-medium text-gray-900">
+                <span className="text-sm font-medium text-zinc-900">
                   {idioma.nombre}
                 </span>
-                <span className="text-xs text-gray-500">{idioma.nivel}</span>
+                <span className="text-xs text-zinc-500">{idioma.nivel}</span>
               </div>
-              <div className="w-full h-2 bg-gray-100 rounded-full overflow-hidden">
+              <div className="w-full h-2 bg-zinc-100 rounded-full overflow-hidden">
                 <div
                   className="h-full bg-primary rounded-full transition-all duration-500"
                   style={{ width: `${percentage}%` }}

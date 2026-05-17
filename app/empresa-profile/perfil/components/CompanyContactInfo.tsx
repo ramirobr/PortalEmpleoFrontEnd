@@ -20,36 +20,36 @@ export default function CompanyContactInfo({ profile }: CompanyContactInfoProps)
       </CardHeader>
       <CardContent className="pt-6 space-y-4">
         <div className="flex items-start gap-3">
-          <MapPin className="w-5 h-5 text-primary mt-0.5" />
+          <MapPin className="size-5 text-primary mt-0.5" />
           <div>
-            <p className="text-sm text-gray-500">Dirección</p>
+            <p className="text-sm text-zinc-500">Dirección</p>
             <p className="font-medium">{profile.direccion || "No especificada"}</p>
             {locationParts.length > 0 && (
-              <p className="text-sm text-gray-500">{locationParts.join(", ")}</p>
+              <p className="text-sm text-zinc-500">{locationParts.join(", ")}</p>
             )}
           </div>
         </div>
 
         <div className="flex items-start gap-3">
-          <Phone className="w-5 h-5 text-primary mt-0.5" />
+          <Phone className="size-5 text-primary mt-0.5" />
           <div>
-            <p className="text-sm text-gray-500">Teléfono</p>
+            <p className="text-sm text-zinc-500">Teléfono</p>
             <p className="font-medium">{profile.telefonoContacto || "No especificado"}</p>
           </div>
         </div>
 
         <div className="flex items-start gap-3">
-          <Mail className="w-5 h-5 text-primary mt-0.5" />
+          <Mail className="size-5 text-primary mt-0.5" />
           <div>
-            <p className="text-sm text-gray-500">Correo de contacto</p>
+            <p className="text-sm text-zinc-500">Correo de contacto</p>
             <p className="font-medium">{profile.correoContacto || "No especificado"}</p>
           </div>
         </div>
 
         <div className="flex items-start gap-3">
-          <FileText className="w-5 h-5 text-primary mt-0.5" />
+          <FileText className="size-5 text-primary mt-0.5" />
           <div>
-            <p className="text-sm text-gray-500">Documento</p>
+            <p className="text-sm text-zinc-500">Documento</p>
             <p className="font-medium">{profile.numeroDocumento || "No especificado"}</p>
           </div>
         </div>

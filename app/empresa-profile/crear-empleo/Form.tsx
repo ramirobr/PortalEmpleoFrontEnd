@@ -248,12 +248,12 @@ export default function CrearEmpleoForm({ fields, initialValues }: FormProps) {
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         {/* Title */}
         <div className="lg:col-span-2">
-          <label className="block text-sm font-semibold text-gray-700 mb-1">
+          <label className="block text-sm font-semibold text-zinc-700 mb-1">
             Título del Empleo
           </label>
           <Input
             placeholder="Ej. Desarrollador Senior React"
-            className="bg-gray-50 border-gray-200 focus:bg-white transition-colors"
+            className="bg-zinc-50 border-zinc-200 focus:bg-white transition-colors"
             {...register("tituloPuesto")}
           />
           {errors.tituloPuesto && (
@@ -265,7 +265,7 @@ export default function CrearEmpleoForm({ fields, initialValues }: FormProps) {
 
         {/* Location */}
         <div>
-          <label className="block text-sm font-semibold text-gray-700 mb-1">
+          <label className="block text-sm font-semibold text-zinc-700 mb-1">
             Ciudad
           </label>
           <Controller
@@ -294,7 +294,7 @@ export default function CrearEmpleoForm({ fields, initialValues }: FormProps) {
 
         {/* Modality */}
         <div>
-          <label className="block text-sm font-semibold text-gray-700 mb-1">
+          <label className="block text-sm font-semibold text-zinc-700 mb-1">
             Modalidad
           </label>
           <Controller
@@ -305,7 +305,7 @@ export default function CrearEmpleoForm({ fields, initialValues }: FormProps) {
                 onValueChange={(value) => field.onChange(Number(value))}
                 value={field.value ? String(field.value) : ""}
               >
-                <SelectTrigger className="bg-gray-50 border-gray-200">
+                <SelectTrigger className="bg-zinc-50 border-zinc-200">
                   <SelectValue placeholder="Seleccionar Modalidad" />
                 </SelectTrigger>
                 <SelectContent>
@@ -330,7 +330,7 @@ export default function CrearEmpleoForm({ fields, initialValues }: FormProps) {
 
         {/* Jornada Laboral */}
         <div>
-          <label className="block text-sm font-semibold text-gray-700 mb-1">
+          <label className="block text-sm font-semibold text-zinc-700 mb-1">
             Jornada Laboral
           </label>
           <Controller
@@ -341,7 +341,7 @@ export default function CrearEmpleoForm({ fields, initialValues }: FormProps) {
                 onValueChange={(value) => field.onChange(Number(value))}
                 value={field.value ? String(field.value) : ""}
               >
-                <SelectTrigger className="bg-gray-50 border-gray-200">
+                <SelectTrigger className="bg-zinc-50 border-zinc-200">
                   <SelectValue placeholder="Seleccionar Jornada" />
                 </SelectTrigger>
                 <SelectContent>
@@ -361,7 +361,7 @@ export default function CrearEmpleoForm({ fields, initialValues }: FormProps) {
 
         {/* Experience */}
         <div>
-          <label className="block text-sm font-semibold text-gray-700 mb-1">
+          <label className="block text-sm font-semibold text-zinc-700 mb-1">
             Experiencia
           </label>
           <Controller
@@ -372,7 +372,7 @@ export default function CrearEmpleoForm({ fields, initialValues }: FormProps) {
                 onValueChange={(value) => field.onChange(Number(value))}
                 value={field.value ? String(field.value) : ""}
               >
-                <SelectTrigger className="bg-gray-50 border-gray-200">
+                <SelectTrigger className="bg-zinc-50 border-zinc-200">
                   <SelectValue placeholder="Seleccionar experiencia" />
                 </SelectTrigger>
                 <SelectContent>
@@ -397,7 +397,7 @@ export default function CrearEmpleoForm({ fields, initialValues }: FormProps) {
 
         {/* Education Level */}
         <div>
-          <label className="block text-sm font-semibold text-gray-700 mb-1">
+          <label className="block text-sm font-semibold text-zinc-700 mb-1">
             Nivel de Estudio
           </label>
           <Controller
@@ -408,7 +408,7 @@ export default function CrearEmpleoForm({ fields, initialValues }: FormProps) {
                 onValueChange={(value) => field.onChange(Number(value))}
                 value={field.value ? String(field.value) : ""}
               >
-                <SelectTrigger className="bg-gray-50 border-gray-200">
+                <SelectTrigger className="bg-zinc-50 border-zinc-200">
                   <SelectValue placeholder="Seleccionar nivel" />
                 </SelectTrigger>
                 <SelectContent>
@@ -433,7 +433,7 @@ export default function CrearEmpleoForm({ fields, initialValues }: FormProps) {
 
         {/* Start Date */}
         <div>
-          <label className="block text-sm font-semibold text-gray-700 mb-1">
+          <label className="block text-sm font-semibold text-zinc-700 mb-1">
             Fecha de Inicio
           </label>
           <Controller
@@ -455,7 +455,7 @@ export default function CrearEmpleoForm({ fields, initialValues }: FormProps) {
 
         {/* Closing Date */}
         <div>
-          <label className="block text-sm font-semibold text-gray-700 mb-1">
+          <label className="block text-sm font-semibold text-zinc-700 mb-1">
             Fecha de Cierre
           </label>
           <Controller
@@ -474,7 +474,7 @@ export default function CrearEmpleoForm({ fields, initialValues }: FormProps) {
 
         {/* Salary */}
         <div className="lg:col-span-2">
-          <label className="block text-sm font-semibold text-gray-700 mb-2">
+          <label className="block text-sm font-semibold text-zinc-700 mb-2">
             Rango Salarial Mensual (USD)
           </label>
           <Controller
@@ -483,7 +483,7 @@ export default function CrearEmpleoForm({ fields, initialValues }: FormProps) {
             render={({ field }) => (
               <div className="flex items-center gap-3">
                 <div className="flex-1">
-                  <label className="text-xs text-gray-500 mb-1 block">Mínimo</label>
+                  <label className="text-xs text-zinc-500 mb-1 block">Mínimo</label>
                   <Input
                     type="number"
                     min={0}
@@ -492,12 +492,12 @@ export default function CrearEmpleoForm({ fields, initialValues }: FormProps) {
                     onChange={(e) =>
                       field.onChange([Number(e.target.value), field.value?.[1] ?? 0])
                     }
-                    className="bg-gray-50 border-gray-200"
+                    className="bg-zinc-50 border-zinc-200"
                   />
                 </div>
-                <span className="mt-5 text-gray-400 font-bold">—</span>
+                <span className="mt-5 text-zinc-400 font-bold">—</span>
                 <div className="flex-1">
-                  <label className="text-xs text-gray-500 mb-1 block">Máximo</label>
+                  <label className="text-xs text-zinc-500 mb-1 block">Máximo</label>
                   <Input
                     type="number"
                     min={0}
@@ -506,7 +506,7 @@ export default function CrearEmpleoForm({ fields, initialValues }: FormProps) {
                     onChange={(e) =>
                       field.onChange([field.value?.[0] ?? 0, Number(e.target.value)])
                     }
-                    className="bg-gray-50 border-gray-200"
+                    className="bg-zinc-50 border-zinc-200"
                   />
                 </div>
               </div>
@@ -521,12 +521,12 @@ export default function CrearEmpleoForm({ fields, initialValues }: FormProps) {
 
         {/* Description */}
         <div className="lg:col-span-2">
-          <label className="block text-sm font-semibold text-gray-700 mb-1">
+          <label className="block text-sm font-semibold text-zinc-700 mb-1">
             Descripción del Puesto
           </label>
           <Textarea
             placeholder="Describe de forma clara las responsabilidades del puesto."
-            className="min-h-[200px] bg-gray-50 border-gray-200 focus:bg-white transition-colors"
+            className="min-h-[200px] bg-zinc-50 border-zinc-200 focus:bg-white transition-colors"
             {...register("descripcion")}
           />
           {errors.descripcion && (
@@ -538,7 +538,7 @@ export default function CrearEmpleoForm({ fields, initialValues }: FormProps) {
 
         {/* Inicio de Labores */}
         <div>
-          <label className="block text-sm font-semibold text-gray-700 mb-1">
+          <label className="block text-sm font-semibold text-zinc-700 mb-1">
             Inicio de Labores
           </label>
           <Controller
@@ -549,7 +549,7 @@ export default function CrearEmpleoForm({ fields, initialValues }: FormProps) {
                 onValueChange={field.onChange}
                 value={field.value ?? ""}
               >
-                <SelectTrigger className="bg-gray-50 border-gray-200">
+                <SelectTrigger className="bg-zinc-50 border-zinc-200">
                   <SelectValue placeholder="Seleccionar inicio" />
                 </SelectTrigger>
                 <SelectContent>
@@ -566,7 +566,7 @@ export default function CrearEmpleoForm({ fields, initialValues }: FormProps) {
 
         {watchedInicioLabores === "Fecha específica" && (
           <div>
-            <label className="block text-sm font-semibold text-gray-700 mb-1">
+            <label className="block text-sm font-semibold text-zinc-700 mb-1">
               Fecha de Inicio de Labores
             </label>
             <Controller
@@ -586,7 +586,7 @@ export default function CrearEmpleoForm({ fields, initialValues }: FormProps) {
 
         {/* Experiencia Requerida */}
         <div className="lg:col-span-2 flex flex-col sm:flex-row sm:items-center gap-4">
-          <label className="flex items-center gap-2 text-sm font-semibold text-gray-700 cursor-pointer select-none">
+          <label className="flex items-center gap-2 text-sm font-semibold text-zinc-700 cursor-pointer select-none">
             <Controller
               name="conExperiencia"
               control={control}
@@ -601,7 +601,7 @@ export default function CrearEmpleoForm({ fields, initialValues }: FormProps) {
           </label>
           {watchedConExperiencia && (
             <div className="flex items-center gap-2">
-              <label className="text-sm text-gray-600 whitespace-nowrap">
+              <label className="text-sm text-zinc-600 whitespace-nowrap">
                 Años de experiencia:
               </label>
               <Controller
@@ -613,7 +613,7 @@ export default function CrearEmpleoForm({ fields, initialValues }: FormProps) {
                     min={0}
                     max={50}
                     placeholder="Ej: 2"
-                    className="w-24 bg-gray-50 border-gray-200"
+                    className="w-24 bg-zinc-50 border-zinc-200"
                     value={field.value ?? ""}
                     onChange={(e) =>
                       field.onChange(
@@ -629,7 +629,7 @@ export default function CrearEmpleoForm({ fields, initialValues }: FormProps) {
 
         {/* Requirements */}
         <div className="lg:col-span-2">
-          <label className="block text-sm font-semibold text-gray-700 mb-2">
+          <label className="block text-sm font-semibold text-zinc-700 mb-2">
             Requisitos
           </label>
           <div className="mb-3 grid grid-cols-2 sm:grid-cols-3 gap-2">
@@ -648,7 +648,7 @@ export default function CrearEmpleoForm({ fields, initialValues }: FormProps) {
           </div>
           <Textarea
             placeholder="Agrega requisitos adicionales del puesto (opcional)."
-            className="min-h-[120px] bg-gray-50 border-gray-200 focus:bg-white transition-colors"
+            className="min-h-[120px] bg-zinc-50 border-zinc-200 focus:bg-white transition-colors"
             {...register("requisitos")}
           />
           {errors.requisitos && (
@@ -677,7 +677,7 @@ export default function CrearEmpleoForm({ fields, initialValues }: FormProps) {
         </div>
       </div>
 
-      <div className="flex justify-end gap-3 mt-8 pt-6 border-t border-gray-100">
+      <div className="flex justify-end gap-3 mt-8 pt-6 border-t border-zinc-100">
         <Button
           variant="outline"
           type="button"
@@ -692,7 +692,7 @@ export default function CrearEmpleoForm({ fields, initialValues }: FormProps) {
           disabled={isSubmitting}
         >
           {isSubmitting && (
-            <span className="animate-spin h-4 w-4 border-2 border-t-transparent rounded-full" />
+            <span className="animate-spin size-4 border-2 border-t-transparent rounded-full" />
           )}
           {isEditMode ? "Actualizar " : "Publicar "}
         </Button>

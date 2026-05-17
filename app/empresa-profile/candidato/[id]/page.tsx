@@ -17,10 +17,10 @@ export default async function CandidatoPage({ params }: CandidatoPageProps) {
   if (!session?.user) {
     return (
       <div className="p-6">
-        <h1 className="text-2xl font-bold text-gray-900">
+        <h1 className="text-2xl font-semibold text-zinc-900">
           No autorizado
         </h1>
-        <p className="text-gray-500 mt-2">
+        <p className="text-zinc-500 mt-2">
           Debe iniciar sesión para ver esta página.
         </p>
       </div>
@@ -42,10 +42,10 @@ export default async function CandidatoPage({ params }: CandidatoPageProps) {
   if (!candidate) {
     return (
       <div className="p-6">
-        <h1 className="text-2xl font-bold text-gray-900">
+        <h1 className="text-2xl font-semibold text-zinc-900">
           Candidato no encontrado
         </h1>
-        <p className="text-gray-500 mt-2">
+        <p className="text-zinc-500 mt-2">
           No se pudo encontrar información del candidato con ID: {id}
         </p>
       </div>

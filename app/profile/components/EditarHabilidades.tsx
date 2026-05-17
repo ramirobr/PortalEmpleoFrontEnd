@@ -186,7 +186,7 @@ export default function EditarHabilidades({
   return (
     <Card className="p-6">
       <div className="flex justify-between items-center">
-        <h2 className="text-2xl font-bold text-primary flex items-center gap-2">
+        <h2 className="text-2xl font-semibold text-primary flex items-center gap-2">
           <Lightbulb width={25} height={25} className="text-primary" />
           Habilidades
         </h2>
@@ -405,7 +405,7 @@ const AddHabilidadForm: React.FC<AddHabilidadFormProps> = ({
           </Button>
           <Button type="submit" disabled={form.formState.isSubmitting}>
             {form.formState.isSubmitting && (
-              <span className="animate-spin h-4 w-4 border-2 border-t-transparent rounded-full" />
+              <span className="animate-spin size-4 border-2 border-t-transparent rounded-full" />
             )}
             Guardar
           </Button>
@@ -550,7 +550,7 @@ const EditHabilidadForm: React.FC<EditHabilidadFormProps> = ({
           </Button>
           <Button type="submit" disabled={form.formState.isSubmitting}>
             {form.formState.isSubmitting && (
-              <span className="animate-spin h-4 w-4 border-2 border-t-transparent rounded-full" />
+              <span className="animate-spin size-4 border-2 border-t-transparent rounded-full" />
             )}
             Guardar
           </Button>

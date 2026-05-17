@@ -13,9 +13,11 @@ import EditarResumen from "../components/EditarResumen";
 export default async function EditProfilePage() {
   const session = await auth();
   if (!session) return;
-  const curriculum = await getCurriculumByUserId(session.user);
-  const user = await getUserInfoByUserId(session.user);
-  const fields = await fetchDatosPersonalesFields();
+  const [curriculum, user, fields] = await Promise.all([
+    getCurriculumByUserId(session.user),
+    getUserInfoByUserId(session.user),
+    fetchDatosPersonalesFields(),
+  ]);
   if (!user) return;
 
   return (

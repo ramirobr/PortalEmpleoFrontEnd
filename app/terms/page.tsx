@@ -10,8 +10,8 @@ export const metadata = {
 function Section({ title, children }: { title: string; children: React.ReactNode }) {
   return (
     <section className="mb-8">
-      <h2 className="text-xl font-bold text-gray-900 mb-3">{title}</h2>
-      <div className="text-gray-600 leading-relaxed space-y-3">{children}</div>
+      <h2 className="text-xl font-semibold text-zinc-900 mb-3">{title}</h2>
+      <div className="text-zinc-600 leading-relaxed space-y-3">{children}</div>
     </section>
   );
 }
@@ -19,10 +19,10 @@ function Section({ title, children }: { title: string; children: React.ReactNode
 export default function TermsPage() {
   return (
     <MainLayout>
-      <div className="min-h-screen bg-gray-50">
+      <div className="min-h-screen bg-zinc-50">
         <div className="bg-gradient-to-br from-primary to-primary-deep py-14 text-white">
           <div className="container text-center">
-            <h1 className="text-4xl font-extrabold mb-3">Términos y Condiciones</h1>
+            <h1 className="text-4xl font-semibold mb-3">Términos y Condiciones</h1>
             <p className="text-white/80 text-base max-w-xl mx-auto">
               Por favor lee detenidamente estos términos antes de utilizar el portal.
             </p>
@@ -30,7 +30,7 @@ export default function TermsPage() {
         </div>
 
         <div className="container py-12 max-w-3xl">
-          <p className="text-sm text-gray-400 mb-8">Última actualización: enero 2025</p>
+          <p className="text-sm text-zinc-400 mb-8">Última actualización: enero 2025</p>
 
           <Section title="1. Aceptación de los términos">
             <p>
@@ -104,7 +104,7 @@ export default function TermsPage() {
             </p>
           </Section>
 
-          <p className="text-sm text-gray-400 mt-10">
+          <p className="text-sm text-zinc-400 mt-10">
             Para consultas sobre estos términos escríbenos a{" "}
             <a href="mailto:info@portalempleo.ec" className="text-primary underline">
               info@portalempleo.ec

@@ -128,7 +128,7 @@ export default function AdminLayout({ children }: Children) {
   return (
     <div className="min-h-screen bg-white relative">
       <Navbar onHamburgerClick={toggleAside} isAsideOpen={isAsideOpen} />
-      <div className="flex relative bg-gray-50">
+      <div className="flex relative bg-zinc-50">
         <AsideMenu
           isOpen={isAsideOpen}
           onClose={closeAside}
@@ -136,7 +136,7 @@ export default function AdminLayout({ children }: Children) {
           className="absolute top-0 left-0 h-full w-80 transform-none bg-surface-dark shadow-none lg:shadow"
           links={adminLinks}
         />
-        <main className="w-full py-10 bg-gray-50 lg:py-20 shrink-0">
+        <main className="w-full py-10 bg-zinc-50 lg:py-20 shrink-0">
           <div className="container">{children}</div>
         </main>
       </div>

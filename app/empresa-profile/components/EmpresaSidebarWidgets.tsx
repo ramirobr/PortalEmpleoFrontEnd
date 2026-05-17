@@ -69,7 +69,7 @@ function CircularProgress({ percentage }: { percentage: number }) {
       </svg>
       <div className="absolute flex flex-col items-center justify-center">
         <Building2 className="size-5 text-primary mb-0.5" />
-        <span className="text-lg font-bold text-gray-800 leading-none">
+        <span className="text-lg font-bold text-zinc-800 leading-none">
           {percentage}%
         </span>
       </div>
@@ -121,12 +121,12 @@ export default function EmpresaSidebarWidgets({
     <div className="space-y-6">
       {/* Mi Empresa - Profile completion */}
       <section
-        className="bg-white rounded-2xl border border-gray-100 shadow-sm p-6"
+        className="bg-white rounded-2xl border border-zinc-100 shadow-sm p-6"
         aria-labelledby="perfil-empresa-title"
       >
         <h3
           id="perfil-empresa-title"
-          className="text-sm font-bold text-gray-900 mb-6 flex items-center gap-2 uppercase tracking-wider"
+          className="text-sm font-semibold text-zinc-900 mb-6 flex items-center gap-2 uppercase tracking-wider"
         >
           <Building2 className="size-4 text-primary" />
           Mi Empresa
@@ -134,10 +134,10 @@ export default function EmpresaSidebarWidgets({
         <div className="flex flex-col items-center gap-4">
           <CircularProgress percentage={profilePct} />
           <div className="text-center">
-            <p className="text-sm font-bold text-gray-900">
+            <p className="text-sm font-bold text-zinc-900">
               Perfil {profilePct}% completo
             </p>
-            <p className="text-xs text-gray-500 mt-1">
+            <p className="text-xs text-zinc-500 mt-1">
               {profilePct < 100
                 ? "Completa tu perfil para atraer mejor talento."
                 : "¡Tu perfil está excelente!"}
@@ -155,12 +155,12 @@ export default function EmpresaSidebarWidgets({
 
       {/* Tus procesos activos - with counts */}
       <section
-        className="bg-white rounded-2xl border border-gray-100 shadow-sm p-6"
+        className="bg-white rounded-2xl border border-zinc-100 shadow-sm p-6"
         aria-labelledby="procesos-activos-title"
       >
         <h3
           id="procesos-activos-title"
-          className="text-sm font-bold text-gray-900 mb-4 flex items-center gap-2 uppercase tracking-wider"
+          className="text-sm font-semibold text-zinc-900 mb-4 flex items-center gap-2 uppercase tracking-wider"
         >
           <FileText className="size-4 text-primary" />
           Procesos Activos
@@ -170,19 +170,19 @@ export default function EmpresaSidebarWidgets({
             <li key={item.label}>
               <Link
                 href={item.href}
-                className="flex items-center justify-between py-3  rounded-xl text-sm text-gray-700 hover:bg-gray-50 hover:text-primary transition-all group"
+                className="flex items-center justify-between py-3  rounded-xl text-sm text-zinc-700 hover:bg-zinc-50 hover:text-primary transition-all group"
               >
                 <div className="flex items-center gap-3">
-                  <div className="size-8 rounded-lg bg-gray-50 group-hover:bg-primary/10 flex items-center justify-center transition-colors">
-                    <item.icon className="size-4 text-gray-400 group-hover:text-primary transition-colors" />
+                  <div className="size-8 rounded-lg bg-zinc-50 group-hover:bg-primary/10 flex items-center justify-center transition-colors">
+                    <item.icon className="size-4 text-zinc-400 group-hover:text-primary transition-colors" />
                   </div>
                   <span className="font-medium">{item.label}</span>
                 </div>
                 <div className="flex items-center gap-2">
-                  <span className="font-bold text-gray-900 bg-gray-100 px-2 py-0.5 rounded text-[12px] group-hover:bg-primary group-hover:text-white transition-colors">
+                  <span className="font-bold text-zinc-900 bg-zinc-100 px-2 py-0.5 rounded text-[12px] group-hover:bg-primary group-hover:text-white transition-colors">
                     {item.count}
                   </span>
-                  <ChevronRight className="size-4 text-gray-300 group-hover:text-primary transition-colors" />
+                  <ChevronRight className="size-4 text-zinc-300 group-hover:text-primary transition-colors" />
                 </div>
               </Link>
             </li>
@@ -197,7 +197,7 @@ export default function EmpresaSidebarWidgets({
       >
         <h3
           id="tips-title"
-          className="text-sm font-bold mb-4 flex items-center gap-2 uppercase tracking-wider"
+          className="text-sm font-semibold mb-4 flex items-center gap-2 uppercase tracking-wider"
         >
           <Award className="size-4 text-white/80" />
           Mejora tus procesos

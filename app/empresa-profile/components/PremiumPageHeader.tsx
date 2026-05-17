@@ -12,11 +12,11 @@ export function PremiumPageHeader({ title, description, children, className }: P
   return (
     <div className={cn("mb-8 flex flex-col md:flex-row md:items-end justify-between gap-4", className)}>
       <div className="max-w-2xl">
-        <h1 className="text-3xl font-bold text-gray-900 tracking-tight leading-none mb-2">
+        <h1 className="text-3xl font-semibold text-zinc-900 tracking-tight leading-none mb-2">
           {title}
         </h1>
         {description && (
-          <p className="text-sm font-medium text-gray-500 max-w-lg">
+          <p className="text-sm font-medium text-zinc-500 max-w-lg">
             {description}
           </p>
         )}

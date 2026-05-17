@@ -27,11 +27,11 @@ export default function DashboardKpiCard({
     <Card className="p-6 transition-all hover:shadow-md">
       <div className="flex justify-between items-start">
         <div>
-          <p className="text-sm font-medium text-gray-500 mb-1">{title}</p>
-          <h3 className="text-2xl font-bold text-gray-900">{value}</h3>
+          <p className="text-sm font-medium text-zinc-500 mb-1">{title}</p>
+          <h3 className="text-2xl font-semibold text-zinc-900">{value}</h3>
         </div>
         <div className={`p-2 rounded-lg ${iconBgClass}`}>
-          <Icon className={`w-5 h-5 ${iconColorClass}`} />
+          <Icon className={`size-5 ${iconColorClass}`} />
         </div>
       </div>
       {trend !== undefined && change !== undefined && (
@@ -42,15 +42,15 @@ export default function DashboardKpiCard({
                 ? "text-green-700 bg-green-50"
                 : trend === "down"
                   ? "text-red-700 bg-red-50"
-                  : "text-gray-700 bg-gray-50"
+                  : "text-zinc-700 bg-zinc-50"
             }`}
           >
-            {trend === "up" && <ArrowUpRight className="w-3 h-3 mr-1" />}
-            {trend === "down" && <ArrowDownRight className="w-3 h-3 mr-1" />}
-            {trend === "neutral" && <Minus className="w-3 h-3 mr-1" />}
+            {trend === "up" && <ArrowUpRight className="size-3 mr-1" />}
+            {trend === "down" && <ArrowDownRight className="size-3 mr-1" />}
+            {trend === "neutral" && <Minus className="size-3 mr-1" />}
             {Math.abs(change)}%
           </span>
-          <span className="text-xs text-gray-400 ml-2">vs mes anterior</span>
+          <span className="text-xs text-zinc-400 ml-2">vs mes anterior</span>
         </div>
       )}
     </Card>

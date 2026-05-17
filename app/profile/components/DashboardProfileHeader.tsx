@@ -98,7 +98,7 @@ export default function DashboardProfileHeader({
       </div>
 
       {/* Validation Alert Bar */}
-      <div className="bg-white rounded-xl border border-gray-100 shadow-sm overflow-hidden flex items-center relative h-20 max-w-[800px]">
+      <div className="bg-white rounded-xl border border-zinc-100 shadow-sm overflow-hidden flex items-center relative h-20 max-w-[800px]">
         {/* Left primary accent border */}
         <div className="absolute left-0 top-0 bottom-0 w-3 bg-secondary rounded-l-xl" />
 

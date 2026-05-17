@@ -71,30 +71,9 @@ export default function JobDetails(job: Job) {
       : `data:image/png;base64,${job.logoEmpresa}`
     : "/logos/company_logo.png";
 
-  // Construir la URL del banner desde base64
-  const bannerSrc = job.bannerEmpresa
-    ? job.bannerEmpresa.startsWith("data:")
-      ? job.bannerEmpresa
-      : `data:image/png;base64,${job.bannerEmpresa}`
-    : null;
-
   return (
     <>
-      {/* Banner */}
-      {bannerSrc && (
-        <section>
-          <div className="relative w-full h-64 md:h-80 lg:h-96 bg-gray-200">
-            <Image
-              src={bannerSrc}
-              alt={`Banner para ${job.titulo}`}
-              fill
-              className="object-cover"
-              unoptimized
-              priority
-            />
-          </div>
-        </section>
-      )}
+      
       <section>
         <div className="container">
           <div className="grid grid-cols-1 md:grid-cols-[2fr_1fr] gap-6">
@@ -112,7 +91,7 @@ export default function JobDetails(job: Job) {
                     />
                   </div>
                   <div className="flex flex-col gap-3">
-                    <h2 className="text-3xl font-bold text-center md:text-left ">
+                    <h2 className="text-3xl font-semibold text-center md:text-left ">
                       {job.titulo}
                     </h2>
                     <div className="flex md:flex-row flex-col items-center md:gap-6 gap-3">
@@ -156,7 +135,7 @@ export default function JobDetails(job: Job) {
                                 key={b}
                                 className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-primary/10 text-primary text-sm font-medium"
                               >
-                                <CheckCircle2 className="w-3.5 h-3.5" />
+                                <CheckCircle2 className="size-3.5" />
                                 {b}
                               </span>
                             ))}
@@ -165,8 +144,8 @@ export default function JobDetails(job: Job) {
                         {extras.length > 0 && (
                           <ul className="space-y-1">
                             {extras.map((e, i) => (
-                              <li key={i} className="flex items-start gap-2 text-sm text-gray-700">
-                                <span className="mt-1.5 w-1.5 h-1.5 rounded-full bg-primary shrink-0" />
+                              <li key={i} className="flex items-start gap-2 text-sm text-zinc-700">
+                                <span className="mt-1.5 size-1.5 rounded-full bg-primary shrink-0" />
                                 {e}
                               </li>
                             ))}
@@ -176,7 +155,7 @@ export default function JobDetails(job: Job) {
                     );
                   })()
                 ) : (
-                  <p className="text-sm text-gray-500">Sin requisitos especificados.</p>
+                  <p className="text-sm text-zinc-500">Sin requisitos especificados.</p>
                 )}
               </Card>
             </div>
@@ -189,7 +168,7 @@ export default function JobDetails(job: Job) {
                     <p className="text-primary uppercase tracking-wide">
                       Salario
                     </p>
-                    <p className="font-medium text-gray-800">
+                    <p className="font-medium text-zinc-800">
                       ${job.salarioBase.toLocaleString()} - $
                       {job.salarioMaximo.toLocaleString()}
                     </p>
@@ -201,7 +180,7 @@ export default function JobDetails(job: Job) {
                     <p className="text-primary uppercase tracking-wide">
                       Ciudad
                     </p>
-                    <p className="font-medium text-gray-800">{job.ciudad}</p>
+                    <p className="font-medium text-zinc-800">{job.ciudad}</p>
                   </div>
                 </div>
                 <div className="font-bold flex items-center gap-4">
@@ -210,7 +189,7 @@ export default function JobDetails(job: Job) {
                     <p className="text-primary uppercase tracking-wide">
                       Experiencia
                     </p>
-                    <p className="font-medium text-gray-800">
+                    <p className="font-medium text-zinc-800">
                       {job.experiencia}
                     </p>
                   </div>
@@ -221,7 +200,7 @@ export default function JobDetails(job: Job) {
                     <p className="text-primary uppercase tracking-wide">
                       Modalidad
                     </p>
-                    <p className="font-medium text-gray-800">{job.modalidad}</p>
+                    <p className="font-medium text-zinc-800">{job.modalidad}</p>
                   </div>
                 </div>
                 <div className="font-bold flex items-center gap-4">
@@ -230,7 +209,7 @@ export default function JobDetails(job: Job) {
                     <p className="text-primary uppercase tracking-wide">
                       Nivel de estudios
                     </p>
-                    <p className="font-medium text-gray-800">
+                    <p className="font-medium text-zinc-800">
                       {job.nivelEstudios}
                     </p>
                   </div>
@@ -243,7 +222,7 @@ export default function JobDetails(job: Job) {
                     </p>
                     <a
                       href={`mailto:${job.correoContacto}`}
-                      className="font-medium text-gray-800 break-all"
+                      className="font-medium text-zinc-800 break-all"
                     >
                       {job.correoContacto}
                     </a>
@@ -256,7 +235,7 @@ export default function JobDetails(job: Job) {
                       <p className="text-primary uppercase tracking-wide">
                         Inicio de labores
                       </p>
-                      <p className="font-medium text-gray-800">
+                      <p className="font-medium text-zinc-800">
                         {job.inicioLabores === "Fecha específica" && job.fechaInicioLabores
                           ? `${job.inicioLabores}: ${job.fechaInicioLabores}`
                           : job.inicioLabores}
@@ -271,7 +250,7 @@ export default function JobDetails(job: Job) {
                       <p className="text-primary uppercase tracking-wide">
                         Años de experiencia
                       </p>
-                      <p className="font-medium text-gray-800">{job.aniosExperiencia} año{job.aniosExperiencia !== 1 ? "s" : ""}</p>
+                      <p className="font-medium text-zinc-800">{job.aniosExperiencia} año{job.aniosExperiencia !== 1 ? "s" : ""}</p>
                     </div>
                   </div>
                 )}
@@ -281,7 +260,7 @@ export default function JobDetails(job: Job) {
               <Card className="mt-6">
                 <TituloSubrayado>Sobre la empresa</TituloSubrayado>
                 <div className="flex items-center gap-4 mb-4">
-                  <div className="w-14 h-14 relative shrink-0">
+                  <div className="size-14 relative shrink-0">
                     <Image
                       src={logoSrc}
                       alt={`Logo de ${job.nombreEmpresa}`}
@@ -291,13 +270,13 @@ export default function JobDetails(job: Job) {
                     />
                   </div>
                   <div>
-                    <p className="font-bold text-gray-900">{job.nombreEmpresa}</p>
+                    <p className="font-bold text-zinc-900">{job.nombreEmpresa}</p>
                     {job.correoContacto && (
                       <a
                         href={`mailto:${job.correoContacto}`}
                         className="text-sm text-primary flex items-center gap-1 mt-1"
                       >
-                        <Mail className="w-3 h-3" />
+                        <Mail className="size-3" />
                         {job.correoContacto}
                       </a>
                     )}
@@ -307,19 +286,19 @@ export default function JobDetails(job: Job) {
                   href={`/empleos-busqueda?empresa=${encodeURIComponent(job.nombreEmpresa)}`}
                   className="text-sm text-primary font-medium flex items-center gap-1 hover:underline"
                 >
-                  <ExternalLink className="w-4 h-4" />
+                  <ExternalLink className="size-4" />
                   Ver más empleos de esta empresa
                 </Link>
                 {archivos.length > 0 && (
                   <div className="mt-4">
-                    <p className="text-sm font-semibold text-gray-700 mb-2">Documentos de la empresa</p>
+                    <p className="text-sm font-semibold text-zinc-700 mb-2">Documentos de la empresa</p>
                     <ul className="space-y-1">
                       {archivos.map((a) => (
-                        <li key={a.idArchivoEmpresa} className="flex items-center gap-2 text-sm text-gray-600">
-                          <FileText className="w-4 h-4 text-primary shrink-0" />
+                        <li key={a.idArchivoEmpresa} className="flex items-center gap-2 text-sm text-zinc-600">
+                          <FileText className="size-4 text-primary shrink-0" />
                           <span>{a.nombreArchivo}</span>
                           {a.tipoArchivo && (
-                            <span className="text-xs text-gray-400">({a.tipoArchivo})</span>
+                            <span className="text-xs text-zinc-400">({a.tipoArchivo})</span>
                           )}
                         </li>
                       ))}

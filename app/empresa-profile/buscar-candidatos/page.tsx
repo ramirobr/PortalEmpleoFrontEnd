@@ -30,10 +30,10 @@ export default async function BuscarCandidatosPage({ searchParams }: Props) {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-zinc-50">
       <div className="w-full bg-gradient-to-r from-primary to-primary/70 py-10 px-6 mb-6">
         <div className="container mx-auto">
-          <h1 className="text-3xl font-bold text-white mb-1">
+          <h1 className="text-3xl font-semibold text-white mb-1">
             Buscar Candidatos
           </h1>
           <p className="text-white/80">

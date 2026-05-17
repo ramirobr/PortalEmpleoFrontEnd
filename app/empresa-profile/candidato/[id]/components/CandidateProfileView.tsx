@@ -37,7 +37,7 @@ export default function CandidateProfileView({
             className="inline-flex items-center text-sm text-primary hover:text-primary/80 transition-colors mb-4"
           >
             <svg
-              className="w-4 h-4 mr-1"
+              className="size-4 mr-1"
               fill="none"
               stroke="currentColor"
               viewBox="0 0 24 24"
@@ -51,8 +51,8 @@ export default function CandidateProfileView({
             </svg>
             Volver a Postulaciones
           </a>
-          <h1 className="text-3xl font-bold text-gray-900">Perfil del Candidato</h1>
-          <p className="text-gray-500 mt-1">
+          <h1 className="text-3xl font-semibold text-zinc-900">Perfil del Candidato</h1>
+          <p className="text-zinc-500 mt-1">
             Información detallada del postulante
           </p>
         </div>

@@ -187,7 +187,7 @@ export function CandidateFilters({
       <div className="lg:hidden flex justify-end p-4">
         <button onClick={onClose} aria-label="Cerrar filtros">
           <svg
-            className="w-6 h-6"
+            className="size-6"
             fill="none"
             stroke="currentColor"
             viewBox="0 0 24 24"
@@ -207,7 +207,7 @@ export function CandidateFilters({
         <div className="relative flex items-stretch w-full group h-12">
           {/* Icon inside input */}
           <div className="absolute left-4 top-1/2 -translate-y-1/2 z-20 flex items-center pointer-events-none">
-            <Search className="w-4 h-4 text-gray-400 group-focus-within:text-primary transition-colors" />
+            <Search className="size-4 text-zinc-400 group-focus-within:text-primary transition-colors" />
           </div>
 
           {/* Input field */}
@@ -217,7 +217,7 @@ export function CandidateFilters({
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
             onKeyDown={(e) => e.key === "Enter" && update("q", searchQuery)}
-            className="w-full pl-10 pr-4 rounded-full bg-white text-gray-700 text-xs shadow-md border-2 border-gray-100 focus:border-primary/20 focus:ring-4 focus:ring-primary/10 transition-all outline-none"
+            className="w-full pl-10 pr-4 rounded-full bg-white text-zinc-700 text-xs shadow-md border-2 border-zinc-100 focus:border-primary/20 focus:ring-4 focus:ring-primary/10 transition-all outline-none"
           />
         </div>
 

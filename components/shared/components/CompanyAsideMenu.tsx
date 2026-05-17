@@ -66,7 +66,7 @@ export default function CompanyAsideMenu({
       {/* Overlay */}
       {isOpen && (
         <div
-          className="fixed inset-0 bg-black/40 z-30"
+          className="fixed inset-0 bg-zinc-950/40 z-30"
           onClick={onClose}
           aria-hidden="true"
         />
@@ -244,7 +244,7 @@ export default function CompanyAsideMenu({
                       <span>Configuración</span>
                     </Link>
                   </li>
-                  <li className="px-5 py-2 cursor-pointer hover:bg-gray-100 rounded flex items-center">
+                  <li className="px-5 py-2 cursor-pointer hover:bg-zinc-100 rounded flex items-center">
                     <button
                       onClick={handleLogout}
                       className="flex items-center w-full h-full text-left cursor-pointer"

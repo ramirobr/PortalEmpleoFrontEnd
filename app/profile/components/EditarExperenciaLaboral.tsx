@@ -146,7 +146,7 @@ export default function EditarExperenciaLaboral({
   return (
     <Card className="p-6">
       <div className="flex justify-between items-center">
-        <h2 className="text-2xl font-bold text-primary flex items-center gap-2">
+        <h2 className="text-2xl font-semibold text-primary flex items-center gap-2">
           <Briefcase width={25} height={25} className="text-primary" />
           Experiencia Laboral
         </h2>
@@ -180,13 +180,13 @@ export default function EditarExperenciaLaboral({
                     Actual
                   </Pill>
                 )}
-                <h4 className="font-bold text-xl">{item.empresa}</h4>
+                <h4 className="font-semibold text-xl">{item.empresa}</h4>
                 <div className="flex flex-col  gap-3">
                   <p className="font-medium text-lg">{item.puesto}</p>
                   {item.fechaInicio && item.fechaFin && (
                     <Pill
                       variant="custom"
-                      bgColor="text-sm font-medium text-gray-500 bg-gray-50 px-3 py-1 rounded-full border border-gray-light uppercase"
+                      bgColor="text-sm font-medium text-zinc-500 bg-zinc-50 px-3 py-1 rounded-full border border-gray-light uppercase"
                       noButton
                     >
                       {`${new Date(item.fechaInicio).toLocaleDateString(
@@ -209,7 +209,7 @@ export default function EditarExperenciaLaboral({
                   <Pencil
                     width={20}
                     height={20}
-                    className="text-gray-500 hover:text-primary transition-colors"
+                    className="text-zinc-500 hover:text-primary transition-colors"
                   />
                 </button>
                 <button
@@ -221,7 +221,7 @@ export default function EditarExperenciaLaboral({
                   <Trash2
                     width={20}
                     height={20}
-                    className="text-gray-500 hover:text-primary transition-colors"
+                    className="text-zinc-500 hover:text-primary transition-colors"
                   />
                 </button>
               </div>

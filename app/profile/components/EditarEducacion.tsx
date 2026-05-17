@@ -133,7 +133,7 @@ export default function EditarEducacion({
   return (
     <Card className="p-6">
       <div className="flex justify-between items-center">
-        <h2 className="text-2xl font-bold text-primary flex items-center gap-2">
+        <h2 className="text-2xl font-semibold text-primary flex items-center gap-2">
           <GraduationCap width={25} height={25} className="text-primary" />
           Educación
         </h2>
@@ -157,13 +157,13 @@ export default function EditarEducacion({
               className="p-4 rounded-lg border border-dashed border-border flex justify-between my-4"
             >
               <div>
-                <h4 className="font-bold text-xl">{item.titulo}</h4>
+                <h4 className="font-semibold text-xl">{item.titulo}</h4>
                 <div className="flex flex-col gap-3">
                   <p className="font-medium text-lg">{item.institucion} </p>
                   {item.fechaInicio && item.fechaFin && (
                     <Pill
                       variant="custom"
-                      bgColor="text-sm font-medium text-gray-500 bg-gray-50 px-3 py-1 rounded-full border border-gray-light uppercase"
+                      bgColor="text-sm font-medium text-zinc-500 bg-zinc-50 px-3 py-1 rounded-full border border-gray-light uppercase"
                       noButton
                     >
                       {`${new Date(item.fechaInicio).toLocaleDateString(
@@ -185,7 +185,7 @@ export default function EditarEducacion({
                   <Pencil
                     width={20}
                     height={20}
-                    className="text-gray-500 hover:text-primary transition-colors"
+                    className="text-zinc-500 hover:text-primary transition-colors"
                   />
                 </button>
                 <button
@@ -198,7 +198,7 @@ export default function EditarEducacion({
                   <Trash2
                     width={20}
                     height={20}
-                    className="text-gray-500 hover:text-primary transition-colors"
+                    className="text-zinc-500 hover:text-primary transition-colors"
                   />
                 </button>
               </div>

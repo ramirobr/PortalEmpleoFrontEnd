@@ -58,7 +58,7 @@ export default function ProfileLayout({ children }: Children) {
           { label: "Ofertas", href: "/empleos-busqueda" },
         ]}
       />
-      <div className="relative bg-gray-50">
+      <div className="relative bg-zinc-50">
         <AsideMenu
           isOpen={isAsideOpen}
           onClose={closeAside}

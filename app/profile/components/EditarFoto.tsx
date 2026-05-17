@@ -165,7 +165,7 @@ export default function EditarFoto() {
   return (
     <Card className="">
       <div className="flex justify-between items-center mb-6">
-        <h2 className="text-2xl font-bold text-primary flex items-center gap-2">
+        <h2 className="text-2xl font-semibold text-primary flex items-center gap-2">
           <Camera width={25} height={25} className="text-primary" />
           Editar foto de perfil
         </h2>
@@ -198,7 +198,7 @@ export default function EditarFoto() {
           onSubmit={form.handleSubmit(onSubmitWithBase64)}
           className="flex flex-col items-center"
         >
-          <div className="relative w-24 h-24 mb-2">
+          <div className="relative size-24 mb-2">
             <Avatar className="size-full">
               <AvatarImage src={imagePreview} />
               <AvatarFallback>{getInitials(fullName)}</AvatarFallback>
@@ -231,7 +231,7 @@ export default function EditarFoto() {
                     {isEditing && (
                       <button
                         type="button"
-                        className="absolute -bottom-4 right-1 bg-white rounded-full p-1 shadow-md cursor-pointer flex items-center justify-center w-8 h-8"
+                        className="absolute -bottom-4 right-1 bg-white rounded-full p-1 shadow-md cursor-pointer flex items-center justify-center size-8"
                         aria-label="Cambiar foto de perfil"
                         onClick={() => fileInputRef.current?.click()}
                       >
@@ -276,7 +276,7 @@ export default function EditarFoto() {
                 disabled={form.formState.isSubmitting}
               >
                 {form.formState.isSubmitting && (
-                  <span className="animate-spin h-4 w-4 border-2 border-t-transparent rounded-full mr-2" />
+                  <span className="animate-spin size-4 border-2 border-t-transparent rounded-full mr-2" />
                 )}
                 Guardar
               </button>
@@ -285,7 +285,7 @@ export default function EditarFoto() {
                 className="btn btn-outline flex items-center gap-2"
                 onClick={openWebcam}
               >
-                <Video className="w-4 h-4" />
+                <Video className="size-4" />
                 Tomar foto
               </button>
             </div>
@@ -299,7 +299,7 @@ export default function EditarFoto() {
                 autoPlay
                 playsInline
                 muted
-                className="w-full max-w-xs rounded-lg border border-gray-200 bg-black"
+                className="w-full max-w-xs rounded-lg border border-zinc-200 bg-zinc-950"
               />
               <canvas ref={canvasRef} className="hidden" />
               <div className="flex gap-3">
@@ -308,7 +308,7 @@ export default function EditarFoto() {
                   className="btn btn-primary flex items-center gap-2"
                   onClick={capturePhoto}
                 >
-                  <Camera className="w-4 h-4" />
+                  <Camera className="size-4" />
                   Capturar
                 </button>
                 <button
@@ -316,7 +316,7 @@ export default function EditarFoto() {
                   className="btn btn-outline flex items-center gap-2"
                   onClick={stopWebcam}
                 >
-                  <X className="w-4 h-4" />
+                  <X className="size-4" />
                   Cancelar
                 </button>
               </div>

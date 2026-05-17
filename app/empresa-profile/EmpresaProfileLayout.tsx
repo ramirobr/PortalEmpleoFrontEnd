@@ -70,7 +70,7 @@ export default function EmpresaProfileLayout({ children }: Children) {
         />
         <main
           className={cn(
-            "w-full py-10 bg-gray-50 lg:py-20",
+            "w-full py-10 bg-zinc-50 lg:py-20",
             pathname === "/empresa-profile" && "pt-0 lg:pt-0",
             pathname === "/empresa-profile/empleos" && "pt-5 lg:pt-10"
           )}

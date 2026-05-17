@@ -120,7 +120,7 @@ export default function BlogFormDialog({
 
         <form onSubmit={handleSubmit} className="space-y-4 mt-2">
           <div>
-            <label className="text-sm font-medium text-gray-700 mb-1 block">
+            <label className="text-sm font-medium text-zinc-700 mb-1 block">
               Título *
             </label>
             <Input
@@ -133,9 +133,9 @@ export default function BlogFormDialog({
           </div>
 
           <div>
-            <label className="text-sm font-medium text-gray-700 mb-1 block">
+            <label className="text-sm font-medium text-zinc-700 mb-1 block">
               Slug *{" "}
-              <span className="text-xs text-gray-400">(URL del artículo)</span>
+              <span className="text-xs text-zinc-400">(URL del artículo)</span>
             </label>
             <Input
               required
@@ -151,9 +151,9 @@ export default function BlogFormDialog({
           </div>
 
           <div>
-            <label className="text-sm font-medium text-gray-700 mb-1 block">
+            <label className="text-sm font-medium text-zinc-700 mb-1 block">
               Resumen *{" "}
-              <span className="text-xs text-gray-400">(máx 500 caracteres)</span>
+              <span className="text-xs text-zinc-400">(máx 500 caracteres)</span>
             </label>
             <textarea
               required
@@ -166,13 +166,13 @@ export default function BlogFormDialog({
               rows={3}
               className="w-full border border-input rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary/20 resize-none"
             />
-            <p className="text-xs text-gray-400 text-right">
+            <p className="text-xs text-zinc-400 text-right">
               {form.resumen.length}/500
             </p>
           </div>
 
           <div>
-            <label className="text-sm font-medium text-gray-700 mb-1 block">
+            <label className="text-sm font-medium text-zinc-700 mb-1 block">
               URL de imagen
             </label>
             <Input
@@ -186,7 +186,7 @@ export default function BlogFormDialog({
           </div>
 
           <div>
-            <label className="text-sm font-medium text-gray-700 mb-1 block">
+            <label className="text-sm font-medium text-zinc-700 mb-1 block">
               Contenido *
             </label>
             <textarea
@@ -200,14 +200,14 @@ export default function BlogFormDialog({
               rows={12}
               className="w-full border border-input rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary/20 resize-y"
             />
-            <p className="text-xs text-gray-400 text-right">
+            <p className="text-xs text-zinc-400 text-right">
               {form.contenido.length}/10000
             </p>
           </div>
 
           {isEditing && estadoOptions.length > 0 && (
             <div>
-              <label className="text-sm font-medium text-gray-700 mb-1 block">
+              <label className="text-sm font-medium text-zinc-700 mb-1 block">
                 Estado
               </label>
               <Select
@@ -246,7 +246,7 @@ export default function BlogFormDialog({
                 }
                 className="size-4 accent-primary"
               />
-              <span className="text-sm text-gray-700">
+              <span className="text-sm text-zinc-700">
                 Publicar inmediatamente
               </span>
             </label>

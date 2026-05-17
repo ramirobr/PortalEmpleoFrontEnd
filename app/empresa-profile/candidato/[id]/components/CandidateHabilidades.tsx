@@ -18,7 +18,7 @@ function getNivelColor(nivel: string): {
       return { bgColor: "bg-blue-100", textColor: "text-blue-700" };
     case "básico":
     default:
-      return { bgColor: "bg-gray-100", textColor: "text-gray-700" };
+      return { bgColor: "bg-zinc-100", textColor: "text-zinc-700" };
   }
 }
 
@@ -39,9 +39,9 @@ export default function CandidateHabilidades({
 
   return (
     <div className="bg-white rounded-lg shadow p-6">
-      <h3 className="text-lg font-semibold text-gray-900 mb-4 flex items-center gap-2">
+      <h3 className="text-lg font-semibold text-zinc-900 mb-4 flex items-center gap-2">
         <svg
-          className="w-5 h-5 text-primary"
+          className="size-5 text-primary"
           fill="none"
           stroke="currentColor"
           viewBox="0 0 24 24"
@@ -54,7 +54,7 @@ export default function CandidateHabilidades({
           />
         </svg>
         Habilidades
-        <span className="ml-auto text-sm font-normal text-gray-500">
+        <span className="ml-auto text-sm font-normal text-zinc-500">
           {habilidades.length} habilidades
         </span>
       </h3>
@@ -62,7 +62,7 @@ export default function CandidateHabilidades({
       <div className="space-y-4">
         {Object.entries(skillsByCategory).map(([category, skills]) => (
           <div key={category}>
-            <h4 className="text-xs font-medium text-gray-500 uppercase tracking-wide mb-2">
+            <h4 className="text-xs font-medium text-zinc-500 uppercase tracking-wide mb-2">
               {category}
             </h4>
             <div className="flex flex-wrap gap-2">
@@ -86,19 +86,19 @@ export default function CandidateHabilidades({
       </div>
 
       {/* Skill Level Legend */}
-      <div className="mt-4 pt-4 border-t border-gray-100">
-        <p className="text-xs text-gray-500 mb-2">Nivel de habilidad:</p>
+      <div className="mt-4 pt-4 border-t border-zinc-100">
+        <p className="text-xs text-zinc-500 mb-2">Nivel de habilidad:</p>
         <div className="flex flex-wrap gap-3 text-xs">
           <span className="flex items-center gap-1">
-            <span className="w-2 h-2 rounded-full bg-green-500"></span>
+            <span className="size-2 rounded-full bg-green-500"></span>
             Avanzado
           </span>
           <span className="flex items-center gap-1">
-            <span className="w-2 h-2 rounded-full bg-blue-500"></span>
+            <span className="size-2 rounded-full bg-blue-500"></span>
             Intermedio
           </span>
           <span className="flex items-center gap-1">
-            <span className="w-2 h-2 rounded-full bg-gray-400"></span>
+            <span className="size-2 rounded-full bg-zinc-400"></span>
             Básico
           </span>
         </div>

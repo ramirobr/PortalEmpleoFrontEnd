@@ -14,33 +14,33 @@ export default function CompanyAdminInfo({ admin }: CompanyAdminInfoProps) {
       </CardHeader>
       <CardContent className="pt-6 space-y-4">
         <div className="flex items-start gap-3">
-          <User className="w-5 h-5 text-primary mt-0.5" />
+          <User className="size-5 text-primary mt-0.5" />
           <div>
-            <p className="text-sm text-gray-500">Nombre completo</p>
+            <p className="text-sm text-zinc-500">Nombre completo</p>
             <p className="font-medium">{admin.nombreCompleto}</p>
           </div>
         </div>
 
         <div className="flex items-start gap-3">
-          <Mail className="w-5 h-5 text-primary mt-0.5" />
+          <Mail className="size-5 text-primary mt-0.5" />
           <div>
-            <p className="text-sm text-gray-500">Correo electrónico</p>
+            <p className="text-sm text-zinc-500">Correo electrónico</p>
             <p className="font-medium">{admin.correoElectronico}</p>
           </div>
         </div>
 
         <div className="flex items-start gap-3">
-          <Phone className="w-5 h-5 text-primary mt-0.5" />
+          <Phone className="size-5 text-primary mt-0.5" />
           <div>
-            <p className="text-sm text-gray-500">Teléfono</p>
+            <p className="text-sm text-zinc-500">Teléfono</p>
             <p className="font-medium">{admin.telefono || "No especificado"}</p>
           </div>
         </div>
 
         <div className="flex items-start gap-3">
-          <UserCheck className="w-5 h-5 text-primary mt-0.5" />
+          <UserCheck className="size-5 text-primary mt-0.5" />
           <div>
-            <p className="text-sm text-gray-500">Estado de la cuenta</p>
+            <p className="text-sm text-zinc-500">Estado de la cuenta</p>
             <span className={`inline-flex items-center px-2 py-1 rounded-full text-xs font-medium ${
               admin.estadoCuenta?.nombre === "Activa"
                 ? "bg-green-100 text-green-700"
@@ -53,9 +53,9 @@ export default function CompanyAdminInfo({ admin }: CompanyAdminInfoProps) {
 
         {admin.fechaRegistro && (
           <div className="flex items-start gap-3">
-            <Calendar className="w-5 h-5 text-primary mt-0.5" />
+            <Calendar className="size-5 text-primary mt-0.5" />
             <div>
-              <p className="text-sm text-gray-500">Fecha de registro</p>
+              <p className="text-sm text-zinc-500">Fecha de registro</p>
               <p className="font-medium">
                 {new Date(admin.fechaRegistro).toLocaleDateString("es-ES", {
                   year: "numeric",

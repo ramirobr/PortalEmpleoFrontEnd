@@ -10,8 +10,8 @@ export const metadata = {
 function Section({ title, children }: { title: string; children: React.ReactNode }) {
   return (
     <section className="mb-8">
-      <h2 className="text-xl font-bold text-gray-900 mb-3">{title}</h2>
-      <div className="text-gray-600 leading-relaxed space-y-3">{children}</div>
+      <h2 className="text-xl font-semibold text-zinc-900 mb-3">{title}</h2>
+      <div className="text-zinc-600 leading-relaxed space-y-3">{children}</div>
     </section>
   );
 }
@@ -20,9 +20,9 @@ type CookieRow = { nombre: string; tipo: string; duracion: string; proposito: st
 
 function CookieTable({ rows }: { rows: CookieRow[] }) {
   return (
-    <div className="overflow-x-auto rounded-xl border border-gray-200 mt-4">
+    <div className="overflow-x-auto rounded-xl border border-zinc-200 mt-4">
       <table className="w-full text-sm text-left">
-        <thead className="bg-gray-50 text-gray-700 font-semibold">
+        <thead className="bg-zinc-50 text-zinc-700 font-semibold">
           <tr>
             <th className="px-4 py-3">Nombre</th>
             <th className="px-4 py-3">Tipo</th>
@@ -30,7 +30,7 @@ function CookieTable({ rows }: { rows: CookieRow[] }) {
             <th className="px-4 py-3">Propósito</th>
           </tr>
         </thead>
-        <tbody className="divide-y divide-gray-100">
+        <tbody className="divide-y divide-zinc-100">
           {rows.map((row) => (
             <tr key={row.nombre} className="bg-white">
               <td className="px-4 py-3 font-mono text-xs">{row.nombre}</td>
@@ -48,10 +48,10 @@ function CookieTable({ rows }: { rows: CookieRow[] }) {
 export default function CookiesPage() {
   return (
     <MainLayout>
-      <div className="min-h-screen bg-gray-50">
+      <div className="min-h-screen bg-zinc-50">
         <div className="bg-gradient-to-br from-primary to-primary-deep py-14 text-white">
           <div className="container text-center">
-            <h1 className="text-4xl font-extrabold mb-3">Política de Cookies</h1>
+            <h1 className="text-4xl font-semibold mb-3">Política de Cookies</h1>
             <p className="text-white/80 text-base max-w-xl mx-auto">
               Información sobre cómo utilizamos cookies y tecnologías similares en el Portal.
             </p>
@@ -59,7 +59,7 @@ export default function CookiesPage() {
         </div>
 
         <div className="container py-12 max-w-3xl">
-          <p className="text-sm text-gray-400 mb-8">Última actualización: enero 2025</p>
+          <p className="text-sm text-zinc-400 mb-8">Última actualización: enero 2025</p>
 
           <Section title="¿Qué son las cookies?">
             <p>
@@ -72,7 +72,7 @@ export default function CookiesPage() {
           <Section title="Cookies que utilizamos">
             <p>Portal Empleo utiliza los siguientes tipos de cookies:</p>
 
-            <h3 className="font-semibold text-gray-800 mt-4 mb-1">Cookies estrictamente necesarias</h3>
+            <h3 className="font-semibold text-zinc-800 mt-4 mb-1">Cookies estrictamente necesarias</h3>
             <p>
               Son imprescindibles para el funcionamiento del Portal. Sin ellas no podrías
               navegar ni usar funciones básicas como iniciar sesión.
@@ -94,7 +94,7 @@ export default function CookiesPage() {
               ]}
             />
 
-            <h3 className="font-semibold text-gray-800 mt-6 mb-1">Cookies de preferencias</h3>
+            <h3 className="font-semibold text-zinc-800 mt-6 mb-1">Cookies de preferencias</h3>
             <p>
               Permiten que el Portal recuerde información que cambia el aspecto o el
               comportamiento del sitio, como tu idioma preferido.
@@ -110,7 +110,7 @@ export default function CookiesPage() {
               ]}
             />
 
-            <h3 className="font-semibold text-gray-800 mt-6 mb-1">Cookies analíticas</h3>
+            <h3 className="font-semibold text-zinc-800 mt-6 mb-1">Cookies analíticas</h3>
             <p>
               Nos ayudan a entender cómo los visitantes interactúan con el Portal, lo que nos
               permite mejorar su funcionamiento. Los datos se recopilan de forma anónima y
@@ -168,7 +168,7 @@ export default function CookiesPage() {
             </p>
           </Section>
 
-          <p className="text-sm text-gray-400 mt-10">
+          <p className="text-sm text-zinc-400 mt-10">
             Para consultas sobre el uso de cookies escríbenos a{" "}
             <a href="mailto:privacidad@portalempleo.ec" className="text-primary underline">
               privacidad@portalempleo.ec

@@ -5,6 +5,8 @@ import UserAvatar from "@/components/shared/components/UserAvatar";
 import Pill from "@/components/shared/components/Pill";
 import { MapPinIcon } from "@/components/shared/icons/Icons";
 
+import { useHasMounted } from "@/lib/hooks";
+
 interface CandidateHeaderProps {
   datosPersonales: DatosPersonales;
   ubicacion: string;
@@ -12,6 +14,7 @@ interface CandidateHeaderProps {
 }
 
 function calculateAge(birthDate: string): number {
+  if (!birthDate) return 0;
   const today = new Date();
   const birth = new Date(birthDate);
   let age = today.getFullYear() - birth.getFullYear();
@@ -27,8 +30,9 @@ export default function CandidateHeader({
   ubicacion,
   picture,
 }: CandidateHeaderProps) {
+  const hasMounted = useHasMounted();
   const fullName = `${datosPersonales.nombre} ${datosPersonales.apellido}`;
-  const age = calculateAge(datosPersonales.fechaNacimiento);
+  const age = hasMounted ? calculateAge(datosPersonales.fechaNacimiento) : 0;
 
   return (
     <div className="bg-white rounded-lg shadow p-6">
@@ -39,7 +43,7 @@ export default function CandidateHeader({
             src={picture}
             size={120}
             alt={`Foto de ${fullName}`}
-            className="ring-4 ring-gray-100"
+            className="ring-4 ring-zinc-100"
           />
         </div>
 
@@ -47,9 +51,9 @@ export default function CandidateHeader({
         <div className="flex-1">
           <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-4">
             <div>
-              <h2 className="text-2xl font-bold text-gray-900">{fullName}</h2>
-              <div className="flex items-center text-gray-500 mt-1 gap-1">
-                <MapPinIcon className="w-4 h-4" />
+              <h2 className="text-2xl font-semibold text-zinc-900">{fullName}</h2>
+              <div className="flex items-center text-zinc-500 mt-1 gap-1">
+                <MapPinIcon className="size-4" />
                 <span>{ubicacion}</span>
               </div>
             </div>
@@ -58,26 +62,26 @@ export default function CandidateHeader({
           {/* Personal Details */}
           <div className="grid grid-cols-2 md:grid-cols-3 gap-4 mt-6">
             <div>
-              <p className="text-xs text-gray-500 uppercase tracking-wide">
+              <p className="text-xs text-zinc-500 uppercase tracking-wide">
                 Edad
               </p>
-              <p className="text-sm font-medium text-gray-900 mt-1">
+              <p className="text-sm font-medium text-zinc-900 mt-1">
                 {age} años
               </p>
             </div>
             <div>
-              <p className="text-xs text-gray-500 uppercase tracking-wide">
+              <p className="text-xs text-zinc-500 uppercase tracking-wide">
                 Nacionalidad
               </p>
-              <p className="text-sm font-medium text-gray-900 mt-1">
+              <p className="text-sm font-medium text-zinc-900 mt-1">
                 {datosPersonales.nacionalidad || "No especificada"}
               </p>
             </div>
             <div>
-              <p className="text-xs text-gray-500 uppercase tracking-wide">
+              <p className="text-xs text-zinc-500 uppercase tracking-wide">
                 Género
               </p>
-              <p className="text-sm font-medium text-gray-900 mt-1">
+              <p className="text-sm font-medium text-zinc-900 mt-1">
                 {datosPersonales.genero || "No especificado"}
               </p>
             </div>
@@ -92,7 +96,7 @@ export default function CandidateHeader({
                 textColor="text-purple-700"
               >
                 <svg
-                  className="w-3 h-3 mr-1 inline"
+                  className="size-3 mr-1 inline"
                   fill="none"
                   stroke="currentColor"
                   viewBox="0 0 24 24"
@@ -114,7 +118,7 @@ export default function CandidateHeader({
                 textColor="text-orange-700"
               >
                 <svg
-                  className="w-3 h-3 mr-1 inline"
+                  className="size-3 mr-1 inline"
                   fill="none"
                   stroke="currentColor"
                   viewBox="0 0 24 24"

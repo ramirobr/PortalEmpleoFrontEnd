@@ -7,7 +7,7 @@ export default async function CompanyRegister() {
   const formFields = await fetchFormFields();
 
   return (
-    <div className="min-h-screen flex flex-col bg-gray-50">
+    <div className="min-h-screen flex flex-col bg-zinc-50">
       <CompanyLayout>
         <main className="flex-1 flex flex-col items-center justify-center px-4 py-12">
           <CompanyForm fields={formFields} />

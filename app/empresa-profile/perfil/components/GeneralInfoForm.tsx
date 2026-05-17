@@ -20,6 +20,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { SearchAutocomplete } from "@/components/ui/search-autocomplete";
 import { CompanyProfileData, CompanyProfileFiltersResponse } from "@/types/company";
 import { Pencil } from "lucide-react";
 import { fetchApi } from "@/lib/apiClient";
@@ -138,8 +139,8 @@ export function GeneralInfoForm({
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        <Button variant="ghost" size="sm" className="h-8 w-8 p-0">
-          <Pencil className="h-4 w-4" />
+        <Button variant="ghost" size="sm" className="size-8 p-0">
+          <Pencil className="size-4" />
         </Button>
       </DialogTrigger>
       <DialogContent className="max-h-[90vh] overflow-y-auto">
@@ -220,26 +221,18 @@ export function GeneralInfoForm({
 
           <div className="space-y-2">
             <Label htmlFor="industria">Industria</Label>
-            <Select
-              value={form.watch("idIndustria").toString()}
-              onValueChange={(value) =>
-                form.setValue("idIndustria", parseInt(value))
+            <SearchAutocomplete<number>
+              options={
+                filters?.industria?.map((opt) => ({
+                  id: opt.idCatalogo,
+                  label: opt.nombre,
+                })) ?? []
               }
-            >
-              <SelectTrigger>
-                <SelectValue placeholder="Selecciona una industria" />
-              </SelectTrigger>
-              <SelectContent>
-                {filters?.industria?.map((opt) => (
-                  <SelectItem
-                    key={opt.idCatalogo}
-                    value={opt.idCatalogo.toString()}
-                  >
-                    {opt.nombre}
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
+              value={form.watch("idIndustria") || undefined}
+              onChange={(value) => form.setValue("idIndustria", value)}
+              placeholder="Selecciona una industria"
+              searchPlaceholder="Buscar industria..."
+            />
             {form.formState.errors.idIndustria && (
               <p className="text-sm text-red-500">
                 {form.formState.errors.idIndustria.message}
@@ -344,7 +337,7 @@ export function GeneralInfoForm({
             </Button>
             <Button type="submit" disabled={form.formState.isSubmitting}>
               {form.formState.isSubmitting && (
-                <span className="animate-spin h-4 w-4 border-2 border-t-transparent rounded-full mr-2" />
+                <span className="animate-spin size-4 border-2 border-t-transparent rounded-full mr-2" />
               )}
               {form.formState.isSubmitting ? "Guardando" : "Guardar"}
             </Button>

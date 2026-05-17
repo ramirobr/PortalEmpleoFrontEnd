@@ -5,17 +5,19 @@ import { IdProp } from "@/types/generic";
 
 export default async function page({ params }: IdProp) {
   const { id } = await params;
-  const fields = await crearEmpleoFilters();
-  const jobData = await fetchJobById(id);
+  const [fields, jobData] = await Promise.all([
+    crearEmpleoFilters(),
+    fetchJobById(id),
+  ]);
 
   return (
     <>
-      <h1 className="text-3xl font-bold text-gray-900 mt-6">Editar Empleo</h1>
-      <p className="text-gray-500 mb-8">
+      <h1 className="text-3xl font-semibold text-zinc-900 mt-6">Editar Empleo</h1>
+      <p className="text-zinc-500 mb-8">
         Completa la información para encontrar al candidato ideal.
       </p>
 
-      <div className="bg-white p-8 rounded-xl shadow-lg border border-gray-100">
+      <div className="bg-white p-8 rounded-xl shadow-lg border border-zinc-100">
         <CrearEmpleoForm fields={fields} initialValues={jobData} />
       </div>
     </>

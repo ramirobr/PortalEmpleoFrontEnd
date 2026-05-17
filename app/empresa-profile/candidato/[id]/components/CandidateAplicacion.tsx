@@ -21,7 +21,7 @@ function getStatusColor(estado: string): {
     case "pendiente":
       return { bgColor: "bg-yellow-100", textColor: "text-yellow-700" };
     default:
-      return { bgColor: "bg-gray-100", textColor: "text-gray-700" };
+      return { bgColor: "bg-zinc-100", textColor: "text-zinc-700" };
   }
 }
 
@@ -32,9 +32,9 @@ export default function CandidateAplicacion({
 
   return (
     <div className="bg-white rounded-lg shadow p-6">
-      <h3 className="text-lg font-semibold text-gray-900 mb-4 flex items-center gap-2">
+      <h3 className="text-lg font-semibold text-zinc-900 mb-4 flex items-center gap-2">
         <svg
-          className="w-5 h-5 text-primary"
+          className="size-5 text-primary"
           fill="none"
           stroke="currentColor"
           viewBox="0 0 24 24"
@@ -52,7 +52,7 @@ export default function CandidateAplicacion({
       <div className="space-y-4">
         {/* Status */}
         <div>
-          <p className="text-xs text-gray-500 uppercase tracking-wide mb-1">
+          <p className="text-xs text-zinc-500 uppercase tracking-wide mb-1">
             Estado
           </p>
           <span className={`px-3 py-1 rounded-full text-sm font-medium ${bgColor} ${textColor}`}>
@@ -62,20 +62,20 @@ export default function CandidateAplicacion({
 
         {/* Position Applied */}
         <div>
-          <p className="text-xs text-gray-500 uppercase tracking-wide mb-1">
+          <p className="text-xs text-zinc-500 uppercase tracking-wide mb-1">
             Vacante
           </p>
-          <p className="text-sm font-medium text-gray-900">
+          <p className="text-sm font-medium text-zinc-900">
             {aplicacion.tituloVacante}
           </p>
         </div>
 
         {/* Application Date */}
         <div>
-          <p className="text-xs text-gray-500 uppercase tracking-wide mb-1">
+          <p className="text-xs text-zinc-500 uppercase tracking-wide mb-1">
             Fecha de Aplicación
           </p>
-          <p className="text-sm text-gray-900">
+          <p className="text-sm text-zinc-900">
             {formatDate(aplicacion.fechaAplicacion)}
           </p>
         </div>
@@ -83,10 +83,10 @@ export default function CandidateAplicacion({
         {/* Cover Letter */}
         {aplicacion.cartaPresentacion && (
           <div>
-            <p className="text-xs text-gray-500 uppercase tracking-wide mb-1">
+            <p className="text-xs text-zinc-500 uppercase tracking-wide mb-1">
               Carta de Presentación
             </p>
-            <p className="text-sm text-gray-600 leading-relaxed bg-gray-50 p-3 rounded-lg">
+            <p className="text-sm text-zinc-600 leading-relaxed bg-zinc-50 p-3 rounded-lg">
               {aplicacion.cartaPresentacion}
             </p>
           </div>
@@ -102,7 +102,7 @@ export default function CandidateAplicacion({
               className="inline-flex items-center gap-2 px-4 py-2 bg-primary text-white rounded-lg hover:bg-primary/90 transition-colors text-sm font-medium"
             >
               <svg
-                className="w-4 h-4"
+                className="size-4"
                 fill="none"
                 stroke="currentColor"
                 viewBox="0 0 24 24"

@@ -34,7 +34,7 @@ export default function Page() {
   }, []);
 
   return (
-    <div className="min-h-screen flex flex-col bg-gray-50">
+    <div className="min-h-screen flex flex-col bg-zinc-50">
       <EmailLayout>
         <main className="flex-1 flex flex-col items-center justify-center px-4 py-12">
           <EmailSignup fields={fields} loadingFields={loadingFields} ciudades={ciudades} provincias={provincias} />

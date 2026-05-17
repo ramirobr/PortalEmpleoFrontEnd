@@ -3,10 +3,11 @@
 import { formatDate } from "@/lib/utils";
 import { CandidateCertificacion } from "@/types/candidate";
 
+import { useHasMounted } from "@/lib/hooks";
+
 interface CandidateCertificacionesProps {
   certificaciones: CandidateCertificacion[];
 }
-
 
 function isExpired(dateString: string | null): boolean {
   if (!dateString) return false;
@@ -16,15 +17,16 @@ function isExpired(dateString: string | null): boolean {
 export default function CandidateCertificaciones({
   certificaciones,
 }: CandidateCertificacionesProps) {
+  const hasMounted = useHasMounted();
   if (certificaciones.length === 0) {
     return null;
   }
 
   return (
     <div className="bg-white rounded-lg shadow p-6">
-      <h3 className="text-lg font-semibold text-gray-900 mb-4 flex items-center gap-2">
+      <h3 className="text-lg font-semibold text-zinc-900 mb-4 flex items-center gap-2">
         <svg
-          className="w-5 h-5 text-primary"
+          className="size-5 text-primary"
           fill="none"
           stroke="currentColor"
           viewBox="0 0 24 24"
@@ -37,27 +39,27 @@ export default function CandidateCertificaciones({
           />
         </svg>
         Certificaciones
-        <span className="ml-auto text-sm font-normal text-gray-500">
+        <span className="ml-auto text-sm font-normal text-zinc-500">
           {certificaciones.length} certificaciones
         </span>
       </h3>
 
       <div className="space-y-4">
         {certificaciones.map((cert) => {
-          const expired = isExpired(cert.fechaExpiracion);
+          const expired = hasMounted && isExpired(cert.fechaExpiracion);
           return (
             <div
               key={cert.id}
               className={`p-4 rounded-lg border ${
                 expired
                   ? "border-red-200 bg-red-50"
-                  : "border-gray-100 bg-gray-50"
+                  : "border-zinc-100 bg-zinc-50"
               }`}
             >
               <div className="flex items-start justify-between gap-2">
                 <div className="flex-1">
-                  <h4 className="font-semibold text-gray-900">{cert.nombre}</h4>
-                  <p className="text-sm text-gray-600">{cert.institucion}</p>
+                  <h4 className="font-semibold text-zinc-900">{cert.nombre}</h4>
+                  <p className="text-sm text-zinc-600">{cert.institucion}</p>
                 </div>
                 {expired && (
                   <span className="px-2 py-0.5 bg-red-100 text-red-700 text-xs rounded whitespace-nowrap">
@@ -66,10 +68,10 @@ export default function CandidateCertificaciones({
                 )}
               </div>
 
-              <div className="flex flex-wrap gap-x-4 gap-y-1 mt-2 text-xs text-gray-500">
+              <div className="flex flex-wrap gap-x-4 gap-y-1 mt-2 text-xs text-zinc-500">
                 <span className="flex items-center gap-1">
                   <svg
-                    className="w-3 h-3"
+                    className="size-3"
                     fill="none"
                     stroke="currentColor"
                     viewBox="0 0 24 24"
@@ -90,7 +92,7 @@ export default function CandidateCertificaciones({
                     }`}
                   >
                     <svg
-                      className="w-3 h-3"
+                      className="size-3"
                       fill="none"
                       stroke="currentColor"
                       viewBox="0 0 24 24"
@@ -108,7 +110,7 @@ export default function CandidateCertificaciones({
               </div>
 
               {cert.credentialId && (
-                <p className="mt-2 text-xs text-gray-400">
+                <p className="mt-2 text-xs text-zinc-400">
                   ID: {cert.credentialId}
                 </p>
               )}

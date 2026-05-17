@@ -18,7 +18,7 @@ export default async function FavoritosPage() {
   return (
     <section>
       <TituloSubrayado>
-        <Heart className="w-8 h-8" />
+        <Heart className="size-8" />
         Empleos Favoritos
       </TituloSubrayado>
       <Suspense fallback={<div>Cargando...</div>}>

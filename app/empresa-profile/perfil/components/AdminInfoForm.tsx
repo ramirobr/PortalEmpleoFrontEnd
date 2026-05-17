@@ -112,8 +112,8 @@ export function AdminInfoForm({
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        <Button variant="ghost" size="sm" className="h-8 w-8 p-0">
-          <Pencil className="h-4 w-4" />
+        <Button variant="ghost" size="sm" className="size-8 p-0">
+          <Pencil className="size-4" />
         </Button>
       </DialogTrigger>
       <DialogContent className="max-h-[90vh] overflow-y-auto">
@@ -227,7 +227,7 @@ export function AdminInfoForm({
             </Button>
             <Button type="submit" disabled={form.formState.isSubmitting}>
               {form.formState.isSubmitting && (
-                <span className="animate-spin h-4 w-4 border-2 border-t-transparent rounded-full mr-2" />
+                <span className="animate-spin size-4 border-2 border-t-transparent rounded-full mr-2" />
               )}
               {form.formState.isSubmitting ? "Guardando" : "Guardar"}
             </Button>

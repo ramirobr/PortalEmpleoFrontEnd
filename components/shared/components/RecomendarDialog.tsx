@@ -122,9 +122,9 @@ export default function RecomendarDialog({
           {/* Datos del revisor */}
           <div className="grid grid-cols-2 gap-3">
             <div>
-              <p className="text-sm font-medium text-gray-700 mb-1.5">
+              <p className="text-sm font-medium text-zinc-700 mb-1.5">
                 Tu nombre{" "}
-                <span className="text-gray-400 font-normal">(opcional)</span>
+                <span className="text-zinc-400 font-normal">(opcional)</span>
               </p>
               <Input
                 placeholder="Ej: Andrea Molina"
@@ -133,9 +133,9 @@ export default function RecomendarDialog({
               />
             </div>
             <div>
-              <p className="text-sm font-medium text-gray-700 mb-1.5">
+              <p className="text-sm font-medium text-zinc-700 mb-1.5">
                 Tu cargo{" "}
-                <span className="text-gray-400 font-normal">(opcional)</span>
+                <span className="text-zinc-400 font-normal">(opcional)</span>
               </p>
               <Input
                 placeholder="Ej: Jefa de RRHH"
@@ -147,7 +147,7 @@ export default function RecomendarDialog({
 
           {/* Star picker */}
           <div>
-            <p className="text-sm font-medium text-gray-700 mb-2">
+            <p className="text-sm font-medium text-zinc-700 mb-2">
               Puntuación
             </p>
             <div className="flex gap-1">
@@ -162,25 +162,25 @@ export default function RecomendarDialog({
                 >
                   <Star
                     className={cn(
-                      "w-9 h-9 transition-colors",
+                      "size-9 transition-colors",
                       activeStar >= star
                         ? "fill-yellow-400 text-yellow-400"
-                        : "fill-gray-200 text-gray-200",
+                        : "fill-zinc-200 text-zinc-200",
                     )}
                   />
                 </button>
               ))}
             </div>
-            <p className="text-xs text-gray-500 mt-1 h-4">
+            <p className="text-xs text-zinc-500 mt-1 h-4">
               {activeStar > 0 ? LABELS[activeStar] : ""}
             </p>
           </div>
 
           {/* Textarea */}
           <div>
-            <p className="text-sm font-medium text-gray-700 mb-2">
+            <p className="text-sm font-medium text-zinc-700 mb-2">
               Comentario{" "}
-              <span className="text-gray-400 font-normal">
+              <span className="text-zinc-400 font-normal">
                 (mín. 20 caracteres)
               </span>
             </p>
@@ -191,7 +191,7 @@ export default function RecomendarDialog({
               rows={4}
               className="resize-none"
             />
-            <p className="text-xs text-gray-400 mt-1 text-right">
+            <p className="text-xs text-zinc-400 mt-1 text-right">
               {razonRecomendacion.length} caracteres
             </p>
           </div>
@@ -212,7 +212,7 @@ export default function RecomendarDialog({
             >
               {loading ? (
                 <>
-                  <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                  <Loader2 className="size-4 mr-2 animate-spin" />
                   Enviando...
                 </>
               ) : (

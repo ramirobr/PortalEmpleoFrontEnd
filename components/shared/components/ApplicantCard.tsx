@@ -24,7 +24,7 @@ export default function ApplicantCard({ applicant }: ApplicantCardProps) {
       <div className="p-6 relative flex-1 flex flex-col">
         {/* Avatar */}
         <div className="flex justify-center mb-6">
-          <div className="w-16 h-16 rounded-full overflow-hidden bg-primary/10 flex items-center justify-center border border-gray-light shrink-0">
+          <div className="size-16 rounded-full overflow-hidden bg-primary/10 flex items-center justify-center border border-gray-light shrink-0">
             {applicant.photo ? (
               // eslint-disable-next-line @next/next/no-img-element
               <img
@@ -46,7 +46,7 @@ export default function ApplicantCard({ applicant }: ApplicantCardProps) {
 
         {/* Name and Details */}
         <div className="text-center w-full mb-4">
-          <h3 className="text-xl font-bold text-primary mb-1 leading-snug capitalize">
+          <h3 className="text-xl font-semibold text-primary mb-1 leading-snug capitalize">
             {applicant.name}
           </h3>
           <div className="text-sm font-bold uppercase tracking-widest leading-snug">
@@ -66,9 +66,9 @@ export default function ApplicantCard({ applicant }: ApplicantCardProps) {
               PERFIL 100% VERIFICADO
             </span>
           </div>
-          <div className="w-9 h-9 rounded-full bg-primary flex items-center justify-center shrink-0 shadow-sm border-2 border-white">
+          <div className="size-9 rounded-full bg-primary flex items-center justify-center shrink-0 shadow-sm border-2 border-white">
             <svg
-              className="w-5 h-5 text-white"
+              className="size-5 text-white"
               fill="none"
               stroke="currentColor"
               viewBox="0 0 24 24"
@@ -83,11 +83,11 @@ export default function ApplicantCard({ applicant }: ApplicantCardProps) {
           </div>
         </div>
 
-        <div className="w-full h-px bg-gray-100 my-4" />
+        <div className="w-full h-px bg-zinc-100 my-4" />
 
         <div className="space-y-4 flex-1">
           <div className="flex items-start gap-2">
-            <div className="w-4 h-4 text-primary mt-0.5 shrink-0">
+            <div className="size-4 text-primary mt-0.5 shrink-0">
               <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path
                   strokeLinecap="round"
@@ -104,17 +104,17 @@ export default function ApplicantCard({ applicant }: ApplicantCardProps) {
               </svg>
             </div>
             <div>
-              <span className="text-[10px] font-extrabold uppercase text-gray-400 block tracking-wider">
+              <span className="text-[10px] font-extrabold uppercase text-zinc-400 block tracking-wider">
                 Ubicación
               </span>
-              <span className="text-sm font-medium text-gray-700">
+              <span className="text-sm font-medium text-zinc-700">
                 {applicant.location || "No especificada"}
               </span>
             </div>
           </div>
 
           <div className="flex items-start gap-2">
-            <div className="w-4 h-4 text-primary mt-0.5 shrink-0">
+            <div className="size-4 text-primary mt-0.5 shrink-0">
               <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path
                   strokeLinecap="round"
@@ -125,10 +125,10 @@ export default function ApplicantCard({ applicant }: ApplicantCardProps) {
               </svg>
             </div>
             <div>
-              <span className="text-[10px] font-extrabold uppercase text-gray-400 block tracking-wider">
+              <span className="text-[10px] font-extrabold uppercase text-zinc-400 block tracking-wider">
                 Aspiración salarial
               </span>
-              <p className="text-sm font-medium text-gray-700">
+              <p className="text-sm font-medium text-zinc-700">
                 {applicant.salary || "$750 - 800"}
               </p>
             </div>
@@ -136,14 +136,14 @@ export default function ApplicantCard({ applicant }: ApplicantCardProps) {
 
           {applicant.skills?.length > 0 && (
             <div className="pt-2">
-              <span className="text-[10px] font-extrabold uppercase text-gray-400 block mb-2 tracking-wider">
+              <span className="text-[10px] font-extrabold uppercase text-zinc-400 block mb-2 tracking-wider">
                 Habilidades
               </span>
               <div className="flex flex-wrap gap-1.5">
                 {applicant.skills.slice(0, 3).map((skill, index) => (
                   <span
                     key={index}
-                    className="px-2 py-0.5 bg-gray-100 text-gray-600 text-[10px] font-bold rounded uppercase"
+                    className="px-2 py-0.5 bg-zinc-100 text-zinc-600 text-[10px] font-bold rounded uppercase"
                   >
                     {skill}
                   </span>

@@ -111,11 +111,11 @@ export default function CambiarContrasena() {
     <>
       <Card className="max-w-md w-full mx-auto">
         <div className="flex flex-col gap-6">
-          <div className="w-12 h-12 bg-primary/10 rounded-full flex items-center justify-center text-primary m-auto">
-            <KeyRound className="w-6 h-6 text-primary" />
+          <div className="size-12 bg-primary/10 rounded-full flex items-center justify-center text-primary m-auto">
+            <KeyRound className="size-6 text-primary" />
           </div>
           <div className="text-center mb-5">
-            <h2 className="text-primary text-2xl font-bold ">
+            <h2 className="text-primary text-2xl font-semibold ">
               Cambiar contraseña
             </h2>
           </div>
@@ -150,7 +150,7 @@ export default function CambiarContrasena() {
                               ? "Ocultar contraseña"
                               : "Mostrar contraseña"
                           }
-                          className="absolute right-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400 cursor-pointer"
+                          className="absolute right-3 top-1/2 -translate-y-1/2 size-5 text-zinc-400 cursor-pointer"
                           onClick={() =>
                             setShowCurrentPassword(!showCurrentPassword)
                           }
@@ -189,7 +189,7 @@ export default function CambiarContrasena() {
                               ? "Ocultar contraseña"
                               : "Mostrar contraseña"
                           }
-                          className="absolute right-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400 cursor-pointer disabled:cursor-not-allowed"
+                          className="absolute right-3 top-1/2 -translate-y-1/2 size-5 text-zinc-400 cursor-pointer disabled:cursor-not-allowed"
                           onClick={() => setShowNewPassword(!showNewPassword)}
                           disabled={!isCurrentPasswordFilled}
                         >
@@ -227,7 +227,7 @@ export default function CambiarContrasena() {
                               ? "Ocultar contraseña"
                               : "Mostrar contraseña"
                           }
-                          className="absolute right-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400 cursor-pointer disabled:cursor-not-allowed"
+                          className="absolute right-3 top-1/2 -translate-y-1/2 size-5 text-zinc-400 cursor-pointer disabled:cursor-not-allowed"
                           onClick={() =>
                             setShowConfirmPassword(!showConfirmPassword)
                           }
@@ -255,7 +255,7 @@ export default function CambiarContrasena() {
                   }
                 >
                   {form.formState.isSubmitting && (
-                    <span className="animate-spin h-4 w-4 border-2 border-t-transparent rounded-full" />
+                    <span className="animate-spin size-4 border-2 border-t-transparent rounded-full" />
                   )}
                   Guardar contraseña
                   <Save />
@@ -273,11 +273,11 @@ export default function CambiarContrasena() {
                 <li className="flex items-center gap-2">
                   {hasMinLength ? (
                     <Check
-                      className="w-4 h-4 text-green-600"
+                      className="size-4 text-green-600"
                       aria-hidden="true"
                     />
                   ) : (
-                    <X className="w-4 h-4 text-red-500" aria-hidden="true" />
+                    <X className="size-4 text-red-500" aria-hidden="true" />
                   )}
                   <span
                     className={hasMinLength ? "text-green-600" : "text-red-500"}
@@ -288,11 +288,11 @@ export default function CambiarContrasena() {
                 <li className="flex items-center gap-2">
                   {hasUppercase ? (
                     <Check
-                      className="w-4 h-4 text-green-600"
+                      className="size-4 text-green-600"
                       aria-hidden="true"
                     />
                   ) : (
-                    <X className="w-4 h-4 text-red-500" aria-hidden="true" />
+                    <X className="size-4 text-red-500" aria-hidden="true" />
                   )}
                   <span
                     className={hasUppercase ? "text-green-600" : "text-red-500"}
@@ -303,11 +303,11 @@ export default function CambiarContrasena() {
                 <li className="flex items-center gap-2">
                   {hasLowercase ? (
                     <Check
-                      className="w-4 h-4 text-green-600"
+                      className="size-4 text-green-600"
                       aria-hidden="true"
                     />
                   ) : (
-                    <X className="w-4 h-4 text-red-500" aria-hidden="true" />
+                    <X className="size-4 text-red-500" aria-hidden="true" />
                   )}
                   <span
                     className={hasLowercase ? "text-green-600" : "text-red-500"}
@@ -318,11 +318,11 @@ export default function CambiarContrasena() {
                 <li className="flex items-center gap-2">
                   {hasNumber ? (
                     <Check
-                      className="w-4 h-4 text-green-600"
+                      className="size-4 text-green-600"
                       aria-hidden="true"
                     />
                   ) : (
-                    <X className="w-4 h-4 text-red-500" aria-hidden="true" />
+                    <X className="size-4 text-red-500" aria-hidden="true" />
                   )}
                   <span
                     className={hasNumber ? "text-green-600" : "text-red-500"}
@@ -333,11 +333,11 @@ export default function CambiarContrasena() {
                 <li className="flex items-center gap-2">
                   {passwordsMatch ? (
                     <Check
-                      className="w-4 h-4 text-green-600"
+                      className="size-4 text-green-600"
                       aria-hidden="true"
                     />
                   ) : (
-                    <X className="w-4 h-4 text-red-500" aria-hidden="true" />
+                    <X className="size-4 text-red-500" aria-hidden="true" />
                   )}
                   <span
                     className={
@@ -356,7 +356,7 @@ export default function CambiarContrasena() {
         href="/"
         className="flex items-center gap-6 text-primary font-bold mt-8 hover:underline"
       >
-        <ArrowLeft className="w-5 h-5" />
+        <ArrowLeft className="size-5" />
         Volver al Inicio
       </Link>
     </>

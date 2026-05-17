@@ -14,6 +14,7 @@ import { useDebouncedValue } from "@/lib/hooks";
 import { FiltersResponse } from "@/types/search";
 import { addSpaces } from "@/lib/utils";
 import { PremiumButton } from "./PremiumButton";
+import { SearchAutocomplete } from "@/components/ui/search-autocomplete";
 
 const PRICE_RANGE_MIN = 100;
 const PRICE_RANGE_MAX = 20000;
@@ -87,7 +88,7 @@ export function Filters({
       <div className="lg:hidden flex justify-end p-4">
         <button onClick={onClose} aria-label="Cerrar filtros">
           <svg
-            className="w-6 h-6"
+            className="size-6"
             fill="none"
             stroke="currentColor"
             viewBox="0 0 24 24"
@@ -123,48 +124,38 @@ export function Filters({
 
         <div>
           <label className="text-black font-bold">Ciudad</label>
-          <Select
-            value={current("ciudad", initialFilters.ciudad)}
-            onValueChange={(v) => update("ciudad", v)}
-          >
-            <SelectTrigger className="w-full mt-1 max-w-[212px]">
-              <SelectValue placeholder="Todas" />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value=" ">Todas</SelectItem>
-              {filters?.ciudad?.map((ciudad) => (
-                <SelectItem
-                  key={ciudad.idCatalogo}
-                  value={ciudad.idCatalogo.toString()}
-                >
-                  {ciudad.nombre}
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
+          <SearchAutocomplete<string>
+            className="w-full mt-1"
+            options={[
+              { id: " ", label: "Todas" },
+              ...(filters?.ciudad?.map((ciudad) => ({
+                id: ciudad.idCatalogo.toString(),
+                label: ciudad.nombre,
+              })) ?? []),
+            ]}
+            value={current("ciudad", initialFilters.ciudad) || undefined}
+            onChange={(v) => update("ciudad", v)}
+            placeholder="Todas"
+            searchPlaceholder="Buscar ciudad..."
+          />
         </div>
 
         <div>
           <label className="text-black font-bold">Provincia</label>
-          <Select
-            value={current("provincia", initialFilters.provincia)}
-            onValueChange={(v) => update("provincia", v)}
-          >
-            <SelectTrigger className="w-full mt-1 max-w-[212px]">
-              <SelectValue placeholder="Todas" />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value=" ">Todas</SelectItem>
-              {filters?.provincia?.map((provincia) => (
-                <SelectItem
-                  key={provincia.idCatalogo}
-                  value={provincia.idCatalogo.toString()}
-                >
-                  {provincia.nombre}
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
+          <SearchAutocomplete<string>
+            className="w-full mt-1"
+            options={[
+              { id: " ", label: "Todas" },
+              ...(filters?.provincia?.map((provincia) => ({
+                id: provincia.idCatalogo.toString(),
+                label: provincia.nombre,
+              })) ?? []),
+            ]}
+            value={current("provincia", initialFilters.provincia) || undefined}
+            onChange={(v) => update("provincia", v)}
+            placeholder="Todas"
+            searchPlaceholder="Buscar provincia..."
+          />
         </div>
 
         <div>
@@ -214,22 +205,20 @@ export function Filters({
 
         <div>
           <label className="text-black font-bold">Empresa</label>
-          <Select
-            value={current("empresa", initialFilters.company)}
-            onValueChange={(v) => update("empresa", v)}
-          >
-            <SelectTrigger className="w-full mt-1 max-w-[212px]">
-              <SelectValue placeholder="Todas" />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value=" ">Todas</SelectItem>
-              {filters?.activeCompanies?.map((company) => (
-                <SelectItem key={company.idEmpresa} value={company.idEmpresa}>
-                  {company.razonSocial}
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
+          <SearchAutocomplete<string>
+            className="w-full mt-1"
+            options={[
+              { id: " ", label: "Todas" },
+              ...(filters?.activeCompanies?.map((company) => ({
+                id: company.idEmpresa,
+                label: company.razonSocial,
+              })) ?? []),
+            ]}
+            value={current("empresa", initialFilters.company) || undefined}
+            onChange={(v) => update("empresa", v)}
+            placeholder="Todas"
+            searchPlaceholder="Buscar empresa..."
+          />
         </div>
 
         <div>

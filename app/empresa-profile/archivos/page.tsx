@@ -205,9 +205,9 @@ export default function ArchivosEmpresaPage() {
     return (
       <div className="container mx-auto px-6 mb-8">
         <div className="mb-8 mt-6">
-          <h1 className="text-3xl font-bold text-gray-900">Mis Archivos</h1>
+          <h1 className="text-3xl font-semibold text-zinc-900">Mis Archivos</h1>
         </div>
-        <p className="text-gray-500">Cargando...</p>
+        <p className="text-zinc-500">Cargando...</p>
       </div>
     );
   }
@@ -217,8 +217,8 @@ export default function ArchivosEmpresaPage() {
   return (
     <div className="container mx-auto px-6 mb-8 space-y-6">
       <div className="mb-2 mt-6">
-        <h1 className="text-3xl font-bold text-gray-900">Mis Archivos</h1>
-        <p className="text-gray-500 mt-1">
+        <h1 className="text-3xl font-semibold text-zinc-900">Mis Archivos</h1>
+        <p className="text-zinc-500 mt-1">
           Aquí la empresa puede subir documentos que validen sus certificaciones,
           cumplimiento de estándares ISO, convenios y acuerdos. Los candidatos
           podrán revisar estos documentos durante el proceso de selección.
@@ -226,48 +226,48 @@ export default function ArchivosEmpresaPage() {
       </div>
 
       {/* Carpetas */}
-      <div className="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
-        <div className="p-6 flex justify-between items-center border-b border-gray-100">
-          <h2 className="text-lg font-semibold text-gray-900 flex items-center gap-2">
-            <FolderOpen className="w-5 h-5 text-yellow-500" />
+      <div className="bg-white rounded-xl shadow-sm border border-zinc-100 overflow-hidden">
+        <div className="p-6 flex justify-between items-center border-b border-zinc-100">
+          <h2 className="text-lg font-semibold text-zinc-900 flex items-center gap-2">
+            <FolderOpen className="size-5 text-yellow-500" />
             Carpetas
           </h2>
           <Button
             size="sm"
             onClick={() => { setEditingCarpeta(null); setCarpetaDialogOpen(true); }}
           >
-            <Plus className="w-4 h-4 mr-1" />
+            <Plus className="size-4 mr-1" />
             Nueva Carpeta
           </Button>
         </div>
         <div className="overflow-x-auto">
           <table className="w-full">
             <thead>
-              <tr className="bg-gray-50 border-b border-gray-100">
-                <th className="py-4 px-4 text-left text-xs text-primary font-bold uppercase tracking-wider">Nombre</th>
-                <th className="py-4 px-4 text-left text-xs text-primary font-bold uppercase tracking-wider">Descripción</th>
-                <th className="py-4 px-4 text-left text-xs text-primary font-bold uppercase tracking-wider">Carpeta Padre</th>
-                <th className="py-4 px-4 text-right text-xs text-primary font-bold uppercase tracking-wider">Acciones</th>
+              <tr className="bg-zinc-50 border-b border-zinc-100">
+                <th className="p-4 text-left text-xs text-primary font-bold uppercase tracking-wider">Nombre</th>
+                <th className="p-4 text-left text-xs text-primary font-bold uppercase tracking-wider">Descripción</th>
+                <th className="p-4 text-left text-xs text-primary font-bold uppercase tracking-wider">Carpeta Padre</th>
+                <th className="p-4 text-right text-xs text-primary font-bold uppercase tracking-wider">Acciones</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-gray-100">
+            <tbody className="divide-y divide-zinc-100">
               {carpetas.length === 0 ? (
                 <tr>
-                  <td colSpan={4} className="p-10 text-center text-gray-400 text-sm">
+                  <td colSpan={4} className="p-10 text-center text-zinc-400 text-sm">
                     No hay carpetas creadas aún.
                   </td>
                 </tr>
               ) : (
                 carpetas.map((c) => (
-                  <tr key={c.idCarpetaEmpresa} className="hover:bg-gray-50 transition-colors">
+                  <tr key={c.idCarpetaEmpresa} className="hover:bg-zinc-50 transition-colors">
                     <td className="py-3 px-4">
-                      <span className="flex items-center gap-2 font-medium text-gray-900">
-                        <FolderOpen className="w-4 h-4 text-yellow-500 shrink-0" />
+                      <span className="flex items-center gap-2 font-medium text-zinc-900">
+                        <FolderOpen className="size-4 text-yellow-500 shrink-0" />
                         {c.nombreCarpeta}
                       </span>
                     </td>
-                    <td className="py-3 px-4 text-sm text-gray-500">{c.descripcion ?? "—"}</td>
-                    <td className="py-3 px-4 text-sm text-gray-500">
+                    <td className="py-3 px-4 text-sm text-zinc-500">{c.descripcion ?? "—"}</td>
+                    <td className="py-3 px-4 text-sm text-zinc-500">
                       {c.idCarpetaPadre ? parentMap[c.idCarpetaPadre] ?? "—" : "—"}
                     </td>
                     <td className="py-3 px-4">
@@ -278,7 +278,7 @@ export default function ArchivosEmpresaPage() {
                           className="p-2 bg-sky-50 text-teal-600 rounded-full hover:bg-teal-600 hover:text-white transition-colors"
                           title="Editar"
                         >
-                          <Pencil className="w-3 h-3" />
+                          <Pencil className="size-3" />
                         </button>
                         <button
                           type="button"
@@ -287,7 +287,7 @@ export default function ArchivosEmpresaPage() {
                           className="p-2 bg-sky-50 text-teal-600 rounded-full hover:bg-teal-600 hover:text-white transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
                           title="Eliminar"
                         >
-                          <Trash2 className="w-3 h-3" />
+                          <Trash2 className="size-3" />
                         </button>
                       </div>
                     </td>
@@ -300,16 +300,16 @@ export default function ArchivosEmpresaPage() {
       </div>
 
       {/* Archivos */}
-      <div className="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
-        <div className="p-6 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 border-b border-gray-100">
-          <h2 className="text-lg font-semibold text-gray-900 flex items-center gap-2">
-            <FileText className="w-5 h-5 text-primary" />
+      <div className="bg-white rounded-xl shadow-sm border border-zinc-100 overflow-hidden">
+        <div className="p-6 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 border-b border-zinc-100">
+          <h2 className="text-lg font-semibold text-zinc-900 flex items-center gap-2">
+            <FileText className="size-5 text-primary" />
             Archivos
           </h2>
           <div className="flex items-center gap-3 w-full sm:w-auto">
             {carpetas.length > 0 && (
               <Select value={selectedCarpetaId} onValueChange={setSelectedCarpetaId}>
-                <SelectTrigger className="w-48 bg-gray-50 border-gray-200">
+                <SelectTrigger className="w-48 bg-zinc-50 border-zinc-200">
                   <SelectValue />
                 </SelectTrigger>
                 <SelectContent>
@@ -326,7 +326,7 @@ export default function ArchivosEmpresaPage() {
               size="sm"
               onClick={() => setUploadDialogOpen(true)}
             >
-              <Upload className="w-4 h-4 mr-1" />
+              <Upload className="size-4 mr-1" />
               Subir Archivo
             </Button>
           </div>
@@ -334,43 +334,43 @@ export default function ArchivosEmpresaPage() {
         <div className="overflow-x-auto">
           <table className="w-full">
             <thead>
-              <tr className="bg-gray-50 border-b border-gray-100">
-                <th className="py-4 px-4 text-left text-xs text-primary font-bold uppercase tracking-wider">Nombre</th>
-                <th className="py-4 px-4 text-left text-xs text-primary font-bold uppercase tracking-wider">Tipo</th>
-                <th className="py-4 px-4 text-left text-xs text-primary font-bold uppercase tracking-wider">Tamaño</th>
-                <th className="py-4 px-4 text-left text-xs text-primary font-bold uppercase tracking-wider">Carpeta</th>
-                <th className="py-4 px-4 text-left text-xs text-primary font-bold uppercase tracking-wider">Fecha</th>
-                <th className="py-4 px-4 text-right text-xs text-primary font-bold uppercase tracking-wider">Acciones</th>
+              <tr className="bg-zinc-50 border-b border-zinc-100">
+                <th className="p-4 text-left text-xs text-primary font-bold uppercase tracking-wider">Nombre</th>
+                <th className="p-4 text-left text-xs text-primary font-bold uppercase tracking-wider">Tipo</th>
+                <th className="p-4 text-left text-xs text-primary font-bold uppercase tracking-wider">Tamaño</th>
+                <th className="p-4 text-left text-xs text-primary font-bold uppercase tracking-wider">Carpeta</th>
+                <th className="p-4 text-left text-xs text-primary font-bold uppercase tracking-wider">Fecha</th>
+                <th className="p-4 text-right text-xs text-primary font-bold uppercase tracking-wider">Acciones</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-gray-100">
+            <tbody className="divide-y divide-zinc-100">
               {loadingArchivos ? (
                 <tr>
-                  <td colSpan={6} className="p-10 text-center text-gray-400 text-sm">
+                  <td colSpan={6} className="p-10 text-center text-zinc-400 text-sm">
                     Cargando archivos...
                   </td>
                 </tr>
               ) : archivos.length === 0 ? (
                 <tr>
-                  <td colSpan={6} className="p-10 text-center text-gray-400 text-sm">
+                  <td colSpan={6} className="p-10 text-center text-zinc-400 text-sm">
                     No hay archivos en esta carpeta.
                   </td>
                 </tr>
               ) : (
                 archivos.map((a) => (
-                  <tr key={a.idArchivoEmpresa} className="hover:bg-gray-50 transition-colors">
+                  <tr key={a.idArchivoEmpresa} className="hover:bg-zinc-50 transition-colors">
                     <td className="py-3 px-4">
-                      <span className="flex items-center gap-2 font-medium text-gray-900 text-sm">
-                        <FileText className="w-4 h-4 text-primary shrink-0" />
+                      <span className="flex items-center gap-2 font-medium text-zinc-900 text-sm">
+                        <FileText className="size-4 text-primary shrink-0" />
                         {a.nombreArchivo}
                       </span>
                     </td>
-                    <td className="py-3 px-4 text-sm text-gray-600">{a.tipoArchivo}</td>
-                    <td className="py-3 px-4 text-sm text-gray-500">{formatBytes(a.tamanoBytes)}</td>
-                    <td className="py-3 px-4 text-sm text-gray-500">
+                    <td className="py-3 px-4 text-sm text-zinc-600">{a.tipoArchivo}</td>
+                    <td className="py-3 px-4 text-sm text-zinc-500">{formatBytes(a.tamanoBytes)}</td>
+                    <td className="py-3 px-4 text-sm text-zinc-500">
                       {a.idCarpetaEmpresa ? (parentMap[a.idCarpetaEmpresa] ?? "—") : "—"}
                     </td>
-                    <td className="py-3 px-4 text-sm text-gray-500">{a.fechaCarga}</td>
+                    <td className="py-3 px-4 text-sm text-zinc-500">{a.fechaCarga}</td>
                     <td className="py-3 px-4">
                       <div className="flex justify-end gap-2">
                         <button
@@ -380,7 +380,7 @@ export default function ArchivosEmpresaPage() {
                           className="p-2 bg-sky-50 text-teal-600 rounded-full hover:bg-teal-600 hover:text-white transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
                           title="Descargar"
                         >
-                          <Download className="w-3 h-3" />
+                          <Download className="size-3" />
                         </button>
                         <button
                           type="button"
@@ -388,7 +388,7 @@ export default function ArchivosEmpresaPage() {
                           className="p-2 bg-sky-50 text-teal-600 rounded-full hover:bg-teal-600 hover:text-white transition-colors"
                           title="Mover"
                         >
-                          <MoveRight className="w-3 h-3" />
+                          <MoveRight className="size-3" />
                         </button>
                         <button
                           type="button"
@@ -397,7 +397,7 @@ export default function ArchivosEmpresaPage() {
                           className="p-2 bg-sky-50 text-teal-600 rounded-full hover:bg-teal-600 hover:text-white transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
                           title="Eliminar"
                         >
-                          <Trash2 className="w-3 h-3" />
+                          <Trash2 className="size-3" />
                         </button>
                       </div>
                     </td>

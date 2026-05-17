@@ -57,27 +57,27 @@ function RecomendacionCard({
   colorClass: string;
 }) {
   return (
-    <div className="bg-white rounded-xl shadow-sm hover:shadow-2xl transition-all duration-500 p-8 flex flex-col gap-6 relative border border-slate-50 group hover:-translate-y-1.5">
+    <div className="bg-white rounded-xl shadow-sm hover:shadow-2xl transition-all duration-500 p-8 flex flex-col gap-6 relative border border-zinc-50 group hover:-translate-y-1.5">
       <div className="flex items-start gap-5">
         <div
           className={cn(
-            "w-14 h-14 rounded-2xl flex items-center justify-center text-white font-bold font-display text-lg shrink-0 shadow-lg group-hover:scale-105 transition-transform duration-500",
+            "size-14 rounded-2xl flex items-center justify-center text-white font-bold font-display text-lg shrink-0 shadow-lg group-hover:scale-105 transition-transform duration-500",
             colorClass,
           )}
         >
           {getIniciales(rec.nombreEmpresa)}
         </div>
         <div className="flex-1 min-w-0 py-1">
-          <h4 className="font-display font-bold text-primary text-xl uppercase tracking-tight leading-none mb-2">
+          <h4 className="font-display font-semibold text-primary text-xl uppercase tracking-tight leading-none mb-2">
             {rec.nombreEmpresa}
           </h4>
           {rec.sector && (
-            <p className="text-[10px] font-bold text-slate-600 uppercase tracking-[0.2em] italic">
+            <p className="text-[10px] font-bold text-zinc-600 uppercase tracking-[0.2em] italic">
               {rec.sector}
             </p>
           )}
         </div>
-        <div className="bg-slate-50 px-3 py-1.5 rounded-full border border-slate-100">
+        <div className="bg-zinc-50 px-3 py-1.5 rounded-full border border-zinc-100">
           <StarRating rating={rec.puntuacion} size={16} />
         </div>
       </div>
@@ -86,15 +86,15 @@ function RecomendacionCard({
         <span className="absolute -top-4 -left-2 text-6xl text-primary/5 font-serif select-none">
           “
         </span>
-        <p className="text-slate-600 leading-relaxed text-[15px] font-medium relative z-10 italic">
+        <p className="text-zinc-600 leading-relaxed text-[15px] font-medium relative z-10 italic">
           {rec.razonRecomendacion}
         </p>
       </div>
 
-      <div className="flex items-center justify-between pt-6 border-t border-slate-100">
+      <div className="flex items-center justify-between pt-6 border-t border-zinc-100">
         <div className="flex items-center gap-3">
-          <div className="w-8 h-8 rounded-full bg-primary/5 flex items-center justify-center border border-primary/10">
-            <ThumbsUp className="w-4 h-4 text-primary" />
+          <div className="size-8 rounded-full bg-primary/5 flex items-center justify-center border border-primary/10">
+            <ThumbsUp className="size-4 text-primary" />
           </div>
           <div>
             {rec.nombreRevisor ? (
@@ -103,7 +103,7 @@ function RecomendacionCard({
                   {rec.nombreRevisor}
                 </p>
                 {rec.cargoRevisor && (
-                  <p className="text-[10px] text-slate-600 font-bold uppercase tracking-widest mt-0.5">
+                  <p className="text-[10px] text-zinc-600 font-bold uppercase tracking-widest mt-0.5">
                     {rec.cargoRevisor}
                   </p>
                 )}
@@ -115,7 +115,7 @@ function RecomendacionCard({
             )}
           </div>
         </div>
-        <span className="text-[10px] text-slate-600 font-bold uppercase tracking-[0.2em] italic">
+        <span className="text-[10px] text-zinc-600 font-bold uppercase tracking-[0.2em] italic">
           {new Date(rec.fechaRecomendacion).toLocaleDateString("es-ES", {
             year: "numeric",
             month: "short",
@@ -171,25 +171,25 @@ export default function RecomendacionesPage() {
     <div className="mx-auto">
       {/* Encabezado */}
       <div className="mb-8">
-        <h1 className="text-3xl font-semibold text-gray-900 mb-1">
+        <h1 className="text-3xl font-semibold text-zinc-900 mb-1">
           Recomendaciones recibidas
         </h1>
-        <p className="text-gray-500">
+        <p className="text-zinc-500">
           Opiniones de empresas con las que has participado en procesos de
           selección.
         </p>
       </div>
 
       {loading ? (
-        <div className="flex items-center justify-center py-24 text-gray-400 gap-3">
-          <Loader2 className="w-6 h-6 animate-spin" />
+        <div className="flex items-center justify-center py-24 text-zinc-400 gap-3">
+          <Loader2 className="size-6 animate-spin" />
           <span>Cargando recomendaciones...</span>
         </div>
       ) : (
         <>
           {/* Resumen */}
-          <div className="p-10 mb-12 bg-white rounded-5xl shadow-sm border border-slate-50 relative overflow-hidden group">
-            <div className="absolute top-0 right-0 w-64 h-64 bg-primary/2 rounded-full -translate-y-1/2 translate-x-1/2" />
+          <div className="p-10 mb-12 bg-white rounded-5xl shadow-sm border border-zinc-50 relative overflow-hidden group">
+            <div className="absolute top-0 right-0 size-64 bg-primary/2 rounded-full -translate-y-1/2 translate-x-1/2" />
 
             <div className="flex flex-col lg:flex-row items-center gap-10 relative z-10">
               <div className="flex flex-col items-center gap-3">
@@ -200,12 +200,12 @@ export default function RecomendacionesPage() {
                   </span>
                 </div>
                 <StarRating rating={Math.round(promedio)} size={28} />
-                <span className="text-[10px] text-slate-600 font-bold uppercase tracking-[0.2em] mt-2 italic">
+                <span className="text-[10px] text-zinc-600 font-bold uppercase tracking-[0.2em] mt-2 italic">
                   Puntuación promedio
                 </span>
               </div>
 
-              <div className="w-px h-32 bg-slate-100 hidden lg:block" />
+              <div className="w-px h-32 bg-zinc-100 hidden lg:block" />
 
               <div className="flex flex-col gap-4 flex-1 w-full max-w-md">
                 {[5, 4, 3, 2, 1].map((star) => {
@@ -215,11 +215,11 @@ export default function RecomendacionesPage() {
                   const pct = total > 0 ? (count / total) * 100 : 0;
                   return (
                     <div key={star} className="flex items-center gap-4">
-                      <span className="text-xs font-bold text-slate-600 w-4">
+                      <span className="text-xs font-bold text-zinc-600 w-4">
                         {star}
                       </span>
                       <StarRating rating={1} maxRating={1} size={16} />
-                      <div className="flex-1 bg-slate-50 rounded-full h-2.5 overflow-hidden border border-slate-100/50">
+                      <div className="flex-1 bg-zinc-50 rounded-full h-2.5 overflow-hidden border border-zinc-100/50">
                         <div
                           className="h-full bg-primary rounded-full transition-all duration-1000 w-[var(--star-pc)]"
                           style={
@@ -227,7 +227,7 @@ export default function RecomendacionesPage() {
                           }
                         />
                       </div>
-                      <span className="text-[10px] font-bold text-slate-600 w-4">
+                      <span className="text-[10px] font-bold text-zinc-600 w-4">
                         {count}
                       </span>
                     </div>
@@ -237,7 +237,7 @@ export default function RecomendacionesPage() {
 
               <div className="flex flex-col items-center gap-2 lg:ml-auto p-8 rounded-xl bg-primary/2 border border-primary/5 min-w-[200px]">
                 <div className="flex items-center gap-2 text-primary group-hover:scale-110 transition-transform duration-500">
-                  <ThumbsUp className="w-10 h-10 fill-primary/10" />
+                  <ThumbsUp className="size-10 fill-primary/10" />
                   <span className="text-5xl font-display font-bold tracking-tight">
                     {total}
                   </span>
@@ -251,15 +251,15 @@ export default function RecomendacionesPage() {
 
           {/* Lista */}
           {total === 0 ? (
-            <div className="text-center py-16 text-gray-400">
-              <ThumbsUp className="w-10 h-10 mx-auto mb-3 opacity-30" />
+            <div className="text-center py-16 text-zinc-400">
+              <ThumbsUp className="size-10 mx-auto mb-3 opacity-30" />
               <p className="text-base">Aún no tienes recomendaciones.</p>
             </div>
           ) : (
             <>
               <div className="flex items-center justify-between mb-4">
-                <h2 className="text-lg font-semibold text-gray-800 flex items-center gap-2">
-                  <Building2 className="w-5 h-5 text-primary" />
+                <h2 className="text-lg font-semibold text-zinc-800 flex items-center gap-2">
+                  <Building2 className="size-5 text-primary" />
                   Empresas que te recomiendan ({total})
                 </h2>
               </div>

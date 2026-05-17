@@ -8,7 +8,7 @@ interface JobSectionProps {
 export default function JobSection({ title, children }: JobSectionProps) {
   return (
     <section className="mb-10 ">
-      <h2 className="text-xl font-bold rounded-t-md p-4 bg-arsenic text-white mb-0!">
+      <h2 className="text-xl font-semibold rounded-t-md p-4 bg-arsenic text-white mb-0!">
         {title}
       </h2>
       <div className="border border-secondary rounded-br-md rounded-bl-md p-8 border-t-0 shadow">

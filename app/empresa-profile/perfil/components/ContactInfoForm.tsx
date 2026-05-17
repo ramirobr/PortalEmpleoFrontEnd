@@ -21,6 +21,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import MapPicker from "@/components/ui/map-picker";
+import { SearchAutocomplete } from "@/components/ui/search-autocomplete";
 import { CompanyProfileData, CompanyProfileFiltersResponse } from "@/types/company";
 import { Pencil, Search, X } from "lucide-react";
 import { fetchApi } from "@/lib/apiClient";
@@ -198,8 +199,8 @@ export function ContactInfoForm({
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        <Button variant="ghost" size="sm" className="h-8 w-8 p-0">
-          <Pencil className="h-4 w-4" />
+        <Button variant="ghost" size="sm" className="size-8 p-0">
+          <Pencil className="size-4" />
         </Button>
       </DialogTrigger>
       <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
@@ -213,20 +214,20 @@ export function ContactInfoForm({
             <div className="flex items-center justify-between">
               <Label>
                 Ubicación{" "}
-                <span className="text-gray-400 font-normal text-xs">(haz clic en el mapa para marcar)</span>
+                <span className="text-zinc-400 font-normal text-xs">(haz clic en el mapa para marcar)</span>
               </Label>
               {hasPin && (
                 <Button
                   type="button"
                   variant="ghost"
                   size="sm"
-                  className="h-6 text-xs text-gray-500 gap-1"
+                  className="h-6 text-xs text-zinc-500 gap-1"
                   onClick={() => {
                     form.setValue("latitud", undefined);
                     form.setValue("longitud", undefined);
                   }}
                 >
-                  <X className="h-3 w-3" /> Limpiar pin
+                  <X className="size-3" /> Limpiar pin
                 </Button>
               )}
             </div>
@@ -236,7 +237,7 @@ export function ContactInfoForm({
               className="w-full h-72 rounded-lg overflow-hidden border"
             />
             {hasPin && (
-              <p className="text-xs text-gray-500">
+              <p className="text-xs text-zinc-500">
                 {geocoding ? "Buscando dirección..." : `Lat: ${latVal!.toFixed(6)}, Lng: ${lngVal!.toFixed(6)}`}
               </p>
             )}
@@ -260,7 +261,7 @@ export function ContactInfoForm({
                 disabled={geocoding}
                 onClick={() => handleForwardGeocode()}
               >
-                <Search className="h-4 w-4" />
+                <Search className="size-4" />
                 Localizar
               </Button>
             </div>
@@ -274,21 +275,18 @@ export function ContactInfoForm({
           {/* Ciudad */}
           <div className="space-y-2">
             <Label htmlFor="ciudad">Ciudad</Label>
-            <Select
-              value={form.watch("idCiudad").toString()}
-              onValueChange={(value) => form.setValue("idCiudad", parseInt(value))}
-            >
-              <SelectTrigger>
-                <SelectValue placeholder="Selecciona una ciudad" />
-              </SelectTrigger>
-              <SelectContent>
-                {filters?.ciudad?.map((ciudad) => (
-                  <SelectItem key={ciudad.idCatalogo} value={ciudad.idCatalogo.toString()}>
-                    {ciudad.nombre}
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
+            <SearchAutocomplete
+              options={
+                filters?.ciudad?.map((c) => ({
+                  id: c.idCatalogo,
+                  label: c.nombre,
+                })) ?? []
+              }
+              value={form.watch("idCiudad") || undefined}
+              onChange={(id) => form.setValue("idCiudad", id)}
+              placeholder="Selecciona una ciudad"
+              searchPlaceholder="Buscar ciudad..."
+            />
             {form.formState.errors.idCiudad && (
               <p className="text-sm text-red-500">
                 {form.formState.errors.idCiudad.message}
@@ -333,7 +331,7 @@ export function ContactInfoForm({
             </Button>
             <Button type="submit" disabled={form.formState.isSubmitting}>
               {form.formState.isSubmitting && (
-                <span className="animate-spin h-4 w-4 border-2 border-t-transparent rounded-full mr-2" />
+                <span className="animate-spin size-4 border-2 border-t-transparent rounded-full mr-2" />
               )}
               {form.formState.isSubmitting ? "Guardando..." : "Guardar"}
             </Button>

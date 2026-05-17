@@ -34,7 +34,7 @@ export default function CandidatosTable({
       case "pendiente":
         return "text-yellow-600 bg-amber-100";
       default:
-        return "text-gray-600 bg-gray-50";
+        return "text-zinc-600 bg-zinc-50";
     }
   };
 
@@ -56,40 +56,40 @@ export default function CandidatosTable({
     <div className="overflow-x-auto">
       <table className="w-full">
         <thead>
-          <tr className="bg-gray-50 border-b border-gray-200">
+          <tr className="bg-zinc-50 border-b border-zinc-200">
             <th
               scope="col"
-              className="text-left py-5 px-4 text-sm font-semibold text-gray-500 uppercase tracking-wider"
+              className="text-left py-5 px-4 text-sm font-semibold text-zinc-500 uppercase tracking-wider"
             >
               Candidato
             </th>
             <th
               scope="col"
-              className="text-left py-5 px-4 text-sm font-semibold text-gray-500 uppercase tracking-wider"
+              className="text-left py-5 px-4 text-sm font-semibold text-zinc-500 uppercase tracking-wider"
             >
               Contacto
             </th>
             <th
               scope="col"
-              className="text-left py-5 px-4 text-sm font-semibold text-gray-500 uppercase tracking-wider"
+              className="text-left py-5 px-4 text-sm font-semibold text-zinc-500 uppercase tracking-wider"
             >
               Fecha Registro
             </th>
             <th
               scope="col"
-              className="text-center py-5 px-4 text-sm font-semibold text-gray-500 uppercase tracking-wider"
+              className="text-center py-5 px-4 text-sm font-semibold text-zinc-500 uppercase tracking-wider"
             >
               Aplicaciones
             </th>
             <th
               scope="col"
-              className="text-center py-5 px-4 text-sm font-semibold text-gray-500 uppercase tracking-wider"
+              className="text-center py-5 px-4 text-sm font-semibold text-zinc-500 uppercase tracking-wider"
             >
               Estado
             </th>
             <th
               scope="col"
-              className="text-center py-5 px-4 text-sm font-semibold text-gray-500 uppercase tracking-wider"
+              className="text-center py-5 px-4 text-sm font-semibold text-zinc-500 uppercase tracking-wider"
             >
               Acciones
             </th>
@@ -99,12 +99,12 @@ export default function CandidatosTable({
           {candidatos.map((candidato) => (
             <tr
               key={candidato.idUsuario}
-              className="border-b border-gray-100 hover:bg-gray-50 transition-colors"
+              className="border-b border-zinc-100 hover:bg-zinc-50 transition-colors"
             >
               {/* Candidato */}
               <td className="py-2 px-4">
                 <div className="flex items-center gap-3">
-                  <Avatar className="w-10 h-10">
+                  <Avatar className="size-10">
                     <AvatarImage
                       src={candidato.fotoUrl}
                       alt={candidato.nombreCompleto}
@@ -114,10 +114,10 @@ export default function CandidatosTable({
                     </AvatarFallback>
                   </Avatar>
                   <div>
-                    <p className="font-semibold text-gray-800">
+                    <p className="font-semibold text-zinc-800">
                       {candidato.nombreCompleto}
                     </p>
-                    <p className="text-sm text-gray-500">
+                    <p className="text-sm text-zinc-500">
                       {candidato.ubicacion}
                     </p>
                   </div>
@@ -127,19 +127,19 @@ export default function CandidatosTable({
               {/* Contacto */}
               <td className="py-2 px-4">
                 <div>
-                  <p className="text-gray-800">{candidato.email}</p>
-                  <p className="text-sm text-gray-500">{candidato.telefono}</p>
+                  <p className="text-zinc-800">{candidato.email}</p>
+                  <p className="text-sm text-zinc-500">{candidato.telefono}</p>
                 </div>
               </td>
 
               {/* Fecha Registro */}
-              <td className="py-2 px-4 text-gray-600">
+              <td className="py-2 px-4 text-zinc-600">
                 {formatDate(candidato.fechaRegistro)}
               </td>
 
               {/* Aplicaciones */}
               <td className="py-2 px-4 text-center">
-                <span className="font-semibold text-gray-700">
+                <span className="font-semibold text-zinc-700">
                   {candidato.totalAplicaciones}
                 </span>
               </td>
@@ -168,7 +168,7 @@ export default function CandidatosTable({
                     aria-label={`Ver perfil de ${candidato.nombreCompleto}`}
                     title="Ver perfil"
                   >
-                    <Eye className="w-3 h-3" />
+                    <Eye className="size-3" />
                   </button>
                   <button
                     type="button"
@@ -182,9 +182,9 @@ export default function CandidatosTable({
                     }
                   >
                     {candidato.estado.nombre === "Activo" ? (
-                      <Ban className="w-3 h-3" />
+                      <Ban className="size-3" />
                     ) : (
-                      <CheckCircle className="w-3 h-3" />
+                      <CheckCircle className="size-3" />
                     )}
                   </button>
                   <button
@@ -194,7 +194,7 @@ export default function CandidatosTable({
                     aria-label={`Eliminar ${candidato.nombreCompleto}`}
                     title="Eliminar candidato"
                   >
-                    <Trash2 className="w-3 h-3" />
+                    <Trash2 className="size-3" />
                   </button>
                 </div>
               </td>
