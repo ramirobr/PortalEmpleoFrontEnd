@@ -33,7 +33,7 @@ export default function MainLayout({ children }: Children) {
 
   let links: NavLink[];
 
-  if (!session) {
+  if (!session?.user) {
     links = authLinks;
   } else if (session.user.role === ROLES.AdministradorEmpresa) {
     links = empresaLinks;
@@ -46,7 +46,7 @@ export default function MainLayout({ children }: Children) {
       <Navbar
         onHamburgerClick={toggleMobileMenu}
         isAsideOpen={isMobileMenuOpen}
-        showCompanyRegister={!session}
+        showCompanyRegister={!session?.user}
       />
 
       <AsideMenu

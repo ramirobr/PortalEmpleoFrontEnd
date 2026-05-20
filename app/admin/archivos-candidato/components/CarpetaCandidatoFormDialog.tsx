@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { useEffect } from "react";
 import { useForm, type Resolver } from "react-hook-form";
@@ -128,7 +128,7 @@ export default function CarpetaCandidatoFormDialog({
                   <FormItem>
                     <FormLabel>
                       Descripción{" "}
-                      <span className="text-zinc-400 font-normal">(opcional)</span>
+                      <span className="text-slate-400 font-normal">(opcional)</span>
                     </FormLabel>
                     <FormControl>
                       <Textarea
@@ -151,7 +151,7 @@ export default function CarpetaCandidatoFormDialog({
                     <FormItem>
                       <FormLabel>
                         Carpeta Padre{" "}
-                        <span className="text-zinc-400 font-normal">(opcional)</span>
+                        <span className="text-slate-400 font-normal">(opcional)</span>
                       </FormLabel>
                       <Select
                         value={field.value ?? NO_PARENT}
@@ -196,7 +196,7 @@ export default function CarpetaCandidatoFormDialog({
               </Button>
               <Button type="submit" disabled={isSubmitting}>
                 {isSubmitting
-                  ? "Guardando..."
+                  ? "Guardando…"
                   : isEditing
                     ? "Guardar Cambios"
                     : "Crear Carpeta"}

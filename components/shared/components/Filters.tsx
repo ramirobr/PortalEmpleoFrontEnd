@@ -8,7 +8,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState, Suspense } from "react";
 import { PriceRange } from "@/components/shared/components/PriceRange";
 import { useDebouncedValue } from "@/lib/hooks";
 import { FiltersResponse } from "@/types/search";
@@ -26,13 +26,13 @@ type Props = {
   onClose?: () => void;
 };
 
-export function Filters({
+function FiltersInner({
   initialFilters,
   filters,
   isOpen = false,
   onClose,
 }: Props) {
-  const router = useRouter();
+  const { push } = useRouter();
   const params = useSearchParams();
   const initialMount = useRef(true);
   const qs = useMemo(() => new URLSearchParams(params.toString()), [params]);
@@ -53,7 +53,7 @@ export function Filters({
     if (!value.trim()) p.delete(key);
     else p.set(key, value.trim());
     p.set("page", "1");
-    router.push("?" + p.toString(), { scroll: false });
+    push("?" + p.toString(), { scroll: false });
   };
 
   const commitRange = ([a, b]: [number, number]) => {
@@ -61,11 +61,11 @@ export function Filters({
     p.set("min", String(a));
     p.set("max", String(b));
     p.set("page", "1");
-    router.push("?" + p.toString(), { scroll: false });
+    push("?" + p.toString(), { scroll: false });
   };
 
   const clearAll = () => {
-    router.push("?", { scroll: false });
+    push("?", { scroll: false });
     setRange([PRICE_RANGE_MIN, PRICE_RANGE_MAX]);
     setSearchQuery("");
   };
@@ -104,14 +104,16 @@ export function Filters({
       </div>
       <div className="rounded-lg lg:shadow shadow-none p-6 flex flex-col gap-6 bg-white">
         <Input
+          id="filter-search"
+          aria-label="Buscar vacantes"
           placeholder="Buscar..."
           value={SearchQuery}
           onChange={(e) => setSearchQuery(e.target.value)}
         />
         <div>
-          <label className="pb-5 block text-black font-bold">
+          <span className="pb-5 block text-black font-bold">
             Rango salarial
-          </label>
+          </span>
           <PriceRange
             min={PRICE_RANGE_MIN}
             max={PRICE_RANGE_MAX}
@@ -123,8 +125,9 @@ export function Filters({
         </div>
 
         <div>
-          <label className="text-black font-bold">Ciudad</label>
+          <label htmlFor="filter-ciudad" className="text-black font-bold">Ciudad</label>
           <SearchAutocomplete<string>
+            id="filter-ciudad"
             className="w-full mt-1"
             options={[
               { id: " ", label: "Todas" },
@@ -141,8 +144,9 @@ export function Filters({
         </div>
 
         <div>
-          <label className="text-black font-bold">Provincia</label>
+          <label htmlFor="filter-provincia" className="text-black font-bold">Provincia</label>
           <SearchAutocomplete<string>
+            id="filter-provincia"
             className="w-full mt-1"
             options={[
               { id: " ", label: "Todas" },
@@ -159,12 +163,12 @@ export function Filters({
         </div>
 
         <div>
-          <label className="text-black font-bold">Fecha</label>
+          <label htmlFor="filter-fecha" className="text-black font-bold">Fecha</label>
           <Select
             value={current("fecha", initialFilters.fecha)}
             onValueChange={(v) => update("fecha", v)}
           >
-            <SelectTrigger className="w-full mt-1 max-w-[212px]">
+            <SelectTrigger id="filter-fecha" className="w-full mt-1 max-w-[212px]">
               <SelectValue placeholder="Todas" />
             </SelectTrigger>
             <SelectContent>
@@ -181,12 +185,12 @@ export function Filters({
         </div>
 
         <div>
-          <label className="text-black font-bold">Experiencia</label>
+          <label htmlFor="filter-experiencia" className="text-black font-bold">Experiencia</label>
           <Select
             value={current("experience", initialFilters.experiencia)}
             onValueChange={(v) => update("experience", v)}
           >
-            <SelectTrigger className="w-full mt-1 max-w-[212px]">
+            <SelectTrigger id="filter-experiencia" className="w-full mt-1 max-w-[212px]">
               <SelectValue placeholder="Todas" />
             </SelectTrigger>
             <SelectContent>
@@ -204,8 +208,9 @@ export function Filters({
         </div>
 
         <div>
-          <label className="text-black font-bold">Empresa</label>
+          <label htmlFor="filter-empresa" className="text-black font-bold">Empresa</label>
           <SearchAutocomplete<string>
+            id="filter-empresa"
             className="w-full mt-1"
             options={[
               { id: " ", label: "Todas" },
@@ -222,12 +227,12 @@ export function Filters({
         </div>
 
         <div>
-          <label className="text-black font-bold">Modalidad</label>
+          <label htmlFor="filter-modalidad" className="text-black font-bold">Modalidad</label>
           <Select
             value={current("modalidad", initialFilters.modalidad)}
             onValueChange={(v) => update("modalidad", v)}
           >
-            <SelectTrigger className="w-full mt-1 max-w-[212px]">
+            <SelectTrigger id="filter-modalidad" className="w-full mt-1 max-w-[212px]">
               <SelectValue placeholder="Todas" />
             </SelectTrigger>
             <SelectContent>
@@ -245,12 +250,12 @@ export function Filters({
         </div>
 
         <div>
-          <label className="text-black font-bold">Jornada Laboral</label>
+          <label htmlFor="filter-jornada" className="text-black font-bold">Jornada Laboral</label>
           <Select
             value={current("jornada", initialFilters.jornada)}
             onValueChange={(v) => update("jornada", v)}
           >
-            <SelectTrigger className="w-full mt-1 max-w-[212px]">
+            <SelectTrigger id="filter-jornada" className="w-full mt-1 max-w-[212px]">
               <SelectValue placeholder="Todas" />
             </SelectTrigger>
             <SelectContent>
@@ -276,5 +281,13 @@ export function Filters({
         </PremiumButton>
       </div>
     </aside>
+  );
+}
+
+export function Filters(props: Props) {
+  return (
+    <Suspense fallback={null}>
+      <FiltersInner {...props} />
+    </Suspense>
   );
 }

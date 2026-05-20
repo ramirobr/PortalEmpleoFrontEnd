@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { AdminEmpleo } from "@/types/admin";
 import {
@@ -12,6 +12,7 @@ import {
 } from "lucide-react";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import Pill from "@/components/shared/components/Pill";
+import { ActionButton } from "@/components/shared/components/ActionButton";
 import {
   AdminTableEmpty,
   AdminTableLoading,
@@ -38,11 +39,11 @@ export default function EmpleosTable({
       case "activa":
         return "text-green-600 bg-green-50";
       case "cerrada":
-        return "text-zinc-600 bg-zinc-100";
+        return "text-slate-600 bg-zinc-100";
       case "pendiente":
         return "text-yellow-600 bg-amber-100";
       default:
-        return "text-zinc-600 bg-zinc-50";
+        return "text-slate-600 bg-zinc-50";
     }
   };
 
@@ -67,37 +68,37 @@ export default function EmpleosTable({
           <tr className="bg-zinc-50 border-b border-zinc-200">
             <th
               scope="col"
-              className="text-left py-5 px-4 text-sm font-semibold text-zinc-500 uppercase tracking-wider"
+              className="text-left py-5 px-4 text-sm font-semibold text-slate-500 uppercase tracking-wider"
             >
               Empleo
             </th>
             <th
               scope="col"
-              className="text-left py-5 px-4 text-sm font-semibold text-zinc-500 uppercase tracking-wider"
+              className="text-left py-5 px-4 text-sm font-semibold text-slate-500 uppercase tracking-wider"
             >
               Empresa
             </th>
             <th
               scope="col"
-              className="text-left py-5 px-4 text-sm font-semibold text-zinc-500 uppercase tracking-wider"
+              className="text-left py-5 px-4 text-sm font-semibold text-slate-500 uppercase tracking-wider"
             >
               Fecha Publicación
             </th>
             <th
               scope="col"
-              className="text-center py-5 px-4 text-sm font-semibold text-zinc-500 uppercase tracking-wider"
+              className="text-center py-5 px-4 text-sm font-semibold text-slate-500 uppercase tracking-wider"
             >
               Postulantes
             </th>
             <th
               scope="col"
-              className="text-center py-5 px-4 text-sm font-semibold text-zinc-500 uppercase tracking-wider"
+              className="text-center py-5 px-4 text-sm font-semibold text-slate-500 uppercase tracking-wider"
             >
               Estado
             </th>
             <th
               scope="col"
-              className="text-center py-5 px-4 text-sm font-semibold text-zinc-500 uppercase tracking-wider"
+              className="text-center py-5 px-4 text-sm font-semibold text-slate-500 uppercase tracking-wider"
             >
               Acciones
             </th>
@@ -112,8 +113,8 @@ export default function EmpleosTable({
               {/* Empleo */}
               <td className="py-2 px-4">
                 <div>
-                  <p className="font-semibold text-zinc-800">{empleo.tituloPuesto}</p>
-                  <div className="flex items-center gap-2 mt-1 text-xs text-zinc-500">
+                  <p className="font-semibold text-slate-800">{empleo.tituloPuesto}</p>
+                  <div className="flex items-center gap-2 mt-1 text-xs text-slate-500">
                     <span className="flex items-center gap-1">
                       <MapPin className="size-3" />
                       {empleo.ubicacion}
@@ -128,18 +129,18 @@ export default function EmpleosTable({
               <td className="py-2 px-4">
                 <div className="flex items-center gap-2">
                   <Avatar className="size-8 rounded-lg">
-                    <AvatarFallback className="rounded-lg bg-zinc-200 text-zinc-600 text-xs">
+                    <AvatarFallback className="rounded-lg bg-zinc-200 text-slate-600 text-xs">
                       {empleo.empresa.substring(0, 2).toUpperCase()}
                     </AvatarFallback>
                   </Avatar>
-                  <span className="text-sm font-medium text-zinc-700">
+                  <span className="text-sm font-medium text-slate-700">
                     {empleo.empresa}
                   </span>
                 </div>
               </td>
 
               {/* Fecha Publicación */}
-              <td className="py-2 px-4 text-zinc-600">
+              <td className="py-2 px-4 text-slate-600">
                 {empleo.fechaPublicacion}
               </td>
 
@@ -168,39 +169,25 @@ export default function EmpleosTable({
               {/* Acciones */}
               <td className="py-2 px-4">
                 <div className="flex items-center justify-center gap-2">
-                  <button
-                    type="button"
+                  <ActionButton
                     onClick={() => onEdit(empleo.idVacante)}
-                    className="p-2 bg-sky-50 text-teal-600 rounded-full hover:bg-teal-600 hover:text-white transition-colors cursor-pointer"
-                    aria-label={`Editar ${empleo.tituloPuesto}`}
+                    icon={<Pencil />}
                     title="Editar vacante"
-                  >
-                    <Pencil className="size-3" />
-                  </button>
-                  <button
-                    type="button"
+                    aria-label={`Editar ${empleo.tituloPuesto}`}
+                  />
+                  <ActionButton
                     onClick={() => onStatusChange(empleo.idVacante)}
-                    className="p-2 bg-sky-50 text-teal-600 rounded-full hover:bg-teal-600 hover:text-white transition-colors cursor-pointer"
+                    icon={empleo.estado === "Activa" ? <Ban /> : <CheckCircle />}
+                    title={empleo.estado === "Activa" ? "Cerrar" : "Activar"}
                     aria-label={`${empleo.estado === "Activa" ? "Cerrar" : "Activar"} ${empleo.tituloPuesto}`}
-                    title={
-                      empleo.estado === "Activa" ? "Cerrar" : "Activar"
-                    }
-                  >
-                    {empleo.estado === "Activa" ? (
-                      <Ban className="size-3" />
-                    ) : (
-                      <CheckCircle className="size-3" />
-                    )}
-                  </button>
-                  <button
-                    type="button"
+                  />
+                  <ActionButton
                     onClick={() => onDelete(empleo.idVacante)}
-                    className="p-2 bg-sky-50 text-teal-600 rounded-full hover:bg-teal-600 hover:text-white transition-colors cursor-pointer"
-                    aria-label={`Eliminar ${empleo.tituloPuesto}`}
+                    variant="danger"
+                    icon={<Trash2 />}
                     title="Eliminar vacante"
-                  >
-                    <Trash2 className="size-3" />
-                  </button>
+                    aria-label={`Eliminar ${empleo.tituloPuesto}`}
+                  />
                 </div>
               </td>
             </tr>

@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { AdminCandidato } from "@/types/admin";
 import { Eye, Ban, CheckCircle, Trash2, Users } from "lucide-react";
@@ -34,7 +34,7 @@ export default function CandidatosTable({
       case "pendiente":
         return "text-yellow-600 bg-amber-100";
       default:
-        return "text-zinc-600 bg-zinc-50";
+        return "text-slate-600 bg-zinc-50";
     }
   };
 
@@ -59,37 +59,37 @@ export default function CandidatosTable({
           <tr className="bg-zinc-50 border-b border-zinc-200">
             <th
               scope="col"
-              className="text-left py-5 px-4 text-sm font-semibold text-zinc-500 uppercase tracking-wider"
+              className="text-left py-5 px-4 text-sm font-semibold text-slate-500 uppercase tracking-wider"
             >
               Candidato
             </th>
             <th
               scope="col"
-              className="text-left py-5 px-4 text-sm font-semibold text-zinc-500 uppercase tracking-wider"
+              className="text-left py-5 px-4 text-sm font-semibold text-slate-500 uppercase tracking-wider"
             >
               Contacto
             </th>
             <th
               scope="col"
-              className="text-left py-5 px-4 text-sm font-semibold text-zinc-500 uppercase tracking-wider"
+              className="text-left py-5 px-4 text-sm font-semibold text-slate-500 uppercase tracking-wider"
             >
               Fecha Registro
             </th>
             <th
               scope="col"
-              className="text-center py-5 px-4 text-sm font-semibold text-zinc-500 uppercase tracking-wider"
+              className="text-center py-5 px-4 text-sm font-semibold text-slate-500 uppercase tracking-wider"
             >
               Aplicaciones
             </th>
             <th
               scope="col"
-              className="text-center py-5 px-4 text-sm font-semibold text-zinc-500 uppercase tracking-wider"
+              className="text-center py-5 px-4 text-sm font-semibold text-slate-500 uppercase tracking-wider"
             >
               Estado
             </th>
             <th
               scope="col"
-              className="text-center py-5 px-4 text-sm font-semibold text-zinc-500 uppercase tracking-wider"
+              className="text-center py-5 px-4 text-sm font-semibold text-slate-500 uppercase tracking-wider"
             >
               Acciones
             </th>
@@ -114,10 +114,10 @@ export default function CandidatosTable({
                     </AvatarFallback>
                   </Avatar>
                   <div>
-                    <p className="font-semibold text-zinc-800">
+                    <p className="font-semibold text-slate-800">
                       {candidato.nombreCompleto}
                     </p>
-                    <p className="text-sm text-zinc-500">
+                    <p className="text-sm text-slate-500">
                       {candidato.ubicacion}
                     </p>
                   </div>
@@ -127,19 +127,19 @@ export default function CandidatosTable({
               {/* Contacto */}
               <td className="py-2 px-4">
                 <div>
-                  <p className="text-zinc-800">{candidato.email}</p>
-                  <p className="text-sm text-zinc-500">{candidato.telefono}</p>
+                  <p className="text-slate-800">{candidato.email}</p>
+                  <p className="text-sm text-slate-500">{candidato.telefono}</p>
                 </div>
               </td>
 
               {/* Fecha Registro */}
-              <td className="py-2 px-4 text-zinc-600">
+              <td className="py-2 px-4 text-slate-600">
                 {formatDate(candidato.fechaRegistro)}
               </td>
 
               {/* Aplicaciones */}
               <td className="py-2 px-4 text-center">
-                <span className="font-semibold text-zinc-700">
+                <span className="font-semibold text-slate-700">
                   {candidato.totalAplicaciones}
                 </span>
               </td>

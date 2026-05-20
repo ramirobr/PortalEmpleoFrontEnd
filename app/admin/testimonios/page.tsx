@@ -13,7 +13,7 @@ export default async function AdminTestimoniosPage() {
   ]);
 
   return (
-    <Suspense fallback={<div>Cargando testimonios...</div>}>
+    <Suspense fallback={<div>Cargando testimonios…</div>}>
       <AdminTestimoniosClient estados={estados} counters={counters} />
     </Suspense>
   );

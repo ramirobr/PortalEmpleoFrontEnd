@@ -1,4 +1,4 @@
-import React from "react";
+﻿import React from "react";
 import { cn } from "@/lib/utils";
 
 interface LoadingStateProps {
@@ -7,14 +7,14 @@ interface LoadingStateProps {
   fullPage?: boolean;
 }
 
-export function LoadingState({ message = "Cargando...", className, fullPage = false }: LoadingStateProps) {
+export function LoadingState({ message = "Cargando…", className, fullPage = false }: LoadingStateProps) {
   const content = (
     <div className={cn("flex flex-col items-center justify-center p-12 text-center", className)}>
       <div className="relative size-12 mb-4">
         <div className="absolute inset-0 rounded-full border-4 border-primary/10" />
         <div className="absolute inset-0 rounded-full border-4 border-primary border-t-transparent animate-spin" />
       </div>
-      <p className="text-sm font-bold text-zinc-900 uppercase tracking-widest animate-pulse">
+      <p className="text-sm font-bold text-slate-900 uppercase tracking-widest animate-pulse">
         {message}
       </p>
     </div>

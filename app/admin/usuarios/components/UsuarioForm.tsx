@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -120,7 +120,7 @@ export default function UsuarioForm({
           )}
         />
 
-        <div className="text-sm text-zinc-600 bg-zinc-50 p-3 rounded">
+        <div className="text-sm text-slate-600 bg-zinc-50 p-3 rounded">
           <p><strong>Tipo de usuario:</strong> {usuario.tipoUsuario === "admin" ? "Administrador" : usuario.tipoUsuario === "empresa" ? "Empresa" : "Postulante"}</p>
           <p><strong>Rol:</strong> {usuario.rol.nombre}</p>
           <p><strong>Fecha de registro:</strong> {usuario.fechaRegistro}</p>
@@ -137,7 +137,7 @@ export default function UsuarioForm({
             Cancelar
           </Button>
           <Button type="submit" disabled={loading}>
-            {loading ? "Guardando..." : "Actualizar"}
+            {loading ? "Guardando…" : "Actualizar"}
           </Button>
         </div>
       </form>

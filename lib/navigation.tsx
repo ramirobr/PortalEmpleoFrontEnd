@@ -46,7 +46,7 @@ export const getUserLinks = (handleLogout?: () => void): NavLink[] => [
   },
   {
     name: "Dashboard",
-    href: "/profile",
+    href: "/perfil",
     icon: (
       <svg width="20" height="20" viewBox="0 0 20 20" fill="currentColor">
         <path d="M15 2H5L4 3v14l1 1h10l1-1V3l-1-1m0 15H5v-3h2a1 1 0 0 0 2 0 1 1 0 0 0-2-1H5v-3h2a1 1 0 0 0 2 0 1 1 0 0 0-2 0H5V7h2a1 1 0 0 0 2-1 1 1 0 0 0-2 0H5V3h10v14zm-8-3 1-1v1H7m0-4h1-1m0-4h1c1 0 0 0 0 0v1L7 6" />
@@ -55,7 +55,7 @@ export const getUserLinks = (handleLogout?: () => void): NavLink[] => [
   },
   {
     name: "Editar Perfil",
-    href: "/profile/edit",
+    href: "/perfil/editar",
     icon: (
       <svg width="20" height="20" viewBox="0 0 20 20" fill="currentColor">
         <path d="M12.075,10.812c1.358-0.853,2.242-2.507,2.242-4.037c0-2.181-1.795-4.618-4.198-4.618S5.921,4.594,5.921,6.775c0,1.53,0.884,3.185,2.242,4.037c-3.222,0.865-5.6,3.807-5.6,7.298c0,0.23,0.189,0.42,0.42,0.42h14.273c0.23,0,0.42-0.189,0.42-0.42C17.676,14.619,15.297,11.677,12.075,10.812 M6.761,6.775c0-2.162,1.773-3.778,3.358-3.778s3.359,1.616,3.359,3.778c0,2.162-1.774,3.778-3.359,3.778S6.761,8.937,6.761,6.775 M3.415,17.69c0.218-3.51,3.142-6.297,6.704-6.297c3.562,0,6.486,2.787,6.705,6.297H3.415z"></path>
@@ -79,7 +79,7 @@ export const getUserLinks = (handleLogout?: () => void): NavLink[] => [
   },
   {
     name: "Empleos favoritos",
-    href: "/profile/favoritos",
+    href: "/perfil/favoritos",
     icon: (
       <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24">
         <path
@@ -95,22 +95,22 @@ export const getUserLinks = (handleLogout?: () => void): NavLink[] => [
   },
   {
     name: "Mis Testimonios",
-    href: "/profile/testimonios",
+    href: "/perfil/testimonios",
     icon: <MessageSquareQuote width={20} height={20} />,
   },
   {
     name: "Recomendaciones",
-    href: "/profile/recomendaciones",
+    href: "/perfil/recomendaciones",
     icon: <ThumbsUp width={20} height={20} />,
   },
   {
     name: "Mis Archivos",
-    href: "/profile/archivos",
+    href: "/perfil/archivos",
     icon: <FolderOpen width={20} height={20} />,
   },
   {
     name: "Cambiar contraseña",
-    href: "/profile/cambiar-contrasena",
+    href: "/perfil/cambiar-contrasena",
     icon: <KeyRound width={20} height={20} />,
   },
   {
@@ -146,17 +146,17 @@ export const getEmpresaLinks = (handleLogout?: () => void): NavLink[] => [
   },
   {
     name: "Panel de Empresa",
-    href: "/empresa-profile",
+    href: "/empresa-perfil",
     icon: <Building2 width={20} height={20} />,
   },
   {
     name: "Perfil de Empresa",
-    href: "/empresa-profile/perfil",
+    href: "/empresa-perfil/perfil",
     icon: <Building width={20} height={20} />,
   },
   {
     name: "Publicar Empleo",
-    href: "/empresa-profile/crear-empleo",
+    href: "/empresa-perfil/crear-empleo",
     icon: (
       <svg
         xmlns="http://www.w3.org/2000/svg"
@@ -171,7 +171,7 @@ export const getEmpresaLinks = (handleLogout?: () => void): NavLink[] => [
   },
   {
     name: "Mis Ofertas",
-    href: "/empresa-profile/empleos",
+    href: "/empresa-perfil/empleos",
     icon: (
       <svg
         xmlns="http://www.w3.org/2000/svg"
@@ -186,7 +186,7 @@ export const getEmpresaLinks = (handleLogout?: () => void): NavLink[] => [
   },
   {
     name: "Postulaciones",
-    href: "/empresa-profile/postulaciones",
+    href: "/empresa-perfil/postulaciones",
     icon: (
       <svg
         xmlns="http://www.w3.org/2000/svg"
@@ -201,17 +201,17 @@ export const getEmpresaLinks = (handleLogout?: () => void): NavLink[] => [
   },
   {
     name: "Buscar Candidatos",
-    href: "/empresa-profile/buscar-candidatos",
+    href: "/empresa-perfil/buscar-candidatos",
     icon: <Search width={20} height={20} />,
   },
   {
     name: "Mis Archivos",
-    href: "/empresa-profile/archivos",
+    href: "/empresa-perfil/archivos",
     icon: <FolderOpen width={20} height={20} />,
   },
   {
     name: "Cambiar contraseña",
-    href: "/empresa-profile/cambiar-contrasena",
+    href: "/empresa-perfil/cambiar-contrasena",
     icon: <KeyRound width={20} height={20} />,
   },
   {

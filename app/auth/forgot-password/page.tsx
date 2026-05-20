@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
@@ -21,9 +21,9 @@ import {
   LockKeyholeOpen,
   UserRoundPlus,
   Building2,
+  MailCheck,
 } from "lucide-react";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
@@ -41,8 +41,9 @@ const forgotPasswordSchema = z.object({
 export type ForgotPasswordValues = z.infer<typeof forgotPasswordSchema>;
 
 export default function ForgotPasswordPage() {
-  const router = useRouter();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [emailSent, setEmailSent] = useState(false);
+  const [sentToEmail, setSentToEmail] = useState("");
 
   const toggleMobileMenu = () => setIsMobileMenuOpen((prev) => !prev);
   const closeMobileMenu = () => setIsMobileMenuOpen(false);
@@ -84,17 +85,73 @@ export default function ForgotPasswordPage() {
         return;
       }
 
-      // Guardamos el token y email en la URL para la siguiente página
-      const params = new URLSearchParams({
-        email: email,
-        token: res.data.resetToken,
-      });
-
-      toast.success(res.data.message || "Se ha enviado un correo con las instrucciones");
-      router.push(`/auth/reset-password?${params.toString()}`);
+      setSentToEmail(email);
+      setEmailSent(true);
     } catch {
       toast.error("Ocurrió un error inesperado. Intenta nuevamente.");
     }
+  }
+
+  if (emailSent) {
+    return (
+      <div className="min-h-screen flex flex-col bg-zinc-50">
+        <Navbar
+          showCompanyRegister={true}
+          onHamburgerClick={toggleMobileMenu}
+          isAsideOpen={isMobileMenuOpen}
+        />
+        <AsideMenu
+          isOpen={isMobileMenuOpen}
+          onClose={closeMobileMenu}
+          side="left"
+          className="w-1/2 max-w-sm"
+          links={authLinks}
+        />
+        <main className="flex-1 flex flex-col items-center justify-center px-4 py-12">
+          <Card className="w-full max-w-md p-6 flex flex-col gap-6 shadow-md">
+            <CardContent className="flex flex-col gap-6 items-center text-center">
+              <div className="size-16 bg-primary/10 rounded-full flex items-center justify-center text-primary">
+                <MailCheck className="size-9" />
+              </div>
+
+              <div>
+                <h2 className="text-black text-2xl font-semibold mb-2">
+                  Revisa tu correo
+                </h2>
+                <p className="text-zinc-600">
+                  Enviamos las instrucciones para restablecer tu contraseña a{" "}
+                  <span className="font-semibold text-primary">{sentToEmail}</span>.
+                  El enlace expira en {60} minutos.
+                </p>
+              </div>
+
+              <p className="text-sm text-zinc-500">
+                ¿No recibiste el correo? Revisa tu carpeta de spam o{" "}
+                <button
+                  type="button"
+                  className="text-primary font-semibold hover:underline"
+                  onClick={() => {
+                    setEmailSent(false);
+                    setSentToEmail("");
+                  }}
+                >
+                  intenta con otro correo
+                </button>
+                .
+              </p>
+
+              <Link href="/auth/login" className="w-full">
+                <Button variant="outline" className="w-full">
+                  <ArrowLeft className="size-4 mr-2" />
+                  Volver al inicio de sesión
+                </Button>
+              </Link>
+            </CardContent>
+          </Card>
+        </main>
+        <Footer />
+      </div>
+    );
   }
 
   return (
@@ -122,7 +179,7 @@ export default function ForgotPasswordPage() {
               <h2 className="text-black text-2xl font-semibold">
                 ¿Olvidaste tu contraseña?
               </h2>
-              <p className="mt-2 text-zinc-600">
+              <p className="mt-2 text-slate-600">
                 No te preocupes, ingresa tu correo electrónico y te enviaremos
                 las instrucciones para restablecerla.
               </p>
@@ -141,7 +198,7 @@ export default function ForgotPasswordPage() {
                       <FormLabel>Correo electrónico *</FormLabel>
                       <FormControl>
                         <div className="relative">
-                          <Mail className="absolute left-3 top-1/2 -translate-y-1/2 text-zinc-400 size-5" />
+                          <Mail className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 size-5" />
                           <Input
                             {...field}
                             type="email"

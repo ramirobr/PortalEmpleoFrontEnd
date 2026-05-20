@@ -24,10 +24,19 @@ import { useHasMounted } from "@/lib/hooks";
 export default function AdminDashboardPage() {
   const { data: session } = useSession();
   const hasMounted = useHasMounted();
-  const [loading, setLoading] = useState(true);
-  const [kpis, setKpis] = useState<AdminDashboardData | null>(null);
-  const [empresasRecientes, setEmpresasRecientes] = useState<AdminEmpresa[]>([]);
-  const [empleosRecientes, setEmpleosRecientes] = useState<AdminEmpleo[]>([]);
+  const [dataState, setDataState] = useState({
+    loading: true,
+    kpis: null as AdminDashboardData | null,
+    empresasRecientes: [] as AdminEmpresa[],
+    empleosRecientes: [] as AdminEmpleo[],
+  });
+  const { loading, kpis, empresasRecientes, empleosRecientes } = dataState;
+
+  const [mountedDate, setMountedDate] = useState("");
+
+  useEffect(() => {
+    setMountedDate(new Date().toLocaleDateString());
+  }, []);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -36,10 +45,12 @@ export default function AdminDashboardPage() {
         getAdminEmpresas({ pageSize: 4, currentPage: 1 }, session?.user?.accessToken),
         getAdminEmpleos({ pageSize: 4, currentPage: 1 }, session?.user?.accessToken),
       ]);
-      if (dashboardRes?.isSuccess) setKpis(dashboardRes.data);
-      if (empresasRes?.isSuccess) setEmpresasRecientes(empresasRes.data.data);
-      if (empleosRes?.isSuccess) setEmpleosRecientes(empleosRes.data.data);
-      setLoading(false);
+      setDataState({
+        kpis: dashboardRes?.isSuccess ? dashboardRes.data : null,
+        empresasRecientes: empresasRes?.isSuccess ? empresasRes.data.data : [],
+        empleosRecientes: empleosRes?.isSuccess ? empleosRes.data.data : [],
+        loading: false,
+      });
     };
     fetchData();
   }, [session]);
@@ -52,8 +63,8 @@ export default function AdminDashboardPage() {
     <div className="space-y-6">
       <div className="flex justify-between items-center">
         <h1 className="text-3xl font-semibold">Dashboard</h1>
-        <div className="text-sm text-zinc-500">
-          Última actualización: {hasMounted ? new Date().toLocaleDateString() : "--/--/----"}
+        <div className="text-sm text-slate-500">
+          Última actualización: {mountedDate || "--/--/----"}
         </div>
       </div>
 
@@ -104,15 +115,15 @@ export default function AdminDashboardPage() {
                 >
                   <div className="flex items-center gap-3">
                     <Avatar className="size-10 rounded-lg">
-                      <AvatarFallback className="rounded-lg bg-zinc-200 text-zinc-600 text-xs">
+                      <AvatarFallback className="rounded-lg bg-zinc-200 text-slate-600 text-xs">
                         {empresa.nombreEmpresa.substring(0, 2).toUpperCase()}
                       </AvatarFallback>
                     </Avatar>
                     <div>
-                      <p className="font-medium text-sm text-zinc-900">
+                      <p className="font-medium text-sm text-slate-900">
                         {empresa.nombreEmpresa}
                       </p>
-                      <p className="text-xs text-zinc-500">{empresa.numeroDocumento}</p>
+                      <p className="text-xs text-slate-500">{empresa.numeroDocumento}</p>
                     </div>
                   </div>
                   <Pill
@@ -120,7 +131,7 @@ export default function AdminDashboardPage() {
                     bgColor={
                       empresa.plan === "Premium"
                         ? "bg-teal-50 text-teal-600"
-                        : "bg-zinc-100 text-zinc-600"
+                        : "bg-zinc-100 text-slate-600"
                     }
                     className="w-fit scale-90"
                     noButton
@@ -152,11 +163,11 @@ export default function AdminDashboardPage() {
                   className="flex items-center justify-between p-3 rounded-lg hover:bg-zinc-50 transition-colors"
                 >
                   <div>
-                    <p className="font-medium text-sm text-zinc-900">
+                    <p className="font-medium text-sm text-slate-900">
                       {empleo.tituloPuesto}
                     </p>
-                    <div className="flex items-center gap-2 mt-0.5 text-xs text-zinc-500">
-                      <span className="font-medium text-zinc-700">
+                    <div className="flex items-center gap-2 mt-0.5 text-xs text-slate-500">
+                      <span className="font-medium text-slate-700">
                         {empleo.empresa}
                       </span>
                       <span>•</span>
@@ -167,10 +178,10 @@ export default function AdminDashboardPage() {
                     </div>
                   </div>
                   <div className="text-right">
-                    <span className="text-xs font-semibold text-zinc-900 block">
+                    <span className="text-xs font-semibold text-slate-900 block">
                       {empleo.postulantes}
                     </span>
-                    <span className="text-[10px] text-zinc-500">posts</span>
+                    <span className="text-[11px] text-slate-500">posts</span>
                   </div>
                 </div>
               ))}

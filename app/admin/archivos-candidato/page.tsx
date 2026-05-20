@@ -6,6 +6,7 @@ import { FolderOpen, FileText, Plus, Upload, Search } from "lucide-react";
 import { Card } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
+import { PremiumButton } from "@/components/shared/components/PremiumButton";
 import {
   Select,
   SelectContent,
@@ -54,14 +55,52 @@ export default function AdminArchivosCandidatoPage() {
 
   // Data
   const [tiposArchivo, setTiposArchivo] = useState<TipoArchivo[]>([]);
-  const [carpetas, setCarpetas] = useState<CarpetaUsuario[]>([]);
-  const [archivos, setArchivos] = useState<ArchivoUsuario[]>([]);
-  const [selectedCarpetaId, setSelectedCarpetaId] = useState<string>(NO_FOLDER);
+  const [dataState, setDataState] = useState({
+    carpetas: [] as CarpetaUsuario[],
+    archivos: [] as ArchivoUsuario[],
+    selectedCarpetaId: NO_FOLDER,
+    loadingCandidatos: false,
+    loadingCarpetas: false,
+    loadingArchivos: false,
+  });
+  const { carpetas, archivos, selectedCarpetaId, loadingCandidatos, loadingCarpetas, loadingArchivos } = dataState;
 
-  // Loading
-  const [loadingCandidatos, setLoadingCandidatos] = useState(false);
-  const [loadingCarpetas, setLoadingCarpetas] = useState(false);
-  const [loadingArchivos, setLoadingArchivos] = useState(false);
+  const setCarpetas = (val: CarpetaUsuario[] | ((prev: CarpetaUsuario[]) => CarpetaUsuario[])) => {
+    setDataState(prev => ({
+      ...prev,
+      carpetas: typeof val === 'function' ? (val as Function)(prev.carpetas) : val
+    }));
+  };
+  const setArchivos = (val: ArchivoUsuario[] | ((prev: ArchivoUsuario[]) => ArchivoUsuario[])) => {
+    setDataState(prev => ({
+      ...prev,
+      archivos: typeof val === 'function' ? (val as Function)(prev.archivos) : val
+    }));
+  };
+  const setSelectedCarpetaId = (val: string | ((prev: string) => string)) => {
+    setDataState(prev => ({
+      ...prev,
+      selectedCarpetaId: typeof val === 'function' ? (val as Function)(prev.selectedCarpetaId) : val
+    }));
+  };
+  const setLoadingCandidatos = (val: boolean | ((prev: boolean) => boolean)) => {
+    setDataState(prev => ({
+      ...prev,
+      loadingCandidatos: typeof val === 'function' ? (val as Function)(prev.loadingCandidatos) : val
+    }));
+  };
+  const setLoadingCarpetas = (val: boolean | ((prev: boolean) => boolean)) => {
+    setDataState(prev => ({
+      ...prev,
+      loadingCarpetas: typeof val === 'function' ? (val as Function)(prev.loadingCarpetas) : val
+    }));
+  };
+  const setLoadingArchivos = (val: boolean | ((prev: boolean) => boolean)) => {
+    setDataState(prev => ({
+      ...prev,
+      loadingArchivos: typeof val === 'function' ? (val as Function)(prev.loadingArchivos) : val
+    }));
+  };
 
   // Dialogs
   const [isCarpetaFormOpen, setIsCarpetaFormOpen] = useState(false);
@@ -95,28 +134,32 @@ export default function AdminArchivosCandidatoPage() {
   useEffect(() => {
     if (!token || !selectedCandidatoId) return;
     const load = async () => {
-      setLoadingCarpetas(true);
-      setLoadingArchivos(true);
-      setCarpetas([]);
-      setArchivos([]);
-      setSelectedCarpetaId(NO_FOLDER);
+      setDataState(prev => ({
+        ...prev,
+        loadingCarpetas: true,
+        loadingArchivos: true,
+        carpetas: [],
+        archivos: [],
+        selectedCarpetaId: NO_FOLDER
+      }));
 
       const [carpRes, archRes] = await Promise.all([
         getCarpetasUsuario(selectedCandidatoId, token),
         getArchivosUsuario(selectedCandidatoId, null, token),
       ]);
-      if (carpRes?.isSuccess && carpRes.data) {
-        setCarpetas(carpRes.data);
-      } else if (carpRes && !carpRes.isSuccess) {
+      setDataState(prev => ({
+        ...prev,
+        carpetas: carpRes?.isSuccess && carpRes.data ? carpRes.data : prev.carpetas,
+        archivos: archRes?.isSuccess && archRes.data ? archRes.data : prev.archivos,
+        loadingCarpetas: false,
+        loadingArchivos: false
+      }));
+      if (carpRes && !carpRes.isSuccess) {
         toast.error("Error al cargar las carpetas");
       }
-      if (archRes?.isSuccess && archRes.data) {
-        setArchivos(archRes.data);
-      } else if (archRes && !archRes.isSuccess) {
+      if (archRes && !archRes.isSuccess) {
         toast.error("Error al cargar los archivos");
       }
-      setLoadingCarpetas(false);
-      setLoadingArchivos(false);
     };
     load();
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -314,12 +357,12 @@ export default function AdminArchivosCandidatoPage() {
 
       {/* Candidato selector */}
       <Card className="mb-6 p-6">
-        <h2 className="text-sm font-semibold text-zinc-700 mb-3">
+        <h2 className="text-sm font-semibold text-slate-700 mb-3">
           Seleccionar Candidato
         </h2>
         <div className="flex flex-col lg:flex-row gap-4">
           <div className="relative flex-1">
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 size-4 text-zinc-400" />
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 size-4 text-slate-400" />
             <Input
               type="text"
               placeholder="Buscar candidato..."
@@ -351,7 +394,7 @@ export default function AdminArchivosCandidatoPage() {
           </Select>
         </div>
         {selectedCandidato && (
-          <p className="text-sm text-zinc-500 mt-2">
+          <p className="text-sm text-slate-500 mt-2">
             Email:{" "}
             <span className="font-medium">{selectedCandidato.email}</span>
             {" · "}Estado:{" "}
@@ -369,15 +412,14 @@ export default function AdminArchivosCandidatoPage() {
                 <FolderOpen className="size-5 text-yellow-600" />
                 Carpetas
               </h2>
-              <Button
+              <PremiumButton
                 size="sm"
                 variant="outline"
                 onClick={handleCreateCarpeta}
-                className="flex items-center gap-2"
+                icon={<Plus />}
               >
-                <Plus className="size-4" />
                 Nueva Carpeta
-              </Button>
+              </PremiumButton>
             </div>
             <Card className="overflow-hidden">
               <CarpetasCandidatoTable
@@ -396,20 +438,19 @@ export default function AdminArchivosCandidatoPage() {
                 <FileText className="size-5 text-blue-600" />
                 Archivos
               </h2>
-              <Button
+              <PremiumButton
                 size="sm"
                 onClick={() => setIsUploadOpen(true)}
-                className="flex items-center gap-2"
+                icon={<Upload />}
               >
-                <Upload className="size-4" />
                 Subir Archivo
-              </Button>
+              </PremiumButton>
             </div>
 
             {/* Folder filter */}
             <Card className="mb-3 p-4">
               <div className="flex items-center gap-3">
-                <FolderOpen className="size-4 text-zinc-400 shrink-0" />
+                <FolderOpen className="size-4 text-slate-400 shrink-0" />
                 <Select
                   value={selectedCarpetaId}
                   onValueChange={handleCarpetaFilterChange}

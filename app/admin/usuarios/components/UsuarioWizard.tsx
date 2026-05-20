@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
@@ -245,21 +245,21 @@ export default function UsuarioWizard({
 
   const renderStepIndicator = () => (
     <div className="flex items-center justify-center mb-8">
-      {Array.from({ length: totalSteps }, (_, i) => (
-        <div key={i} className="flex items-center">
+      {Array.from({ length: totalSteps }, (_, i) => ({ id: `step-${i + 1}`, num: i + 1 })).map((step) => (
+        <div key={step.id} className="flex items-center">
           <div
             className={`size-8 rounded-full flex items-center justify-center text-sm font-medium ${
-              i + 1 <= currentStep
+              step.num <= currentStep
                 ? "bg-primary text-white"
-                : "bg-zinc-200 text-zinc-600"
+                : "bg-zinc-200 text-slate-600"
             }`}
           >
-            {i + 1 <= currentStep ? <Check className="size-4" /> : i + 1}
+            {step.num <= currentStep ? <Check className="size-4" /> : step.num}
           </div>
-          {i < totalSteps - 1 && (
+          {step.num <= totalSteps - 1 && (
             <div
               className={`w-12 h-0.5 mx-2 ${
-                i + 1 < currentStep ? "bg-primary" : "bg-zinc-200"
+                step.num < currentStep ? "bg-primary" : "bg-zinc-200"
               }`}
             />
           )}
@@ -272,7 +272,7 @@ export default function UsuarioWizard({
     <div className="space-y-6">
       <div className="text-center">
         <h3 className="text-lg font-semibold mb-2">¿Qué tipo de usuario deseas crear?</h3>
-        <p className="text-zinc-600">Selecciona el tipo de cuenta que mejor se ajuste a tus necesidades</p>
+        <p className="text-slate-600">Selecciona el tipo de cuenta que mejor se ajuste a tus necesidades</p>
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
@@ -285,7 +285,7 @@ export default function UsuarioWizard({
           <CardContent className="p-6 text-center">
             <User className="size-12 mx-auto mb-4 text-blue-600" />
             <h4 className="font-semibold mb-2">Postulante</h4>
-            <p className="text-sm text-zinc-600">
+            <p className="text-sm text-slate-600">
               Para personas que buscan empleo y oportunidades laborales
             </p>
           </CardContent>
@@ -300,7 +300,7 @@ export default function UsuarioWizard({
           <CardContent className="p-6 text-center">
             <Building2 className="size-12 mx-auto mb-4 text-green-600" />
             <h4 className="font-semibold mb-2">Empresa</h4>
-            <p className="text-sm text-zinc-600">
+            <p className="text-sm text-slate-600">
               Para empresas que buscan publicar ofertas de trabajo
             </p>
           </CardContent>
@@ -527,7 +527,7 @@ export default function UsuarioWizard({
                         onClick={() => setShowPassword(!showPassword)}
                         title={showPassword ? "Ocultar contraseña" : "Mostrar contraseña"}
                       >
-                        <Eye className="size-4 text-zinc-400" />
+                        <Eye className="size-4 text-slate-400" />
                       </button>
                     </div>
                   </FormControl>
@@ -975,7 +975,7 @@ export default function UsuarioWizard({
                       onClick={() => setShowPassword(!showPassword)}
                       title={showPassword ? "Ocultar contraseña" : "Mostrar contraseña"}
                     >
-                      <Eye className="size-4 text-zinc-400" />
+                      <Eye className="size-4 text-slate-400" />
                     </button>
                   </div>
                 </FormControl>

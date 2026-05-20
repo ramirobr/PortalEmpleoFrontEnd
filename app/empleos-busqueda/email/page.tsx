@@ -12,12 +12,12 @@ type Props = {
 };
 
 export default async function PasanteEmailPage({ searchParams }: Props) {
-  const session = await auth();
-  const [params, filtersItems] = await Promise.all([
+  const [session, params, filtersItems] = await Promise.all([
+    auth(),
     searchParams,
     fetchFilters(),
   ]);
-  
+
   const role = params.role;
   const filters: Record<string, string> = {
     page: params.page ?? "1",
@@ -43,17 +43,21 @@ export default async function PasanteEmailPage({ searchParams }: Props) {
       <MainLayout>
         <div className="mx-auto">
           <Banner title="Ofertas de Empleo" />
-          <section className="container py-20">
+          <section className="container py-10">
             <div className="mb-8">
-              <h1 className="text-3xl font-semibold text-zinc-900 mb-2">
-                {role === "pasante" ? "Empleos para Pasantes" : 
-                 role === "horas" ? "Trabajo por Horas" : 
-                 "Búsqueda de Empleos"}
+              <h1 className="text-3xl font-semibold text-slate-900 mb-2">
+                {role === "pasante"
+                  ? "Empleos para Pasantes"
+                  : role === "horas"
+                    ? "Trabajo por Horas"
+                    : "Búsqueda de Empleos"}
               </h1>
-              <p className="text-zinc-600">
-                {role === "pasante" ? "Encuentra las mejores oportunidades para iniciar tu carrera profesional." : 
-                 role === "horas" ? "Oportunidades flexibles ajustadas a tu tiempo." : 
-                 "Explora todas nuestras vacantes disponibles."}
+              <p className="text-slate-600">
+                {role === "pasante"
+                  ? "Encuentra las mejores oportunidades para iniciar tu carrera profesional."
+                  : role === "horas"
+                    ? "Oportunidades flexibles ajustadas a tu tiempo."
+                    : "Explora todas nuestras vacantes disponibles."}
               </p>
             </div>
 

@@ -1,4 +1,4 @@
-import MainLayout from "@/components/shared/layout/MainLayout";
+﻿import MainLayout from "@/components/shared/layout/MainLayout";
 import Footer from "@/components/shared/components/Footer";
 
 export const metadata = {
@@ -10,8 +10,8 @@ export const metadata = {
 function Section({ title, children }: { title: string; children: React.ReactNode }) {
   return (
     <section className="mb-8">
-      <h2 className="text-xl font-semibold text-zinc-900 mb-3">{title}</h2>
-      <div className="text-zinc-600 leading-relaxed space-y-3">{children}</div>
+      <h2 className="text-xl font-semibold text-slate-900 mb-3">{title}</h2>
+      <div className="text-slate-600 leading-relaxed space-y-3">{children}</div>
     </section>
   );
 }
@@ -22,7 +22,7 @@ function CookieTable({ rows }: { rows: CookieRow[] }) {
   return (
     <div className="overflow-x-auto rounded-xl border border-zinc-200 mt-4">
       <table className="w-full text-sm text-left">
-        <thead className="bg-zinc-50 text-zinc-700 font-semibold">
+        <thead className="bg-zinc-50 text-slate-700 font-semibold">
           <tr>
             <th className="px-4 py-3">Nombre</th>
             <th className="px-4 py-3">Tipo</th>
@@ -59,7 +59,7 @@ export default function CookiesPage() {
         </div>
 
         <div className="container py-12 max-w-3xl">
-          <p className="text-sm text-zinc-400 mb-8">Última actualización: enero 2025</p>
+          <p className="text-sm text-slate-400 mb-8">Última actualización: enero 2025</p>
 
           <Section title="¿Qué son las cookies?">
             <p>
@@ -72,7 +72,7 @@ export default function CookiesPage() {
           <Section title="Cookies que utilizamos">
             <p>Portal Empleo utiliza los siguientes tipos de cookies:</p>
 
-            <h3 className="font-semibold text-zinc-800 mt-4 mb-1">Cookies estrictamente necesarias</h3>
+            <h3 className="font-semibold text-slate-800 mt-4 mb-1">Cookies estrictamente necesarias</h3>
             <p>
               Son imprescindibles para el funcionamiento del Portal. Sin ellas no podrías
               navegar ni usar funciones básicas como iniciar sesión.
@@ -94,7 +94,7 @@ export default function CookiesPage() {
               ]}
             />
 
-            <h3 className="font-semibold text-zinc-800 mt-6 mb-1">Cookies de preferencias</h3>
+            <h3 className="font-semibold text-slate-800 mt-6 mb-1">Cookies de preferencias</h3>
             <p>
               Permiten que el Portal recuerde información que cambia el aspecto o el
               comportamiento del sitio, como tu idioma preferido.
@@ -110,7 +110,7 @@ export default function CookiesPage() {
               ]}
             />
 
-            <h3 className="font-semibold text-zinc-800 mt-6 mb-1">Cookies analíticas</h3>
+            <h3 className="font-semibold text-slate-800 mt-6 mb-1">Cookies analíticas</h3>
             <p>
               Nos ayudan a entender cómo los visitantes interactúan con el Portal, lo que nos
               permite mejorar su funcionamiento. Los datos se recopilan de forma anónima y
@@ -168,7 +168,7 @@ export default function CookiesPage() {
             </p>
           </Section>
 
-          <p className="text-sm text-zinc-400 mt-10">
+          <p className="text-sm text-slate-400 mt-10">
             Para consultas sobre el uso de cookies escríbenos a{" "}
             <a href="mailto:privacidad@portalempleo.ec" className="text-primary underline">
               privacidad@portalempleo.ec

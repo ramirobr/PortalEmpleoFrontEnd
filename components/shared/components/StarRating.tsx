@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { Star } from "lucide-react";
 import { cn } from "@/lib/utils";
@@ -45,7 +45,7 @@ export function StarRating({
               "shrink-0 transition-colors duration-300",
               isFilled 
                 ? "text-functional-label-star fill-functional-label-star" 
-                : "text-zinc-200 fill-none",
+                : "text-slate-200 fill-none",
               starClassName
             )}
             aria-hidden="true"

@@ -1,8 +1,8 @@
-
+﻿
 
 @layer base {
   body {
-    @apply bg-white text-zinc-500 font-primary;
+    @apply bg-white text-slate-500 font-primary;
   }
 
   .container {

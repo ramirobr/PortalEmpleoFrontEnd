@@ -49,9 +49,9 @@ export default function CompanyAsideMenu({
 
     if (path === "/") {
       isActive = pathname === "/";
-    } else if (path === "/empresa-profile" || path === "/empresa-profile/") {
+    } else if (path === "/empresa-perfil" || path === "/empresa-perfil/") {
       isActive =
-        pathname === "/empresa-profile" || pathname === "/empresa-profile/";
+        pathname === "/empresa-perfil" || pathname === "/empresa-perfil/";
     } else {
       isActive = pathname.startsWith(path);
     }
@@ -108,9 +108,9 @@ export default function CompanyAsideMenu({
         <div className="flex flex-col items-center py-15  h-full">
           <nav className="flex-1 w-full">
             <ul className="space-y-2">
-              <li id="Home" className={getLinkClass(session ? "/empresa-profile" : "/")}>
+              <li id="Home" className={getLinkClass(session ? "/empresa-perfil" : "/")}>
                 <Link
-                  href={session ? "/empresa-profile" : "/"}
+                  href={session ? "/empresa-perfil" : "/"}
                   className="flex items-center w-full h-full"
                   onClick={onClose}
                 >
@@ -131,10 +131,10 @@ export default function CompanyAsideMenu({
                 <>
                   <li
                     id="dashboard"
-                    className={getLinkClass("/empresa-profile")}
+                    className={getLinkClass("/empresa-perfil")}
                   >
                     <Link
-                      href="/empresa-profile/"
+                      href="/empresa-perfil/"
                       className="flex items-center w-full h-full"
                       onClick={onClose}
                     >
@@ -144,10 +144,10 @@ export default function CompanyAsideMenu({
                   </li>
                   <li
                     id="crear-empleo"
-                    className={getLinkClass("/empresa-profile/crear-empleo")}
+                    className={getLinkClass("/empresa-perfil/crear-empleo")}
                   >
                     <Link
-                      href="/empresa-profile/crear-empleo"
+                      href="/empresa-perfil/crear-empleo"
                       className="flex items-center w-full h-full"
                       onClick={onClose}
                     >
@@ -164,10 +164,10 @@ export default function CompanyAsideMenu({
                   </li>
                   <li
                     id="ofertas"
-                    className={getLinkClass("/empresa-profile/ofertas")}
+                    className={getLinkClass("/empresa-perfil/ofertas")}
                   >
                     <Link
-                      href="/empresa-profile/ofertas"
+                      href="/empresa-perfil/ofertas"
                       className="flex items-center w-full h-full"
                       onClick={onClose}
                     >
@@ -184,10 +184,10 @@ export default function CompanyAsideMenu({
                   </li>
                   <li
                     id="postulaciones"
-                    className={getLinkClass("/empresa-profile/postulaciones")}
+                    className={getLinkClass("/empresa-perfil/postulaciones")}
                   >
                     <Link
-                      href="/empresa-profile/postulaciones"
+                      href="/empresa-perfil/postulaciones"
                       className="flex items-center w-full h-full"
                       onClick={onClose}
                     >
@@ -205,11 +205,11 @@ export default function CompanyAsideMenu({
                   <li
                     id="buscar-candidatos"
                     className={getLinkClass(
-                      "/empresa-profile/buscar-candidatos",
+                      "/empresa-perfil/buscar-candidatos",
                     )}
                   >
                     <Link
-                      href="/empresa-profile/buscar-candidatos"
+                      href="/empresa-perfil/buscar-candidatos"
                       className="flex items-center w-full h-full"
                       onClick={onClose}
                     >
@@ -226,10 +226,10 @@ export default function CompanyAsideMenu({
                   </li>
                   <li
                     id="configuracion"
-                    className={getLinkClass("/empresa-profile/configuracion")}
+                    className={getLinkClass("/empresa-perfil/configuracion")}
                   >
                     <Link
-                      href="/empresa-profile/configuracion"
+                      href="/empresa-perfil/configuracion"
                       className="flex items-center w-full h-full"
                       onClick={onClose}
                     >

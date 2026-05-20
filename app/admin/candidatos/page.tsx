@@ -19,8 +19,19 @@ import TablePagination from "@/components/shared/components/TablePagination";
 
 export default function AdminCandidatosPage() {
   const { data: session } = useSession();
-  const [candidatos, setCandidatos] = useState<AdminCandidato[]>([]);
-  const [loading, setLoading] = useState(true);
+  const [dataState, setDataState] = useState({
+    candidatos: [] as AdminCandidato[],
+    loading: true,
+  });
+  const { candidatos, loading } = dataState;
+
+  const setCandidatos = (val: AdminCandidato[] | ((prev: AdminCandidato[]) => AdminCandidato[])) => {
+    setDataState(prev => ({
+      ...prev,
+      candidatos: typeof val === 'function' ? (val as Function)(prev.candidatos) : val
+    }));
+  };
+
   const [search, setSearch] = useState("");
   const [estadoFilter, setEstadoFilter] = useState("todos");
   const [currentPage, setCurrentPage] = useState(1);
@@ -31,13 +42,15 @@ export default function AdminCandidatosPage() {
     let cancelled = false;
     let timerId: ReturnType<typeof setTimeout>;
     const fetchCandidatos = async () => {
-      setLoading(true);
+      setDataState((prev) => ({ ...prev, loading: true }));
       await new Promise<void>((resolve) => {
         timerId = setTimeout(resolve, 500);
       });
       if (cancelled) return;
-      setCandidatos(mockCandidatos);
-      setLoading(false);
+      setDataState({
+        candidatos: mockCandidatos,
+        loading: false,
+      });
     };
 
     fetchCandidatos();
@@ -112,7 +125,7 @@ export default function AdminCandidatosPage() {
         <div className="flex flex-col lg:flex-row gap-4">
           {/* Search */}
           <div className="relative flex-1">
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 size-4 text-zinc-400" />
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 size-4 text-slate-400" />
             <Input
               type="text"
               placeholder="Buscar por nombre o email..."

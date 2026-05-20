@@ -1,4 +1,4 @@
-import React from "react";
+﻿import React from "react";
 import { cn } from "@/lib/utils";
 
 interface StatusBadgeProps {
@@ -36,7 +36,7 @@ const statusConfig: Record<string, { styles: string; label: string }> = {
     label: "Rechazado",
   },
   expirado: {
-    styles: "bg-zinc-100 text-zinc-600 border-zinc-200",
+    styles: "bg-zinc-100 text-slate-600 border-zinc-200",
     label: "Expirado",
   },
   activa: {
@@ -44,7 +44,7 @@ const statusConfig: Record<string, { styles: string; label: string }> = {
     label: "Activa",
   },
   preseleccionado: {
-    styles: "bg-zinc-100 text-zinc-700 border-zinc-200",
+    styles: "bg-zinc-100 text-slate-700 border-zinc-200",
     label: "Preseleccionado",
   },
 };
@@ -56,7 +56,7 @@ export function StatusBadge({ status, className }: StatusBadgeProps) {
   const config = Object.entries(statusConfig).find(([key]) => 
     normalized.includes(key)
   )?.[1] || {
-    styles: "bg-zinc-50 text-zinc-600 border-zinc-100",
+    styles: "bg-zinc-50 text-slate-600 border-zinc-100",
     label: status,
   };
 

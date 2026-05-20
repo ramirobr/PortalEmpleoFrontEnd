@@ -1,4 +1,4 @@
-import React from "react";
+﻿import React from "react";
 import Image from "next/image";
 import Link from "next/link";
 
@@ -6,7 +6,7 @@ const Jumbo = () => {
   return (
     <section className="relative w-full min-h-[600px] h-[75vh] flex flex-col items-center justify-center px-4 py-16">
       <div className="absolute inset-0 w-full h-full z-0">
-        <Image src="/jumbo.jpg" alt="" fill className="object-cover" priority />
+        <Image src="/jumbo.jpg" alt="" fill sizes="100vw" className="object-cover" priority />
         <div className="absolute inset-0 bg-zinc-950/40" />
       </div>
       <div className="container relative z-10 mx-auto max-w-5xl px-4 text-center">

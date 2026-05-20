@@ -35,7 +35,7 @@ import {
 import { MessageSquare, Search, Star } from "lucide-react";
 import { useSession } from "next-auth/react";
 import { useRouter, useSearchParams } from "next/navigation";
-import { useEffect, useState, useTransition } from "react";
+import { useEffect, useState, useTransition, useRef } from "react";
 import { toast } from "sonner";
 import TestimoniosTable from "./TestimoniosTable";
 
@@ -50,7 +50,7 @@ export default function AdminTestimoniosClient({
 }: AdminTestimoniosClientProps) {
   const { data: session } = useSession();
   const [, startTransition] = useTransition();
-  const router = useRouter();
+  const { push } = useRouter();
   const params = useSearchParams();
 
   const currentPage = parseInt(params.get("page") || "1");
@@ -59,13 +59,22 @@ export default function AdminTestimoniosClient({
   const estadoFilter = params.get("estado") || "todos";
   const calificacionFilter = params.get("calificacion") || "todas";
 
-  const [testimonios, setTestimonios] = useState<TestimonialData[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [totalItems, setTotalItems] = useState(0);
+  const [dataState, setDataState] = useState({
+    testimonios: [] as TestimonialData[],
+    loading: true,
+    totalItems: 0,
+  });
+  const { testimonios, loading, totalItems } = dataState;
   const [refetchTrigger, setRefetchTrigger] = useState(0);
+  const prevInitialCountersRef = useRef(initialCounters);
   const [counters, setCounters] = useState<TestimonialCounters | undefined>(
     initialCounters,
   );
+
+  if (initialCounters !== prevInitialCountersRef.current) {
+    prevInitialCountersRef.current = initialCounters;
+    setCounters(initialCounters);
+  }
 
   const [selectedTestimonio, setSelectedTestimonio] =
     useState<TestimonialData | null>(null);
@@ -86,7 +95,7 @@ export default function AdminTestimoniosClient({
 
   useEffect(() => {
     const fetchData = async () => {
-      setLoading(true);
+      setDataState((prev) => ({ ...prev, loading: true }));
       try {
         const response = await fetchApi<AdminTestimonialsResponse>(
           "/Testimonial/getAll",
@@ -109,13 +118,17 @@ export default function AdminTestimoniosClient({
           },
         );
         if (response) {
-          setTestimonios(response.data.data);
-          setTotalItems(response.data.totalItems);
+          setDataState({
+            testimonios: response.data.data,
+            totalItems: response.data.totalItems,
+            loading: false,
+          });
+        } else {
+          setDataState((prev) => ({ ...prev, loading: false }));
         }
       } catch (error) {
         console.error("Error fetching testimonials:", error);
-      } finally {
-        setLoading(false);
+        setDataState((prev) => ({ ...prev, loading: false }));
       }
     };
 
@@ -140,7 +153,7 @@ export default function AdminTestimoniosClient({
           newParams.delete(key);
         }
       });
-      router.push(`?${newParams.toString()}`, { scroll: false });
+      push(`?${newParams.toString()}`, { scroll: false });
     });
   };
 
@@ -215,7 +228,7 @@ export default function AdminTestimoniosClient({
             className={`size-5 ${
               star <= rating
                 ? "fill-yellow-400 text-yellow-400"
-                : "fill-zinc-200 text-zinc-200"
+                : "fill-zinc-200 text-slate-200"
             }`}
           />
         ))}
@@ -233,28 +246,28 @@ export default function AdminTestimoniosClient({
       {/* Stats Cards */}
       <div className="grid grid-cols-2 lg:grid-cols-5 gap-4 mb-6">
         <Card className="p-4 text-center">
-          <p className="text-2xl font-bold text-zinc-900">
+          <p className="text-2xl font-bold text-slate-900">
             {counters?.totalTestimonios}
           </p>
-          <p className="text-sm text-zinc-500">Total</p>
+          <p className="text-sm text-slate-500">Total</p>
         </Card>
         <Card className="p-4 text-center">
           <p className="text-2xl font-bold text-green-600">
             {counters?.totalTestimoniosPublicados}
           </p>
-          <p className="text-sm text-zinc-500">Aprobados</p>
+          <p className="text-sm text-slate-500">Aprobados</p>
         </Card>
         <Card className="p-4 text-center">
           <p className="text-2xl font-bold text-yellow-600">
             {counters?.totalTestimoniosEnRevision}
           </p>
-          <p className="text-sm text-zinc-500">Pendientes</p>
+          <p className="text-sm text-slate-500">Pendientes</p>
         </Card>
         <Card className="p-4 text-center">
           <p className="text-2xl font-bold text-red-600">
             {counters?.totalTestimoniosRechazados}
           </p>
-          <p className="text-sm text-zinc-500">Rechazados</p>
+          <p className="text-sm text-slate-500">Rechazados</p>
         </Card>
         <Card className="p-4 text-center">
           <div className="flex items-center justify-center gap-1">
@@ -263,7 +276,7 @@ export default function AdminTestimoniosClient({
             </p>
             <Star className="size-5 fill-yellow-400 text-yellow-400" />
           </div>
-          <p className="text-sm text-zinc-500">Promedio</p>
+          <p className="text-sm text-slate-500">Promedio</p>
         </Card>
       </div>
 
@@ -271,14 +284,12 @@ export default function AdminTestimoniosClient({
         <div className="flex flex-col lg:flex-row gap-4">
           <form
             className="relative flex-1"
-            onSubmit={(e) => {
-              e.preventDefault();
-              const formData = new FormData(e.currentTarget);
+            action={(formData) => {
               const search = formData.get("search") as string;
               updateParams({ search, page: "1" });
             }}
           >
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 size-4 text-zinc-400" />
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 size-4 text-slate-400" />
             <Input
               name="search"
               type="text"
@@ -379,30 +390,30 @@ export default function AdminTestimoniosClient({
                   </AvatarFallback>
                 </Avatar>
                 <div>
-                  <h3 className="font-semibold text-zinc-900">
+                  <h3 className="font-semibold text-slate-900">
                     {selectedTestimonio.candidato.nombreCompleto}
                   </h3>
-                  <p className="text-sm text-zinc-600">
+                  <p className="text-sm text-slate-600">
                     {selectedTestimonio.cargo} en {selectedTestimonio.empresa}
                   </p>
-                  <p className="text-xs text-zinc-400">
+                  <p className="text-xs text-slate-400">
                     {selectedTestimonio.candidato.email}
                   </p>
                 </div>
               </div>
 
               <div className="flex items-center gap-2">
-                <span className="text-sm text-zinc-600">Calificación:</span>
+                <span className="text-sm text-slate-600">Calificación:</span>
                 {renderStars(selectedTestimonio.calificacion)}
               </div>
 
               <div className="bg-zinc-50 rounded-lg p-4">
-                <p className="text-zinc-700 italic">
+                <p className="text-slate-700 italic">
                   &quot;{selectedTestimonio.testimonioDetalle}&quot;
                 </p>
               </div>
 
-              <div className="flex justify-between text-sm text-zinc-500 pt-2 border-t">
+              <div className="flex justify-between text-sm text-slate-500 pt-2 border-t">
                 <span>
                   Fecha: {formatDate(selectedTestimonio.fechaCreacion)}
                 </span>

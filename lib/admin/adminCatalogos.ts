@@ -87,7 +87,7 @@ export async function deleteCatalogo(
  * Extract unique catalog types from a catalog list
  */
 export function getCatalogTypes(catalogs: AdminCatalogo[]): string[] {
-  return [...new Set(catalogs.map((c) => c.tipoCatalogo))].sort();
+  return [...new Set(catalogs.map((c) => c.tipoCatalogo))].toSorted();
 }
 
 /**

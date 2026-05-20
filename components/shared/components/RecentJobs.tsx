@@ -1,6 +1,6 @@
 "use client";
 import { RecentJob } from "@/types/jobs";
-import JobCard from "@/app/jobs/components/JobCard";
+import JobCard from "@/app/empleos/components/JobCard";
 
 export type RecentJobsProps = {
   jobs?: RecentJob[];

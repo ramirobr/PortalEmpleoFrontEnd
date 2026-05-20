@@ -1,4 +1,4 @@
-import React from "react";
+﻿import React from "react";
 import { cn } from "@/lib/utils";
 
 interface SkillPillProps {
@@ -11,7 +11,7 @@ export function SkillPill({ skill, className, variant = "outline" }: SkillPillPr
   const variants = {
     primary: "bg-primary/10 text-primary border-primary/20",
     secondary: "bg-secondary/10 text-secondary border-secondary/20",
-    outline: "bg-zinc-50 text-zinc-700 border-zinc-200 hover:border-primary/30 hover:bg-white transition-all",
+    outline: "bg-zinc-50 text-slate-700 border-zinc-200 hover:border-primary/30 hover:bg-white transition-all",
   };
 
   return (

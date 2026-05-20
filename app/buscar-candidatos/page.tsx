@@ -1,5 +1,5 @@
 import { Suspense } from "react";
-import CandidatesContent from "../empresa-profile/buscar-candidatos/components/CandidatesContent";
+import CandidatesContent from "../empresa-perfil/buscar-candidatos/components/CandidatesContent";
 import MainLayout from "@/components/shared/layout/MainLayout";
 
 type Props = {
@@ -29,10 +29,10 @@ export default async function BuscarCandidatosPublicPage({ searchParams }: Props
     <MainLayout>
       <div className="container mx-auto py-8">
         <div className="mb-8">
-          <h1 className="text-3xl font-semibold text-zinc-900 mb-2">
+          <h1 className="text-3xl font-semibold text-slate-900 mb-2">
             Encuentra tu Equipo Ideal
           </h1>
-          <p className="text-zinc-600">
+          <p className="text-slate-600">
             Explora el talento disponible y encuentra al candidato perfecto para tu empresa
           </p>
         </div>

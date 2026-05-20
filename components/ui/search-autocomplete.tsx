@@ -27,6 +27,10 @@ type Props<T extends string | number> = {
   searchPlaceholder?: string; // Kept for backward compatibility
   className?: string;
   disabled?: boolean;
+  id?: string;
+  name?: string;
+  "aria-label"?: string;
+  "aria-labelledby"?: string;
 };
 
 export function SearchAutocomplete<T extends string | number>({
@@ -37,6 +41,10 @@ export function SearchAutocomplete<T extends string | number>({
   searchPlaceholder,
   className,
   disabled,
+  id,
+  name,
+  "aria-label": ariaLabel,
+  "aria-labelledby": ariaLabelledby,
 }: Props<T>) {
   const [open, setOpen] = React.useState(false);
   const [inputValue, setInputValue] = React.useState("");
@@ -73,12 +81,11 @@ export function SearchAutocomplete<T extends string | number>({
   const handleClear = (e: React.MouseEvent) => {
     e.stopPropagation();
     setInputValue("");
-    // We don't have a 'null' or 'undefined' in the type T, 
-    // but usually these are IDs. If it's a number, 0 might be invalid.
-    // To be safe, we only allow clearing if T allows it or we pass a generic type.
-    // For now, we'll just open the list.
     setOpen(true);
   };
+
+  const uniqueId = React.useId();
+  const listboxId = `${id || uniqueId}-listbox`;
 
   return (
     <div className={cn("relative w-full", className)}>
@@ -86,6 +93,13 @@ export function SearchAutocomplete<T extends string | number>({
         <PopoverTrigger asChild>
           <div className="relative w-full group">
             <Input
+              id={id || uniqueId}
+              name={name}
+              aria-label={ariaLabel}
+              aria-labelledby={ariaLabelledby}
+              role="combobox"
+              aria-expanded={open}
+              aria-controls={open ? listboxId : undefined}
               disabled={disabled}
               placeholder={displayPlaceholder}
               value={inputValue}
@@ -102,6 +116,7 @@ export function SearchAutocomplete<T extends string | number>({
                   type="button"
                   onClick={handleClear}
                   className="p-1 hover:bg-zinc-100 rounded-full text-gray-dark transition-colors"
+                  aria-label="Limpiar selección"
                 >
                   <X className="size-3.5 opacity-50" />
                 </button>
@@ -116,7 +131,7 @@ export function SearchAutocomplete<T extends string | number>({
           onOpenAutoFocus={(e) => e.preventDefault()}
         >
           <Command className="w-full" shouldFilter={false}>
-            <CommandList className="max-h-[300px]">
+            <CommandList id={listboxId} className="max-h-[300px]">
               <CommandEmpty className="py-6 text-center text-sm text-gray-dark">
                 Sin resultados.
               </CommandEmpty>

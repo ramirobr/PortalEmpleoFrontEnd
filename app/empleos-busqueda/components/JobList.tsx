@@ -1,5 +1,5 @@
 import { Job } from "@/types/jobs";
-import JobCard from "@/app/jobs/components/JobCard";
+import JobCard from "@/app/empleos/components/JobCard";
 
 interface Props {
   jobs: Job[];

@@ -1,5 +1,6 @@
 "use client";
 import Loader from "@/components/shared/components/Loader";
+import { Suspense } from "react";
 import { useJobs } from "../hooks/useJobs";
 import { JobList } from "./JobList";
 import { Pagination } from "./Pagination";
@@ -11,7 +12,7 @@ type Props = {
   initialFilters?: Record<string, string>;
 };
 
-export default function Search({ token, onToggleFilters, initialFilters }: Props) {
+function SearchInner({ token, onToggleFilters, initialFilters }: Props) {
   const { jobs, total, loading, pageSize } = useJobs(token, initialFilters);
 
   return (
@@ -28,5 +29,13 @@ export default function Search({ token, onToggleFilters, initialFilters }: Props
         </>
       )}
     </div>
+  );
+}
+
+export default function Search(props: Props) {
+  return (
+    <Suspense fallback={<div className="flex items-center justify-center min-h-[300px]"><Loader size={48} /></div>}>
+      <SearchInner {...props} />
+    </Suspense>
   );
 }

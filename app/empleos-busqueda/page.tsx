@@ -13,8 +13,8 @@ type Props = {
 };
 
 export default async function JobsPage({ searchParams }: Props) {
-  const session = await auth();
-  const [params, filtersItems] = await Promise.all([
+  const [session, params, filtersItems] = await Promise.all([
+    auth(),
     searchParams,
     fetchFilters(),
   ]);
@@ -34,7 +34,7 @@ export default async function JobsPage({ searchParams }: Props) {
     <div className="min-h-screen">
       <MainLayout>
         <div className="mx-auto">
-          <section className="container py-20">
+          <section className="container py-10">
             <Suspense>
               <JobsContent
                 initialFilters={filters as Record<string, string>}

@@ -11,10 +11,11 @@ const getNumericParam = (n: string | null | undefined) => {
 
 export function useJobs(token?: string, initialFilters?: Record<string, string>) {
   const searchParams = useSearchParams();
-  const [jobsData, setJobsData] = useState<GetAllJobsResponse["data"] | null>(
-    null
-  );
-  const [loading, setLoading] = useState(true);
+  const [state, setState] = useState({
+    jobsData: null as GetAllJobsResponse["data"] | null,
+    loading: true,
+  });
+  const { jobsData, loading } = state;
 
   const pageSize = Number(searchParams.get("pageSize") ?? initialFilters?.pageSize ?? 10);
   const currentPage = Number(searchParams.get("page") ?? initialFilters?.page ?? 1);
@@ -34,7 +35,7 @@ export function useJobs(token?: string, initialFilters?: Record<string, string>)
     const controller = new AbortController();
 
     async function load() {
-      setLoading(true);
+      setState((prev) => ({ ...prev, loading: true }));
 
       const params = {
         pageSize,
@@ -59,12 +60,16 @@ export function useJobs(token?: string, initialFilters?: Record<string, string>)
           token,
         });
         if (data?.isSuccess && data.data) {
-          setJobsData(data.data);
+          setState({
+            jobsData: data.data,
+            loading: false,
+          });
+        } else {
+          setState((prev) => ({ ...prev, loading: false }));
         }
       } catch (e: unknown) {
         if (e instanceof Error && e.name !== "AbortError") console.warn(e);
-      } finally {
-        setLoading(false);
+        setState((prev) => ({ ...prev, loading: false }));
       }
     }
 

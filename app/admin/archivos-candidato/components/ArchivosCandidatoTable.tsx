@@ -2,6 +2,7 @@
 
 import { ArchivoUsuario, CarpetaUsuario } from "@/types/admin";
 import { Download, MoveRight, Trash2, FileText } from "lucide-react";
+import { ActionButton } from "@/components/shared/components/ActionButton";
 import {
   AdminTableEmpty,
   AdminTableLoading,
@@ -21,6 +22,12 @@ function formatBytes(bytes?: number): string {
   if (bytes < 1024) return `${bytes} B`;
   if (bytes < 1024 * 1024) return `${(bytes / 1024).toFixed(1)} KB`;
   return `${(bytes / (1024 * 1024)).toFixed(1)} MB`;
+}
+
+
+function formatSimpleDate(dateStr?: string | Date) {
+  if (!dateStr) return "N/A";
+  return new Date(dateStr).toLocaleDateString("es-ES");
 }
 
 export default function ArchivosCandidatoTable({
@@ -54,25 +61,25 @@ export default function ArchivosCandidatoTable({
       <table className="w-full">
         <thead>
           <tr className="bg-zinc-50 border-b border-zinc-200">
-            <th className="text-left py-5 px-4 text-sm font-semibold text-zinc-500 uppercase tracking-wider">
+            <th className="text-left py-5 px-4 text-sm font-semibold text-slate-500 uppercase tracking-wider">
               Nombre
             </th>
-            <th className="text-left py-5 px-4 text-sm font-semibold text-zinc-500 uppercase tracking-wider">
+            <th className="text-left py-5 px-4 text-sm font-semibold text-slate-500 uppercase tracking-wider">
               Tipo
             </th>
-            <th className="text-center py-5 px-4 text-sm font-semibold text-zinc-500 uppercase tracking-wider">
+            <th className="text-center py-5 px-4 text-sm font-semibold text-slate-500 uppercase tracking-wider">
               Extensión
             </th>
-            <th className="text-center py-5 px-4 text-sm font-semibold text-zinc-500 uppercase tracking-wider">
+            <th className="text-center py-5 px-4 text-sm font-semibold text-slate-500 uppercase tracking-wider">
               Tamaño
             </th>
-            <th className="text-left py-5 px-4 text-sm font-semibold text-zinc-500 uppercase tracking-wider">
+            <th className="text-left py-5 px-4 text-sm font-semibold text-slate-500 uppercase tracking-wider">
               Carpeta
             </th>
-            <th className="text-left py-5 px-4 text-sm font-semibold text-zinc-500 uppercase tracking-wider">
+            <th className="text-left py-5 px-4 text-sm font-semibold text-slate-500 uppercase tracking-wider">
               Fecha
             </th>
-            <th className="text-center py-5 px-4 text-sm font-semibold text-zinc-500 uppercase tracking-wider">
+            <th className="text-center py-5 px-4 text-sm font-semibold text-slate-500 uppercase tracking-wider">
               Acciones
             </th>
           </tr>
@@ -88,7 +95,7 @@ export default function ArchivosCandidatoTable({
                   <div className="size-9 rounded-lg bg-blue-50 flex items-center justify-center shrink-0">
                     <FileText className="size-4 text-blue-600" />
                   </div>
-                  <p className="font-medium text-zinc-900 max-w-[200px] truncate">
+                  <p className="font-medium text-slate-900 max-w-[200px] truncate">
                     {archivo.nombreArchivo}
                   </p>
                 </div>
@@ -100,55 +107,50 @@ export default function ArchivosCandidatoTable({
               </td>
               <td className="p-4 text-center">
                 {archivo.extension ? (
-                  <span className="inline-flex items-center justify-center px-2.5 py-1 bg-zinc-100 text-zinc-700 rounded-full text-xs font-mono uppercase">
+                  <span className="inline-flex items-center justify-center px-2.5 py-1 bg-zinc-100 text-slate-700 rounded-full text-xs font-mono uppercase">
                     {archivo.extension.replace(".", "")}
                   </span>
                 ) : (
-                  <span className="text-zinc-400 text-sm">—</span>
+                  <span className="text-slate-400 text-sm">N/A</span>
                 )}
               </td>
               <td className="p-4 text-center">
-                <span className="text-sm text-zinc-600">
+                <span className="text-sm text-slate-600">
                   {formatBytes(archivo.tamanoBytes)}
                 </span>
               </td>
               <td className="p-4">
                 {archivo.idCarpetaUsuario ? (
-                  <span className="text-sm text-zinc-600">
+                  <span className="text-sm text-slate-600">
                     {carpetaMap[archivo.idCarpetaUsuario] ?? "Carpeta"}
                   </span>
                 ) : (
-                  <span className="text-zinc-400 text-sm">Raíz</span>
+                  <span className="text-slate-400 text-sm">Raíz</span>
                 )}
               </td>
               <td className="p-4">
-                <span className="text-sm text-zinc-600">
-                  {new Date(archivo.fechaCarga).toLocaleDateString("es-ES")}
+                <span className="text-sm text-slate-600" suppressHydrationWarning>
+                  {formatSimpleDate(archivo.fechaCarga)}
                 </span>
               </td>
               <td className="p-4">
                 <div className="flex items-center justify-center gap-2">
-                  <button
+                  <ActionButton
                     onClick={() => onDownload(archivo.idArchivoUsuario)}
-                    className="p-2 rounded-lg hover:bg-green-50 text-green-600 transition-colors"
+                    icon={<Download />}
                     title="Descargar archivo"
-                  >
-                    <Download className="size-4" />
-                  </button>
-                  <button
+                  />
+                  <ActionButton
                     onClick={() => onMover(archivo)}
-                    className="p-2 rounded-lg hover:bg-orange-50 text-orange-600 transition-colors"
+                    icon={<MoveRight />}
                     title="Mover archivo"
-                  >
-                    <MoveRight className="size-4" />
-                  </button>
-                  <button
+                  />
+                  <ActionButton
                     onClick={() => onDelete(archivo.idArchivoUsuario)}
-                    className="p-2 rounded-lg hover:bg-red-50 text-red-600 transition-colors"
+                    variant="danger"
+                    icon={<Trash2 />}
                     title="Eliminar archivo"
-                  >
-                    <Trash2 className="size-4" />
-                  </button>
+                  />
                 </div>
               </td>
             </tr>

@@ -8,8 +8,11 @@ import MainLayout from "@/components/shared/layout/MainLayout";
 import Footer from "@/components/shared/components/Footer";
 
 export default async function Home() {
-  const session = await auth();
-  const testimonials = (await fetchTestimonials()) ?? [];
+  const [session, testimonialsData] = await Promise.all([
+    auth(),
+    fetchTestimonials(),
+  ]);
+  const testimonials = testimonialsData ?? [];
 
   const categories = [
     {
@@ -48,29 +51,29 @@ export default async function Home() {
     <MainLayout>
       <main className="min-h-screen bg-background flex flex-col items-center font-body">
         {/* Hero Section */}
-        <section className="w-full max-w-7xl px-4 py-12 flex flex-col items-center text-center">
+        <section className="w-full container px-4 py-12 flex flex-col items-center text-center">
           {/* Tagline */}
           <p className="text-2xl lg:text-3xl lg:text-4xl font-display font-extrabold text-primary mb-3 leading-tight">
             Conectando empresas, empleadores y personas en busca de trabajo
           </p>
-          <p className="text-base lg:text-lg text-zinc-600 max-w-2xl mb-10 leading-relaxed">
+          <p className="text-base lg:text-lg text-slate-600 max-w-2xl mb-10 leading-relaxed">
             Encuentra el talento ideal para tu negocio o la oportunidad laboral
             que estás buscando
           </p>
 
-          <h1 className="text-4xl lg:text-5xl lg:text-6xl font-display font-semibold text-zinc-900 mb-6 tracking-tight">
+          <h1 className="text-4xl lg:text-5xl lg:text-6xl font-display font-semibold text-slate-900 mb-6 tracking-tight">
             ¿Qué estás buscando?
           </h1>
-          <p className="text-lg lg:text-xl text-zinc-500 max-w-2xl mb-16 leading-relaxed">
+          <p className="text-lg lg:text-xl text-slate-500 max-w-2xl mb-16 leading-relaxed">
             Selecciona el perfil que mejor te describa para personalizar tu
             experiencia.
           </p>
 
           {/* Categories Grid */}
           <div className="grid grid-cols-1 xl:grid-cols-3 lg:grid-cols-5 gap-6 w-full px-4 mb-12">
-            {categories.map((cat, index) => (
+            {categories.map((cat) => (
               <ProfileCard
-                key={index}
+                key={cat.title}
                 title={cat.title}
                 description={cat.description}
                 image={cat.image}
@@ -89,11 +92,11 @@ export default async function Home() {
           </Link>
         </section>
 
-        <section className="w-full bg-background py-16 sm:py-20 px-6">
-          <div className="max-w-7xl mx-auto bg-zinc-200 rounded-xl p-6 lg:p-14 shadow-sm border border-zinc-100 flex flex-col lg:flex-row gap-12 lg:gap-20 items-center">
+        <section className="container">
+          <div className="bg-zinc-200 rounded-xl p-6 lg:p-14 shadow-sm border border-zinc-100 flex flex-col lg:flex-row gap-12 lg:gap-20 items-center">
             {/* Left: Info */}
             <div className="flex-1 text-left">
-              <h2 className="text-3xl lg:text-4xl font-display font-semibold text-zinc-900 mb-8 tracking-tight">
+              <h2 className="text-3xl lg:text-4xl font-display font-semibold text-slate-900 mb-8 tracking-tight">
                 ¿Por qué elegir implica?
               </h2>
               <div className="space-y-6">
@@ -123,6 +126,7 @@ export default async function Home() {
                     src="/categories/why_choose_us.png"
                     alt="Futuristic Collaboration"
                     fill
+                    sizes="(max-width: 768px) 100vw, 50vw"
                     className="object-cover transition-transform duration-1000 hover:scale-105"
                   />
                 </div>
@@ -153,10 +157,10 @@ function BenefitItem({
         {icon}
       </div>
       <div>
-        <h4 className="text-xl font-semibold text-zinc-900 mb-2 transition-colors group-hover:text-primary">
+        <h4 className="text-xl font-semibold text-slate-900 mb-2 transition-colors group-hover:text-primary">
           {title}
         </h4>
-        <p className="text-zinc-500 leading-relaxed max-w-sm">{description}</p>
+        <p className="text-slate-500 leading-relaxed max-w-sm">{description}</p>
       </div>
     </div>
   );
@@ -180,17 +184,17 @@ function ProfileCard({
     >
       {/* Circle Container for Image */}
       <div className="relative size-32 mb-6 overflow-hidden rounded-full border-4 border-white shadow-md transition-transform duration-500 group-hover:scale-110">
-        <Image src={image} alt={title} fill className="object-cover" />
+        <Image src={image} alt={title} fill sizes="128px" className="object-cover" />
         {/* Subtle Overlay */}
         <div className="absolute inset-0 bg-primary/5 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
       </div>
 
       {/* Info */}
       <div className="flex flex-col items-center space-y-2">
-        <h3 className="text-lg font-semibold text-zinc-900 text-center leading-tight transition-colors group-hover:text-primary">
+        <h3 className="text-lg font-semibold text-slate-900 text-center leading-tight transition-colors group-hover:text-primary">
           {title}
         </h3>
-        <p className="text-sm font-medium text-zinc-600 text-center">
+        <p className="text-sm font-medium text-slate-600 text-center">
           {description}
         </p>
       </div>

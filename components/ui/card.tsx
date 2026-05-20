@@ -1,4 +1,4 @@
-import * as React from "react";
+﻿import * as React from "react";
 
 import { cn } from "@/lib/utils";
 
@@ -46,7 +46,7 @@ function CardDescription({ className, ...props }: React.ComponentProps<"div">) {
   return (
     <div
       data-slot="card-description"
-      className={cn("text-zinc-500 text-sm", className)}
+      className={cn("text-slate-500 text-sm", className)}
       {...props}
     />
   );

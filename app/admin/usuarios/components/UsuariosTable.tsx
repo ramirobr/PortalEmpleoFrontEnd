@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { AdminUsuario } from "@/types/admin";
 import {
@@ -11,6 +11,7 @@ import {
   User,
 } from "lucide-react";
 import Pill from "@/components/shared/components/Pill";
+import { ActionButton } from "@/components/shared/components/ActionButton";
 import {
   AdminTableEmpty,
   AdminTableLoading,
@@ -49,13 +50,13 @@ export default function UsuariosTable({
       case "activo":
         return "text-green-600 bg-green-50";
       case "inactivo":
-        return "text-zinc-600 bg-zinc-100";
+        return "text-slate-600 bg-zinc-100";
       case "suspendido":
         return "text-orange-600 bg-orange-50";
       case "pendiente":
         return "text-yellow-600 bg-amber-100";
       default:
-        return "text-zinc-600 bg-zinc-50";
+        return "text-slate-600 bg-zinc-50";
     }
   };
 
@@ -93,43 +94,43 @@ export default function UsuariosTable({
           <tr className="bg-zinc-50 border-b border-zinc-200">
             <th
               scope="col"
-              className="text-left py-5 px-4 text-sm font-semibold text-zinc-500 uppercase tracking-wider"
+              className="text-left py-5 px-4 text-sm font-semibold text-slate-500 uppercase tracking-wider"
             >
               Usuario
             </th>
             <th
               scope="col"
-              className="text-left py-5 px-4 text-sm font-semibold text-zinc-500 uppercase tracking-wider"
+              className="text-left py-5 px-4 text-sm font-semibold text-slate-500 uppercase tracking-wider"
             >
               Email
             </th>
             <th
               scope="col"
-              className="text-left py-5 px-4 text-sm font-semibold text-zinc-500 uppercase tracking-wider"
+              className="text-left py-5 px-4 text-sm font-semibold text-slate-500 uppercase tracking-wider"
             >
               Rol / Tipo
             </th>
             <th
               scope="col"
-              className="text-left py-5 px-4 text-sm font-semibold text-zinc-500 uppercase tracking-wider"
+              className="text-left py-5 px-4 text-sm font-semibold text-slate-500 uppercase tracking-wider"
             >
               Registro
             </th>
             <th
               scope="col"
-              className="text-left py-5 px-4 text-sm font-semibold text-zinc-500 uppercase tracking-wider"
+              className="text-left py-5 px-4 text-sm font-semibold text-slate-500 uppercase tracking-wider"
             >
               Último acceso
             </th>
             <th
               scope="col"
-              className="text-center py-5 px-4 text-sm font-semibold text-zinc-500 uppercase tracking-wider"
+              className="text-center py-5 px-4 text-sm font-semibold text-slate-500 uppercase tracking-wider"
             >
               Estado
             </th>
             <th
               scope="col"
-              className="text-center py-5 px-4 text-sm font-semibold text-zinc-500 uppercase tracking-wider"
+              className="text-center py-5 px-4 text-sm font-semibold text-slate-500 uppercase tracking-wider"
             >
               Acciones
             </th>
@@ -147,32 +148,32 @@ export default function UsuariosTable({
                     {getInitials(usuario.nombreCompleto)}
                   </div>
                   <div>
-                    <p className="font-semibold text-zinc-900">
+                    <p className="font-semibold text-slate-900">
                       {usuario.nombreCompleto}
                     </p>
-                    <span className="text-xs text-zinc-500 inline-flex items-center gap-1">
+                    <span className="text-xs text-slate-500 inline-flex items-center gap-1">
                       <TipoUsuarioIcon tipo={usuario.tipoUsuario} />
                       {getTipoLabel(usuario.tipoUsuario)}
                     </span>
                   </div>
                 </div>
               </td>
-              <td className="p-4 text-sm text-zinc-600">
+              <td className="p-4 text-sm text-slate-600">
                 {usuario.email}
               </td>
               <td className="p-4">
                 <Pill
                   variant="custom"
-                  className={usuario.tipoUsuario === "admin" ? "text-primary bg-primary/10" : "text-zinc-700 bg-zinc-100"}
+                  className={usuario.tipoUsuario === "admin" ? "text-primary bg-primary/10" : "text-slate-700 bg-zinc-100"}
                   noButton
                 >
                   {usuario.rol.nombre}
                 </Pill>
               </td>
-              <td className="p-4 text-sm text-zinc-500">
+              <td className="p-4 text-sm text-slate-500">
                 {formatDate(usuario.fechaRegistro)}
               </td>
-              <td className="p-4 text-sm text-zinc-500">
+              <td className="p-4 text-sm text-slate-500">
                 {usuario.ultimoAcceso
                   ? formatDate(usuario.ultimoAcceso)
                   : "—"}
@@ -189,38 +190,22 @@ export default function UsuariosTable({
               </td>
               <td className="p-4">
                 <div className="flex items-center justify-center gap-2">
-                  <button
-                    type="button"
+                  <ActionButton
                     onClick={() => onEdit(usuario.idUsuario)}
-                    className="p-2 rounded-lg hover:bg-blue-50 text-blue-600 transition-colors"
+                    icon={<Pencil />}
                     title="Editar usuario"
-                  >
-                    <Pencil className="size-4" />
-                  </button>
-                  <button
-                    type="button"
+                  />
+                  <ActionButton
                     onClick={() => onToggleStatus(usuario.idUsuario)}
-                    className={`p-2 rounded-lg transition-colors ${
-                      usuario.estado.nombre === "Activo"
-                        ? "hover:bg-orange-50 text-orange-600"
-                        : "hover:bg-green-50 text-green-600"
-                    }`}
-                    title={
-                      usuario.estado.nombre === "Activo"
-                        ? "Desactivar"
-                        : "Activar"
-                    }
-                  >
-                    <Power className="size-4" />
-                  </button>
-                  <button
-                    type="button"
+                    icon={<Power />}
+                    title={usuario.estado.nombre === "Activo" ? "Desactivar" : "Activar"}
+                  />
+                  <ActionButton
                     onClick={() => onDelete(usuario.idUsuario)}
-                    className="p-2 rounded-lg hover:bg-red-50 text-red-600 transition-colors"
+                    variant="danger"
+                    icon={<Trash2 />}
                     title="Eliminar usuario"
-                  >
-                    <Trash2 className="size-4" />
-                  </button>
+                  />
                 </div>
               </td>
             </tr>

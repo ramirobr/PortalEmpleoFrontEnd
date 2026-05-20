@@ -1,4 +1,4 @@
-interface SocialLinksProps {
+﻿interface SocialLinksProps {
   colorClass?: string;
   hoverColorClass?: string;
 }

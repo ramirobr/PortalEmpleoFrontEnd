@@ -1,8 +1,9 @@
-"use client";
+﻿"use client";
 
 import { AdminRole } from "@/types/admin";
 import { Pencil, Power, Trash2, Shield, Users } from "lucide-react";
 import Pill from "@/components/shared/components/Pill";
+import { ActionButton } from "@/components/shared/components/ActionButton";
 import {
   AdminTableEmpty,
   AdminTableLoading,
@@ -35,9 +36,9 @@ export default function RolesTable({
       case "activo":
         return "text-green-600 bg-green-50";
       case "inactivo":
-        return "text-zinc-600 bg-zinc-100";
+        return "text-slate-600 bg-zinc-100";
       default:
-        return "text-zinc-600 bg-zinc-50";
+        return "text-slate-600 bg-zinc-50";
     }
   };
 
@@ -72,43 +73,43 @@ export default function RolesTable({
           <tr className="bg-zinc-50 border-b border-zinc-200">
             <th
               scope="col"
-              className="text-left py-5 px-4 text-sm font-semibold text-zinc-500 uppercase tracking-wider"
+              className="text-left py-5 px-4 text-sm font-semibold text-slate-500 uppercase tracking-wider"
             >
               Rol
             </th>
             <th
               scope="col"
-              className="text-left py-5 px-4 text-sm font-semibold text-zinc-500 uppercase tracking-wider"
+              className="text-left py-5 px-4 text-sm font-semibold text-slate-500 uppercase tracking-wider"
             >
               Descripción
             </th>
             <th
               scope="col"
-              className="text-center py-5 px-4 text-sm font-semibold text-zinc-500 uppercase tracking-wider"
+              className="text-center py-5 px-4 text-sm font-semibold text-slate-500 uppercase tracking-wider"
             >
               Permisos
             </th>
             <th
               scope="col"
-              className="text-center py-5 px-4 text-sm font-semibold text-zinc-500 uppercase tracking-wider"
+              className="text-center py-5 px-4 text-sm font-semibold text-slate-500 uppercase tracking-wider"
             >
               Usuarios
             </th>
             <th
               scope="col"
-              className="text-center py-5 px-4 text-sm font-semibold text-zinc-500 uppercase tracking-wider"
+              className="text-center py-5 px-4 text-sm font-semibold text-slate-500 uppercase tracking-wider"
             >
               Estado
             </th>
             <th
               scope="col"
-              className="text-left py-5 px-4 text-sm font-semibold text-zinc-500 uppercase tracking-wider"
+              className="text-left py-5 px-4 text-sm font-semibold text-slate-500 uppercase tracking-wider"
             >
               Última Actualización
             </th>
             <th
               scope="col"
-              className="text-center py-5 px-4 text-sm font-semibold text-zinc-500 uppercase tracking-wider"
+              className="text-center py-5 px-4 text-sm font-semibold text-slate-500 uppercase tracking-wider"
             >
               Acciones
             </th>
@@ -124,9 +125,9 @@ export default function RolesTable({
                     <Shield className="size-5 text-primary" />
                   </div>
                   <div>
-                    <p className="font-semibold text-zinc-900">{role.nombre}</p>
+                    <p className="font-semibold text-slate-900">{role.nombre}</p>
                     {isSystemRole(role.nombre) && (
-                      <span className="text-xs text-zinc-500">
+                      <span className="text-xs text-slate-500">
                         Rol del sistema
                       </span>
                     )}
@@ -136,7 +137,7 @@ export default function RolesTable({
 
               {/* Description */}
               <td className="p-4">
-                <p className="text-sm text-zinc-600 max-w-xs truncate">
+                <p className="text-sm text-slate-600 max-w-xs truncate">
                   {role.descripcion}
                 </p>
               </td>
@@ -167,7 +168,7 @@ export default function RolesTable({
 
               {/* Users Count */}
               <td className="p-4 text-center">
-                <div className="flex items-center justify-center gap-1.5 text-zinc-600">
+                <div className="flex items-center justify-center gap-1.5 text-slate-600">
                   <Users className="size-4" />
                   <span className="font-medium">{role.usuariosAsignados}</span>
                 </div>
@@ -181,48 +182,30 @@ export default function RolesTable({
               </td>
 
               {/* Last Updated */}
-              <td className="p-4 text-sm text-zinc-500">
+              <td className="p-4 text-sm text-slate-500">
                 {formatDate(role.fechaActualizacion)}
               </td>
 
               {/* Actions */}
               <td className="p-4">
                 <div className="flex items-center justify-center gap-2">
-                  {/* Edit */}
-                  <button
+                  <ActionButton
                     onClick={() => onEdit(role.idRol)}
-                    className="p-2 rounded-lg hover:bg-blue-50 text-blue-600 transition-colors"
+                    icon={<Pencil />}
                     title="Editar rol"
-                  >
-                    <Pencil className="size-4" />
-                  </button>
-
-                  {/* Toggle Status */}
-                  <button
+                  />
+                  <ActionButton
                     onClick={() => onToggleStatus(role.idRol)}
-                    className={`p-2 rounded-lg transition-colors ${
-                      role.estado.nombre === "Activo"
-                        ? "hover:bg-orange-50 text-orange-600"
-                        : "hover:bg-green-50 text-green-600"
-                    }`}
-                    title={
-                      role.estado.nombre === "Activo"
-                        ? "Desactivar rol"
-                        : "Activar rol"
-                    }
-                  >
-                    <Power className="size-4" />
-                  </button>
-
-                  {/* Delete - Only for non-system roles */}
+                    icon={<Power />}
+                    title={role.estado.nombre === "Activo" ? "Desactivar rol" : "Activar rol"}
+                  />
                   {!isSystemRole(role.nombre) && (
-                    <button
+                    <ActionButton
                       onClick={() => onDelete(role.idRol)}
-                      className="p-2 rounded-lg hover:bg-red-50 text-red-600 transition-colors"
+                      variant="danger"
+                      icon={<Trash2 />}
                       title="Eliminar rol"
-                    >
-                      <Trash2 className="size-4" />
-                    </button>
+                    />
                   )}
                 </div>
               </td>

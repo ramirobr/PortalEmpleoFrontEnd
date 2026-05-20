@@ -19,8 +19,8 @@ export default function Testimonials({ testimonials }: TestimonialsProps) {
 
   return (
     <section className="w-full py-16 sm:py-20 px-6 bg-background">
-      <div className="max-w-7xl mx-auto">
-        <h2 className="text-3xl lg:text-4xl font-display font-semibold text-zinc-900 text-center mb-12 tracking-tight">
+      <div className="container mx-auto">
+        <h2 className="text-3xl lg:text-4xl font-display font-semibold text-slate-900 text-center mb-12 tracking-tight">
           Lo que dicen de nosotros
         </h2>
 
@@ -59,11 +59,12 @@ export default function Testimonials({ testimonials }: TestimonialsProps) {
                           src={`data:image/jpeg;base64,${t.foto.trim()}`}
                           alt={t.nombreCompleto}
                           fill
+                          sizes="56px"
                           className="object-cover"
                           unoptimized
                         />
                       ) : (
-                        <div className="w-full h-full flex items-center justify-center text-zinc-400 text-xl font-bold">
+                        <div className="w-full h-full flex items-center justify-center text-slate-400 text-xl font-bold">
                           {t.nombreCompleto.charAt(0).toUpperCase()}
                         </div>
                       )}
@@ -71,7 +72,7 @@ export default function Testimonials({ testimonials }: TestimonialsProps) {
                     <div>
                       <p className="font-bold text-primary">{t.nombreCompleto}</p>
                       {(t.cargo || t.empresa) && (
-                        <p className="text-xs text-zinc-500">
+                        <p className="text-xs text-slate-500">
                           {[t.cargo, t.empresa].filter(Boolean).join(" en ")}
                         </p>
                       )}
@@ -82,12 +83,12 @@ export default function Testimonials({ testimonials }: TestimonialsProps) {
                     {Array.from({ length: 5 }).map((_, i) => (
                       <Star
                         key={i}
-                        className={`size-4 ${i < t.calificacion ? "fill-amber-400 text-amber-400" : "text-zinc-200"}`}
+                        className={`size-4 ${i < t.calificacion ? "fill-amber-400 text-amber-400" : "text-slate-200"}`}
                       />
                     ))}
                   </div>
 
-                  <p className="text-zinc-600 text-sm leading-relaxed flex-1">
+                  <p className="text-slate-600 text-sm leading-relaxed flex-1">
                     &ldquo;{t.testimonioDetalle}&rdquo;
                   </p>
                 </div>

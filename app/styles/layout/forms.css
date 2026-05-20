@@ -1,8 +1,8 @@
-@layer base {
+﻿@layer base {
   select,
   input:not([type="checkbox"]):not([type="radio"]),
   textarea {
-    @apply border-gray-light border focus:border-primary bg-[#fbfdff] h-13 placeholder:text-zinc-500 rounded px-4 py-2;
+    @apply border-gray-light border focus:border-primary bg-[#fbfdff] h-13 placeholder:text-slate-500 rounded px-4 py-2;
   }
   input[type="checkbox"],
   input[type="radio"] {

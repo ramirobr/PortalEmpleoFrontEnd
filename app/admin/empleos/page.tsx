@@ -22,14 +22,18 @@ import TablePagination from "@/components/shared/components/TablePagination";
 
 export default function AdminEmpleosPage() {
   const { data: session } = useSession();
-  const router = useRouter();
-  const [empleos, setEmpleos] = useState<AdminEmpleo[]>([]);
-  const [loading, setLoading] = useState(true);
+  const { push } = useRouter();
+  const [data, setData] = useState({
+    empleos: [] as AdminEmpleo[],
+    totalItems: 0,
+    loading: true,
+  });
+  const { empleos, loading, totalItems } = data;
+
   const [search, setSearch] = useState("");
   const [estadoFilter, setEstadoFilter] = useState("0");
   const [currentPage, setCurrentPage] = useState(1);
   const [pageSize, setPageSize] = useState(10);
-  const [totalItems, setTotalItems] = useState(0);
   const [estadosVacante, setEstadosVacante] = useState<CatalogsByType[]>([]);
 
   // Fetch estados de vacante catalog
@@ -48,7 +52,7 @@ export default function AdminEmpleosPage() {
   // Fetch empleos from real API
   useEffect(() => {
     const fetchEmpleos = async () => {
-      setLoading(true);
+      setData(prev => ({ ...prev, loading: true }));
       const response = await getAdminEmpleos(
         {
           pageSize,
@@ -59,24 +63,29 @@ export default function AdminEmpleosPage() {
         session?.user?.accessToken,
       );
       if (response?.isSuccess) {
-        setEmpleos(response.data.data);
-        setTotalItems(response.data.totalItems);
+        setData({
+          empleos: response.data.data,
+          totalItems: response.data.totalItems,
+          loading: false,
+        });
+      } else {
+        setData(prev => ({ ...prev, loading: false }));
       }
-      setLoading(false);
     };
 
     fetchEmpleos();
   }, [session, currentPage, pageSize, search, estadoFilter]);
 
   const handleEdit = (idVacante: string) => {
-    router.push(`/admin/empleos/${idVacante}`);
+    push(`/admin/empleos/${idVacante}`);
   };
 
   const handleStatusChange = async (idVacante: string) => {
     // TODO: Implement with real API
     console.log("Change status vacante:", idVacante);
-    setEmpleos((prev) =>
-      prev.map((e) =>
+    setData((prev) => ({
+      ...prev,
+      empleos: prev.empleos.map((e) =>
         e.idVacante === idVacante
           ? {
               ...e,
@@ -84,13 +93,17 @@ export default function AdminEmpleosPage() {
             }
           : e,
       ),
-    );
+    }));
   };
 
   const handleDelete = async (idVacante: string) => {
     // TODO: Implement with real API and confirmation dialog
     console.log("Delete vacante:", idVacante);
-    setEmpleos((prev) => prev.filter((e) => e.idVacante !== idVacante));
+    setData((prev) => ({
+      ...prev,
+      empleos: prev.empleos.filter((e) => e.idVacante !== idVacante),
+      totalItems: prev.totalItems - 1,
+    }));
   };
 
   return (
@@ -105,7 +118,7 @@ export default function AdminEmpleosPage() {
         <div className="flex flex-col lg:flex-row gap-4">
           {/* Search */}
           <div className="relative flex-1">
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 size-4 text-zinc-400" />
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 size-4 text-slate-400" />
             <Input
               type="text"
               placeholder="Buscar por título o empresa..."

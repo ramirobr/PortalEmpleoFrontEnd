@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
@@ -174,7 +174,7 @@ export default function RoleFormDialog({
                       {Object.entries(permisosByModule).map(
                         ([modulo, moduloPermisos]) => (
                           <div key={modulo}>
-                            <h4 className="font-semibold text-sm text-zinc-700 mb-2">
+                            <h4 className="font-semibold text-sm text-slate-700 mb-2">
                               {modulo}
                             </h4>
                             <div className="grid grid-cols-1 gap-2 ml-2">
@@ -212,7 +212,7 @@ export default function RoleFormDialog({
                                         <FormLabel className="text-sm font-normal cursor-pointer">
                                           {permiso.nombre}
                                         </FormLabel>
-                                        <p className="text-xs text-zinc-500">
+                                        <p className="text-xs text-slate-500">
                                           {permiso.descripcion}
                                         </p>
                                       </div>

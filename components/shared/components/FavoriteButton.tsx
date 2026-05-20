@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 import {
   removeVacanteFavorita,
   addVacanteFavorita,
@@ -22,11 +22,11 @@ export default function FavoriteButton({
 }: FavoriteButtonProps) {
   const [favorite, setFavorite] = useState(isFavorite);
   const { data: session } = useSession();
-  const router = useRouter();
+  const { push } = useRouter();
 
   const handleFavoriteClick = async () => {
     if (!session) {
-      router.push("/auth/email");
+      push("/auth/email");
       return;
     }
 
@@ -48,10 +48,10 @@ export default function FavoriteButton({
       <Heart
         className={`size-6 transition-colors ${
           !isLoggedIn
-            ? "text-zinc-400 fill-zinc-400"
+            ? "text-slate-400 fill-zinc-400"
             : favorite
               ? "text-primary fill-primary"
-              : "text-zinc-400"
+              : "text-slate-400"
         }`}
       />
     </button>

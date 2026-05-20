@@ -3,7 +3,7 @@ import { Manrope, Plus_Jakarta_Sans } from "next/font/google";
 import "./styles/globals.css";
 import { Toaster } from "@/components/ui/sonner";
 import { auth } from "@/auth";
-import { Providers } from "./providers";
+import Providers from "./providers";
 import AuthHydrator from "@/components/AuthHydrator";
 import { getCurriculumByUserId, getUserPic } from "@/lib/user/info";
 
@@ -33,7 +33,7 @@ export default async function RootLayout({
     getUserPic(session?.user),
   ]);
   return (
-    <html lang="en" suppressHydrationWarning>
+    <html lang="es" suppressHydrationWarning>
       <body className={`${manrope.variable} ${plusJakartaSans.variable} font-primary`}>
         <Providers session={session}>
           {session && curriculum && (

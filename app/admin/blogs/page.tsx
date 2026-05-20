@@ -12,7 +12,7 @@ export default async function AdminBlogsPage() {
   ]);
 
   return (
-    <Suspense fallback={<div>Cargando blogs...</div>}>
+    <Suspense fallback={<div>Cargando blogs…</div>}>
       <AdminBlogsClient counters={counters?.data} estados={estados ?? []} />
     </Suspense>
   );

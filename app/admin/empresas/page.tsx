@@ -21,26 +21,47 @@ import TablePagination from "@/components/shared/components/TablePagination";
 
 export default function AdminEmpresasPage() {
   const { data: session } = useSession();
-  const [empresas, setEmpresas] = useState<AdminEmpresa[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [totalItems, setTotalItems] = useState(0);
+  const [dataState, setDataState] = useState({
+    empresas: [] as AdminEmpresa[],
+    totalItems: 0,
+    loading: true,
+  });
+  const { empresas, totalItems, loading } = dataState;
+
+  const setEmpresas = (val: AdminEmpresa[] | ((prev: AdminEmpresa[]) => AdminEmpresa[])) => {
+    setDataState(prev => ({
+      ...prev,
+      empresas: typeof val === 'function' ? (val as Function)(prev.empresas) : val
+    }));
+  };
+
   const [search, setSearch] = useState("");
   const [estadoFilter, setEstadoFilter] = useState("0");
   const [planFilter, setPlanFilter] = useState("todos");
   const [currentPage, setCurrentPage] = useState(1);
   const [pageSize, setPageSize] = useState(10);
-  const [estadoOptions, setEstadoOptions] = useState<CatalogsByType[]>([]);
-  const [planOptions, setPlanOptions] = useState<CatalogsByType[]>([]);
+  const [catalogState, setCatalogState] = useState({
+    estadoOptions: [] as CatalogsByType[],
+    planOptions: [] as CatalogsByType[],
+  });
+  const { estadoOptions, planOptions } = catalogState;
 
   useEffect(() => {
     const token = session?.user?.accessToken;
-    getCatalogosByType("ESTADO_EMPRESA", token).then(setEstadoOptions);
-    getCatalogosByType("PLAN_EMPRESA", token).then(setPlanOptions);
+    Promise.all([
+      getCatalogosByType("ESTADO_EMPRESA", token),
+      getCatalogosByType("PLAN_EMPRESA", token),
+    ]).then(([estados, planes]) => {
+      setCatalogState({
+        estadoOptions: estados || [],
+        planOptions: planes || [],
+      });
+    });
   }, [session]);
 
   useEffect(() => {
     const fetchEmpresas = async () => {
-      setLoading(true);
+      setDataState((prev) => ({ ...prev, loading: true }));
       const response = await getAdminEmpresas(
         {
           pageSize,
@@ -52,10 +73,14 @@ export default function AdminEmpresasPage() {
         session?.user?.accessToken,
       );
       if (response?.isSuccess) {
-        setEmpresas(response.data.data);
-        setTotalItems(response.data.totalItems);
+        setDataState({
+          empresas: response.data.data,
+          totalItems: response.data.totalItems,
+          loading: false,
+        });
+      } else {
+        setDataState((prev) => ({ ...prev, loading: false }));
       }
-      setLoading(false);
     };
 
     fetchEmpresas();
@@ -86,7 +111,7 @@ export default function AdminEmpresasPage() {
         <div className="flex flex-col lg:flex-row gap-4">
           {/* Search */}
           <div className="relative flex-1">
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 size-4 text-zinc-400" />
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 size-4 text-slate-400" />
             <Input
               type="text"
               placeholder="Buscar por nombre o RUT..."

@@ -14,7 +14,7 @@ const Loader: React.FC<LoaderProps> = ({
 }) => (
   <div
     className={`flex items-center justify-center ${className}`}
-    aria-label="Cargando..."
+    aria-label="Cargando…"
     role="status"
   >
     <svg

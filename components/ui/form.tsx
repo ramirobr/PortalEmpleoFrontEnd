@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import * as React from "react";
 import * as LabelPrimitive from "@radix-ui/react-label";
@@ -130,7 +130,7 @@ function FormDescription({ className, ...props }: React.ComponentProps<"p">) {
     <p
       data-slot="form-description"
       id={formDescriptionId}
-      className={cn("text-zinc-500 text-sm", className)}
+      className={cn("text-slate-500 text-sm", className)}
       {...props}
     />
   );

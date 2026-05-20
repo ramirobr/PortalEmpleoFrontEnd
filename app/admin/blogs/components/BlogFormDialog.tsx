@@ -15,7 +15,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { AdminBlog } from "@/types/blog";
-import { useEffect, useState } from "react";
+import { useEffect, useReducer, useRef } from "react";
 
 interface BlogFormDialogProps {
   open: boolean;
@@ -45,6 +45,92 @@ function slugify(text: string): string {
     .replace(/\s+/g, "-");
 }
 
+// ==================== REDUCER ESTADOS ====================
+
+interface BlogFormState {
+  form: BlogFormData;
+  loading: boolean;
+}
+
+type BlogFormAction =
+  | { type: "RESET"; payload: { initialData: AdminBlog | null | undefined } }
+  | { type: "UPDATE_FIELD"; field: keyof BlogFormData; value: any }
+  | { type: "SET_TITLE"; titulo: string; slugManual: boolean }
+  | { type: "SET_LOADING"; loading: boolean };
+
+const initialState: BlogFormState = {
+  form: {
+    titulo: "",
+    slug: "",
+    resumen: "",
+    contenido: "",
+    imagenUrl: "",
+    idEstadoBlog: undefined,
+    publicarInmediatamente: false,
+  },
+  loading: false,
+};
+
+function blogFormReducer(state: BlogFormState, action: BlogFormAction): BlogFormState {
+  switch (action.type) {
+    case "RESET": {
+      const data = action.payload.initialData;
+      if (data) {
+        return {
+          ...state,
+          loading: false,
+          form: {
+            titulo: data.titulo,
+            slug: data.slug,
+            resumen: data.resumen,
+            contenido: data.contenido,
+            imagenUrl: data.imagenUrl ?? "",
+            idEstadoBlog: data.estado.id,
+            publicarInmediatamente: false,
+          },
+        };
+      }
+      return {
+        ...state,
+        loading: false,
+        form: {
+          titulo: "",
+          slug: "",
+          resumen: "",
+          contenido: "",
+          imagenUrl: "",
+          idEstadoBlog: undefined,
+          publicarInmediatamente: false,
+        },
+      };
+    }
+    case "UPDATE_FIELD":
+      return {
+        ...state,
+        form: {
+          ...state.form,
+          [action.field]: action.value,
+        },
+      };
+    case "SET_TITLE":
+      return {
+        ...state,
+        form: {
+          ...state.form,
+          titulo: action.titulo,
+          slug: action.slugManual ? state.form.slug : slugify(action.titulo),
+        },
+      };
+    case "SET_LOADING":
+      return {
+        ...state,
+        loading: action.loading,
+      };
+    default:
+      return state;
+  }
+}
+
 export default function BlogFormDialog({
   open,
   onClose,
@@ -53,59 +139,29 @@ export default function BlogFormDialog({
   estadoOptions,
 }: BlogFormDialogProps) {
   const isEditing = !!initialData;
-  const [loading, setLoading] = useState(false);
-  const [form, setForm] = useState<BlogFormData>({
-    titulo: "",
-    slug: "",
-    resumen: "",
-    contenido: "",
-    imagenUrl: "",
-    idEstadoBlog: undefined,
-    publicarInmediatamente: false,
-  });
-  const [slugManual, setSlugManual] = useState(false);
+  const [state, dispatch] = useReducer(blogFormReducer, initialState);
+  const slugManual = useRef(false);
 
   useEffect(() => {
+    dispatch({ type: "RESET", payload: { initialData } });
     if (initialData) {
-      setForm({
-        titulo: initialData.titulo,
-        slug: initialData.slug,
-        resumen: initialData.resumen,
-        contenido: initialData.contenido,
-        imagenUrl: initialData.imagenUrl ?? "",
-        idEstadoBlog: initialData.estado.id,
-        publicarInmediatamente: false,
-      });
-      setSlugManual(true);
+      slugManual.current = true;
     } else {
-      setForm({
-        titulo: "",
-        slug: "",
-        resumen: "",
-        contenido: "",
-        imagenUrl: "",
-        idEstadoBlog: undefined,
-        publicarInmediatamente: false,
-      });
-      setSlugManual(false);
+      slugManual.current = false;
     }
   }, [initialData, open]);
 
   const handleTituloChange = (titulo: string) => {
-    setForm((prev) => ({
-      ...prev,
-      titulo,
-      slug: slugManual ? prev.slug : slugify(titulo),
-    }));
+    dispatch({ type: "SET_TITLE", titulo, slugManual: slugManual.current });
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setLoading(true);
+    dispatch({ type: "SET_LOADING", loading: true });
     try {
-      await onSubmit(form);
+      await onSubmit(state.form);
     } finally {
-      setLoading(false);
+      dispatch({ type: "SET_LOADING", loading: false });
     }
   };
 
@@ -120,12 +176,13 @@ export default function BlogFormDialog({
 
         <form onSubmit={handleSubmit} className="space-y-4 mt-2">
           <div>
-            <label className="text-sm font-medium text-zinc-700 mb-1 block">
+            <label htmlFor="blog-titulo" className="text-sm font-medium text-slate-700 mb-1 block">
               Título *
             </label>
             <Input
+              id="blog-titulo"
               required
-              value={form.titulo}
+              value={state.form.titulo}
               onChange={(e) => handleTituloChange(e.target.value)}
               placeholder="Título del artículo"
               maxLength={200}
@@ -133,16 +190,17 @@ export default function BlogFormDialog({
           </div>
 
           <div>
-            <label className="text-sm font-medium text-zinc-700 mb-1 block">
+            <label htmlFor="blog-slug" className="text-sm font-medium text-slate-700 mb-1 block">
               Slug *{" "}
-              <span className="text-xs text-zinc-400">(URL del artículo)</span>
+              <span className="text-xs text-slate-400">(URL del artículo)</span>
             </label>
             <Input
+              id="blog-slug"
               required
-              value={form.slug}
+              value={state.form.slug}
               onChange={(e) => {
-                setSlugManual(true);
-                setForm((prev) => ({ ...prev, slug: e.target.value }));
+                slugManual.current = true;
+                dispatch({ type: "UPDATE_FIELD", field: "slug", value: e.target.value });
               }}
               placeholder="mi-articulo"
               maxLength={200}
@@ -151,34 +209,36 @@ export default function BlogFormDialog({
           </div>
 
           <div>
-            <label className="text-sm font-medium text-zinc-700 mb-1 block">
+            <label htmlFor="blog-resumen" className="text-sm font-medium text-slate-700 mb-1 block">
               Resumen *{" "}
-              <span className="text-xs text-zinc-400">(máx 500 caracteres)</span>
+              <span className="text-xs text-slate-400">(máx 500 caracteres)</span>
             </label>
             <textarea
+              id="blog-resumen"
               required
-              value={form.resumen}
+              value={state.form.resumen}
               onChange={(e) =>
-                setForm((prev) => ({ ...prev, resumen: e.target.value }))
+                dispatch({ type: "UPDATE_FIELD", field: "resumen", value: e.target.value })
               }
               placeholder="Descripción breve del artículo..."
               maxLength={500}
               rows={3}
               className="w-full border border-input rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary/20 resize-none"
             />
-            <p className="text-xs text-zinc-400 text-right">
-              {form.resumen.length}/500
+            <p className="text-xs text-slate-400 text-right">
+              {state.form.resumen.length}/500
             </p>
           </div>
 
           <div>
-            <label className="text-sm font-medium text-zinc-700 mb-1 block">
+            <label htmlFor="blog-imagenUrl" className="text-sm font-medium text-slate-700 mb-1 block">
               URL de imagen
             </label>
             <Input
-              value={form.imagenUrl}
+              id="blog-imagenUrl"
+              value={state.form.imagenUrl}
               onChange={(e) =>
-                setForm((prev) => ({ ...prev, imagenUrl: e.target.value }))
+                dispatch({ type: "UPDATE_FIELD", field: "imagenUrl", value: e.target.value })
               }
               placeholder="https://ejemplo.com/imagen.jpg"
               type="url"
@@ -186,40 +246,38 @@ export default function BlogFormDialog({
           </div>
 
           <div>
-            <label className="text-sm font-medium text-zinc-700 mb-1 block">
+            <label htmlFor="blog-contenido" className="text-sm font-medium text-slate-700 mb-1 block">
               Contenido *
             </label>
             <textarea
+              id="blog-contenido"
               required
-              value={form.contenido}
+              value={state.form.contenido}
               onChange={(e) =>
-                setForm((prev) => ({ ...prev, contenido: e.target.value }))
+                dispatch({ type: "UPDATE_FIELD", field: "contenido", value: e.target.value })
               }
               placeholder="Escribe el contenido completo del artículo..."
               maxLength={10000}
               rows={12}
               className="w-full border border-input rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary/20 resize-y"
             />
-            <p className="text-xs text-zinc-400 text-right">
-              {form.contenido.length}/10000
+            <p className="text-xs text-slate-400 text-right">
+              {state.form.contenido.length}/10000
             </p>
           </div>
 
           {isEditing && estadoOptions.length > 0 && (
             <div>
-              <label className="text-sm font-medium text-zinc-700 mb-1 block">
+              <label htmlFor="blog-estado" className="text-sm font-medium text-slate-700 mb-1 block">
                 Estado
               </label>
               <Select
-                value={form.idEstadoBlog?.toString()}
+                value={state.form.idEstadoBlog?.toString()}
                 onValueChange={(v) =>
-                  setForm((prev) => ({
-                    ...prev,
-                    idEstadoBlog: parseInt(v),
-                  }))
+                  dispatch({ type: "UPDATE_FIELD", field: "idEstadoBlog", value: parseInt(v) })
                 }
               >
-                <SelectTrigger>
+                <SelectTrigger id="blog-estado">
                   <SelectValue placeholder="Selecciona estado" />
                 </SelectTrigger>
                 <SelectContent>
@@ -237,16 +295,13 @@ export default function BlogFormDialog({
             <label className="flex items-center gap-2 cursor-pointer">
               <input
                 type="checkbox"
-                checked={form.publicarInmediatamente}
+                checked={state.form.publicarInmediatamente}
                 onChange={(e) =>
-                  setForm((prev) => ({
-                    ...prev,
-                    publicarInmediatamente: e.target.checked,
-                  }))
+                  dispatch({ type: "UPDATE_FIELD", field: "publicarInmediatamente", value: e.target.checked })
                 }
                 className="size-4 accent-primary"
               />
-              <span className="text-sm text-zinc-700">
+              <span className="text-sm text-slate-700">
                 Publicar inmediatamente
               </span>
             </label>
@@ -256,8 +311,8 @@ export default function BlogFormDialog({
             <Button type="button" variant="outline" onClick={onClose}>
               Cancelar
             </Button>
-            <Button type="submit" disabled={loading}>
-              {loading ? "Guardando..." : isEditing ? "Guardar cambios" : "Crear artículo"}
+            <Button type="submit" disabled={state.loading}>
+              {state.loading ? "Guardando…" : isEditing ? "Guardar cambios" : "Crear artículo"}
             </Button>
           </div>
         </form>

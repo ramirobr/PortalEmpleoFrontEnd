@@ -1,4 +1,8 @@
+# Portal Empleo Frontend
+
 This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+
+Refer to [Design System Strategy: The Professional Catalyst](file:///c:/ftorres/PROYECTOS/PortalEmpleo/src/FrontEnd/design.md) for UI/UX guidelines.
 
 ## Getting Started
 

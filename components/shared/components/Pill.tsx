@@ -1,4 +1,4 @@
-import React from "react";
+﻿import React from "react";
 import { X } from "lucide-react";
 
 interface PillProps {
@@ -45,7 +45,7 @@ const Pill: React.FC<PillProps> = ({
       case "red":
         return "bg-red-100 text-red-700";
       case "gray":
-        return "bg-zinc-100 text-zinc-700";
+        return "bg-zinc-100 text-slate-700";
       default:
         return "bg-blue-100 text-blue-700";
     }

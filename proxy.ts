@@ -6,11 +6,11 @@ const ROLE_RULES: {
   roles: Roles[];
 }[] = [
     {
-      match: (pathname) => pathname.startsWith("/profile"),
+      match: (pathname) => pathname.startsWith("/perfil"),
       roles: [ROLES.Postulante],
     },
     {
-      match: (pathname) => pathname.startsWith("/empresa-profile"),
+      match: (pathname) => pathname.startsWith("/empresa-perfil"),
       roles: [ROLES.AdministradorEmpresa],
     },
     {
@@ -39,8 +39,8 @@ export default auth((req) => {
 
 export const config = {
   matcher: [
-    "/profile/:path*",
-    "/empresa-profile/:path*",
+    "/perfil/:path*",
+    "/empresa-perfil/:path*",
     "/admin/:path*",
   ],
 };

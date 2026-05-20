@@ -13,9 +13,20 @@
     @apply border-border outline-ring/50;
   }
 
+  html {
+    scrollbar-gutter: stable;
+  }
+
+  html,
+  body {
+    max-width: 100%;
+    overflow-x: hidden;
+  }
+
   body {
     font-family: var(--font-primary);
     @apply bg-background text-foreground;
+    padding-right: 0px !important;
   }
 }
 

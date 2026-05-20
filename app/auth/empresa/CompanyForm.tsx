@@ -98,7 +98,7 @@ type CompanyFormProps = {
 };
 
 export default function CompanyForm({ fields }: CompanyFormProps) {
-  const router = useRouter();
+  const { push } = useRouter();
   const { update } = useSession();
   const [showPassword, setShowPassword] = useState(false);
   const [showRepeatPassword, setShowRepeatPassword] = useState(false);
@@ -160,7 +160,7 @@ export default function CompanyForm({ fields }: CompanyFormProps) {
       }
       form.reset();
       await update();
-      router.push("/empresa-profile");
+      push("/empresa-perfil");
     } else {
       toast.error(registerRes?.messages.join("\n"));
     }
@@ -350,7 +350,7 @@ export default function CompanyForm({ fields }: CompanyFormProps) {
               <FormItem className="lg:col-span-2">
                 <FormLabel>
                   Ubicación en el mapa{" "}
-                  <span className="text-zinc-400 font-normal">(opcional)</span>
+                  <span className="text-slate-400 font-normal">(opcional)</span>
                 </FormLabel>
                 <FormControl>
                   <MapPicker
@@ -366,7 +366,7 @@ export default function CompanyForm({ fields }: CompanyFormProps) {
                   />
                 </FormControl>
                 {(form.watch("latitud") != null) && (
-                  <p className="text-xs text-zinc-500 mt-1">
+                  <p className="text-xs text-slate-500 mt-1">
                     Lat: {form.watch("latitud")?.toFixed(6)}, Lng: {form.watch("longitud")?.toFixed(6)}
                   </p>
                 )}
@@ -392,7 +392,7 @@ export default function CompanyForm({ fields }: CompanyFormProps) {
                         }
                       />
                     </FormControl>
-                    <span className="text-xs text-zinc-500 ml-2">
+                    <span className="text-xs text-slate-500 ml-2">
                       Ej. 991234567
                     </span>
                     <FormMessage />
@@ -486,7 +486,7 @@ export default function CompanyForm({ fields }: CompanyFormProps) {
             <legend className="sr-only">Información de usuario</legend>
             <div className="flex items-center gap-3 mb-4">
               <div className="h-px flex-1 bg-zinc-200" />
-              <span className="text-sm font-semibold text-zinc-600 whitespace-nowrap">
+              <span className="text-sm font-semibold text-slate-600 whitespace-nowrap">
                 Datos de contacto del responsable del registro
               </span>
               <div className="h-px flex-1 bg-zinc-200" />
@@ -570,7 +570,7 @@ export default function CompanyForm({ fields }: CompanyFormProps) {
                     <FormControl>
                       <Input id="email-usuario" type="email" {...field} />
                     </FormControl>
-                    <span className="text-xs text-zinc-500">
+                    <span className="text-xs text-slate-500">
                       A este mail se van a enviar las facturas de compra.
                     </span>
                     <FormMessage />
@@ -598,7 +598,7 @@ export default function CompanyForm({ fields }: CompanyFormProps) {
                         <button
                           type="button"
                           aria-label={showPassword ? "Ocultar contraseña" : "Mostrar contraseña"}
-                          className="absolute right-3 top-1/2 -translate-y-1/2 size-5 text-zinc-400 cursor-pointer"
+                          className="absolute right-3 top-1/2 -translate-y-1/2 size-5 text-slate-400 cursor-pointer"
                           onMouseDown={() => setShowPassword(true)}
                           onMouseUp={() => setShowPassword(false)}
                           onMouseLeave={() => setShowPassword(false)}
@@ -608,7 +608,7 @@ export default function CompanyForm({ fields }: CompanyFormProps) {
                         </button>
                       </div>
                     </FormControl>
-                    <span className="text-xs text-zinc-500 block mt-1">
+                    <span className="text-xs text-slate-500 block mt-1">
                       Debe tener 7 dígitos como mínima.
                     </span>
                     <FormMessage />
@@ -636,7 +636,7 @@ export default function CompanyForm({ fields }: CompanyFormProps) {
                         <button
                           type="button"
                           aria-label={showRepeatPassword ? "Ocultar contraseña" : "Mostrar contraseña"}
-                          className="absolute right-3 top-1/2 -translate-y-1/2 size-5 text-zinc-400 cursor-pointer"
+                          className="absolute right-3 top-1/2 -translate-y-1/2 size-5 text-slate-400 cursor-pointer"
                           onMouseDown={() => setShowRepeatPassword(true)}
                           onMouseUp={() => setShowRepeatPassword(false)}
                           onMouseLeave={() => setShowRepeatPassword(false)}

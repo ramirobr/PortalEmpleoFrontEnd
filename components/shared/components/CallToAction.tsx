@@ -1,4 +1,4 @@
-import Link from "next/link";
+﻿import Link from "next/link";
 import React from "react";
 
 const CallToAction = () => {
@@ -9,7 +9,7 @@ const CallToAction = () => {
           <h2 className="text-3xl lg:text-4xl font-semibold text-white mb-6 tracking-tight">
             ¿Listo para dar el siguiente paso?
           </h2>
-          <p className="text-zinc-300 max-w-2xl mx-auto mb-10 text-lg">
+          <p className="text-slate-300 max-w-2xl mx-auto mb-10 text-lg">
             Únete a miles de profesionales que ya han encontrado su trabajo
             ideal a través de nuestra plataforma.
           </p>

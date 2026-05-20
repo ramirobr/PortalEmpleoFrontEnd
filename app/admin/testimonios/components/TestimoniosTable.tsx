@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 import Pill from "@/components/shared/components/Pill";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { formatDate, getInitials } from "@/lib/utils";
@@ -43,7 +43,7 @@ export default function TestimoniosTable({
       case EstadoNombre.Rechazado:
         return "text-red-600 bg-red-50";
       default:
-        return "text-zinc-600 bg-zinc-50";
+        return "text-slate-600 bg-zinc-50";
     }
   };
 
@@ -56,7 +56,7 @@ export default function TestimoniosTable({
             className={`size-4 ${
               star <= rating
                 ? "fill-yellow-400 text-yellow-400"
-                : "fill-zinc-200 text-zinc-200"
+                : "fill-zinc-200 text-slate-200"
             }`}
           />
         ))}
@@ -90,37 +90,37 @@ export default function TestimoniosTable({
           <tr className="bg-zinc-50 border-b border-zinc-200">
             <th
               scope="col"
-              className="text-left py-5 px-4 text-sm font-semibold text-zinc-500 uppercase tracking-wider"
+              className="text-left py-5 px-4 text-sm font-semibold text-slate-500 uppercase tracking-wider"
             >
               Candidato
             </th>
             <th
               scope="col"
-              className="text-left py-5 px-4 text-sm font-semibold text-zinc-500 uppercase tracking-wider"
+              className="text-left py-5 px-4 text-sm font-semibold text-slate-500 uppercase tracking-wider"
             >
               Testimonio
             </th>
             <th
               scope="col"
-              className="text-center py-5 px-4 text-sm font-semibold text-zinc-500 uppercase tracking-wider"
+              className="text-center py-5 px-4 text-sm font-semibold text-slate-500 uppercase tracking-wider"
             >
               Calificación
             </th>
             <th
               scope="col"
-              className="text-left py-5 px-4 text-sm font-semibold text-zinc-500 uppercase tracking-wider"
+              className="text-left py-5 px-4 text-sm font-semibold text-slate-500 uppercase tracking-wider"
             >
               Fecha
             </th>
             <th
               scope="col"
-              className="text-center py-5 px-4 text-sm font-semibold text-zinc-500 uppercase tracking-wider"
+              className="text-center py-5 px-4 text-sm font-semibold text-slate-500 uppercase tracking-wider"
             >
               Estado
             </th>
             <th
               scope="col"
-              className="text-center py-5 px-4 text-sm font-semibold text-zinc-500 uppercase tracking-wider"
+              className="text-center py-5 px-4 text-sm font-semibold text-slate-500 uppercase tracking-wider"
             >
               Acciones
             </th>
@@ -146,10 +146,10 @@ export default function TestimoniosTable({
                     </AvatarFallback>
                   </Avatar>
                   <div>
-                    <p className="font-medium text-zinc-900 text-sm">
+                    <p className="font-medium text-slate-900 text-sm">
                       {testimonio.candidato.nombreCompleto}
                     </p>
-                    <p className="text-xs text-zinc-500">
+                    <p className="text-xs text-slate-500">
                       {testimonio.cargo} - {testimonio.empresa}
                     </p>
                   </div>
@@ -157,7 +157,7 @@ export default function TestimoniosTable({
               </td>
 
               <td className="p-4 max-w-xs">
-                <p className="text-sm text-zinc-700 line-clamp-2">
+                <p className="text-sm text-slate-700 line-clamp-2">
                   {truncateText(testimonio.testimonioDetalle)}
                 </p>
               </td>
@@ -167,7 +167,7 @@ export default function TestimoniosTable({
               </td>
 
               <td className="p-4">
-                <div className="flex items-center gap-1 text-sm text-zinc-600">
+                <div className="flex items-center gap-1 text-sm text-slate-600">
                   <Clock className="size-4" />
                   {formatDate(testimonio.fechaCreacion)}
                 </div>
@@ -192,7 +192,7 @@ export default function TestimoniosTable({
                 <div className="flex items-center justify-center gap-2">
                   <button
                     onClick={() => onView(testimonio.idTestimonio)}
-                    className="p-2 rounded-lg text-zinc-500 hover:text-primary hover:bg-primary/10 transition-colors cursor-pointer"
+                    className="p-2 rounded-lg text-slate-500 hover:text-primary hover:bg-primary/10 transition-colors cursor-pointer"
                     title="Ver detalle"
                   >
                     <Eye className="size-4" />
@@ -201,7 +201,7 @@ export default function TestimoniosTable({
                   {testimonio.estado.nombre === EstadoNombre.EnRevision && (
                     <button
                       onClick={() => onApprove(testimonio.idTestimonio)}
-                      className="p-2 rounded-lg text-zinc-500 hover:text-green-600 hover:bg-green-50 transition-colors cursor-pointer"
+                      className="p-2 rounded-lg text-slate-500 hover:text-green-600 hover:bg-green-50 transition-colors cursor-pointer"
                       title="Aprobar testimonio"
                     >
                       <CheckCircle className="size-4" />
@@ -211,7 +211,7 @@ export default function TestimoniosTable({
                   {testimonio.estado.nombre !== EstadoNombre.Rechazado && (
                     <button
                       onClick={() => onReject(testimonio.idTestimonio)}
-                      className="p-2 rounded-lg text-zinc-500 hover:text-orange-600 hover:bg-orange-50 transition-colors cursor-pointer"
+                      className="p-2 rounded-lg text-slate-500 hover:text-orange-600 hover:bg-orange-50 transition-colors cursor-pointer"
                       title="Rechazar testimonio"
                     >
                       <XCircle className="size-4" />
@@ -220,7 +220,7 @@ export default function TestimoniosTable({
 
                   <button
                     onClick={() => onDelete(testimonio.idTestimonio)}
-                    className="p-2 rounded-lg text-zinc-500 hover:text-red-600 hover:bg-red-50 transition-colors"
+                    className="p-2 rounded-lg text-slate-500 hover:text-red-600 hover:bg-red-50 transition-colors"
                     title="Eliminar testimonio"
                   >
                     <Trash2 className="size-4" />

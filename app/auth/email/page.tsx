@@ -10,10 +10,13 @@ import EmailLayout from "./EmailLayout";
 import EmailSignup from "./PostulantForm";
 
 export default function Page() {
-  const [fields, setFields] = useState<SignUpFieldsResponse | null>(null);
-  const [loadingFields, setLoadingFields] = useState(true);
-  const [ciudades, setCiudades] = useState<CatalogsByType[]>([]);
-  const [provincias, setProvincias] = useState<CatalogsByType[]>([]);
+  const [state, setState] = useState({
+    fields: null as SignUpFieldsResponse | null,
+    loadingFields: true,
+    ciudades: [] as CatalogsByType[],
+    provincias: [] as CatalogsByType[],
+  });
+  const { fields, loadingFields, ciudades, provincias } = state;
 
   useEffect(() => {
     async function getFields() {
@@ -23,11 +26,14 @@ export default function Page() {
           fetchApi<CatalogsByTypeResponse>("/Catalog/getAllCatalogsByType/CIUDAD"),
           fetchApi<CatalogsByTypeResponse>("/Catalog/getAllCatalogsByType/PROVINCIA"),
         ]);
-        setFields(fetchedFields);
-        if (ciudadesRes?.data) setCiudades(ciudadesRes.data);
-        if (provinciasRes?.data) setProvincias(provinciasRes.data);
-      } finally {
-        setLoadingFields(false);
+        setState({
+          fields: fetchedFields,
+          ciudades: ciudadesRes?.data || [],
+          provincias: provinciasRes?.data || [],
+          loadingFields: false,
+        });
+      } catch (err) {
+        setState((prev) => ({ ...prev, loadingFields: false }));
       }
     }
     getFields();

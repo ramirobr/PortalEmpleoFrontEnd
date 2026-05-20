@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
@@ -54,7 +54,7 @@ const resetPasswordSchema = z
 export type ResetPasswordValues = z.infer<typeof resetPasswordSchema>;
 
 function ResetPasswordForm() {
-  const router = useRouter();
+  const { push } = useRouter();
   const searchParams = useSearchParams();
   const email = searchParams.get("email");
   const token = searchParams.get("token");
@@ -148,7 +148,7 @@ function ResetPasswordForm() {
                 <h2 className="text-black text-2xl font-semibold mb-2">
                   Enlace inválido
                 </h2>
-                <p className="text-zinc-600">
+                <p className="text-slate-600">
                   El enlace para restablecer tu contraseña es inválido o ha
                   expirado. Por favor, solicita uno nuevo.
                 </p>
@@ -187,7 +187,7 @@ function ResetPasswordForm() {
 
       // Redirigir al login después de 3 segundos
       setTimeout(() => {
-        router.push("/auth/login");
+        push("/auth/login");
       }, 3000);
     } catch {
       toast.error("Ocurrió un error inesperado. Intenta nuevamente.");
@@ -221,7 +221,7 @@ function ResetPasswordForm() {
                 <h2 className="text-black text-2xl font-semibold mb-2">
                   ¡Contraseña actualizada!
                 </h2>
-                <p className="text-zinc-600">
+                <p className="text-slate-600">
                   Tu contraseña ha sido restablecida exitosamente. Serás
                   redirigido al inicio de sesión en unos segundos.
                 </p>
@@ -266,7 +266,7 @@ function ResetPasswordForm() {
               <h2 className="text-black text-2xl font-semibold">
                 Crea una nueva contraseña
               </h2>
-              <p className="mt-2 text-zinc-600">
+              <p className="mt-2 text-slate-600">
                 Ingresa tu nueva contraseña para la cuenta asociada a{" "}
                 <span className="font-semibold text-primary">{email}</span>
               </p>
@@ -297,7 +297,7 @@ function ResetPasswordForm() {
                       <FormLabel>Nueva contraseña *</FormLabel>
                       <FormControl>
                         <div className="relative">
-                          <Lock className="absolute left-3 top-1/2 -translate-y-1/2 text-zinc-400 size-5" />
+                          <Lock className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 size-5" />
                           <Input
                             {...field}
                             type={showPassword ? "text" : "password"}
@@ -311,7 +311,7 @@ function ResetPasswordForm() {
                                 ? "Ocultar contraseña"
                                 : "Mostrar contraseña"
                             }
-                            className="absolute right-3 top-1/2 -translate-y-1/2 size-5 text-zinc-400 cursor-pointer"
+                            className="absolute right-3 top-1/2 -translate-y-1/2 size-5 text-slate-400 cursor-pointer"
                             onMouseDown={() => handleMouseDown("password")}
                             onMouseUp={() => handleMouseUp("password")}
                             onMouseLeave={() => handleMouseUp("password")}
@@ -334,7 +334,7 @@ function ResetPasswordForm() {
                       <FormLabel>Confirmar contraseña *</FormLabel>
                       <FormControl>
                         <div className="relative">
-                          <Lock className="absolute left-3 top-1/2 -translate-y-1/2 text-zinc-400 size-5" />
+                          <Lock className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 size-5" />
                           <Input
                             {...field}
                             type={showConfirmPassword ? "text" : "password"}
@@ -348,7 +348,7 @@ function ResetPasswordForm() {
                                 ? "Ocultar contraseña"
                                 : "Mostrar contraseña"
                             }
-                            className="absolute right-3 top-1/2 -translate-y-1/2 size-5 text-zinc-400 cursor-pointer"
+                            className="absolute right-3 top-1/2 -translate-y-1/2 size-5 text-slate-400 cursor-pointer"
                             onMouseDown={() => handleMouseDown("confirm")}
                             onMouseUp={() => handleMouseUp("confirm")}
                             onMouseLeave={() => handleMouseUp("confirm")}

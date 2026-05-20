@@ -21,8 +21,19 @@ import TablePagination from "@/components/shared/components/TablePagination";
 
 export default function AdminRolesPage() {
   const { data: session } = useSession();
-  const [roles, setRoles] = useState<AdminRole[]>([]);
-  const [loading, setLoading] = useState(true);
+  const [dataState, setDataState] = useState({
+    roles: [] as AdminRole[],
+    loading: true,
+  });
+  const { roles, loading } = dataState;
+
+  const setRoles = (val: AdminRole[] | ((prev: AdminRole[]) => AdminRole[])) => {
+    setDataState(prev => ({
+      ...prev,
+      roles: typeof val === 'function' ? (val as Function)(prev.roles) : val
+    }));
+  };
+
   const [search, setSearch] = useState("");
   const [estadoFilter, setEstadoFilter] = useState("todos");
   const [currentPage, setCurrentPage] = useState(1);
@@ -35,13 +46,15 @@ export default function AdminRolesPage() {
     let cancelled = false;
     let timerId: ReturnType<typeof setTimeout>;
     const fetchRoles = async () => {
-      setLoading(true);
+      setDataState((prev) => ({ ...prev, loading: true }));
       await new Promise<void>((resolve) => {
         timerId = setTimeout(resolve, 500);
       });
       if (cancelled) return;
-      setRoles(mockRoles);
-      setLoading(false);
+      setDataState({
+        roles: mockRoles,
+        loading: false,
+      });
     };
 
     fetchRoles();
@@ -172,7 +185,7 @@ export default function AdminRolesPage() {
         <div className="flex flex-col lg:flex-row gap-4">
           {/* Search */}
           <div className="relative flex-1">
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 size-4 text-zinc-400" />
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 size-4 text-slate-400" />
             <Input
               type="text"
               placeholder="Buscar por nombre o descripción..."

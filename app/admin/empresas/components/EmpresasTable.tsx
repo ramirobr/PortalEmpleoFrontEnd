@@ -1,9 +1,10 @@
-"use client";
+﻿"use client";
 
 import { AdminEmpresa } from "@/types/admin";
 import { Pencil, Ban, CheckCircle, Trash2, Building2 } from "lucide-react";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import Pill from "@/components/shared/components/Pill";
+import { ActionButton } from "@/components/shared/components/ActionButton";
 import {
   AdminTableEmpty,
   AdminTableLoading,
@@ -34,7 +35,7 @@ export default function EmpresasTable({
       case "suspendida":
         return "text-orange-600 bg-orange-50";
       default:
-        return "text-zinc-600 bg-zinc-50";
+        return "text-slate-600 bg-zinc-50";
     }
   };
 
@@ -43,7 +44,7 @@ export default function EmpresasTable({
       case "premium":
         return "text-teal-600 bg-teal-50";
       default:
-        return "text-zinc-600 bg-zinc-50";
+        return "text-slate-600 bg-zinc-50";
     }
   };
 
@@ -68,31 +69,31 @@ export default function EmpresasTable({
           <tr className="bg-zinc-50 border-b border-zinc-200">
             <th
               scope="col"
-              className="text-left py-5 px-4 text-sm font-semibold text-zinc-500 uppercase tracking-wider"
+              className="text-left py-5 px-4 text-sm font-semibold text-slate-500 uppercase tracking-wider"
             >
               Empresa
             </th>
             <th
               scope="col"
-              className="text-left py-5 px-4 text-sm font-semibold text-zinc-500 uppercase tracking-wider"
+              className="text-left py-5 px-4 text-sm font-semibold text-slate-500 uppercase tracking-wider"
             >
               Fecha Registro
             </th>
             <th
               scope="col"
-              className="text-center py-5 px-4 text-sm font-semibold text-zinc-500 uppercase tracking-wider"
+              className="text-center py-5 px-4 text-sm font-semibold text-slate-500 uppercase tracking-wider"
             >
               Ofertas Activas
             </th>
             <th
               scope="col"
-              className="text-center py-5 px-4 text-sm font-semibold text-zinc-500 uppercase tracking-wider"
+              className="text-center py-5 px-4 text-sm font-semibold text-slate-500 uppercase tracking-wider"
             >
               Plan / Estatus
             </th>
             <th
               scope="col"
-              className="text-center py-5 px-4 text-sm font-semibold text-zinc-500 uppercase tracking-wider"
+              className="text-center py-5 px-4 text-sm font-semibold text-slate-500 uppercase tracking-wider"
             >
               Acciones
             </th>
@@ -108,27 +109,27 @@ export default function EmpresasTable({
               <td className="py-2 px-4">
                 <div className="flex items-center gap-3">
                   <Avatar className="size-10 rounded-lg">
-                    <AvatarFallback className="rounded-lg bg-zinc-200 text-zinc-600 text-xs">
+                    <AvatarFallback className="rounded-lg bg-zinc-200 text-slate-600 text-xs">
                       {empresa.nombreEmpresa.substring(0, 2).toUpperCase()}
                     </AvatarFallback>
                   </Avatar>
                   <div>
-                    <p className="font-semibold text-zinc-800">
+                    <p className="font-semibold text-slate-800">
                       {empresa.nombreEmpresa}
                     </p>
-                    <p className="text-sm text-zinc-500">{empresa.numeroDocumento}</p>
+                    <p className="text-sm text-slate-500">{empresa.numeroDocumento}</p>
                   </div>
                 </div>
               </td>
 
               {/* Fecha Registro */}
-              <td className="py-2 px-4 text-zinc-600">
+              <td className="py-2 px-4 text-slate-600">
                 {empresa.fechaRegistro}
               </td>
 
               {/* Ofertas Activas */}
               <td className="py-2 px-4 text-center">
-                <span className="font-semibold text-zinc-700">
+                <span className="font-semibold text-slate-700">
                   {empresa.ofertasActivas}
                 </span>
               </td>
@@ -158,37 +159,25 @@ export default function EmpresasTable({
               {/* Acciones */}
               <td className="py-2 px-4">
                 <div className="flex items-center justify-center gap-2">
-                  <button
-                    type="button"
+                  <ActionButton
                     onClick={() => onEdit(empresa.idEmpresa)}
-                    className="p-2 bg-sky-50 text-teal-600 rounded-full hover:bg-teal-600 hover:text-white transition-colors cursor-pointer"
-                    aria-label={`Editar ${empresa.nombreEmpresa}`}
+                    icon={<Pencil />}
                     title="Editar empresa"
-                  >
-                    <Pencil className="size-3" />
-                  </button>
-                  <button
-                    type="button"
+                    aria-label={`Editar ${empresa.nombreEmpresa}`}
+                  />
+                  <ActionButton
                     onClick={() => onSuspend(empresa.idEmpresa)}
-                    className="p-2 bg-sky-50 text-teal-600 rounded-full hover:bg-teal-600 hover:text-white transition-colors cursor-pointer"
-                    aria-label={`${empresa.estado.toLowerCase() === "activa" ? "Suspender" : "Activar"} ${empresa.nombreEmpresa}`}
+                    icon={empresa.estado.toLowerCase() === "activa" ? <Ban /> : <CheckCircle />}
                     title={empresa.estado.toLowerCase() === "activa" ? "Suspender" : "Activar"}
-                  >
-                    {empresa.estado.toLowerCase() === "activa" ? (
-                      <Ban className="size-3" />
-                    ) : (
-                      <CheckCircle className="size-3" />
-                    )}
-                  </button>
-                  <button
-                    type="button"
+                    aria-label={`${empresa.estado.toLowerCase() === "activa" ? "Suspender" : "Activar"} ${empresa.nombreEmpresa}`}
+                  />
+                  <ActionButton
                     onClick={() => onDelete(empresa.idEmpresa)}
-                    className="p-2 bg-sky-50 text-teal-600 rounded-full hover:bg-teal-600 hover:text-white transition-colors cursor-pointer"
-                    aria-label={`Eliminar ${empresa.nombreEmpresa}`}
+                    variant="danger"
+                    icon={<Trash2 />}
                     title="Eliminar empresa"
-                  >
-                    <Trash2 className="size-3" />
-                  </button>
+                    aria-label={`Eliminar ${empresa.nombreEmpresa}`}
+                  />
                 </div>
               </td>
             </tr>

@@ -1,8 +1,10 @@
 "use client";
 
 import { useState } from "react";
+import Link from "next/link";
 import Navbar from "../../../components/shared/components/Navbar";
 import Footer from "../../../components/shared/components/Footer";
+import Image from "next/image";
 import AsideMenu, {
   NavLink,
 } from "../../../components/shared/components/AsideMenu";
@@ -50,7 +52,7 @@ export default function SignIn() {
           Crea tu cuenta y comienza a buscar empleo
         </h2>
         <div className="w-full max-w-md flex flex-col gap-4">
-          <button className="cursor-pointer flex items-center justify-center gap-2 w-full py-3 rounded bg-white border border-zinc-300 font-semibold text-base text-zinc-700 hover:bg-zinc-50 focus:outline-none focus:ring-2 focus:ring-blue-500 mb-2">
+          <button className="cursor-pointer flex items-center justify-center gap-2 w-full py-3 rounded bg-white border border-zinc-300 font-semibold text-base text-slate-700 hover:bg-zinc-50 focus:outline-none focus:ring-2 focus:ring-blue-500 mb-2">
             Acceder con Google
           </button>
           <button className="cursor-pointer flex items-center justify-center gap-2 w-full py-3 rounded bg-brand-linkedin text-white font-semibold text-base hover:bg-brand-linkedin-dark focus:outline-none focus:ring-2 focus:ring-blue-500 mb-2">
@@ -58,37 +60,41 @@ export default function SignIn() {
           </button>
           <div className="flex items-center my-4">
             <hr className="flex-1 border-zinc-300" />
-            <span className="mx-4 text-zinc-500 font-semibold">o</span>
+            <span className="mx-4 text-slate-500 font-semibold">o</span>
             <hr className="flex-1 border-zinc-300" />
           </div>
-          <a
+          <Link
             href="/auth/email"
-            className="flex items-center gap-2 px-4 py-3 rounded border border-zinc-300 bg-white text-zinc-800 font-medium text-lg shadow hover:bg-zinc-100 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-400"
+            className="flex items-center gap-2 px-4 py-3 rounded border border-zinc-300 bg-white text-slate-800 font-medium text-lg shadow hover:bg-zinc-100 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-400"
           >
             <span className="text-2xl">✉️</span>
             Continuar con correo electrónico
-          </a>
+          </Link>
         </div>
         {/*
         <div className="mt-8 text-center">
           <p className="font-semibold mb-2">¡Descarga la app en tu celular!</p>
           <div className="flex justify-center gap-4 mb-4">
             <a href="https://play.google.com/store" aria-label="Google Play">
-              <img
+              <Image
                 src="/badges/google-play-badge.png"
                 alt="Disponible en Google Play"
-                className="h-12"
+                width={135}
+                height={40}
+                className="h-12 w-auto"
               />
             </a>
             <a href="https://www.apple.com/app-store/" aria-label="App Store">
-              <img
+              <Image
                 src="/badges/app-store-badge.png"
                 alt="Consíguelo en App Store"
-                className="h-12"
+                width={135}
+                height={40}
+                className="h-12 w-auto"
               />
             </a>
           </div>
-          <div className="flex justify-center gap-6 text-2xl text-zinc-400 mt-4">
+          <div className="flex justify-center gap-6 text-2xl text-slate-400 mt-4">
             <a
               href="https://facebook.com"
               aria-label="Facebook"

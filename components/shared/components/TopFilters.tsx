@@ -1,6 +1,7 @@
 "use client";
 
 import { useRouter, useSearchParams } from "next/navigation";
+import { Suspense } from "react";
 import {
   Select,
   SelectContent,
@@ -16,19 +17,19 @@ interface Props {
   entityName?: string;
 }
 
-export function TopFilters({
+function TopFiltersInner({
   total,
   onToggleFilters,
   entityName = "empleos",
 }: Props) {
   const params = useSearchParams();
-  const router = useRouter();
+  const { push } = useRouter();
 
   const update = (k: string, v: string) => {
     const p = new URLSearchParams(params.toString());
     p.set(k, v);
     p.set("page", "1");
-    router.push("?" + p.toString(), { scroll: false });
+    push("?" + p.toString(), { scroll: false });
   };
 
   return (
@@ -61,7 +62,7 @@ export function TopFilters({
         </PremiumButton>
       </div>
       <div className="flex items-center gap-4 pb-6 justify-between lg:justify-end w-full lg:w-auto">
-        <label className="hidden lg:block">Ordenar por:</label>
+        <span className="hidden lg:block">Ordenar por:</span>
         <Select
           defaultValue={params.get("sort") ?? "recent"}
           onValueChange={(v) => update("sort", v)}
@@ -74,7 +75,7 @@ export function TopFilters({
             <SelectItem value="oldest">Antiguo</SelectItem>
           </SelectContent>
         </Select>
-        <label className="hidden lg:block">Items por página:</label>
+        <span className="hidden lg:block">Items por página:</span>
         <Select
           defaultValue={params.get("pageSize") ?? "10"}
           onValueChange={(v) => update("pageSize", v)}
@@ -90,5 +91,13 @@ export function TopFilters({
         </Select>
       </div>
     </div>
+  );
+}
+
+export function TopFilters(props: Props) {
+  return (
+    <Suspense fallback={null}>
+      <TopFiltersInner {...props} />
+    </Suspense>
   );
 }

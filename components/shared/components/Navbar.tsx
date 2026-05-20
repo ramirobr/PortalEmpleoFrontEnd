@@ -110,7 +110,7 @@ export default function Navbar({
                     className={`text-sm font-medium transition-colors hover:text-primary ${
                       isActive
                         ? "text-primary border-b-2 border-primary pb-0.5"
-                        : "text-zinc-600"
+                        : "text-slate-600"
                     }`}
                   >
                     {link.label}
@@ -133,9 +133,9 @@ export default function Navbar({
                     onClick={() => setNotifOpen((prev) => !prev)}
                     className="relative p-2 rounded-full hover:bg-zinc-100 transition-colors cursor-pointer"
                   >
-                    <Bell className="size-5 text-zinc-600" />
+                    <Bell className="size-5 text-slate-600" />
                     {unreadNotifications > 0 && (
-                      <span className="absolute -top-0.5 -right-0.5 min-w-[18px] h-[18px] bg-primary text-white text-[10px] font-bold rounded-full flex items-center justify-center px-1">
+                      <span className="absolute -top-0.5 -right-0.5 min-w-[18px] h-[18px] bg-primary text-white text-xs font-bold rounded-full flex items-center justify-center px-1">
                         {unreadNotifications > 99 ? "99+" : unreadNotifications}
                       </span>
                     )}
@@ -161,7 +161,7 @@ export default function Navbar({
             ) : (
               <>
                 <div className="hidden lg:flex items-center gap-3">
-                  {!pathname.startsWith("/profile") && (
+                  {!pathname.startsWith("/perfil") && (
                     <>
                       <PremiumButton href="/auth/email" variant="outline" size="sm">
                         Crear cuenta

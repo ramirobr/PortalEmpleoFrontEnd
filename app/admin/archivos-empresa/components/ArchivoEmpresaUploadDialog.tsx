@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { useEffect, useRef } from "react";
 import { useForm, type Resolver } from "react-hook-form";
@@ -164,8 +164,8 @@ export default function ArchivoEmpresaUploadDialog({
                         className="border-2 border-dashed border-zinc-200 rounded-lg p-6 text-center cursor-pointer hover:border-primary/50 transition-colors"
                         onClick={() => fileInputRef.current?.click()}
                       >
-                        <Upload className="size-8 text-zinc-400 mx-auto mb-2" />
-                        <p className="text-sm text-zinc-500">
+                        <Upload className="size-8 text-slate-400 mx-auto mb-2" />
+                        <p className="text-sm text-slate-500">
                           Haz clic para seleccionar un archivo
                         </p>
                         <input
@@ -237,7 +237,7 @@ export default function ArchivoEmpresaUploadDialog({
                   <FormItem>
                     <FormLabel>
                       Carpeta{" "}
-                      <span className="text-zinc-400 font-normal">(opcional)</span>
+                      <span className="text-slate-400 font-normal">(opcional)</span>
                     </FormLabel>
                     <Select
                       value={field.value ?? NO_FOLDER}
@@ -280,7 +280,7 @@ export default function ArchivoEmpresaUploadDialog({
                 Cancelar
               </Button>
               <Button type="submit" disabled={isSubmitting}>
-                {isSubmitting ? "Subiendo..." : "Subir Archivo"}
+                {isSubmitting ? "Subiendo…" : "Subir Archivo"}
               </Button>
             </DialogFooter>
           </form>

@@ -45,7 +45,7 @@ export default function AdminBlogsClient({
 }: AdminBlogsClientProps) {
   const { data: session } = useSession();
   const [, startTransition] = useTransition();
-  const router = useRouter();
+  const { push } = useRouter();
   const params = useSearchParams();
 
   const currentPage = parseInt(params.get("page") || "1");
@@ -53,9 +53,12 @@ export default function AdminBlogsClient({
   const searchQuery = params.get("search") || "";
   const estadoFilter = params.get("estado") || "todos";
 
-  const [blogs, setBlogs] = useState<AdminBlog[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [totalItems, setTotalItems] = useState(0);
+  const [dataState, setDataState] = useState({
+    blogs: [] as AdminBlog[],
+    loading: true,
+    totalItems: 0,
+  });
+  const { blogs, loading, totalItems } = dataState;
   const [refetchTrigger, setRefetchTrigger] = useState(0);
   const [counters, setCounters] = useState<BlogCounters | undefined>(initialCounters);
 
@@ -77,7 +80,7 @@ export default function AdminBlogsClient({
 
   useEffect(() => {
     const fetchData = async () => {
-      setLoading(true);
+      setDataState((prev) => ({ ...prev, loading: true }));
       try {
         const selectedEstado = estados.find(
           (e) => e.nombre.toLowerCase() === estadoFilter.toLowerCase(),
@@ -92,13 +95,17 @@ export default function AdminBlogsClient({
           session?.user.accessToken,
         );
         if (response?.data) {
-          setBlogs(response.data.data ?? []);
-          setTotalItems(response.data.totalItems ?? 0);
+          setDataState({
+            blogs: response.data.data ?? [],
+            totalItems: response.data.totalItems ?? 0,
+            loading: false,
+          });
+        } else {
+          setDataState((prev) => ({ ...prev, loading: false }));
         }
       } catch {
         console.error("Error fetching blogs");
-      } finally {
-        setLoading(false);
+        setDataState((prev) => ({ ...prev, loading: false }));
       }
     };
     fetchData();
@@ -111,7 +118,7 @@ export default function AdminBlogsClient({
         if (value) newParams.set(key, value);
         else newParams.delete(key);
       });
-      router.push(`?${newParams.toString()}`, { scroll: false });
+      push(`?${newParams.toString()}`, { scroll: false });
     });
   };
 
@@ -198,28 +205,28 @@ export default function AdminBlogsClient({
       {/* Stats */}
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
         <Card className="p-4 text-center">
-          <p className="text-2xl font-bold text-zinc-900">
+          <p className="text-2xl font-bold text-slate-900">
             {counters?.totalBlogs ?? 0}
           </p>
-          <p className="text-sm text-zinc-500">Total</p>
+          <p className="text-sm text-slate-500">Total</p>
         </Card>
         <Card className="p-4 text-center">
           <p className="text-2xl font-bold text-green-600">
             {counters?.totalBlogsPublicados ?? 0}
           </p>
-          <p className="text-sm text-zinc-500">Publicados</p>
+          <p className="text-sm text-slate-500">Publicados</p>
         </Card>
         <Card className="p-4 text-center">
           <p className="text-2xl font-bold text-yellow-600">
             {counters?.totalBlogsBorrador ?? 0}
           </p>
-          <p className="text-sm text-zinc-500">Borradores</p>
+          <p className="text-sm text-slate-500">Borradores</p>
         </Card>
         <Card className="p-4 text-center">
-          <p className="text-2xl font-bold text-zinc-500">
+          <p className="text-2xl font-bold text-slate-500">
             {counters?.totalBlogsArchivados ?? 0}
           </p>
-          <p className="text-sm text-zinc-500">Archivados</p>
+          <p className="text-sm text-slate-500">Archivados</p>
         </Card>
       </div>
 
@@ -228,13 +235,11 @@ export default function AdminBlogsClient({
         <div className="flex flex-col lg:flex-row gap-4">
           <form
             className="relative flex-1"
-            onSubmit={(e) => {
-              e.preventDefault();
-              const fd = new FormData(e.currentTarget);
-              updateUrlParams({ search: fd.get("search") as string, page: "1" });
+            action={(formData) => {
+              updateUrlParams({ search: formData.get("search") as string, page: "1" });
             }}
           >
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 size-4 text-zinc-400" />
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 size-4 text-slate-400" />
             <Input
               name="search"
               defaultValue={searchQuery}
@@ -314,7 +319,7 @@ export default function AdminBlogsClient({
             <DialogDescription>{selectedBlog?.resumen}</DialogDescription>
           </DialogHeader>
           {selectedBlog && (
-            <div className="space-y-4 text-sm text-zinc-700">
+            <div className="space-y-4 text-sm text-slate-700">
               <div>
                 <span className="font-semibold">Slug: </span>
                 <code className="bg-zinc-100 px-1.5 py-0.5 rounded text-xs">

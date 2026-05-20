@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import {
   Select,
@@ -36,35 +36,33 @@ export default function TablePagination({
 
   // Generate page numbers to show
   const getPageNumbers = () => {
-    const pages: (number | string)[] = [];
+    const pages: { id: string; value: number | string }[] = [];
     const maxVisiblePages = 5;
 
     if (totalPages <= maxVisiblePages) {
       for (let i = 1; i <= totalPages; i++) {
-        pages.push(i);
+        pages.push({ id: `page-${i}`, value: i });
       }
     } else {
-      pages.push(1);
+      pages.push({ id: "page-1", value: 1 });
 
       if (currentPage > 3) {
-        pages.push("...");
+        pages.push({ id: "ellipsis-start", value: "..." });
       }
 
       const start = Math.max(2, currentPage - 1);
       const end = Math.min(totalPages - 1, currentPage + 1);
 
       for (let i = start; i <= end; i++) {
-        if (!pages.includes(i)) {
-          pages.push(i);
-        }
+        pages.push({ id: `page-${i}`, value: i });
       }
 
       if (currentPage < totalPages - 2) {
-        pages.push("...");
+        pages.push({ id: "ellipsis-end", value: "..." });
       }
 
-      if (!pages.includes(totalPages)) {
-        pages.push(totalPages);
+      if (!pages.some(p => p.value === totalPages)) {
+        pages.push({ id: `page-${totalPages}`, value: totalPages });
       }
     }
 
@@ -80,9 +78,9 @@ export default function TablePagination({
     "min-w-[40px] h-10 flex items-center justify-center rounded-xl text-sm font-medium transition-all border cursor-pointer active:scale-95";
   const activeClass = "bg-primary text-white border-primary shadow-sm"; 
   const inactiveClass =
-    "bg-white text-zinc-700 border-zinc-100 hover:border-primary/30 hover:text-primary";
+    "bg-white text-slate-700 border-zinc-100 hover:border-primary/30 hover:text-primary";
   const navButtonClass =
-    "px-5 py-2 h-10 flex items-center justify-center rounded-xl border border-zinc-100 text-sm font-medium text-zinc-700 bg-white hover:border-primary/30 hover:text-primary disabled:opacity-50 disabled:cursor-not-allowed transition-all cursor-pointer active:scale-95 uppercase tracking-wider";
+    "px-5 py-2 h-10 flex items-center justify-center rounded-xl border border-zinc-100 text-sm font-medium text-slate-700 bg-white hover:border-primary/30 hover:text-primary disabled:opacity-50 disabled:cursor-not-allowed transition-all cursor-pointer active:scale-95 uppercase tracking-wider";
 
   return (
     <div
@@ -94,13 +92,13 @@ export default function TablePagination({
     >
       {/* Items info */}
       {showInfo && (
-        <div className="text-sm text-zinc-500 order-2 sm:order-1 h-10 flex items-center">
+        <div className="text-sm text-slate-500 order-2 sm:order-1 h-10 flex items-center">
           <span>
             Mostrando{" "}
-            <span className="font-medium text-zinc-900">
+            <span className="font-medium text-slate-900">
               {startItem} - {endItem}
             </span>{" "}
-            de <span className="font-medium text-zinc-900">{totalItems}</span> {itemLabel}
+            de <span className="font-medium text-slate-900">{totalItems}</span> {itemLabel}
           </span>
         </div>
       )}
@@ -119,24 +117,24 @@ export default function TablePagination({
 
         {/* Page numbers */}
         <div className="flex items-center gap-1">
-          {getPageNumbers().map((page, index) =>
-            typeof page === "number" ? (
+          {getPageNumbers().map((page) =>
+            typeof page.value === "number" ? (
               <button
-                key={page}
+                key={page.id}
                 type="button"
-                onClick={() => onPageChange(page)}
+                onClick={() => onPageChange(page.value as number)}
                 className={`${buttonBaseClass} ${
-                  currentPage === page ? activeClass : inactiveClass
+                  currentPage === page.value ? activeClass : inactiveClass
                 }`}
               >
-                {page}
+                {page.value}
               </button>
             ) : (
               <span
-                key={`ellipsis-${index}`}
-                className="size-10 flex items-center justify-center text-zinc-400 font-medium"
+                key={page.id}
+                className="size-10 flex items-center justify-center text-slate-400 font-medium"
               >
-                {page}
+                {page.value}
               </span>
             ),
           )}

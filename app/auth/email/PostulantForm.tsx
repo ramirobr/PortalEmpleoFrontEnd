@@ -99,7 +99,7 @@ export default function EmailSignup({ fields, loadingFields = false, ciudades = 
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const timeoutRef = useRef<NodeJS.Timeout | null>(null);
   const confirmTimeoutRef = useRef<NodeJS.Timeout | null>(null);
-  const router = useRouter();
+  const { push } = useRouter();
   const { update } = useSession();
   const form = useForm<FormValues>({
     resolver: zodResolver(signupSchema),
@@ -159,7 +159,7 @@ export default function EmailSignup({ fields, loadingFields = false, ciudades = 
       }
       form.reset();
       await update();
-      router.push("/profile");
+      push("/perfil");
       return;
     }
 
@@ -237,7 +237,7 @@ export default function EmailSignup({ fields, loadingFields = false, ciudades = 
                           disabled={loadingFields}
                         >
                           <SelectTrigger id="documento">
-                            <SelectValue placeholder={loadingFields ? "Cargando..." : "Tipo"} />
+                            <SelectValue placeholder={loadingFields ? "Cargando…" : "Tipo"} />
                           </SelectTrigger>
                           <SelectContent>
                             {fields?.tipo_documento?.map((tipo) => (
@@ -297,7 +297,7 @@ export default function EmailSignup({ fields, loadingFields = false, ciudades = 
                           }
                         />
                       </FormControl>
-                      <span className="text-xs text-zinc-500 ml-2">
+                      <span className="text-xs text-slate-500 ml-2">
                         Ej. 991234567
                       </span>
                       <FormMessage />
@@ -369,7 +369,7 @@ export default function EmailSignup({ fields, loadingFields = false, ciudades = 
                                 ? "Ocultar contraseña"
                                 : "Mostrar contraseña"
                             }
-                            className="absolute right-3 top-1/2 -translate-y-1/2 size-5 text-zinc-400"
+                            className="absolute right-3 top-1/2 -translate-y-1/2 size-5 text-slate-400"
                             onMouseDown={handleMouseDown}
                             onMouseUp={handleMouseUp}
                             onMouseLeave={handleMouseUp}
@@ -403,7 +403,7 @@ export default function EmailSignup({ fields, loadingFields = false, ciudades = 
                           <button
                             type="button"
                             aria-label={showConfirmPassword ? "Ocultar contraseña" : "Mostrar contraseña"}
-                            className="absolute right-3 top-1/2 -translate-y-1/2 size-5 text-zinc-400 cursor-pointer"
+                            className="absolute right-3 top-1/2 -translate-y-1/2 size-5 text-slate-400 cursor-pointer"
                             onMouseDown={handleConfirmMouseDown}
                             onMouseUp={handleConfirmMouseUp}
                             onMouseLeave={handleConfirmMouseUp}
@@ -432,7 +432,7 @@ export default function EmailSignup({ fields, loadingFields = false, ciudades = 
                           disabled={loadingFields}
                         >
                           <SelectTrigger id="genero">
-                            <SelectValue placeholder={loadingFields ? "Cargando..." : "Género"} />
+                            <SelectValue placeholder={loadingFields ? "Cargando…" : "Género"} />
                           </SelectTrigger>
                           <SelectContent>
                             {fields?.genero?.map((genero) => (
@@ -467,7 +467,7 @@ export default function EmailSignup({ fields, loadingFields = false, ciudades = 
                         disabled={loadingFields}
                       >
                         <SelectTrigger id="jornada-laboral">
-                          <SelectValue placeholder={loadingFields ? "Cargando..." : "Selecciona una jornada"} />
+                          <SelectValue placeholder={loadingFields ? "Cargando…" : "Selecciona una jornada"} />
                         </SelectTrigger>
                         <SelectContent>
                           {fields?.tipo_empleo?.map((jornada) => (
@@ -501,7 +501,7 @@ export default function EmailSignup({ fields, loadingFields = false, ciudades = 
                             field.onChange(val);
                             form.setValue("idCiudad", undefined);
                           }}
-                          placeholder={loadingFields ? "Cargando..." : "Selecciona provincia"}
+                          placeholder={loadingFields ? "Cargando…" : "Selecciona provincia"}
                         />
                       </FormControl>
                       <FormMessage />
@@ -519,7 +519,7 @@ export default function EmailSignup({ fields, loadingFields = false, ciudades = 
                           options={ciudades.map((c) => ({ id: c.idCatalogo, label: c.nombre }))}
                           value={field.value}
                           onChange={field.onChange}
-                          placeholder={loadingFields ? "Cargando..." : "Selecciona ciudad"}
+                          placeholder={loadingFields ? "Cargando…" : "Selecciona ciudad"}
                         />
                       </FormControl>
                       <FormMessage />
@@ -536,7 +536,7 @@ export default function EmailSignup({ fields, loadingFields = false, ciudades = 
                     <FormLabel>Email *</FormLabel>
                     <FormControl>
                       <div className="relative">
-                        <Mail className="absolute left-3 top-1/2 -translate-y-1/2 text-zinc-400 size-5" />
+                        <Mail className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 size-5" />
                         <Input
                           type="email"
                           placeholder="Ingresa tu email"
@@ -557,15 +557,16 @@ export default function EmailSignup({ fields, loadingFields = false, ciudades = 
               render={({ field }) => (
                 <FormItem>
                   <FormControl>
-                    <label className="flex items-center gap-2">
+                    <label htmlFor="aceptaCondicionesUso" className="flex items-center gap-2">
                       <Checkbox
+                        id="aceptaCondicionesUso"
                         checked={field.value}
                         onCheckedChange={field.onChange}
                       />
                       <span className="text-sm">
                         Acepto las{" "}
                         <Link
-                          href="/terms"
+                          href="/terminos"
                           className="text-primary font-semibold underline"
                         >
                           Condiciones de uso
@@ -585,15 +586,16 @@ export default function EmailSignup({ fields, loadingFields = false, ciudades = 
               render={({ field }) => (
                 <FormItem>
                   <FormControl>
-                    <label className="flex items-center gap-2">
+                    <label htmlFor="aceptaPoliticaPrivacidad" className="flex items-center gap-2">
                       <Checkbox
+                        id="aceptaPoliticaPrivacidad"
                         checked={field.value}
                         onCheckedChange={field.onChange}
                       />
                       <span className="text-sm">
                         He leído y comprendo la{" "}
                         <Link
-                          href="/privacy"
+                          href="/privacidad"
                           className="text-primary font-semibold underline"
                         >
                           Política de protección de datos personales y
@@ -614,8 +616,9 @@ export default function EmailSignup({ fields, loadingFields = false, ciudades = 
               render={({ field }) => (
                 <FormItem>
                   <FormControl>
-                    <label className="flex items-center gap-2">
+                    <label htmlFor="aceptaNotificaciones" className="flex items-center gap-2">
                       <Checkbox
+                        id="aceptaNotificaciones"
                         checked={field.value}
                         onCheckedChange={field.onChange}
                       />

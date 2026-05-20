@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { useState, useEffect } from "react";
 import {
@@ -63,9 +63,9 @@ export default function MoverArchivoCandidatoDialog({
         </DialogHeader>
 
         <div className="py-4">
-          <label className="text-sm font-medium text-zinc-700 mb-2 block">
+          <span className="text-sm font-medium text-slate-700 mb-2 block">
             Carpeta Destino
-          </label>
+          </span>
           <Select value={selectedCarpeta} onValueChange={setSelectedCarpeta}>
             <SelectTrigger>
               <SelectValue />
@@ -73,7 +73,7 @@ export default function MoverArchivoCandidatoDialog({
             <SelectContent>
               <SelectItem value={ROOT}>
                 <span className="flex items-center gap-2">
-                  <FolderOpen className="size-4 text-zinc-400" />
+                  <FolderOpen className="size-4 text-slate-400" />
                   Raíz (sin carpeta)
                 </span>
               </SelectItem>

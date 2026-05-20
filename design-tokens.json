@@ -5,7 +5,7 @@
     "card": "#ffffff",
     "card-foreground": "#171c1f",
     "primary": {
-      "DEFAULT": "#006a62",
+      "DEFAULT": "#00857c",
       "container": "#26a69a",
       "light": "#2abba7",
       "deep": "#004d40"
@@ -34,14 +34,14 @@
       }
     },
     "gray-light": "rgba(23, 28, 31, 0.2)",
-    "gray-dark": "#707f8c",
+    "gray-dark": "#697885",
     "popover": {
       "DEFAULT": "#ffffff",
       "foreground": "#171c1f"
     },
     "border": "rgba(23, 28, 31, 0.2)",
     "input": "rgba(23, 28, 31, 0.2)",
-    "ring": "#006a62"
+    "ring": "#00857c"
   },
   "fonts": {
     "display": "var(--font-manrope)",

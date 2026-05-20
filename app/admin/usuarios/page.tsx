@@ -36,8 +36,19 @@ import TablePagination from "@/components/shared/components/TablePagination";
 
 export default function AdminUsuariosPage() {
   const { data: session } = useSession();
-  const [usuarios, setUsuarios] = useState<AdminUsuario[]>([]);
-  const [loading, setLoading] = useState(true);
+  const [dataState, setDataState] = useState({
+    usuarios: [] as AdminUsuario[],
+    loading: true,
+  });
+  const { usuarios, loading } = dataState;
+
+  const setUsuarios = (val: AdminUsuario[] | ((prev: AdminUsuario[]) => AdminUsuario[])) => {
+    setDataState(prev => ({
+      ...prev,
+      usuarios: typeof val === 'function' ? (val as Function)(prev.usuarios) : val
+    }));
+  };
+
   const [search, setSearch] = useState("");
   const [estadoFilter, setEstadoFilter] = useState("todos");
   const [rolFilter, setRolFilter] = useState("todos");
@@ -61,13 +72,15 @@ export default function AdminUsuariosPage() {
     let cancelled = false;
     let timerId: ReturnType<typeof setTimeout>;
     const fetchUsuarios = async () => {
-      setLoading(true);
+      setDataState((prev) => ({ ...prev, loading: true }));
       await new Promise<void>((resolve) => {
         timerId = setTimeout(resolve, 500);
       });
       if (cancelled) return;
-      setUsuarios(getMockUsuarios());
-      setLoading(false);
+      setDataState({
+        usuarios: getMockUsuarios(),
+        loading: false,
+      });
     };
 
     fetchUsuarios();
@@ -225,7 +238,7 @@ export default function AdminUsuariosPage() {
           <div className="flex flex-col lg:flex-row gap-4 flex-wrap">
             {/* Search */}
             <div className="relative flex-1 min-w-[200px]">
-              <Search className="absolute left-3 top-1/2 -translate-y-1/2 size-4 text-zinc-400" />
+              <Search className="absolute left-3 top-1/2 -translate-y-1/2 size-4 text-slate-400" />
               <Input
                 type="text"
                 placeholder="Buscar por nombre, email o rol..."
@@ -357,7 +370,7 @@ export default function AdminUsuariosPage() {
             <DialogTitle>¿Eliminar usuario?</DialogTitle>
           </DialogHeader>
           <div className="py-4">
-            <p className="text-sm text-zinc-600">
+            <p className="text-sm text-slate-600">
               Esta acción no se puede deshacer. Se eliminará permanentemente el
               usuario{" "}
               <strong>{usuarioToDelete?.nombreCompleto}</strong> y todos sus

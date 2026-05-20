@@ -10,12 +10,12 @@ export default function Footer() {
     <footer className="bg-primary py-6 border-t border-zinc-200 text-center text-white">
       <div className="container">
         <div className="flex flex-col lg:flex-row items-center justify-between px-4 text-white text-sm mb-2 lg:mb-0">
-          <div>
+          <div suppressHydrationWarning>
             &copy; {hasMounted ? new Date().getFullYear() : "2024"} Portal Empleo. Todos los derechos reservados.
           </div>
           <SocialLinks
             colorClass="text-white"
-            hoverColorClass="hover:text-zinc-200"
+            hoverColorClass="hover:text-slate-200"
           />
         </div>
       </div>

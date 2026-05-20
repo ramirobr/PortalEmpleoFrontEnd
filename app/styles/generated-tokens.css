@@ -8,7 +8,7 @@
   --color-foreground: #171c1f;
   --color-card: #ffffff;
   --color-card-foreground: #171c1f;
-  --color-primary: #006a62;
+  --color-primary: #00857c;
   --color-primary-container: #26a69a;
   --color-primary-light: #2abba7;
   --color-primary-deep: #004d40;
@@ -26,12 +26,12 @@
   --color-brand-linkedin: #2867b2;
   --color-brand-linkedin-dark: #205081;
   --color-gray-light: rgba(23, 28, 31, 0.2);
-  --color-gray-dark: #707f8c;
+  --color-gray-dark: #697885;
   --color-popover: #ffffff;
   --color-popover-foreground: #171c1f;
   --color-border: rgba(23, 28, 31, 0.2);
   --color-input: rgba(23, 28, 31, 0.2);
-  --color-ring: #006a62;
+  --color-ring: #00857c;
   --font-display: var(--font-manrope);
   --font-body: var(--font-plus-jakarta-sans);
   --font-label: var(--font-plus-jakarta-sans);
@@ -49,7 +49,7 @@
   --foreground: #171c1f;
   --card: #ffffff;
   --card-foreground: #171c1f;
-  --primary: #006a62;
+  --primary: #00857c;
   --primary-container: #26a69a;
   --primary-light: #2abba7;
   --primary-deep: #004d40;
@@ -67,12 +67,12 @@
   --brand-linkedin: #2867b2;
   --brand-linkedin-dark: #205081;
   --gray-light: rgba(23, 28, 31, 0.2);
-  --gray-dark: #707f8c;
+  --gray-dark: #697885;
   --popover: #ffffff;
   --popover-foreground: #171c1f;
   --border: rgba(23, 28, 31, 0.2);
   --input: rgba(23, 28, 31, 0.2);
-  --ring: #006a62;
+  --ring: #00857c;
   --font-display: var(--font-manrope);
   --font-body: var(--font-plus-jakarta-sans);
   --font-label: var(--font-plus-jakarta-sans);

@@ -22,9 +22,9 @@ function getStatusClasses(nombre: string) {
     case EstadoBlogNombre.Borrador:
       return "text-yellow-600 bg-amber-100";
     case EstadoBlogNombre.Archivado:
-      return "text-zinc-500 bg-zinc-100";
+      return "text-slate-500 bg-zinc-100";
     default:
-      return "text-zinc-600 bg-zinc-50";
+      return "text-slate-600 bg-zinc-50";
   }
 }
 
@@ -69,7 +69,7 @@ export default function BlogsTable({
                 <th
                   key={col}
                   scope="col"
-                  className="text-left py-5 px-4 text-sm font-semibold text-zinc-500 uppercase tracking-wider"
+                  className="text-left py-5 px-4 text-sm font-semibold text-slate-500 uppercase tracking-wider"
                 >
                   {col}
                 </th>
@@ -86,16 +86,16 @@ export default function BlogsTable({
               }`}
             >
               <td className="p-4 max-w-xs">
-                <p className="font-medium text-zinc-900 text-sm line-clamp-2">
+                <p className="font-medium text-slate-900 text-sm line-clamp-2">
                   {blog.titulo}
                 </p>
-                <p className="text-xs text-zinc-500 mt-0.5 line-clamp-1">
+                <p className="text-xs text-slate-500 mt-0.5 line-clamp-1">
                   {blog.resumen}
                 </p>
               </td>
 
               <td className="p-4">
-                <code className="text-xs text-zinc-500 bg-zinc-100 px-2 py-0.5 rounded">
+                <code className="text-xs text-slate-500 bg-zinc-100 px-2 py-0.5 rounded">
                   {blog.slug}
                 </code>
               </td>
@@ -108,15 +108,15 @@ export default function BlogsTable({
                 </span>
               </td>
 
-              <td className="p-4">
-                <div className="flex items-center gap-1 text-sm text-zinc-600">
+              <td className="p-4" suppressHydrationWarning>
+                <div className="flex items-center gap-1 text-sm text-slate-600">
                   <Clock className="size-3.5" />
                   {formatDate(blog.fechaCreacion)}
                 </div>
               </td>
 
-              <td className="p-4">
-                <span className="text-sm text-zinc-600">
+              <td className="p-4" suppressHydrationWarning>
+                <span className="text-sm text-slate-600">
                   {blog.fechaPublicacion ? formatDate(blog.fechaPublicacion) : "-"}
                 </span>
               </td>
@@ -125,21 +125,21 @@ export default function BlogsTable({
                 <div className="flex items-center gap-1">
                   <button
                     onClick={() => onView(blog)}
-                    className="p-2 rounded-lg text-zinc-500 hover:text-primary hover:bg-primary/10 transition-colors"
+                    className="p-2 rounded-lg text-slate-500 hover:text-primary hover:bg-primary/10 transition-colors"
                     title="Ver artículo"
                   >
                     <Eye className="size-4" />
                   </button>
                   <button
                     onClick={() => onEdit(blog)}
-                    className="p-2 rounded-lg text-zinc-500 hover:text-blue-600 hover:bg-blue-50 transition-colors"
+                    className="p-2 rounded-lg text-slate-500 hover:text-blue-600 hover:bg-blue-50 transition-colors"
                     title="Editar"
                   >
                     <Edit2 className="size-4" />
                   </button>
                   <button
                     onClick={() => onDelete(blog.idBlog)}
-                    className="p-2 rounded-lg text-zinc-500 hover:text-red-600 hover:bg-red-50 transition-colors"
+                    className="p-2 rounded-lg text-slate-500 hover:text-red-600 hover:bg-red-50 transition-colors"
                     title="Eliminar"
                   >
                     <Trash2 className="size-4" />

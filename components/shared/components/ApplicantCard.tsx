@@ -2,6 +2,7 @@
 
 import React from "react";
 import Link from "next/link";
+import Image from "next/image";
 
 export interface Applicant {
   id: string;
@@ -26,11 +27,13 @@ export default function ApplicantCard({ applicant }: ApplicantCardProps) {
         <div className="flex justify-center mb-6">
           <div className="size-16 rounded-full overflow-hidden bg-primary/10 flex items-center justify-center border border-gray-light shrink-0">
             {applicant.photo ? (
-              // eslint-disable-next-line @next/next/no-img-element
-              <img
+              <Image
                 src={`data:image/jpeg;base64,${applicant.photo}`}
                 className="w-full h-full object-cover"
                 alt={`Foto de ${applicant.name}`}
+                width={64}
+                height={64}
+                unoptimized
               />
             ) : (
               <span className="text-xl font-bold text-primary">
@@ -104,10 +107,10 @@ export default function ApplicantCard({ applicant }: ApplicantCardProps) {
               </svg>
             </div>
             <div>
-              <span className="text-[10px] font-extrabold uppercase text-zinc-400 block tracking-wider">
+              <span className="text-[11px] font-extrabold uppercase text-slate-400 block tracking-wider">
                 Ubicación
               </span>
-              <span className="text-sm font-medium text-zinc-700">
+              <span className="text-sm font-medium text-slate-700">
                 {applicant.location || "No especificada"}
               </span>
             </div>
@@ -125,10 +128,10 @@ export default function ApplicantCard({ applicant }: ApplicantCardProps) {
               </svg>
             </div>
             <div>
-              <span className="text-[10px] font-extrabold uppercase text-zinc-400 block tracking-wider">
+              <span className="text-[11px] font-extrabold uppercase text-slate-400 block tracking-wider">
                 Aspiración salarial
               </span>
-              <p className="text-sm font-medium text-zinc-700">
+              <p className="text-sm font-medium text-slate-700">
                 {applicant.salary || "$750 - 800"}
               </p>
             </div>
@@ -136,14 +139,14 @@ export default function ApplicantCard({ applicant }: ApplicantCardProps) {
 
           {applicant.skills?.length > 0 && (
             <div className="pt-2">
-              <span className="text-[10px] font-extrabold uppercase text-zinc-400 block mb-2 tracking-wider">
+              <span className="text-[11px] font-extrabold uppercase text-slate-400 block mb-2 tracking-wider">
                 Habilidades
               </span>
               <div className="flex flex-wrap gap-1.5">
-                {applicant.skills.slice(0, 3).map((skill, index) => (
+                {applicant.skills.slice(0, 3).map((skill) => (
                   <span
-                    key={index}
-                    className="px-2 py-0.5 bg-zinc-100 text-zinc-600 text-[10px] font-bold rounded uppercase"
+                    key={skill}
+                    className="px-2 py-0.5 bg-zinc-100 text-slate-600 text-[11px] font-bold rounded uppercase"
                   >
                     {skill}
                   </span>
@@ -155,7 +158,7 @@ export default function ApplicantCard({ applicant }: ApplicantCardProps) {
       </div>
 
       <Link
-        href={`/empresa-profile/candidato/${applicant.id}`}
+        href={`/empresa-perfil/candidato/${applicant.id}`}
         className="bg-primary hover:bg-secondary text-white text-sm font-bold uppercase py-4 transition-colors text-center cursor-pointer w-full mt-auto"
       >
         VER PERFIL

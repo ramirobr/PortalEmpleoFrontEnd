@@ -20,10 +20,10 @@ export function SimpleBarChart({
       className="w-full flex items-end justify-between gap-2"
       style={{ height }}
     >
-      {data.map((item, index) => {
+      {data.map((item) => {
         const heightPercentage = Math.round((item.amount / maxVal) * 100);
         return (
-          <div key={index} className="flex-1 flex flex-col items-center group">
+          <div key={item.month} className="flex-1 flex flex-col items-center group">
             <div className="relative w-full flex justify-center items-end h-full">
               <div
                 className={`w-[80%] rounded-t-sm transition-all duration-500 ease-out group-hover:opacity-80 ${barColor}`}
@@ -34,7 +34,7 @@ export function SimpleBarChart({
                 ${(item.amount / 1000000).toFixed(1)}M
               </div>
             </div>
-            <span className="text-xs text-zinc-400 mt-2">{item.month}</span>
+            <span className="text-xs text-slate-400 mt-2">{item.month}</span>
           </div>
         );
       })}
@@ -113,8 +113,8 @@ export function DualLineChart({ data, height = 200 }: DualLineChartProps) {
 
       {/* X Axis Labels */}
       <div className="absolute bottom-[-24px] w-full flex justify-between px-1">
-        {data.map((d, i) => (
-          <span key={i} className="text-xs text-zinc-400 w-8 text-center">
+        {data.map((d) => (
+          <span key={d.month} className="text-xs text-slate-400 w-8 text-center">
             {d.month}
           </span>
         ))}
@@ -124,11 +124,11 @@ export function DualLineChart({ data, height = 200 }: DualLineChartProps) {
       <div className="absolute top-[-30px] right-0 flex gap-4">
         <div className="flex items-center gap-1.5">
           <div className="size-3 rounded-full bg-blue-500"></div>
-          <span className="text-xs text-zinc-500">Candidatos</span>
+          <span className="text-xs text-slate-500">Candidatos</span>
         </div>
         <div className="flex items-center gap-1.5">
           <div className="size-3 rounded-full bg-purple-500"></div>
-          <span className="text-xs text-zinc-500">Empresas</span>
+          <span className="text-xs text-slate-500">Empresas</span>
         </div>
       </div>
     </div>

@@ -43,7 +43,7 @@ const loginSchema = z.object({
 export type LoginValues = z.infer<typeof loginSchema>;
 
 function LoginForm() {
-  const router = useRouter();
+  const { push } = useRouter();
   const [showPassword, setShowPassword] = useState(false);
   const timeoutRef = useRef<NodeJS.Timeout | null>(null);
   const searchParams = useSearchParams();
@@ -84,16 +84,16 @@ function LoginForm() {
       const userRole = session?.user?.role;
       switch (userRole) {
         case ROLES.AdministradorSistema:
-          router.push("/admin");
+          push("/admin");
           break;
         case ROLES.AdministradorEmpresa:
-          router.push("/empresa-profile");
+          push("/empresa-perfil");
           break;
         case ROLES.Postulante:
-          router.push("/profile");
+          push("/perfil");
           break;
         default:
-          router.push(next ?? "/");
+          push(next ?? "/");
       }
     } catch {
       toast.error("Credenciales inválidas");
@@ -124,7 +124,7 @@ function LoginForm() {
               <h2 className="text-black text-2xl font-semibold ">
                 Bienvenido de nuevo
               </h2>
-              <p className="mt-2 text-zinc-600">
+              <p className="mt-2 text-slate-600">
                 Inicia sesión para gestionar tus candidaturas
               </p>
             </div>
@@ -141,7 +141,7 @@ function LoginForm() {
                       <FormLabel>Correo electrónico *</FormLabel>
                       <FormControl>
                         <div className="relative">
-                          <Mail className="absolute left-3 top-1/2 -translate-y-1/2 text-zinc-400 size-5" />
+                          <Mail className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 size-5" />
                           <Input
                             {...field}
                             type="email"
@@ -177,7 +177,7 @@ function LoginForm() {
                                 ? "Ocultar contraseña"
                                 : "Mostrar contraseña"
                             }
-                            className="absolute right-3 top-1/2 -translate-y-1/2 size-5 text-zinc-400 cursor-pointer"
+                            className="absolute right-3 top-1/2 -translate-y-1/2 size-5 text-slate-400 cursor-pointer"
                             onMouseDown={handleMouseDown}
                             onMouseUp={handleMouseUp}
                             onMouseLeave={handleMouseUp}

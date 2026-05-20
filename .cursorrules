@@ -1,0 +1,84 @@
+# AI Coding Standards & Single Source of Truth
+
+## 🔍 COMPONENT SEARCH & REUSE POLICY (MANDATORY)
+**Before creating any new UI component or implementing a complex UI pattern, you MUST follow this hierarchy:**
+1. **Search Workspace**: Perform a thorough search across the entire codebase (especially in `@/components/shared/components`) to check for an existing component that fulfills the requirement. **REUSE** and extend existing components whenever possible.
+2. **Search UI Libraries**: If no workspace component exists, check the installed libraries: **Radix UI** primitives for logic/structure and **Lucide React** for icons.
+3. **Create Reusable Component**: Only if the component exists in neither the workspace nor the libraries, you may create a new one. It MUST:
+   - Be placed in `@/components/shared/components/`.
+   - Strictly follow the tokens in `design-tokens.json`.
+   - Be designed for **HIGH REUSABILITY** with clear props.
+   - Use `cn()` for class composition.
+
+## 🛑 STRICT DESIGN & UI FREEZE (CRITICAL)
+**DO NOT ACCIDENTALLY OR PROACTIVELY MODIFY THE LOOK AND FEEL OF THIS APPLICATION.**
+You are strictly forbidden from altering the design system, colors, spacing, CSS animations, or layout structures unless the user **EXPLICITLY** and **DIRECTLY** commands you to "change the design", "update the UI", or similar phrasing.
+- If the user asks for a functional fix (e.g., "fix the bug", "wire up the API", "add validation"), you must **PRESERVE** the existing HTML/Tailwind classes exactly as they are.
+- NEVER invent new Tailwind utility combinations to "improve" the look unless asked.
+- Assume the current UI is exactly what the designer intended.
+
+## 💅 STYLING STANDARDS (MANDATORY)
+- **NO INLINE STYLES**: You are strictly forbidden from using the `style={{ ... }}` prop in React components. All styling MUST be done through Tailwind CSS utility classes.
+- **Exception**: Inline styles are ONLY allowed if it is technically impossible to achieve the result with Tailwind (e.g., dynamic calculated values from an API or complex third-party library requirements) AND the user has explicitly and expressly authorized it for that specific case.
+- **Tailwind Only**: Always prefer standard Tailwind utilities or the tokens generated in `app/styles/generated-tokens.css`.
+
+## Spec-Driven Development (SDD) Workflow (MANDATORY)
+This project operates on a strict Spec-Driven Development (SDD) model.
+**Before writing ANY UI code or modifying any component, you MUST consult the following files:**
+1. `design-tokens.json` (Root) -> Contains the single source of truth for colors, fonts, shadows, and radii. Do not invent hex codes or spacing metrics.
+2. `docs/sdd/ui-components.spec.md` -> Contains the strict implementation rules for atomic components, layouts, and accessibility.
+
+If a requested UI feature or design pattern does not exist in `design-tokens.json` or the spec, you MUST ask the user to update the spec first.
+
+## UI Components & Design System
+
+### 1. The PremiumButton Standard (MANDATORY)
+**Before generating, suggesting, or writing any code involving buttons, actions, or links that look like buttons, you MUST adhere to the following rule:**
+
+There is a single source of truth for all buttons across the application: the `PremiumButton` component.
+
+- **NEVER** use standard HTML `<button>` tags for primary or secondary UI actions.
+- **NEVER** use generic `<Link className="...">` for button-like navigation.
+- **ALWAYS** import and use the `PremiumButton` component:
+  `import { PremiumButton } from "@/components/shared/components/PremiumButton";`
+
+#### PremiumButton API Properties:
+- **`href`**: If provided, automatically renders as a Next.js `<Link>`.
+- **`variant`**: `"primary"` (default) | `"secondary"` | `"outline"` | `"white"`.
+- **`size`**: `"sm"` | `"md"` (default) | `"lg"`.
+- **`icon`**: React element (e.g., `<Check />`).
+- **`iconPosition`**: `"left"` (default) | `"right"`.
+- **`isLoading`**: Boolean to show a spinner.
+- All standard HTML button props are natively supported (`onClick`, `disabled`, `type`, etc).
+
+#### Example Usage:
+```tsx
+import { PremiumButton } from "@/components/shared/components/PremiumButton";
+
+// Action Button
+<PremiumButton variant="primary" onClick={handleClick}>
+  Confirmar
+</PremiumButton>
+
+// Navigation Link Button
+<PremiumButton href="/dashboard" variant="outline" size="sm">
+  Ir al Dashboard
+</PremiumButton>
+```
+
+### 2. StatusBadge & SkillPill Standards (MANDATORY)
+- **StatusBadge**: ALWAYS use the dedicated component for application/job statuses. It must map statuses to semantic colors (Púrpura: Entrevista, Cyan: Postulada, Verde: Contratado, Rojo: Rechazado).
+- **SkillPill**: ALWAYS use the premium SkillPill for technical skills. It must have a minimum font size of 12px, subtle brand borders, and high contrast.
+
+### 3. Global Pagination & Loading States (MANDATORY)
+- **TablePagination**: ALL lists and tables must use `TablePagination`. It must use the brand's primary color (`#006a62`) for active states and `rounded-xl` for rounding.
+- **LoadingState**: Use standard skeleton patterns or the `LoadingState` component. Never use raw "Cargando..." text without a visual structure.
+
+### 4. Typography Standards
+- **Minimum Text Size (Strict Rule)**: Informational labels, badges, and small buttons MUST have a minimum size of **11px** (`text-[11px]`). **NEVER** use `10px` (`text-[10px]` or smaller) anywhere across the site, as it causes major visual accessibility issues.
+- **Color Palettes (Strict Rule)**: 
+  1. **NEVER** use `zinc` colors (like `text-zinc-400`, `text-zinc-500`, etc.) for text. Grayscale text colors must ALWAYS be **slate** (specifically `text-slate-500` or other `slate` shades with a proper suffix) to maintain clean color consistency and proper visual contrast.
+  2. **NEVER use random or custom hexadecimal colors (e.g., `text-[#006a62]`, `bg-[#006a62]`, etc.)** for styling unless explicitly instructed by the user. You MUST always use the defined design tokens and standard Tailwind classes configured in the application (like `text-primary`, `bg-primary`, `text-slate-500`, `bg-sky-50`, etc.).
+
+---
+**CRITICAL AI INSTRUCTION:** Do NOT implement any single line of code without passing through this document first to verify component standards.
