@@ -1,0 +1,15 @@
+﻿
+
+@layer base {
+  body {
+    @apply bg-white text-slate-500 font-primary;
+  }
+
+  .container {
+    @apply mx-auto px-8;
+  }
+
+  hr {
+    @apply border-gray-light;
+  }
+}

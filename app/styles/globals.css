@@ -1,0 +1,32 @@
+@import "tailwindcss";
+@import "./layout/theme.css";
+@import "./layout/forms.css";
+@import "./layout/buttons.css";
+@import "./layout/typography.css";
+@import "tw-animate-css";
+@plugin "@tailwindcss/container-queries";
+
+@import "./generated-tokens.css";
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+
+  html {
+    scrollbar-gutter: stable;
+  }
+
+  html,
+  body {
+    max-width: 100%;
+    overflow-x: hidden;
+  }
+
+  body {
+    font-family: var(--font-primary);
+    @apply bg-background text-foreground;
+    padding-right: 0px !important;
+  }
+}
+

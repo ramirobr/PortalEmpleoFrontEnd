@@ -24,11 +24,13 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
           id: data.userId,
           fullName: data.fullName,
           role: data.role,
+          roles: data.roles ?? [data.role],
           email: data.email,
           accessToken: data.token,
           tokenExpireIn: data.tokenExpireIn,
           refreshToken: data.refreshToken,
           idEmpresa: data.idEmpresa,
+          idTipoJornadaLaboral: data.idTipoJornadaLaboral,
         };
       },
     }),
@@ -60,12 +62,14 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
         id: token.id,
         fullName: token.fullName,
         role: token.role,
+        roles: token.roles ?? [token.role],
         email: token.email,
         emailVerified: null,
         accessToken: token.accessToken,
         refreshToken: token.refreshToken,
         tokenExpireIn: token.tokenExpireIn,
         idEmpresa: token.idEmpresa,
+        idTipoJornadaLaboral: token.idTipoJornadaLaboral,
       };
       return session;
     },

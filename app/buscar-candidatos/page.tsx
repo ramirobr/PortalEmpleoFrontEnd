@@ -1,0 +1,49 @@
+import { Suspense } from "react";
+import CandidatesContent from "../empresa-perfil/buscar-candidatos/components/CandidatesContent";
+import MainLayout from "@/components/shared/layout/MainLayout";
+
+type Props = {
+  searchParams: Promise<Record<string, string>>;
+};
+
+export default async function BuscarCandidatosPublicPage({ searchParams }: Props) {
+  const params = await searchParams;
+
+  const filters = {
+    page: params.page ?? "1",
+    pageSize: params.pageSize ?? "10",
+    q: params.q,
+    edadMin: params.edadMin,
+    edadMax: params.edadMax,
+    aspiracionMin: params.aspiracionMin,
+    aspiracionMax: params.aspiracionMax,
+    experienciaMin: params.experienciaMin,
+    experienciaMax: params.experienciaMax,
+    provincia: params.provincia,
+    ciudad: params.ciudad,
+    nivelEducacion: params.nivelEducacion,
+    preferenciaTurno: params.preferenciaTurno,
+  };
+
+  return (
+    <MainLayout>
+      <div className="container mx-auto py-8">
+        <div className="mb-8">
+          <h1 className="text-3xl font-semibold text-slate-900 mb-2">
+            Encuentra tu Equipo Ideal
+          </h1>
+          <p className="text-slate-600">
+            Explora el talento disponible y encuentra al candidato perfecto para tu empresa
+          </p>
+        </div>
+
+        <Suspense>
+          <CandidatesContent
+            initialFilters={filters as Record<string, string>}
+            filtersItems={undefined}
+          />
+        </Suspense>
+      </div>
+    </MainLayout>
+  );
+}

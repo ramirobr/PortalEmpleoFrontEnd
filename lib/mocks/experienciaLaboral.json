@@ -1,0 +1,55 @@
+[
+  {
+    "Empresa": "Tech Solutions S.A.",
+    "Titulo": "Desarrollo de Software",
+    "Puesto": "Desarrollador Full Stack",
+    "Institucion": "",
+    "Nivel": "",
+    "FechaInicio": "2020-01-15",
+    "FechaFin": "2023-12-31",
+    "Pais": "Ecuador",
+    "Actual": true
+  },
+  {
+    "Empresa": "InnovaSoft Corp.",
+    "Titulo": "Consultoría Tecnológica",
+    "Puesto": "Ingeniero de Software Senior",
+    "Institucion": "",
+    "Nivel": "",
+    "FechaInicio": "2018-03-10",
+    "FechaFin": "2019-12-20",
+    "Pais": "Ecuador",
+    "Actual": false
+  },
+  {
+    "Empresa": "Digital Systems Ltda.",
+    "Titulo": "Desarrollo Web",
+    "Puesto": "Desarrollador Frontend",
+    "Institucion": "",
+    "Nivel": "",
+    "FechaInicio": "2016-06-01",
+    "FechaFin": "2018-02-28",
+    "Pais": "Ecuador",
+    "Actual": false
+  },
+  {
+    "Empresa": "CodeMasters Inc.",
+    "Titulo": "Aplicaciones Móviles",
+    "Puesto": "Desarrollador Mobile",
+    "Institucion": "",
+    "Nivel": "",
+    "FechaInicio": "2014-09-15",
+    "FechaFin": "2016-05-30",
+    "Pais": "Ecuador"
+  },
+  {
+    "Empresa": "StartUp Ventures",
+    "Titulo": "Tecnología Financiera",
+    "Puesto": "Desarrollador Junior",
+    "Institucion": "",
+    "Nivel": "",
+    "FechaInicio": "2012-01-10",
+    "FechaFin": "2014-08-31",
+    "Pais": "Ecuador"
+  }
+]

@@ -1,0 +1,37 @@
+[
+  {
+    "Titulo": "Ing. de Sistemas",
+    "Institucion": "Universidad Tecnica Particular de Loja",
+    "Nivel": "Universitario - En Curso",
+    "Fecha": "2001-10-15",
+    "Pais": "Ecuador"
+  },
+  {
+    "Titulo": "Lic. en Administración",
+    "Institucion": "Universidad Central del Ecuador",
+    "Nivel": "Universitario - Finalizado",
+    "Fecha": "1998-07-20",
+    "Pais": "Ecuador"
+  },
+  {
+    "Titulo": "Tecnólogo en Informática",
+    "Institucion": "Instituto Superior Tecnológico",
+    "Nivel": "Tecnológico - Finalizado",
+    "Fecha": "2005-12-10",
+    "Pais": "Ecuador"
+  },
+  {
+    "Titulo": "Bachiller Técnico",
+    "Institucion": "Colegio Técnico Nacional",
+    "Nivel": "Secundario - Finalizado",
+    "Fecha": "1995-03-25",
+    "Pais": "Ecuador"
+  },
+  {
+    "Titulo": "Diplomado en Gestión de Proyectos",
+    "Institucion": "Escuela Politécnica Nacional",
+    "Nivel": "Diplomado - Finalizado",
+    "Fecha": "2010-09-30",
+    "Pais": "Ecuador"
+  }
+]

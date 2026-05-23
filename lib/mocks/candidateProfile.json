@@ -1,0 +1,202 @@
+{
+  "id": "cand-001",
+  "datosPersonales": {
+    "nombre": "María",
+    "apellido": "García López",
+    "tipoDocumento": "Cédula",
+    "numeroDocumento": "1723456789",
+    "fechaNacimiento": "1995-03-15",
+    "nacionalidad": "Ecuatoriana",
+    "genero": "Femenino",
+    "estadoCivil": "Soltera",
+    "movilidad": true,
+    "licencia": true,
+    "tipoLicencia": ["B", "A1"]
+  },
+  "datosContacto": {
+    "email": "maria.garcia@email.com",
+    "telefono": "+593 2 123 4567",
+    "celular": "+593 99 876 5432",
+    "direccion": "Av. República del Salvador N34-56",
+    "ciudad": "Quito",
+    "provincia": "Pichincha",
+    "pais": "Ecuador"
+  },
+  "resumenProfesional": "Profesional apasionada por la tecnología con más de 5 años de experiencia en desarrollo de software. Especializada en aplicaciones web modernas utilizando React, TypeScript y Node.js. Comprometida con las mejores prácticas de desarrollo y la entrega de productos de alta calidad. Excelentes habilidades de comunicación y trabajo en equipo.",
+  "disponibilidad": "Inmediata",
+  "expectativaSalarial": "$1,500 - $2,000 USD",
+  "educacion": [
+    {
+      "id": "edu-001",
+      "titulo": "Ingeniería en Sistemas Informáticos",
+      "institucion": "Escuela Politécnica Nacional",
+      "nivel": "Universitario - Finalizado",
+      "fechaInicio": "2013-09-01",
+      "fechaFin": "2018-07-15",
+      "estaCursando": false,
+      "descripcion": "Especialización en Desarrollo de Software. Proyecto de tesis: Sistema de gestión empresarial con arquitectura microservicios."
+    },
+    {
+      "id": "edu-002",
+      "titulo": "Diplomado en Cloud Computing",
+      "institucion": "Universidad San Francisco de Quito",
+      "nivel": "Diplomado - Finalizado",
+      "fechaInicio": "2020-01-15",
+      "fechaFin": "2020-06-30",
+      "estaCursando": false,
+      "descripcion": "Certificación en AWS y Azure. Arquitectura de soluciones cloud."
+    },
+    {
+      "id": "edu-003",
+      "titulo": "Maestría en Ciencia de Datos",
+      "institucion": "Universidad de las Américas",
+      "nivel": "Postgrado - En Curso",
+      "fechaInicio": "2024-09-01",
+      "fechaFin": null,
+      "estaCursando": true,
+      "descripcion": "Especialización en Machine Learning y Big Data Analytics."
+    }
+  ],
+  "experienciaLaboral": [
+    {
+      "id": "exp-001",
+      "puesto": "Senior Software Developer",
+      "empresa": "Tech Solutions Ecuador",
+      "sector": "Tecnología",
+      "fechaInicio": "2021-03-01",
+      "fechaFin": null,
+      "estaTrabajando": true,
+      "descripcion": "Liderazgo técnico de equipo de 5 desarrolladores. Diseño e implementación de arquitectura frontend con React y TypeScript. Integración de APIs RESTful y GraphQL. Implementación de CI/CD con GitHub Actions.",
+      "pais": "Ecuador",
+      "ciudad": "Quito",
+      "tipoEmpleo": "Tiempo Completo"
+    },
+    {
+      "id": "exp-002",
+      "puesto": "Full Stack Developer",
+      "empresa": "InnovaSoft Corp",
+      "sector": "Consultoría TI",
+      "fechaInicio": "2019-01-15",
+      "fechaFin": "2021-02-28",
+      "estaTrabajando": false,
+      "descripcion": "Desarrollo de aplicaciones empresariales con React, Node.js y PostgreSQL. Participación en proyectos ágiles con Scrum. Implementación de soluciones de e-commerce.",
+      "pais": "Ecuador",
+      "ciudad": "Quito",
+      "tipoEmpleo": "Tiempo Completo"
+    },
+    {
+      "id": "exp-003",
+      "puesto": "Junior Developer",
+      "empresa": "StartUp Ventures",
+      "sector": "Fintech",
+      "fechaInicio": "2018-08-01",
+      "fechaFin": "2018-12-31",
+      "estaTrabajando": false,
+      "descripcion": "Desarrollo de módulos frontend con React. Colaboración en APIs con Express.js. Participación en code reviews y pair programming.",
+      "pais": "Ecuador",
+      "ciudad": "Guayaquil",
+      "tipoEmpleo": "Tiempo Completo"
+    }
+  ],
+  "habilidades": [
+    {
+      "id": "skill-001",
+      "nombre": "React",
+      "nivel": "Avanzado",
+      "categoria": "Frontend",
+      "aniosExperiencia": 5
+    },
+    {
+      "id": "skill-002",
+      "nombre": "TypeScript",
+      "nivel": "Avanzado",
+      "categoria": "Lenguajes",
+      "aniosExperiencia": 4
+    },
+    {
+      "id": "skill-003",
+      "nombre": "Node.js",
+      "nivel": "Intermedio",
+      "categoria": "Backend",
+      "aniosExperiencia": 4
+    },
+    {
+      "id": "skill-004",
+      "nombre": "PostgreSQL",
+      "nivel": "Intermedio",
+      "categoria": "Base de Datos",
+      "aniosExperiencia": 3
+    },
+    {
+      "id": "skill-005",
+      "nombre": "Docker",
+      "nivel": "Intermedio",
+      "categoria": "DevOps",
+      "aniosExperiencia": 2
+    },
+    {
+      "id": "skill-006",
+      "nombre": "AWS",
+      "nivel": "Básico",
+      "categoria": "Cloud",
+      "aniosExperiencia": 2
+    },
+    {
+      "id": "skill-007",
+      "nombre": "Git",
+      "nivel": "Avanzado",
+      "categoria": "Herramientas",
+      "aniosExperiencia": 5
+    },
+    {
+      "id": "skill-008",
+      "nombre": "Python",
+      "nivel": "Intermedio",
+      "categoria": "Lenguajes",
+      "aniosExperiencia": 2
+    }
+  ],
+  "idiomas": [
+    {
+      "id": "lang-001",
+      "nombre": "Español",
+      "nivel": "Nativo"
+    },
+    {
+      "id": "lang-002",
+      "nombre": "Inglés",
+      "nivel": "Avanzado (B2)"
+    },
+    {
+      "id": "lang-003",
+      "nombre": "Portugués",
+      "nivel": "Básico (A2)"
+    }
+  ],
+  "certificaciones": [
+    {
+      "id": "cert-001",
+      "nombre": "AWS Certified Developer - Associate",
+      "institucion": "Amazon Web Services",
+      "fechaObtencion": "2023-05-20",
+      "fechaExpiracion": "2026-05-20",
+      "credentialId": "AWS-DEV-2023-12345"
+    },
+    {
+      "id": "cert-002",
+      "nombre": "Professional Scrum Master I (PSM I)",
+      "institucion": "Scrum.org",
+      "fechaObtencion": "2022-11-10",
+      "fechaExpiracion": null,
+      "credentialId": "PSM-I-845632"
+    }
+  ],
+  "aplicacion": {
+    "idVacante": "vac-001",
+    "tituloVacante": "Senior Frontend Developer",
+    "fechaAplicacion": "2026-01-15",
+    "estado": "En Revisión",
+    "cartaPresentacion": "Me dirijo a ustedes para expresar mi interés en la posición de Senior Frontend Developer. Con más de 5 años de experiencia en desarrollo web con React y TypeScript, estoy segura de que puedo aportar valor significativo a su equipo. Mi experiencia liderando proyectos y mi pasión por crear interfaces de usuario excepcionales me convierten en una candidata ideal para esta posición.",
+    "curriculumUrl": "/cv/maria-garcia-cv.pdf"
+  }
+}
