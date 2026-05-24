@@ -72,7 +72,7 @@ function LoginForm() {
     try {
       const res = await SignIn(email, password);
       if (res?.error) {
-        toast.error("Credenciales inválidas");
+        toast.error(res.error);
         return;
       }
       form.reset();
@@ -106,7 +106,7 @@ function LoginForm() {
 
       push("/");
     } catch {
-      toast.error("Credenciales inválidas");
+      toast.error("No se pudo iniciar sesion");
     }
   }
 

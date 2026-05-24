@@ -26,6 +26,7 @@ import { Pencil } from "lucide-react";
 import { fetchApi } from "@/lib/apiClient";
 import { toast } from "sonner";
 import { useState } from "react";
+import { normalizeWebsiteUrl } from "@/lib/url";
 
 const generalInfoSchema = z.object({
   nombre: z.string().min(1, "El nombre es requerido"),
@@ -75,11 +76,14 @@ export function GeneralInfoForm({
 
   const onSubmit = async (data: GeneralInfoFormData) => {
     try {
+      const sitioWeb = normalizeWebsiteUrl(data.sitioWeb);
+
       const response = await fetchApi(`/Company/update-general-info`, {
         method: "PUT",
         body: {
           idEmpresa: companyData.idEmpresa,
           ...data,
+          sitioWeb,
         },
         token: accessToken,
       });
@@ -102,7 +106,7 @@ export function GeneralInfoForm({
           nombre: data.nombre,
           razonSocial: data.razonSocial,
           numeroDocumento: data.numeroDocumento,
-          sitioWeb: data.sitioWeb,
+          sitioWeb,
           tiempoOperacion: data.tiempoOperacion,
           certificaciones: data.certificaciones,
           estado: selectedEstado

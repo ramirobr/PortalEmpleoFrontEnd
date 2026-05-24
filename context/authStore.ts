@@ -23,6 +23,7 @@ type AuthState = {
   setProfesion: (profesion: string) => void;
   setUnreadNotifications: (count: number) => void;
   setNotifications: (notifications: Notificacion[]) => void;
+  addNotification: (notification: Notificacion) => void;
   markNotificationRead: (id: string) => void;
   removeNotification: (id: string) => void;
   clear: () => void;
@@ -38,6 +39,7 @@ const initalState: Omit<
   | "setProfesion"
   | "setUnreadNotifications"
   | "setNotifications"
+  | "addNotification"
   | "markNotificationRead"
   | "removeNotification"
 > = {
@@ -105,6 +107,18 @@ export const useAuthStore = create<AuthState>((set) => ({
     set({
       notifications,
       unreadNotifications: notifications.filter((n) => !n.esLeida).length,
+    }),
+  addNotification: (notification) =>
+    set((state) => {
+      if (state.notifications.some((n) => n.idNotificacion === notification.idNotificacion)) {
+        return state;
+      }
+
+      const updated = [notification, ...state.notifications];
+      return {
+        notifications: updated,
+        unreadNotifications: updated.filter((n) => !n.esLeida).length,
+      };
     }),
   markNotificationRead: (id) =>
     set((state) => {

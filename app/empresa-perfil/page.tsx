@@ -65,7 +65,6 @@ export default async function EmpresaProfilePage() {
         {/* Sidebar Column */}
         <aside className="lg:col-span-4 space-y-6">
           <EmpresaSidebarWidgets
-            companyProfile={companyProfile ?? null}
             aplicantesRecientes={aplicantesRecientes}
             ofertasCount={ofertasCount}
             contrataciones={contrataciones}

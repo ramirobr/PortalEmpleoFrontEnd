@@ -27,6 +27,7 @@ import { AdminInfoForm } from "./AdminInfoForm";
 import { ContactInfoForm } from "./ContactInfoForm";
 import { GeneralInfoForm } from "./GeneralInfoForm";
 import { LogoUploadDialog } from "./LogoUploadDialog";
+import { getWebsiteDisplayUrl, normalizeWebsiteUrl } from "@/lib/url";
 
 interface CompanyProfileViewProps {
   profile: CompanyProfileData;
@@ -173,12 +174,12 @@ export default function CompanyProfileView({
                     Sitio Web
                   </p>
                   <a
-                    href={companyData.sitioWeb}
+                    href={normalizeWebsiteUrl(companyData.sitioWeb)}
                     target="_blank"
                     rel="noopener noreferrer"
                     className="font-medium text-primary hover:text-secondary transition-colors text-sm truncate block"
                   >
-                    {companyData.sitioWeb.replace(/^https?:\/\//, "")}
+                    {getWebsiteDisplayUrl(companyData.sitioWeb)}
                   </a>
                 </div>
               </div>

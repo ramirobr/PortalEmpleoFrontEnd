@@ -2,6 +2,7 @@ import { CompanyProfileData } from "@/types/company";
 import { Building2, Globe, Users, Briefcase, CheckCircle } from "lucide-react";
 import Pill from "@/components/shared/components/Pill";
 import Image from "next/image";
+import { getWebsiteDisplayUrl, normalizeWebsiteUrl } from "@/lib/url";
 
 interface CompanyProfileCardProps {
   profile: CompanyProfileData;
@@ -79,12 +80,12 @@ export default function CompanyProfileCard({
               <div>
                 <p className="text-[11px] font-extrabold uppercase tracking-widest text-slate-400 mb-0.5">Sitio Web</p>
                 <a
-                  href={profile.sitioWeb}
+                  href={normalizeWebsiteUrl(profile.sitioWeb)}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="font-bold text-primary hover:text-secondary transition-colors truncate block max-w-[200px]"
                 >
-                  {profile.sitioWeb.replace(/^https?:\/\//, "")}
+                  {getWebsiteDisplayUrl(profile.sitioWeb)}
                 </a>
               </div>
             </div>

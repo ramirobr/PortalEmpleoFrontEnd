@@ -1,7 +1,6 @@
 import { PremiumButton } from "@/components/shared/components/PremiumButton";
 import Link from "next/link";
 import {
-  Building2,
   CheckCircle2,
   ChevronRight,
   FileText,
@@ -9,90 +8,28 @@ import {
   Briefcase,
   Award,
 } from "lucide-react";
-import { CompanyProfileData } from "@/types/company";
 import { AplicanteReciente } from "@/types/company";
 
 interface EmpresaSidebarWidgetsProps {
-  companyProfile: CompanyProfileData | null;
   aplicantesRecientes: AplicanteReciente[];
   ofertasCount: number;
   contrataciones: number;
   candidatosEnRevision: number;
 }
 
-function calcularPorcentajePerfil(profile: CompanyProfileData | null): number {
-  if (!profile) return 0;
-  const campos = [
-    profile.descripcion,
-    profile.sitioWeb,
-    profile.logoUrl,
-    profile.telefonoContacto,
-    profile.correoContacto,
-    profile.direccion,
-    profile.ciudad?.nombre,
-    profile.industria?.nombre,
-    profile.cantidadEmpleados?.nombre,
-    profile.razonSocial,
-  ];
-  const rellenos = campos.filter((c) => !!c && c.trim() !== "").length;
-  return Math.round((rellenos / campos.length) * 100);
-}
-
-function CircularProgress({ percentage }: { percentage: number }) {
-  const radius = 40;
-  const circumference = 2 * Math.PI * radius;
-  const strokeDashoffset = circumference - (percentage / 100) * circumference;
-
-  return (
-    <div className="relative inline-flex items-center justify-center">
-      <svg width="100" height="100" className="-rotate-90">
-        <circle
-          cx="50"
-          cy="50"
-          r={radius}
-          fill="none"
-          stroke="#e5e7eb"
-          strokeWidth="8"
-        />
-        <circle
-          cx="50"
-          cy="50"
-          r={radius}
-          fill="none"
-          stroke="#006a62"
-          strokeWidth="8"
-          strokeDasharray={circumference}
-          strokeDashoffset={strokeDashoffset}
-          strokeLinecap="round"
-          className="transition-all duration-700"
-        />
-      </svg>
-      <div className="absolute flex flex-col items-center justify-center">
-        <Building2 className="size-5 text-primary mb-0.5" />
-        <span className="text-lg font-bold text-slate-800 leading-none">
-          {percentage}%
-        </span>
-      </div>
-    </div>
-  );
-}
-
 export default function EmpresaSidebarWidgets({
-  companyProfile,
   aplicantesRecientes,
   ofertasCount,
   contrataciones,
   candidatosEnRevision,
 }: EmpresaSidebarWidgetsProps) {
-  const profilePct = calcularPorcentajePerfil(companyProfile);
-
   const entrevistas = aplicantesRecientes.filter((a) =>
     a.usuario.estadoAplicacion.nombre.toLowerCase().includes("entrevista"),
   ).length;
 
   const procesos = [
     {
-      label: "En revisión",
+      label: "En revision",
       count: candidatosEnRevision,
       href: "/empresa-perfil/postulaciones",
       icon: Users,
@@ -119,40 +56,6 @@ export default function EmpresaSidebarWidgets({
 
   return (
     <div className="space-y-6">
-      {/* Mi Empresa - Profile completion */}
-      <section
-        className="bg-white rounded-2xl border border-zinc-100 shadow-sm p-6"
-        aria-labelledby="perfil-empresa-title"
-      >
-        <h3
-          id="perfil-empresa-title"
-          className="text-sm font-semibold text-slate-900 mb-6 flex items-center gap-2 uppercase tracking-wider"
-        >
-          <Building2 className="size-4 text-primary" />
-          Mi Empresa
-        </h3>
-        <div className="flex flex-col items-center gap-4">
-          <CircularProgress percentage={profilePct} />
-          <div className="text-center">
-            <p className="text-sm font-bold text-slate-900">
-              Perfil {profilePct}% completo
-            </p>
-            <p className="text-xs text-slate-500 mt-1">
-              {profilePct < 100
-                ? "Completa tu perfil para atraer mejor talento."
-                : "¡Tu perfil está excelente!"}
-            </p>
-          </div>
-          <PremiumButton
-            href="/empresa-perfil/perfil"
-            variant="primary"
-            className="w-full"
-          >
-            Editar Perfil
-          </PremiumButton>
-        </div>
-      </section>
-
       {/* Tus procesos activos - with counts */}
       <section
         className="bg-white rounded-2xl border border-zinc-100 shadow-sm p-6"
@@ -170,7 +73,7 @@ export default function EmpresaSidebarWidgets({
             <li key={item.label}>
               <Link
                 href={item.href}
-                className="flex items-center justify-between py-3  rounded-xl text-sm text-slate-700 hover:bg-zinc-50 hover:text-primary transition-all group"
+                className="flex items-center justify-between py-3 rounded-xl text-sm text-slate-700 hover:bg-zinc-50 hover:text-primary transition-all group"
               >
                 <div className="flex items-center gap-3">
                   <div className="size-8 rounded-lg bg-zinc-50 group-hover:bg-primary/10 flex items-center justify-center transition-colors">
@@ -225,7 +128,7 @@ export default function EmpresaSidebarWidgets({
           size="sm"
           className="mt-6 w-full"
         >
-          Ver Consejos →
+          Ver Consejos -&gt;
         </PremiumButton>
       </section>
     </div>

@@ -20,13 +20,11 @@ import {
 } from "@/components/ui/select";
 import { SearchAutocomplete } from "@/components/ui/search-autocomplete";
 import MapPicker from "@/components/ui/map-picker";
-import { SignIn } from "@/lib/auth/signin";
 import { CompanySignUp } from "@/lib/auth/signup";
 import { addSpaces } from "@/lib/utils";
 import { FormFieldsResponse } from "@/types/company";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { ArrowRight, Building2, Eye } from "lucide-react";
-import { useSession } from "next-auth/react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useRef, useState } from "react";
@@ -99,7 +97,6 @@ type CompanyFormProps = {
 
 export default function CompanyForm({ fields }: CompanyFormProps) {
   const { push } = useRouter();
-  const { update } = useSession();
   const [showPassword, setShowPassword] = useState(false);
   const [showRepeatPassword, setShowRepeatPassword] = useState(false);
   const passwordTimeoutRef = useRef<NodeJS.Timeout | null>(null);
@@ -153,14 +150,9 @@ export default function CompanyForm({ fields }: CompanyFormProps) {
     });
 
     if (registerRes?.isSuccess) {
-      const res = await SignIn(formData.email, formData.password);
-      if (res?.error) {
-        toast.error("Credenciales inválidas");
-        return;
-      }
       form.reset();
-      await update();
-      push("/empresa-perfil");
+      toast.success(registerRes.messages?.[0] ?? "Empresa registrada. Revisa tu correo para activarla.");
+      push("/auth/login");
     } else {
       toast.error(registerRes?.messages.join("\n"));
     }
