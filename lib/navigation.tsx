@@ -10,8 +10,10 @@ import {
   FolderOpen,
   MessageSquareQuote,
   ThumbsUp,
+  MessageSquare,
 } from "lucide-react";
 import React from "react";
+import { MESSAGING_ENABLED } from "@/lib/utils";
 
 export const getAuthLinks = (): NavLink[] => [
   {
@@ -108,6 +110,11 @@ export const getUserLinks = (handleLogout?: () => void): NavLink[] => [
     href: "/perfil/archivos",
     icon: <FolderOpen width={20} height={20} />,
   },
+  ...(MESSAGING_ENABLED ? [{
+    name: "Mensajes",
+    href: "/perfil/mensajes",
+    icon: <MessageSquare width={20} height={20} />,
+  }] : []),
   {
     name: "Cambiar contraseña",
     href: "/perfil/cambiar-contrasena",
@@ -209,6 +216,11 @@ export const getEmpresaLinks = (handleLogout?: () => void): NavLink[] => [
     href: "/empresa-perfil/archivos",
     icon: <FolderOpen width={20} height={20} />,
   },
+  ...(MESSAGING_ENABLED ? [{
+    name: "Mensajes",
+    href: "/empresa-perfil/mensajes",
+    icon: <MessageSquare width={20} height={20} />,
+  }] : []),
   {
     name: "Cambiar contraseña",
     href: "/empresa-perfil/cambiar-contrasena",

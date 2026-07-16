@@ -76,7 +76,13 @@ export default function CandidateHabilidades({
                     textColor={textColor}
                     className="flex items-center gap-1"
                   >
-                    {skill.nombre}
+                    <span>{skill.nombre}</span>
+                    {skill.aniosExperiencia > 0 && (
+                      <span className="opacity-70 text-[10px]">· {skill.aniosExperiencia} año{skill.aniosExperiencia !== 1 ? "s" : ""}</span>
+                    )}
+                    {skill.tipoExperiencia && (
+                      <span className="opacity-60 text-[10px]">· {skill.tipoExperiencia}</span>
+                    )}
                   </Pill>
                 );
               })}

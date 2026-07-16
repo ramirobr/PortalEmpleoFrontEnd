@@ -67,7 +67,7 @@ export default function EditarEducacion({
     });
 
     if (!res?.isSuccess) {
-      toast.error("Error actualizando educación");
+      toast.error("Error actualizando título/curso");
       return;
     }
 
@@ -75,7 +75,7 @@ export default function EditarEducacion({
       prev.map((item) => (item.id === editForm.id ? values : item)),
     );
     handleModalClose();
-    toast.success(res?.data || "Item actualizado");
+    toast.success("Título/Curso actualizado");
   };
 
   const handleAddSave = async (values: Educacion) => {
@@ -92,7 +92,7 @@ export default function EditarEducacion({
       body,
     });
     if (!res?.isSuccess) {
-      toast.error("Error agregando educación");
+      toast.error("Error agregando título/curso");
       return;
     }
     setEducacionItems([
@@ -100,7 +100,7 @@ export default function EditarEducacion({
       ...educacionItems,
     ]);
     handleAddModalClose();
-    toast.success("Educación agregada");
+    toast.success("Título/Curso agregado");
   };
 
   const handleDeleteConfirm = async () => {
@@ -115,7 +115,7 @@ export default function EditarEducacion({
     }
     setEducacionItems((prev) => prev.filter((h) => h.id !== deleteModal));
     handleDeleteCancel();
-    toast.success(res.data);
+    toast.success("Título/Curso eliminado");
   };
 
   const handleDeleteCancel = () => {
@@ -135,12 +135,12 @@ export default function EditarEducacion({
       <div className="flex justify-between items-center">
         <h2 className="text-2xl font-semibold text-primary flex items-center gap-2">
           <GraduationCap width={25} height={25} className="text-primary" />
-          Educación
+          Títulos y Cursos
         </h2>
         <button
           id="agregar-educacion"
           className="cursor-pointer flex items-center gap-2 text-primary font-bold align-center btn bg-primary/10"
-          aria-label={`Agregar nuevo item educación`}
+          aria-label={`Agregar nuevo item de título o curso`}
           type="button"
           onClick={handleAddClick}
         >
@@ -184,13 +184,28 @@ export default function EditarEducacion({
                         </Pill>
                       </span>
                     )}
+                    {item.documentoAdjunto && (
+                      <button
+                        type="button"
+                        onClick={() => {
+                          const ext = item.documentoAdjunto!.startsWith("data:application/pdf") ? ".pdf" : ".jpg";
+                          const a = document.createElement("a");
+                          a.href = item.documentoAdjunto!;
+                          a.download = `${item.titulo.replace(/\s+/g, "_")}${ext}`;
+                          a.click();
+                        }}
+                        className="flex items-center gap-1.5 text-sm text-primary hover:text-primary/80 underline cursor-pointer w-fit"
+                      >
+                        📄 Descargar documento
+                      </button>
+                    )}
                   </div>
                 </div>
                 <div className="flex items-center gap-6 self-start">
                   <button
                     id="editar"
                     className="cursor-pointer"
-                    aria-label={`Editar item educación: ${item.titulo}`}
+                    aria-label={`Editar item: ${item.titulo}`}
                     type="button"
                     onClick={() => handleEditClick(item.id)}
                   >

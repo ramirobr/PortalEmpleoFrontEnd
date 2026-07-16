@@ -21,6 +21,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { Textarea } from "@/components/ui/textarea";
 import { fetchApi } from "@/lib/apiClient";
 import { validarCedulaEcuatoriana } from "@/lib/utils";
 import { DatosPersonalesFieldsResponse, UserInfoData } from "@/types/user";
@@ -58,6 +59,11 @@ const schema = z
     idTipoJornadaLaboral: z.number().optional(),
     telefonoReferencia1: z.string().optional(),
     telefonoReferencia2: z.string().optional(),
+    expectativaSalarial: z.string().optional(),
+    tieneDiscapacidad: z.boolean().optional(),
+    tipoDiscapacidad: z.string().optional(),
+    porcentajeDiscapacidad: z.coerce.number().min(0).max(100).optional(),
+    medioContactoPreferido: z.string().optional(),
   })
   .superRefine((data, ctx) => {
     const CEDULA = 3580;
@@ -101,6 +107,11 @@ export default function EditarDatosPersonales({
       idTipoJornadaLaboral: user.datosPersonales.idTipoJornadaLaboral,
       telefonoReferencia1: user.datosPersonales.telefonoReferencia1 ?? "",
       telefonoReferencia2: user.datosPersonales.telefonoReferencia2 ?? "",
+      expectativaSalarial: user.datosPersonales.expectativaSalarial ?? "",
+      tieneDiscapacidad: user.datosPersonales.tieneDiscapacidad ?? false,
+      tipoDiscapacidad: user.datosPersonales.tipoDiscapacidad ?? "",
+      porcentajeDiscapacidad: user.datosPersonales.porcentajeDiscapacidad ?? undefined,
+      medioContactoPreferido: user.datosPersonales.medioContactoPreferido ?? "",
     },
   });
 
@@ -130,6 +141,11 @@ export default function EditarDatosPersonales({
       idTipoJornadaLaboral: data.idTipoJornadaLaboral,
       telefonoReferencia1: data.telefonoReferencia1,
       telefonoReferencia2: data.telefonoReferencia2,
+      expectativaSalarial: data.expectativaSalarial || undefined,
+      tieneDiscapacidad: data.tieneDiscapacidad,
+      tipoDiscapacidad: data.tipoDiscapacidad || undefined,
+      porcentajeDiscapacidad: data.porcentajeDiscapacidad ?? undefined,
+      medioContactoPreferido: data.medioContactoPreferido || undefined,
     };
 
     const res = await fetchApi("/User/update-user", {
@@ -530,6 +546,121 @@ export default function EditarDatosPersonales({
               )}
             />
           </div>
+          {/* Aspiración salarial y preferencia de contacto */}
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-4 mt-4">
+            <FormField
+              control={form.control}
+              name="expectativaSalarial"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel htmlFor="expectativaSalarial">Aspiración salarial</FormLabel>
+                  <FormControl>
+                    <Input
+                      id="expectativaSalarial"
+                      disabled={!isEditing}
+                      placeholder="Ej: $800 - $1200 mensuales"
+                      {...field}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="medioContactoPreferido"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel htmlFor="medioContactoPreferido">Medio de contacto preferido</FormLabel>
+                  <FormControl>
+                    <Select
+                      onValueChange={field.onChange}
+                      value={field.value ?? ""}
+                      disabled={!isEditing}
+                    >
+                      <SelectTrigger id="medioContactoPreferido">
+                        <SelectValue placeholder="Selecciona una opción" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="Llamada telefónica">Llamada telefónica</SelectItem>
+                        <SelectItem value="WhatsApp">WhatsApp</SelectItem>
+                        <SelectItem value="Correo electrónico">Correo electrónico</SelectItem>
+                        <SelectItem value="Mensajería interna">Mensajería interna</SelectItem>
+                      </SelectContent>
+                    </Select>
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+          </div>
+          {/* Discapacidad */}
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-4">
+            <FormField
+              control={form.control}
+              name="tieneDiscapacidad"
+              render={({ field }) => (
+                <FormItem className="block">
+                  <FormLabel htmlFor="tieneDiscapacidad" className="mr-2">
+                    Persona con discapacidad
+                  </FormLabel>
+                  <FormControl>
+                    <Checkbox
+                      id="tieneDiscapacidad"
+                      checked={field.value ?? false}
+                      onCheckedChange={field.onChange}
+                      disabled={!isEditing}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+          </div>
+          {form.watch("tieneDiscapacidad") && (
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-4">
+              <FormField
+                control={form.control}
+                name="tipoDiscapacidad"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel htmlFor="tipoDiscapacidad">Tipo de discapacidad</FormLabel>
+                    <FormControl>
+                      <Input
+                        id="tipoDiscapacidad"
+                        disabled={!isEditing}
+                        placeholder="Ej: Visual, Auditiva, Motriz..."
+                        {...field}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name="porcentajeDiscapacidad"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel htmlFor="porcentajeDiscapacidad">Porcentaje de discapacidad (%)</FormLabel>
+                    <FormControl>
+                      <Input
+                        id="porcentajeDiscapacidad"
+                        type="number"
+                        min={0}
+                        max={100}
+                        disabled={!isEditing}
+                        placeholder="Ej: 30"
+                        value={field.value !== undefined ? String(field.value) : ""}
+                        onChange={(e) => field.onChange(e.target.value === "" ? undefined : Number(e.target.value))}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            </div>
+          )}
           {isEditing && (
             <div className="col-span-2 mt-8 flex justify-end">
               <PremiumButton

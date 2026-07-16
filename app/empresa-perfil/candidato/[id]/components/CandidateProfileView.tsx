@@ -84,7 +84,7 @@ export default function CandidateProfileView({
 
         {/* Right Column - Secondary Info */}
         <div className="space-y-6">
-          <CandidateContactInfo datosContacto={candidate.datosContacto} />
+          <CandidateContactInfo datosContacto={candidate.datosContacto} candidateId={idCandidato} nombreCandidato={nombreCandidato} />
 
           <CandidateHabilidades habilidades={candidate.habiliades} />
 

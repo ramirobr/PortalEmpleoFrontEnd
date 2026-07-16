@@ -662,21 +662,21 @@ export default function CompanyForm({ fields }: CompanyFormProps) {
                   <div className="text-sm">
                     Acepto los{" "}
                     <Link
-                      href="/terms"
+                      href="/terminos"
                       className="text-primary font-semibold underline"
                     >
                       Términos y Condiciones
                     </Link>
                     ,{" "}
                     <Link
-                      href="/privacy"
+                      href="/privacidad"
                       className="text-primary font-semibold underline"
                     >
                       Política de Privacidad
                     </Link>
                     ,{" "}
                     <Link
-                      href="/contract"
+                      href="/contrato"
                       className="text-primary font-semibold underline"
                     >
                       Condiciones de contratación
@@ -690,7 +690,7 @@ export default function CompanyForm({ fields }: CompanyFormProps) {
                     </Link>
                     ,{" "}
                     <Link
-                      href="/help"
+                      href="/ayuda"
                       className="text-primary font-semibold underline"
                     >
                       Solicitud de Ayuda

@@ -2,6 +2,7 @@ import Link from "next/link";
 import Pill from "@/components/shared/components/Pill";
 import { ListaTrabajosAplicado } from "@/types/user";
 import { formatDistanceToNow } from "date-fns";
+import { parseBackendDate } from "@/lib/utils";
 import { es } from "date-fns/locale";
 
 type JobsAppliedProps = {
@@ -19,7 +20,7 @@ export default function JobsApplied({
       <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-6">
         {listaTrabajosAplicados?.length ? (
           listaTrabajosAplicados.map((job) => {
-            const timeAgo = formatDistanceToNow(new Date(job.fechaAplicacion), {
+            const timeAgo = formatDistanceToNow(parseBackendDate(job.fechaAplicacion), {
               addSuffix: true,
               locale: es,
             });

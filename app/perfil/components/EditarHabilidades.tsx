@@ -45,8 +45,9 @@ const habilidadSchema = z.object({
     .number()
     .min(0, "Debe ser mayor a 0")
     .max(60, "Maximo alcanzado"),
-  idCategoria: z.number().min(1, "Selecciona una categoria"),
-  idNivel: z.number().min(1, "Selecciona un nivel"),
+  idCategoria: z.number().min(1, "Selecciona una categoría"),
+  idNivel: z.number().min(1, "Selecciona un nivel de dominio"),
+  idTipoExperiencia: z.number().optional(),
 });
 
 export type HabilidadValues = z.infer<typeof habilidadSchema>;
@@ -99,7 +100,8 @@ export default function EditarHabilidades({
     const body = {
       idCategoriaHabilidad: values.idCategoria,
       idNivelExperiencia: values.idNivel,
-      aniosExperiencia: values.aniosExperiencia, //FIXME Not being saved
+      aniosExperiencia: values.aniosExperiencia,
+      idTipoExperiencia: values.idTipoExperiencia ?? null,
       nombre: values.nombre,
       idCurriculum,
       orden: 0,
@@ -124,6 +126,8 @@ export default function EditarHabilidades({
       idCategoria: res.data.idCategoriaHabilidad,
       categoria: "",
       orden: 0,
+      aniosExperiencia: res.data.aniosExperiencia,
+      idTipoExperiencia: res.data.idTipoExperiencia,
     };
     setHabilidades([habilidad, ...habilidades]);
     handleAddModalClose();
@@ -146,7 +150,8 @@ export default function EditarHabilidades({
       idHabilidad: editModal.id,
       idCategoriaHabilidad: values.idCategoria,
       idNivelExperiencia: values.idNivel,
-      aniosExperiencia: values.aniosExperiencia, //FIXME Not being saved
+      aniosExperiencia: values.aniosExperiencia,
+      idTipoExperiencia: values.idTipoExperiencia ?? null,
       nombre: values.nombre,
       idCurriculum,
       orden: 0,
@@ -171,6 +176,8 @@ export default function EditarHabilidades({
       idCategoria: body.idCategoriaHabilidad,
       categoria: "",
       orden: 0,
+      aniosExperiencia: body.aniosExperiencia,
+      idTipoExperiencia: body.idTipoExperiencia ?? undefined,
     };
     setHabilidades((prev) =>
       prev.map((item) => (item.id === habilidad.id ? habilidad : item)),
@@ -291,6 +298,7 @@ const AddHabilidadForm: React.FC<AddHabilidadFormProps> = ({
       idCategoria: undefined,
       idNivel: undefined,
       aniosExperiencia: 0,
+      idTipoExperiencia: undefined,
     },
   });
 
@@ -306,7 +314,7 @@ const AddHabilidadForm: React.FC<AddHabilidadFormProps> = ({
           name="nombre"
           render={({ field }) => (
             <FormItem>
-              <FormLabel htmlFor="add-nombre">Nombre</FormLabel>
+              <FormLabel htmlFor="add-nombre">Nombre de la habilidad</FormLabel>
               <FormControl>
                 <Input
                   {...field}
@@ -321,19 +329,29 @@ const AddHabilidadForm: React.FC<AddHabilidadFormProps> = ({
         />
         <FormField
           control={form.control}
-          name="aniosExperiencia"
+          name="idCategoria"
           render={({ field }) => (
-            <FormItem>
-              <FormLabel htmlFor="add-nombre">Años de experiencia</FormLabel>
+            <FormItem className="w-full">
+              <FormLabel>Categoría *</FormLabel>
               <FormControl>
-                <Input
-                  type="number"
-                  value={field.value ?? ""}
-                  onChange={(e) => {
-                    const v = e.target.value;
-                    field.onChange(v === "" ? undefined : Number(v));
-                  }}
-                />
+                <Select
+                  onValueChange={(value) => field.onChange(Number(value))}
+                  value={field.value ? String(field.value) : ""}
+                >
+                  <SelectTrigger>
+                    <SelectValue placeholder="Ej: Técnica, Blanda, Herramienta..." />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {fields?.categoria_habilidad?.map((cat) => (
+                      <SelectItem
+                        key={cat.idCatalogo}
+                        value={cat.idCatalogo.toString()}
+                      >
+                        {cat.nombre}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -344,14 +362,14 @@ const AddHabilidadForm: React.FC<AddHabilidadFormProps> = ({
           name="idNivel"
           render={({ field }) => (
             <FormItem className="w-full">
-              <FormLabel>Tipo de experiencia *</FormLabel>
+              <FormLabel>Nivel de dominio *</FormLabel>
               <FormControl>
                 <Select
                   onValueChange={(value) => field.onChange(Number(value))}
                   value={field.value ? String(field.value) : ""}
                 >
                   <SelectTrigger>
-                    <SelectValue placeholder="" />
+                    <SelectValue placeholder="Ej: Básico, Intermedio, Avanzado..." />
                   </SelectTrigger>
                   <SelectContent>
                     {fields?.experiencia?.map((exp) => (
@@ -371,29 +389,51 @@ const AddHabilidadForm: React.FC<AddHabilidadFormProps> = ({
         />
         <FormField
           control={form.control}
-          name="idCategoria"
+          name="idTipoExperiencia"
           render={({ field }) => (
             <FormItem className="w-full">
-              <FormLabel>Categoría *</FormLabel>
+              <FormLabel>Tipo de experiencia</FormLabel>
               <FormControl>
                 <Select
                   onValueChange={(value) => field.onChange(Number(value))}
                   value={field.value ? String(field.value) : ""}
                 >
                   <SelectTrigger>
-                    <SelectValue placeholder="" />
+                    <SelectValue placeholder="Ej: Prácticas, Laboral, Proyectos..." />
                   </SelectTrigger>
                   <SelectContent>
-                    {fields?.categoria_habilidad?.map((cat) => (
+                    {fields?.tipo_experiencia_habilidad?.map((t) => (
                       <SelectItem
-                        key={cat.idCatalogo}
-                        value={cat.idCatalogo.toString()}
+                        key={t.idCatalogo}
+                        value={t.idCatalogo.toString()}
                       >
-                        {cat.nombre}
+                        {t.nombre}
                       </SelectItem>
                     ))}
                   </SelectContent>
                 </Select>
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        <FormField
+          control={form.control}
+          name="aniosExperiencia"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Años de experiencia en esta habilidad</FormLabel>
+              <FormControl>
+                <Input
+                  type="number"
+                  min={0}
+                  max={60}
+                  value={field.value ?? ""}
+                  onChange={(e) => {
+                    const v = e.target.value;
+                    field.onChange(v === "" ? 0 : Number(v));
+                  }}
+                />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -436,7 +476,8 @@ const EditHabilidadForm: React.FC<EditHabilidadFormProps> = ({
       nombre: initialValues?.nombre || "",
       idCategoria: initialValues?.idCategoria || 0,
       idNivel: initialValues?.idNivel || 0,
-      aniosExperiencia: 0,
+      aniosExperiencia: initialValues?.aniosExperiencia || 0,
+      idTipoExperiencia: initialValues?.idTipoExperiencia ?? undefined,
     },
   });
 
@@ -452,11 +493,11 @@ const EditHabilidadForm: React.FC<EditHabilidadFormProps> = ({
           name="nombre"
           render={({ field }) => (
             <FormItem>
-              <FormLabel htmlFor="add-nombre">Nombre</FormLabel>
+              <FormLabel htmlFor="edit-nombre">Nombre de la habilidad</FormLabel>
               <FormControl>
                 <Input
                   {...field}
-                  id="add-nombre"
+                  id="edit-nombre"
                   className="w-full border rounded px-3 py-2"
                   required
                 />
@@ -467,19 +508,29 @@ const EditHabilidadForm: React.FC<EditHabilidadFormProps> = ({
         />
         <FormField
           control={form.control}
-          name="aniosExperiencia"
+          name="idCategoria"
           render={({ field }) => (
-            <FormItem>
-              <FormLabel htmlFor="add-nombre">Años de experiencia</FormLabel>
+            <FormItem className="w-full">
+              <FormLabel>Categoría *</FormLabel>
               <FormControl>
-                <Input
-                  type="number"
-                  value={field.value ?? ""}
-                  onChange={(e) => {
-                    const v = e.target.value;
-                    field.onChange(v === "" ? undefined : Number(v));
-                  }}
-                />
+                <Select
+                  onValueChange={(value) => field.onChange(Number(value))}
+                  value={field.value ? String(field.value) : ""}
+                >
+                  <SelectTrigger>
+                    <SelectValue placeholder="Ej: Técnica, Blanda, Herramienta..." />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {fields?.categoria_habilidad?.map((cat) => (
+                      <SelectItem
+                        key={cat.idCatalogo}
+                        value={cat.idCatalogo.toString()}
+                      >
+                        {cat.nombre}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -490,14 +541,14 @@ const EditHabilidadForm: React.FC<EditHabilidadFormProps> = ({
           name="idNivel"
           render={({ field }) => (
             <FormItem className="w-full">
-              <FormLabel>Tipo de experiencia *</FormLabel>
+              <FormLabel>Nivel de dominio *</FormLabel>
               <FormControl>
                 <Select
                   onValueChange={(value) => field.onChange(Number(value))}
                   value={field.value ? String(field.value) : ""}
                 >
                   <SelectTrigger>
-                    <SelectValue placeholder="" />
+                    <SelectValue placeholder="Ej: Básico, Intermedio, Avanzado..." />
                   </SelectTrigger>
                   <SelectContent>
                     {fields?.experiencia?.map((exp) => (
@@ -517,29 +568,51 @@ const EditHabilidadForm: React.FC<EditHabilidadFormProps> = ({
         />
         <FormField
           control={form.control}
-          name="idCategoria"
+          name="idTipoExperiencia"
           render={({ field }) => (
             <FormItem className="w-full">
-              <FormLabel>Categoría *</FormLabel>
+              <FormLabel>Tipo de experiencia</FormLabel>
               <FormControl>
                 <Select
                   onValueChange={(value) => field.onChange(Number(value))}
                   value={field.value ? String(field.value) : ""}
                 >
                   <SelectTrigger>
-                    <SelectValue placeholder="" />
+                    <SelectValue placeholder="Ej: Prácticas, Laboral, Proyectos..." />
                   </SelectTrigger>
                   <SelectContent>
-                    {fields?.categoria_habilidad?.map((cat) => (
+                    {fields?.tipo_experiencia_habilidad?.map((t) => (
                       <SelectItem
-                        key={cat.idCatalogo}
-                        value={cat.idCatalogo.toString()}
+                        key={t.idCatalogo}
+                        value={t.idCatalogo.toString()}
                       >
-                        {cat.nombre}
+                        {t.nombre}
                       </SelectItem>
                     ))}
                   </SelectContent>
                 </Select>
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        <FormField
+          control={form.control}
+          name="aniosExperiencia"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Años de experiencia en esta habilidad</FormLabel>
+              <FormControl>
+                <Input
+                  type="number"
+                  min={0}
+                  max={60}
+                  value={field.value ?? ""}
+                  onChange={(e) => {
+                    const v = e.target.value;
+                    field.onChange(v === "" ? 0 : Number(v));
+                  }}
+                />
               </FormControl>
               <FormMessage />
             </FormItem>

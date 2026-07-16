@@ -1,14 +1,44 @@
 ﻿"use client";
 
+import { useState } from "react";
+import { useSession } from "next-auth/react";
+import { useAuthStore } from "@/context/authStore";
 import { DatosContacto } from "@/types/user";
+import { MESSAGING_ENABLED } from "@/lib/utils";
+import { getOrCreateConversacion } from "@/lib/mensajes/api";
+import { MessageSquare } from "lucide-react";
 
 interface CandidateContactInfoProps {
   datosContacto: DatosContacto;
+  candidateId: string;
+  nombreCandidato?: string;
 }
 
 export default function CandidateContactInfo({
   datosContacto,
+  candidateId,
+  nombreCandidato,
 }: CandidateContactInfoProps) {
+  const { data: session } = useSession();
+  const idEmpresa = useAuthStore((s) => s.idEmpresa);
+  const openFloatingChat = useAuthStore((s) => s.openFloatingChat);
+  const [contactando, setContactando] = useState(false);
+
+  const handleSendMessage = async () => {
+    if (!session?.user.accessToken || !idEmpresa) return;
+    setContactando(true);
+    try {
+      const res = await getOrCreateConversacion(
+        { idUsuario: candidateId, idEmpresa },
+        session.user.accessToken,
+      );
+      if (res?.isSuccess) {
+        openFloatingChat(res.data.idConversacion, nombreCandidato ?? datosContacto.email);
+      }
+    } finally {
+      setContactando(false);
+    }
+  };
   return (
     <div className="bg-white rounded-lg shadow p-6">
       <h3 className="text-lg font-semibold text-slate-900 mb-4 flex items-center gap-2">
@@ -155,6 +185,64 @@ export default function CandidateContactInfo({
             </p>
           </div>
         </div>
+
+        {/* Planilla de servicio básico */}
+        {datosContacto.planillaServicio && (
+          <div className="flex items-start gap-3">
+            <div className="p-2 bg-primary/10 rounded-lg">
+              <svg className="size-4 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+              </svg>
+            </div>
+            <div>
+              <p className="text-xs text-slate-500 uppercase tracking-wide">Planilla de servicio básico</p>
+              <button type="button" onClick={() => { const d = datosContacto.planillaServicio as string; const ext = d.startsWith("data:application/pdf") ? ".pdf" : ".jpg"; const a = document.createElement("a"); a.href = d; a.download = `planilla_servicio${ext}`; a.click(); }} className="text-sm font-medium text-primary hover:text-primary/80 underline cursor-pointer">Descargar archivo</button>
+            </div>
+          </div>
+        )}
+
+        {/* Antecedentes penales */}
+        {datosContacto.documentoAntecedentes && (
+          <div className="flex items-start gap-3">
+            <div className="p-2 bg-primary/10 rounded-lg">
+              <svg className="size-4 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+              </svg>
+            </div>
+            <div>
+              <p className="text-xs text-slate-500 uppercase tracking-wide">Antecedentes penales</p>
+              <button type="button" onClick={() => { const a = document.createElement("a"); a.href = datosContacto.documentoAntecedentes!; a.download = "antecedentes_penales.pdf"; a.click(); }} className="text-sm font-medium text-primary hover:text-primary/80 underline cursor-pointer">Descargar documento</button>
+            </div>
+          </div>
+        )}
+
+        {/* Validación IESS */}
+        {datosContacto.documentoIESS && (
+          <div className="flex items-start gap-3">
+            <div className="p-2 bg-primary/10 rounded-lg">
+              <svg className="size-4 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+              </svg>
+            </div>
+            <div>
+              <p className="text-xs text-slate-500 uppercase tracking-wide">Validación IESS</p>
+              <button type="button" onClick={() => { const a = document.createElement("a"); a.href = datosContacto.documentoIESS!; a.download = "validacion_iess.pdf"; a.click(); }} className="text-sm font-medium text-primary hover:text-primary/80 underline cursor-pointer">Descargar documento</button>
+            </div>
+          </div>
+        )}
+
+        {/* Botón Enviar Mensaje — controlado por feature flag */}
+        {MESSAGING_ENABLED && (
+          <button
+            type="button"
+            disabled={contactando}
+            onClick={handleSendMessage}
+            className="mt-2 w-full flex items-center justify-center gap-2 px-4 py-2.5 bg-primary text-white rounded-lg hover:bg-primary/90 disabled:opacity-50 disabled:cursor-not-allowed transition-colors font-medium text-sm cursor-pointer"
+          >
+            <MessageSquare className="size-4" />
+            {contactando ? "Iniciando chat…" : "Enviar Mensaje"}
+          </button>
+        )}
       </div>
     </div>
   );

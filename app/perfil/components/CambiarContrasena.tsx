@@ -12,6 +12,7 @@ import {
 } from "@/components/ui/form";
 import { ArrowLeft, Check, Eye, Save, X } from "lucide-react";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { Input } from "@/components/ui/input";
 import { fetchApi } from "@/lib/apiClient";
 import { GenericResponse } from "@/types/user";
@@ -40,6 +41,8 @@ type ChangePasswordFormValues = z.infer<typeof schema>;
 
 export default function CambiarContrasena() {
   const { data: session } = useSession();
+  const pathname = usePathname();
+  const dashboardHref = pathname.startsWith("/empresa-perfil") ? "/empresa-perfil" : "/perfil";
 
   // Show/hide password states
   const [showCurrentPassword, setShowCurrentPassword] = useState(false);
@@ -361,11 +364,11 @@ export default function CambiarContrasena() {
         </div>
       </Card>
       <Link
-        href="/"
+        href={dashboardHref}
         className="flex items-center gap-6 text-primary font-bold mt-8 hover:underline"
       >
         <ArrowLeft className="size-5" />
-        Volver al Inicio
+        Volver al Panel
       </Link>
     </>
   );

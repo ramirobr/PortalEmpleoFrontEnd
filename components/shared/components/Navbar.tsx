@@ -8,9 +8,12 @@ import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useCallback, useEffect, useState } from "react";
-import { Bell, Menu, User } from "lucide-react";
+import { Bell, LogOut, Menu, MessageSquare, User } from "lucide-react";
 import NotificationDropdown from "./NotificationDropdown";
+import MessageDropdown from "./MessageDropdown";
+import FloatingChatWindows from "@/components/mensajes/FloatingChatWindow";
 import { PremiumButton } from "./PremiumButton";
+import { MESSAGING_ENABLED } from "@/lib/utils";
 
 interface NavLink {
   label: string;
@@ -24,6 +27,7 @@ interface NavbarProps {
   navLinks?: NavLink[];
   profileButtonLabel?: string;
   logoHref?: string;
+  onLogout?: () => void;
 }
 
 const DEFAULT_NAV_LINKS: NavLink[] = [
@@ -63,16 +67,19 @@ export default function Navbar({
   navLinks,
   profileButtonLabel = "Mi Perfil",
   logoHref = "/",
+  onLogout,
 }: NavbarProps) {
   const { data: session, status } = useSession();
   const pathname = usePathname();
   const id = useAuthStore((s) => s.id);
   const unreadNotifications = useAuthStore((s) => s.unreadNotifications);
+  const unreadMessages = useAuthStore((s) => s.unreadMessages);
   const hydrate = useAuthStore((s) => s.hydrate);
   const isCompanyAdmin =
     session?.user?.role === ROLES.AdministradorEmpresa ||
     session?.user?.role === ROLES.AdministradorDeEmpresa;
   const [notifOpen, setNotifOpen] = useState(false);
+  const [msgOpen, setMsgOpen] = useState(false);
   const resolvedLogoHref =
     status === "authenticated" ? getDashboardHref(session?.user?.role) : logoHref;
   const resolvedNavLinks =
@@ -108,6 +115,7 @@ export default function Navbar({
   }, [handleUserSession, status]);
 
   return (
+    <>
     <nav className="sticky top-0 z-50 w-full py-3 bg-white/95 backdrop-blur-md border-b border-zinc-100 shadow-sm transition-all duration-300">
       <div className="container flex items-center justify-between gap-4">
         {/* Left: Logo */}
@@ -183,7 +191,31 @@ export default function Navbar({
                   />
                 </div>
 
-                {/* Mi Perfil button */}
+                {/* Message bell — solo si la mensajería está activa */}
+                {MESSAGING_ENABLED && (
+                <div className="relative">
+                  <button
+                    type="button"
+                    aria-label="Mensajes"
+                    onClick={() => { setMsgOpen((prev) => !prev); setNotifOpen(false); }}
+                    className="relative p-2 rounded-full hover:bg-zinc-100 transition-colors cursor-pointer"
+                  >
+                    <MessageSquare className="size-5 text-slate-600" />
+                    {unreadMessages > 0 && (
+                      <span className="absolute -top-0.5 -right-0.5 min-w-[18px] h-[18px] bg-primary text-white text-xs font-bold rounded-full flex items-center justify-center px-1">
+                        {unreadMessages > 99 ? "99+" : unreadMessages}
+                      </span>
+                    )}
+                  </button>
+
+                  <MessageDropdown
+                    isOpen={msgOpen}
+                    onClose={() => setMsgOpen(false)}
+                  />
+                </div>
+                )}
+
+                {/* Mi Perfil button — opens sidebar on all screen sizes */}
                 <PremiumButton
                   type="button"
                   onClick={onHamburgerClick}
@@ -193,6 +225,19 @@ export default function Navbar({
                 >
                   {profileButtonLabel}
                 </PremiumButton>
+                {/* Logout button — desktop only, visible alongside Mi Perfil */}
+                {onLogout && (
+                  <button
+                    type="button"
+                    onClick={onLogout}
+                    aria-label="Cerrar sesión"
+                    title="Cerrar sesión"
+                    className="hidden lg:flex items-center gap-1.5 text-sm font-medium text-slate-500 hover:text-red-600 transition-colors cursor-pointer px-2 py-1.5 rounded-md hover:bg-red-50"
+                  >
+                    <LogOut className="size-4" />
+                    <span>Salir</span>
+                  </button>
+                )}
               </>
             ) : (
               <>
@@ -231,5 +276,8 @@ export default function Navbar({
         )}
       </div>
     </nav>
+    {/* Ventana flotante de chat — fuera del nav para evitar overflow clip */}
+    {MESSAGING_ENABLED && <FloatingChatWindows />}
+    </>
   );
 }

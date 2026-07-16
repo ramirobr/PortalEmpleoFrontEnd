@@ -18,9 +18,11 @@ import {
 } from "@/components/ui/select";
 import { DatosPersonalesFieldsResponse, Educacion } from "@/types/user";
 import { zodResolver } from "@hookform/resolvers/zod";
-import React from "react";
+import { FileText, Trash2 } from "lucide-react";
+import React, { useRef } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
+import { fileToBase64 } from "@/lib/utils";
 
 const schema = z.object({
   titulo: z.string().min(1, "El título es obligatorio."),
@@ -31,6 +33,26 @@ const schema = z.object({
   estaCursando: z.boolean(),
   idNivelEstudio: z.number().min(1, "Selecciona un nivel de estudio"),
   descripcion: z.string().min(1, "Descripcion es obligatoria."),
+  documento: z
+    .union([z.instanceof(File), z.string(), z.undefined()])
+    .optional()
+    .refine(
+      (f) => {
+        if (f instanceof File) return f.size <= 5 * 1024 * 1024;
+        return true;
+      },
+      { message: "El archivo no debe exceder los 5MB." }
+    )
+    .refine(
+      (f) => {
+        if (f instanceof File)
+          return ["application/pdf", "image/jpeg", "image/jpg", "image/png",
+            "application/msword",
+            "application/vnd.openxmlformats-officedocument.wordprocessingml.document"].includes(f.type);
+        return true;
+      },
+      { message: "Solo se permiten PDF, Word, JPG o PNG." }
+    ),
 });
 
 export type EditarEducacionItemValues = z.infer<typeof schema>;
@@ -48,6 +70,8 @@ const EditarEducacionItem: React.FC<EditarEducacionItemProps> = ({
   onSave,
   onCancel,
 }) => {
+  const fileInputRef = useRef<HTMLInputElement | null>(null);
+
   const form = useForm<EditarEducacionItemValues>({
     resolver: zodResolver(schema),
     defaultValues: {
@@ -63,16 +87,25 @@ const EditarEducacionItem: React.FC<EditarEducacionItemProps> = ({
       estaCursando: initialValues?.estaCursando ?? false,
       idNivelEstudio: initialValues?.idNivelEstudio ?? 0,
       descripcion: initialValues?.descripcion ?? "",
+      documento: initialValues?.documentoAdjunto ?? undefined,
     },
   });
 
-  const onSubmit = (data: EditarEducacionItemValues) => {
+  const onSubmit = async (data: EditarEducacionItemValues) => {
+    let documentoAdjunto: string | undefined = undefined;
+    if (data.documento instanceof File) {
+      documentoAdjunto = await fileToBase64(data.documento);
+    } else if (typeof data.documento === "string" && data.documento) {
+      documentoAdjunto = data.documento;
+    }
+
     onSave({
       ...data,
       fechaInicio: new Date(data.fechaInicio).toISOString(),
       fechaFin: new Date(data.fechaFin).toISOString(),
       id: "",
       orden: 0,
+      documentoAdjunto,
     });
   };
 
@@ -213,6 +246,76 @@ const EditarEducacionItem: React.FC<EditarEducacionItemProps> = ({
             )}
           />
         </div>
+
+        {/* Documento adjunto */}
+        <FormField
+          control={form.control}
+          name="documento"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Documento de respaldo (opcional)</FormLabel>
+              <FormControl>
+                <div className="flex items-center gap-3">
+                  <input
+                    type="file"
+                    accept=".pdf,.jpg,.jpeg,.png,.doc,.docx"
+                    className="hidden"
+                    ref={(el) => {
+                      fileInputRef.current = el;
+                      field.ref(el);
+                    }}
+                    onChange={(e) => {
+                      const file = e.target.files?.[0];
+                      if (file) field.onChange(file);
+                    }}
+                  />
+                  <button
+                    type="button"
+                    onClick={() => fileInputRef.current?.click()}
+                    className="btn btn-secondary flex items-center gap-2 cursor-pointer text-sm"
+                  >
+                    <FileText className="size-4" />
+                    {field.value instanceof File
+                      ? field.value.name
+                      : typeof field.value === "string" && field.value
+                        ? "Documento cargado"
+                        : "Subir documento"}
+                  </button>
+                  {field.value && (
+                    <button
+                      type="button"
+                      onClick={() => {
+                        field.onChange(undefined);
+                        if (fileInputRef.current) fileInputRef.current.value = "";
+                      }}
+                      className="text-red-500 hover:text-red-700 cursor-pointer"
+                      aria-label="Quitar documento"
+                    >
+                      <Trash2 className="size-4" />
+                    </button>
+                  )}
+                  {typeof field.value === "string" && field.value && (
+                    <button
+                      type="button"
+                      onClick={() => {
+                        const ext = field.value?.toString().startsWith("data:application/pdf") ? ".pdf" : ".jpg";
+                        const a = document.createElement("a");
+                        a.href = field.value as string;
+                        a.download = `documento_titulo${ext}`;
+                        a.click();
+                      }}
+                      className="text-sm text-primary underline cursor-pointer"
+                    >
+                      Descargar
+                    </button>
+                  )}
+                </div>
+              </FormControl>
+              <p className="text-xs text-slate-500 mt-1">PDF, Word, JPG o PNG · máx. 5MB</p>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
 
         <div className="flex justify-end gap-2 mt-4">
           <PremiumButton variant="outline" onClick={onCancel}>

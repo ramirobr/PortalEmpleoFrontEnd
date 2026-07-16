@@ -5,6 +5,7 @@ import { PremiumButton } from "@/components/shared/components/PremiumButton";
 import { Bell, MailOpen, Send, Clock, Trash2 } from "lucide-react";
 import { formatDistanceToNow } from "date-fns";
 import { es } from "date-fns/locale";
+import { parseBackendDate } from "@/lib/utils";
 import { useState, useRef } from "react";
 import { Notificacion } from "@/types/user";
 import { useSession } from "next-auth/react";
@@ -93,7 +94,7 @@ export default function NotificacionesCandidato({
           <p className="text-slate-500 font-medium italic">No tienes notificaciones en este momento.</p>
         ) : (
           sortedNotifications.map((notif) => {
-            const timeAgo = formatDistanceToNow(new Date(notif.fechaCreacion), {
+            const timeAgo = formatDistanceToNow(parseBackendDate(notif.fechaCreacion), {
               addSuffix: true,
               locale: es,
             });

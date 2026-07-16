@@ -1,5 +1,6 @@
 "use client";
 import { UserAuthData, Notificacion } from "@/types/user";
+import type { Mensaje } from "@/types/mensajes";
 import { create } from "zustand";
 
 export type AuthHydratorProps = {
@@ -25,7 +26,16 @@ type AuthState = {
   setNotifications: (notifications: Notificacion[]) => void;
   addNotification: (notification: Notificacion) => void;
   markNotificationRead: (id: string) => void;
+  markAllNotificationsRead: () => void;
   removeNotification: (id: string) => void;
+  unreadMessages: number;
+  setUnreadMessages: (count: number) => void;
+  addUnreadMessage: () => void;
+  lastIncomingMessage: Mensaje | null;
+  setLastIncomingMessage: (msg: Mensaje | null) => void;
+  floatingConvs: Array<{ convId: string; nombre: string }>;
+  openFloatingChat: (convId: string, nombre: string) => void;
+  closeFloatingChat: (convId: string) => void;
   clear: () => void;
 } & AuthHydratorProps & { profesion?: string };
 
@@ -41,7 +51,13 @@ const initalState: Omit<
   | "setNotifications"
   | "addNotification"
   | "markNotificationRead"
+  | "markAllNotificationsRead"
   | "removeNotification"
+  | "setUnreadMessages"
+  | "addUnreadMessage"
+  | "setLastIncomingMessage"
+  | "openFloatingChat"
+  | "closeFloatingChat"
 > = {
   id: undefined,
   fullName: undefined,
@@ -50,6 +66,9 @@ const initalState: Omit<
   isAuthenticated: false,
   unreadNotifications: 0,
   notifications: [],
+  unreadMessages: 0,
+  floatingConvs: [],
+  lastIncomingMessage: null,
   idCurriculum: "",
   pic: "",
   idEmpresa: undefined,
@@ -103,10 +122,20 @@ export const useAuthStore = create<AuthState>((set) => ({
       profesion,
     })),
   setUnreadNotifications: (count) => set({ unreadNotifications: count }),
-  setNotifications: (notifications) =>
-    set({
-      notifications,
-      unreadNotifications: notifications.filter((n) => !n.esLeida).length,
+  setNotifications: (incoming) =>
+    set((state) => {
+      // Las notificaciones "incoming" vienen del servidor y solo incluyen no leídas.
+      // Preservamos las que el usuario ya marcó como leídas localmente para que
+      // no desaparezcan de la lista al re-renderizar el dashboard.
+      const incomingIds = new Set(incoming.map((n) => n.idNotificacion));
+      const preservedRead = state.notifications.filter(
+        (n) => n.esLeida && !incomingIds.has(n.idNotificacion),
+      );
+      const merged = [...incoming, ...preservedRead];
+      return {
+        notifications: merged,
+        unreadNotifications: merged.filter((n) => !n.esLeida).length,
+      };
     }),
   addNotification: (notification) =>
     set((state) => {
@@ -130,6 +159,28 @@ export const useAuthStore = create<AuthState>((set) => ({
         unreadNotifications: updated.filter((n) => !n.esLeida).length,
       };
     }),
+  markAllNotificationsRead: () =>
+    set((state) => ({
+      notifications: state.notifications.map((n) => ({ ...n, esLeida: true })),
+      unreadNotifications: 0,
+    })),
+  setUnreadMessages: (count) => set({ unreadMessages: count }),
+  addUnreadMessage: () => set((state) => ({ unreadMessages: state.unreadMessages + 1 })),
+  setLastIncomingMessage: (msg) => set({ lastIncomingMessage: msg }),
+  openFloatingChat: (convId, nombre) =>
+    set((state) => {
+      // Si ya está abierta, no duplicar
+      if (state.floatingConvs.some((c) => c.convId === convId)) return state;
+      // Máximo 3 ventanas simultáneas — eliminar la más antigua si se supera
+      const current = state.floatingConvs.length >= 3
+        ? state.floatingConvs.slice(1)
+        : state.floatingConvs;
+      return { floatingConvs: [...current, { convId, nombre }] };
+    }),
+  closeFloatingChat: (convId) =>
+    set((state) => ({
+      floatingConvs: state.floatingConvs.filter((c) => c.convId !== convId),
+    })),
   removeNotification: (id) =>
     set((state) => {
       const updated = state.notifications.filter((n) => n.idNotificacion !== id);

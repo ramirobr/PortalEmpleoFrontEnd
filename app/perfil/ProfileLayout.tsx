@@ -57,6 +57,7 @@ export default function ProfileLayout({ children }: Children) {
           { label: "Inicio", href: "/perfil" },
           { label: "Ofertas", href: "/empleos-busqueda" },
         ]}
+        onLogout={handleLogout}
       />
       <div className="relative bg-zinc-50">
         <AsideMenu

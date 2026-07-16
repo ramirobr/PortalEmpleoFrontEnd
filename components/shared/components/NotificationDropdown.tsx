@@ -8,6 +8,7 @@ import { useSession } from "next-auth/react";
 import { useAuthStore } from "@/context/authStore";
 import { fetchApi } from "@/lib/apiClient";
 import { ROLES } from "@/types/auth";
+import { parseBackendDate } from "@/lib/utils";
 
 interface NotificationDropdownProps {
   isOpen: boolean;
@@ -22,12 +23,14 @@ export default function NotificationDropdown({
   const notifications = useAuthStore((s) => s.notifications);
   const unreadNotifications = useAuthStore((s) => s.unreadNotifications);
   const markNotificationRead = useAuthStore((s) => s.markNotificationRead);
+  const markAllNotificationsRead = useAuthStore((s) => s.markAllNotificationsRead);
   const removeNotification = useAuthStore((s) => s.removeNotification);
   const panelRef = useRef<HTMLDivElement>(null);
   const isCompanyAdmin =
     session?.user?.role === ROLES.AdministradorEmpresa ||
     session?.user?.role === ROLES.AdministradorDeEmpresa;
   const [deletingId, setDeletingId] = useState<string | null>(null);
+  const [markingAll, setMarkingAll] = useState(false);
 
   const onCloseRef = useRef(onClose);
   useEffect(() => {
@@ -93,6 +96,30 @@ export default function NotificationDropdown({
     }
   };
 
+  const markAllAsRead = async () => {
+    if (!session?.user?.accessToken || unreadNotifications === 0) return;
+    setMarkingAll(true);
+    try {
+      const unread = notifications.filter((n) => !n.esLeida);
+      await Promise.all(
+        unread.map((n) => {
+          const endpoint = isCompanyAdmin
+            ? `/NotificacionesEmpresa/marcarLeida/${n.idNotificacion}`
+            : `/Notificacion/marcarLeida/${n.idNotificacion}?esLeida=true`;
+          return fetchApi(endpoint, {
+            method: "PUT",
+            token: session.user.accessToken,
+          });
+        }),
+      );
+      markAllNotificationsRead();
+    } catch (error) {
+      console.error("Error marking all notifications as read:", error);
+    } finally {
+      setMarkingAll(false);
+    }
+  };
+
   if (!isOpen) return null;
 
   const sorted = notifications.toSorted(
@@ -124,6 +151,21 @@ export default function NotificationDropdown({
         </button>
       </div>
 
+      {/* Mark all as read bar */}
+      {unreadNotifications > 0 && (
+        <div className="px-5 py-2 border-b border-zinc-100 flex justify-end">
+          <button
+            type="button"
+            onClick={markAllAsRead}
+            disabled={markingAll}
+            className="flex items-center gap-1.5 text-xs font-medium text-primary hover:text-primary/80 disabled:opacity-50 cursor-pointer transition-colors"
+          >
+            <MailOpen className="size-3.5" />
+            {markingAll ? "Marcando..." : "Marcar todas como leídas"}
+          </button>
+        </div>
+      )}
+
       {/* List */}
       <div className="overflow-y-auto max-h-[420px]">
         {sorted.length === 0 ? (
@@ -132,7 +174,7 @@ export default function NotificationDropdown({
           </div>
         ) : (
           sorted.map((notif) => {
-            const timeAgo = formatDistanceToNow(new Date(notif.fechaCreacion), {
+            const timeAgo = formatDistanceToNow(parseBackendDate(notif.fechaCreacion), {
               addSuffix: true,
               locale: es,
             });

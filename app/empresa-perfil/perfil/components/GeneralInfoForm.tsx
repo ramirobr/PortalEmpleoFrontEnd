@@ -27,6 +27,7 @@ import { fetchApi } from "@/lib/apiClient";
 import { toast } from "sonner";
 import { useState } from "react";
 import { normalizeWebsiteUrl } from "@/lib/url";
+import { Textarea } from "@/components/ui/textarea";
 
 const generalInfoSchema = z.object({
   nombre: z.string().min(1, "El nombre es requerido"),
@@ -39,6 +40,7 @@ const generalInfoSchema = z.object({
   idEstadoEmpresa: z.number().min(1, "Selecciona un estado"),
   tiempoOperacion: z.number().min(0).optional(),
   certificaciones: z.string().optional(),
+  descripcion: z.string().max(1000, "Máximo 1000 caracteres").optional(),
 });
 
 type GeneralInfoFormData = z.infer<typeof generalInfoSchema>;
@@ -71,6 +73,7 @@ export function GeneralInfoForm({
       idEstadoEmpresa: companyData.estado?.id || 0,
       tiempoOperacion: companyData.tiempoOperacion ?? undefined,
       certificaciones: companyData.certificaciones || "",
+      descripcion: companyData.descripcion || "",
     },
   });
 
@@ -84,6 +87,7 @@ export function GeneralInfoForm({
           idEmpresa: companyData.idEmpresa,
           ...data,
           sitioWeb,
+          descripcion: data.descripcion || undefined,
         },
         token: accessToken,
       });
@@ -109,6 +113,7 @@ export function GeneralInfoForm({
           sitioWeb,
           tiempoOperacion: data.tiempoOperacion,
           certificaciones: data.certificaciones,
+          descripcion: data.descripcion || undefined,
           estado: selectedEstado
             ? { id: selectedEstado.idCatalogo, nombre: selectedEstado.nombre }
             : companyData.estado,
@@ -328,6 +333,21 @@ export function GeneralInfoForm({
             {form.formState.errors.idEstadoEmpresa && (
               <p className="text-sm text-red-500">
                 {form.formState.errors.idEstadoEmpresa.message}
+              </p>
+            )}
+          </div>
+
+          <div className="space-y-2">
+            <Label htmlFor="descripcion">Descripción de la empresa</Label>
+            <Textarea
+              id="descripcion"
+              {...form.register("descripcion")}
+              placeholder="Describe la empresa, su actividad económica y principales líneas de negocio..."
+              rows={4}
+            />
+            {form.formState.errors.descripcion && (
+              <p className="text-sm text-red-500">
+                {form.formState.errors.descripcion.message}
               </p>
             )}
           </div>

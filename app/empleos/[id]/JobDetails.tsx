@@ -22,12 +22,15 @@ import {
   GraduationCap,
   Mail,
   MapPin,
+  MessageSquare,
 } from "lucide-react";
 import { useSession } from "next-auth/react";
 import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
 import JobApplyForm from "../components/JobApplyForm";
+import { getOrCreateConversacion } from "@/lib/mensajes/api";
+import { MESSAGING_ENABLED } from "@/lib/utils";
 
 type ArchivoPublico = {
   idArchivoEmpresa: string;
@@ -39,9 +42,11 @@ type ArchivoPublico = {
 
 export default function JobDetails(job: Job) {
   const id = useAuthStore((s) => s.id);
+  const openFloatingChat = useAuthStore((s) => s.openFloatingChat);
   const { data: session } = useSession();
   const viewedRef = useRef(false);
   const [archivos, setArchivos] = useState<ArchivoPublico[]>([]);
+  const [contactando, setContactando] = useState(false);
 
   useEffect(() => {
     if (
@@ -170,7 +175,8 @@ export default function JobDetails(job: Job) {
             </div>
             <div>
               <Card>
-                <TituloSubrayado>Resumen de la oferta</TituloSubrayado>                <div className="flex flex-col gap-4 ">
+                <TituloSubrayado>Resumen de la oferta</TituloSubrayado>
+                <div className="flex flex-col gap-4 ">
                   <div className="flex items-center gap-4 pt-0">
                     <IconBadge size={32} icon={Banknote} className="shrink-0" />
                     <div>
@@ -300,6 +306,37 @@ export default function JobDetails(job: Job) {
                   <ExternalLink className="size-4" />
                   Ver más empleos de esta empresa
                 </Link>
+
+                {/* Contactar empresa via mensajería interna */}
+                {MESSAGING_ENABLED && session?.user.role === ROLES.Postulante && job.idEmpresa && (
+                  <button
+                    type="button"
+                    disabled={contactando}
+                    onClick={async () => {
+                      if (!id || !session?.user.accessToken) return;
+                      setContactando(true);
+                      try {
+                        const res = await getOrCreateConversacion(
+                          {
+                            idUsuario: id,
+                            idEmpresa: job.idEmpresa!,
+                            idVacante: job.idVacante,
+                          },
+                          session.user.accessToken,
+                        );
+                        if (res?.isSuccess) {
+                          openFloatingChat(res.data.idConversacion, job.nombreEmpresa);
+                        }
+                      } finally {
+                        setContactando(false);
+                      }
+                    }}
+                    className="mt-3 w-full flex items-center justify-center gap-2 px-4 py-2.5 bg-primary text-white rounded-lg hover:bg-primary/90 disabled:opacity-50 disabled:cursor-not-allowed transition-colors font-medium text-sm cursor-pointer"
+                  >
+                    <MessageSquare className="size-4" />
+                    {contactando ? "Iniciando chat…" : "Contactar empresa"}
+                  </button>
+                )}
                 {archivos.length > 0 && (
                   <div className="mt-4">
                     <p className="text-sm font-semibold text-slate-700 mb-2">Documentos de la empresa</p>

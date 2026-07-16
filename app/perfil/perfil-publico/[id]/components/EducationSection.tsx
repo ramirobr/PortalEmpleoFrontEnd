@@ -18,7 +18,7 @@ export default function EducationSection({ educacion }: EducationSectionProps) {
     <div className="bg-white rounded-xl shadow-sm border border-zinc-100 p-6 md:p-8">
       <div className="flex items-center gap-3 mb-6">
         <GraduationCap className="text-teal-600" size={24} />
-        <h2 className="text-xl font-semibold text-teal-600">Educación</h2>
+        <h2 className="text-xl font-semibold text-teal-600">Títulos y Cursos</h2>
       </div>
 
       <div className="space-y-6">

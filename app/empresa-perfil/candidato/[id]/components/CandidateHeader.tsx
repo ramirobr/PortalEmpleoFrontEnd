@@ -133,6 +133,23 @@ export default function CandidateHeader({
                 Licencia: {datosPersonales.tipoLicencia.join(", ")}
               </Pill>
             )}
+            {datosPersonales.expectativaSalarial && (
+              <Pill variant="custom" bgColor="bg-emerald-100" textColor="text-emerald-700">
+                💰 Aspiración: {datosPersonales.expectativaSalarial}
+              </Pill>
+            )}
+            {datosPersonales.medioContactoPreferido && (
+              <Pill variant="custom" bgColor="bg-teal-100" textColor="text-teal-700">
+                📞 Contacto preferido: {datosPersonales.medioContactoPreferido}
+              </Pill>
+            )}
+            {datosPersonales.tieneDiscapacidad && (
+              <Pill variant="custom" bgColor="bg-sky-100" textColor="text-sky-700">
+                ♿ Discapacidad
+                {datosPersonales.tipoDiscapacidad ? `: ${datosPersonales.tipoDiscapacidad}` : ""}
+                {datosPersonales.porcentajeDiscapacidad ? ` (${datosPersonales.porcentajeDiscapacidad}%)` : ""}
+              </Pill>
+            )}
           </div>
         </div>
       </div>

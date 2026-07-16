@@ -59,6 +59,7 @@ export default function EmpresaProfileLayout({ children }: Children) {
           { label: "Contrataciones", href: "/empresa-perfil/postulaciones" },
         ]}
         profileButtonLabel="Mi Empresa"
+        onLogout={handleLogout}
       />
       <div className="flex relative">
         <AsideMenu

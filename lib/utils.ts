@@ -3,8 +3,30 @@ import { twMerge } from "tailwind-merge";
 import { formatDistanceToNow } from "date-fns";
 import { es } from "date-fns/locale";
 
+/**
+ * Feature flag — mensajería interna.
+ * Para desactivar: NEXT_PUBLIC_MESSAGING_ENABLED=false en .env.local
+ * Por defecto: habilitado si la variable no está definida.
+ */
+export const MESSAGING_ENABLED =
+  process.env.NEXT_PUBLIC_MESSAGING_ENABLED !== "false";
+
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
+}
+
+/**
+ * Parsea una fecha devuelta por el backend .NET (sin sufijo de zona horaria)
+ * como UTC. Sin esto, JavaScript la interpreta como hora local, generando
+ * desfases de +5h en Ecuador (UTC-5).
+ */
+export function parseBackendDate(dateStr: string): Date {
+  if (!dateStr) return new Date();
+  const normalized =
+    dateStr.endsWith("Z") || dateStr.includes("+") || dateStr.includes("-", 10)
+      ? dateStr
+      : dateStr + "Z";
+  return new Date(normalized);
 }
 
 export const addSpaces = (t: string) =>

@@ -1,6 +1,11 @@
 ﻿"use client";
 
 import { useState } from "react";
+import { useRouter } from "next/navigation";
+import { useSession } from "next-auth/react";
+import { useAuthStore } from "@/context/authStore";
+import { getOrCreateConversacion } from "@/lib/mensajes/api";
+import { MESSAGING_ENABLED } from "@/lib/utils";
 import {
   CheckIcon,
   XCircleIcon,
@@ -14,6 +19,10 @@ export default function CandidateActions({
   candidateId,
 }: CandidateActionsProps) {
   const [isProcessing, setIsProcessing] = useState(false);
+  const [contactando, setContactando] = useState(false);
+  const router = useRouter();
+  const { data: session } = useSession();
+  const idEmpresa = useAuthStore((s) => s.idEmpresa);
 
   const handleApprove = async () => {
     setIsProcessing(true);
@@ -36,15 +45,24 @@ export default function CandidateActions({
   };
 
   const handleScheduleInterview = () => {
-    // TODO: Implement interview scheduling
     console.log("Schedule interview for:", candidateId);
     alert("Función de programar entrevista próximamente");
   };
 
-  const handleSendMessage = () => {
-    // TODO: Implement messaging
-    console.log("Send message to:", candidateId);
-    alert("Función de mensajería próximamente");
+  const handleSendMessage = async () => {
+    if (!session?.user.accessToken || !idEmpresa) return;
+    setContactando(true);
+    try {
+      const res = await getOrCreateConversacion(
+        { idUsuario: candidateId, idEmpresa },
+        session.user.accessToken,
+      );
+      if (res?.isSuccess) {
+        router.push(`/empresa-perfil/mensajes`);
+      }
+    } finally {
+      setContactando(false);
+    }
   };
 
   return (
@@ -94,9 +112,11 @@ export default function CandidateActions({
         </button>
 
         {/* Send Message Button */}
+        {MESSAGING_ENABLED && (
         <button
           onClick={handleSendMessage}
-          className="w-full flex items-center justify-center gap-2 px-4 py-2.5 border border-zinc-300 text-slate-700 rounded-lg hover:bg-zinc-50 transition-colors font-medium"
+          disabled={contactando}
+          className="w-full flex items-center justify-center gap-2 px-4 py-2.5 border border-zinc-300 text-slate-700 rounded-lg hover:bg-zinc-50 transition-colors font-medium disabled:opacity-50 disabled:cursor-not-allowed"
         >
           <svg
             className="size-4"
@@ -111,8 +131,9 @@ export default function CandidateActions({
               d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"
             />
           </svg>
-          Enviar Mensaje
+          {contactando ? "Iniciando…" : "Enviar Mensaje"}
         </button>
+        )}
       </div>
 
       {/* Additional Actions */}
