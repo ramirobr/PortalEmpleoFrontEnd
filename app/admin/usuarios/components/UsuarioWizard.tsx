@@ -235,6 +235,22 @@ const adminStepFields: Record<number, FieldPath<AdminFormData>[]> = {
   3: ["email", "idRoles", "password", "repeatPassword"],
 };
 
+const renderSectionHeader = (
+  icon: ReactNode,
+  title: string,
+  description: string,
+) => (
+  <div className="mb-6 flex items-start gap-3">
+    <div className="mt-0.5 flex size-10 shrink-0 items-center justify-center rounded-md bg-primary/10 text-primary">
+      {icon}
+    </div>
+    <div>
+      <h3 className="text-lg font-semibold text-slate-900">{title}</h3>
+      <p className="mt-1 text-sm text-slate-500">{description}</p>
+    </div>
+  </div>
+);
+
 export default function UsuarioWizard({
   onSubmit,
   onCancel,
@@ -489,22 +505,6 @@ export default function UsuarioWizard({
           </div>
         );
       })}
-    </div>
-  );
-
-  const renderSectionHeader = (
-    icon: ReactNode,
-    title: string,
-    description: string,
-  ) => (
-    <div className="mb-6 flex items-start gap-3">
-      <div className="mt-0.5 flex size-10 shrink-0 items-center justify-center rounded-md bg-primary/10 text-primary">
-        {icon}
-      </div>
-      <div>
-        <h3 className="text-lg font-semibold text-slate-900">{title}</h3>
-        <p className="mt-1 text-sm text-slate-500">{description}</p>
-      </div>
     </div>
   );
 

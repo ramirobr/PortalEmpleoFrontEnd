@@ -77,14 +77,12 @@ function SingleFloatingChat({ convId, nombre, index }: SingleFloatingChatProps) 
   };
 
   const handleToggleMinimize = () => {
-    setMinimized((v) => {
-      const next = !v;
-      if (!next && unreadCount > 0 && session?.user.accessToken) {
-        setUnreadCount(0);
-        marcarLeidosByConversacion(convId, isCompanyAdmin, session.user.accessToken);
-      }
-      return next;
-    });
+    const next = !minimized;
+    setMinimized(next);
+    if (!next && unreadCount > 0 && session?.user.accessToken) {
+      setUnreadCount(0);
+      marcarLeidosByConversacion(convId, isCompanyAdmin, session.user.accessToken);
+    }
   };
 
   return (

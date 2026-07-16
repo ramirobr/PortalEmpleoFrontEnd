@@ -133,6 +133,163 @@ function buildForm(empresa: CompanyProfileData | null): EmpresaFormState {
   };
 }
 
+function EmpresaContactSection({
+  form,
+  ciudadOptions,
+  onUpdate,
+}: {
+  form: EmpresaFormState;
+  ciudadOptions: CatalogsByType[];
+  onUpdate: (field: keyof EmpresaFormState, value: string) => void;
+}) {
+  return (
+    <section className="grid gap-4 md:grid-cols-2">
+      <div>
+        <Label htmlFor="empresa-correo">Correo de contacto</Label>
+        <Input
+          id="empresa-correo"
+          type="email"
+          value={form.correoContacto}
+          onChange={(event) => onUpdate("correoContacto", event.target.value)}
+          required
+        />
+      </div>
+      <div>
+        <Label htmlFor="empresa-telefono">Teléfono de contacto</Label>
+        <Input
+          id="empresa-telefono"
+          value={form.telefonoContacto}
+          onChange={(event) => onUpdate("telefonoContacto", event.target.value)}
+        />
+      </div>
+      <div>
+        <Label>Ciudad</Label>
+        <Select
+          value={form.idCiudad}
+          onValueChange={(value) => onUpdate("idCiudad", value)}
+        >
+          <SelectTrigger>
+            <SelectValue placeholder="Selecciona ciudad" />
+          </SelectTrigger>
+          <SelectContent>
+            {ciudadOptions.map((item) => (
+              <SelectItem key={item.idCatalogo} value={item.idCatalogo.toString()}>
+                {item.nombre}
+              </SelectItem>
+            ))}
+          </SelectContent>
+        </Select>
+      </div>
+      <div>
+        <Label htmlFor="empresa-direccion">Dirección</Label>
+        <Input
+          id="empresa-direccion"
+          value={form.direccion}
+          onChange={(event) => onUpdate("direccion", event.target.value)}
+          required
+        />
+      </div>
+      <div>
+        <Label htmlFor="empresa-latitud">Latitud</Label>
+        <Input
+          id="empresa-latitud"
+          type="number"
+          step="any"
+          value={form.latitud}
+          onChange={(event) => onUpdate("latitud", event.target.value)}
+        />
+      </div>
+      <div>
+        <Label htmlFor="empresa-longitud">Longitud</Label>
+        <Input
+          id="empresa-longitud"
+          type="number"
+          step="any"
+          value={form.longitud}
+          onChange={(event) => onUpdate("longitud", event.target.value)}
+        />
+      </div>
+    </section>
+  );
+}
+
+function EmpresaAdminFields({
+  form,
+  generoOptions,
+  onUpdate,
+}: {
+  form: EmpresaFormState;
+  generoOptions: CatalogsByType[];
+  onUpdate: (field: keyof EmpresaFormState, value: string) => void;
+}) {
+  return (
+    <section className="grid gap-4 border-t border-zinc-100 pt-6 md:grid-cols-2">
+      <div>
+        <Label htmlFor="empresa-admin-nombre">Nombre administrador</Label>
+        <Input
+          id="empresa-admin-nombre"
+          value={form.nombreAdministrador}
+          onChange={(event) => onUpdate("nombreAdministrador", event.target.value)}
+        />
+      </div>
+      <div>
+        <Label htmlFor="empresa-admin-apellido">Apellido administrador</Label>
+        <Input
+          id="empresa-admin-apellido"
+          value={form.apellidoAdministrador}
+          onChange={(event) => onUpdate("apellidoAdministrador", event.target.value)}
+        />
+      </div>
+      <div>
+        <Label htmlFor="empresa-admin-correo">Correo administrador</Label>
+        <Input
+          id="empresa-admin-correo"
+          type="email"
+          value={form.correoAdministrador}
+          onChange={(event) => onUpdate("correoAdministrador", event.target.value)}
+        />
+      </div>
+      <div>
+        <Label>Género</Label>
+        <Select
+          value={form.idGeneroAdministrador}
+          onValueChange={(value) => onUpdate("idGeneroAdministrador", value)}
+        >
+          <SelectTrigger>
+            <SelectValue placeholder="Selecciona género" />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem value="0">Sin especificar</SelectItem>
+            {generoOptions.map((item) => (
+              <SelectItem key={item.idCatalogo} value={item.idCatalogo.toString()}>
+                {item.nombre}
+              </SelectItem>
+            ))}
+          </SelectContent>
+        </Select>
+      </div>
+      <div>
+        <Label htmlFor="empresa-admin-telefono">Teléfono</Label>
+        <Input
+          id="empresa-admin-telefono"
+          value={form.telefonoAdministrador}
+          onChange={(event) => onUpdate("telefonoAdministrador", event.target.value)}
+        />
+      </div>
+      <div>
+        <Label htmlFor="empresa-admin-movil">Teléfono móvil</Label>
+        <Input
+          id="empresa-admin-movil"
+          value={form.telefonoMovilAdministrador}
+          onChange={(event) =>
+            onUpdate("telefonoMovilAdministrador", event.target.value)
+          }
+        />
+      </div>
+    </section>
+  );
+}
+
 export default function EmpresaEditDialog({
   open,
   empresa,
@@ -330,139 +487,18 @@ export default function EmpresaEditDialog({
               </div>
             </section>
 
-            <section className="grid gap-4 md:grid-cols-2">
-              <div>
-                <Label htmlFor="empresa-correo">Correo de contacto</Label>
-                <Input
-                  id="empresa-correo"
-                  type="email"
-                  value={form.correoContacto}
-                  onChange={(event) => updateField("correoContacto", event.target.value)}
-                  required
-                />
-              </div>
-              <div>
-                <Label htmlFor="empresa-telefono">Teléfono de contacto</Label>
-                <Input
-                  id="empresa-telefono"
-                  value={form.telefonoContacto}
-                  onChange={(event) => updateField("telefonoContacto", event.target.value)}
-                />
-              </div>
-              <div>
-                <Label>Ciudad</Label>
-                <Select
-                  value={form.idCiudad}
-                  onValueChange={(value) => updateField("idCiudad", value)}
-                >
-                  <SelectTrigger>
-                    <SelectValue placeholder="Selecciona ciudad" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    {catalogs.ciudadOptions.map((item) => (
-                      <SelectItem key={item.idCatalogo} value={item.idCatalogo.toString()}>
-                        {item.nombre}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-              </div>
-              <div>
-                <Label htmlFor="empresa-direccion">Dirección</Label>
-                <Input
-                  id="empresa-direccion"
-                  value={form.direccion}
-                  onChange={(event) => updateField("direccion", event.target.value)}
-                  required
-                />
-              </div>
-              <div>
-                <Label htmlFor="empresa-latitud">Latitud</Label>
-                <Input
-                  id="empresa-latitud"
-                  type="number"
-                  step="any"
-                  value={form.latitud}
-                  onChange={(event) => updateField("latitud", event.target.value)}
-                />
-              </div>
-              <div>
-                <Label htmlFor="empresa-longitud">Longitud</Label>
-                <Input
-                  id="empresa-longitud"
-                  type="number"
-                  step="any"
-                  value={form.longitud}
-                  onChange={(event) => updateField("longitud", event.target.value)}
-                />
-              </div>
-            </section>
+            <EmpresaContactSection
+              form={form}
+              ciudadOptions={catalogs.ciudadOptions}
+              onUpdate={updateField}
+            />
 
             {hasAdminUser && (
-              <section className="grid gap-4 border-t border-zinc-100 pt-6 md:grid-cols-2">
-                <div>
-                  <Label htmlFor="empresa-admin-nombre">Nombre administrador</Label>
-                  <Input
-                    id="empresa-admin-nombre"
-                    value={form.nombreAdministrador}
-                    onChange={(event) => updateField("nombreAdministrador", event.target.value)}
-                  />
-                </div>
-                <div>
-                  <Label htmlFor="empresa-admin-apellido">Apellido administrador</Label>
-                  <Input
-                    id="empresa-admin-apellido"
-                    value={form.apellidoAdministrador}
-                    onChange={(event) => updateField("apellidoAdministrador", event.target.value)}
-                  />
-                </div>
-                <div>
-                  <Label htmlFor="empresa-admin-correo">Correo administrador</Label>
-                  <Input
-                    id="empresa-admin-correo"
-                    type="email"
-                    value={form.correoAdministrador}
-                    onChange={(event) => updateField("correoAdministrador", event.target.value)}
-                  />
-                </div>
-                <div>
-                  <Label>Género</Label>
-                  <Select
-                    value={form.idGeneroAdministrador}
-                    onValueChange={(value) => updateField("idGeneroAdministrador", value)}
-                  >
-                    <SelectTrigger>
-                      <SelectValue placeholder="Selecciona género" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="0">Sin especificar</SelectItem>
-                      {catalogs.generoOptions.map((item) => (
-                        <SelectItem key={item.idCatalogo} value={item.idCatalogo.toString()}>
-                          {item.nombre}
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
-                </div>
-                <div>
-                  <Label htmlFor="empresa-admin-telefono">Teléfono</Label>
-                  <Input
-                    id="empresa-admin-telefono"
-                    value={form.telefonoAdministrador}
-                    onChange={(event) => updateField("telefonoAdministrador", event.target.value)}
-                  />
-                </div>
-                <div>
-                  <Label htmlFor="empresa-admin-movil">Teléfono móvil</Label>
-                  <Input
-                    id="empresa-admin-movil"
-                    value={form.telefonoMovilAdministrador}
-                    onChange={(event) =>
-                      updateField("telefonoMovilAdministrador", event.target.value)
-                    }
-                  />
-                </div>
-              </section>
+              <EmpresaAdminFields
+                form={form}
+                generoOptions={catalogs.generoOptions}
+                onUpdate={updateField}
+              />
             )}
 
             <DialogFooter>

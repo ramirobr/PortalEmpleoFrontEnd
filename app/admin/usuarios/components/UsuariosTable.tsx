@@ -40,6 +40,34 @@ function TipoUsuarioIcon({ tipo }: { tipo: AdminUsuario["tipoUsuario"] }) {
   }
 }
 
+const getStatusClasses = (status: string) => {
+  switch (status.toLowerCase()) {
+    case "activo":
+      return "text-green-600 bg-green-50";
+    case "inactivo":
+      return "text-slate-600 bg-zinc-100";
+    case "suspendido":
+      return "text-orange-600 bg-orange-50";
+    case "pendiente":
+      return "text-yellow-600 bg-amber-100";
+    default:
+      return "text-slate-600 bg-zinc-50";
+  }
+};
+
+const getTipoLabel = (tipo: AdminUsuario["tipoUsuario"]) => {
+  switch (tipo) {
+    case "admin":
+      return "Administrador";
+    case "empresa":
+      return "Empresa";
+    case "candidato":
+      return "Postulante";
+    default:
+      return tipo;
+  }
+};
+
 export default function UsuariosTable({
   usuarios,
   loading,
@@ -48,33 +76,6 @@ export default function UsuariosTable({
   onToggleStatus,
   onDelete,
 }: UsuariosTableProps) {
-  const getStatusClasses = (status: string) => {
-    switch (status.toLowerCase()) {
-      case "activo":
-        return "text-green-600 bg-green-50";
-      case "inactivo":
-        return "text-slate-600 bg-zinc-100";
-      case "suspendido":
-        return "text-orange-600 bg-orange-50";
-      case "pendiente":
-        return "text-yellow-600 bg-amber-100";
-      default:
-        return "text-slate-600 bg-zinc-50";
-    }
-  };
-
-  const getTipoLabel = (tipo: AdminUsuario["tipoUsuario"]) => {
-    switch (tipo) {
-      case "admin":
-        return "Administrador";
-      case "empresa":
-        return "Empresa";
-      case "candidato":
-        return "Postulante";
-      default:
-        return tipo;
-    }
-  };
 
   if (loading) {
     return <AdminTableLoading message="Cargando usuarios..." />;

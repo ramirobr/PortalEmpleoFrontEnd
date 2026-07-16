@@ -8,14 +8,14 @@ interface PostulantesRecientesProps {
   aplicantes: AplicanteReciente[];
 }
 
+const getPhotoSrc = (photo?: string) => {
+  if (!photo) return null;
+  return `data:image/jpeg;base64,${photo.trim()}`;
+};
+
 export default function PostulantesRecientes({
   aplicantes,
 }: PostulantesRecientesProps) {
-  const getPhotoSrc = (photo?: string) => {
-    if (!photo) return null;
-    return `data:image/jpeg;base64,${photo.trim()}`;
-  };
-
   const destacados = aplicantes.slice(0, 4);
 
   return (

@@ -171,12 +171,14 @@ export default function EditarExperenciaLaboral({
               ? new Date(item.fechaInicio).toLocaleDateString("es-ES", {
                   month: "short",
                   year: "numeric",
+                  timeZone: "UTC",
                 })
               : "";
             const endStr = item.fechaFin
               ? new Date(item.fechaFin).toLocaleDateString("es-ES", {
                   month: "short",
                   year: "numeric",
+                  timeZone: "UTC",
                 })
               : "";
             return (

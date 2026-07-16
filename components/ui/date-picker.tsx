@@ -35,7 +35,7 @@ export function DatePicker({ value, onChange, id, disabled, className }: DatePic
               className,
             )}
           >
-            {value ? value.toLocaleDateString() : "Fecha"}
+            {value ? value.toLocaleDateString("es-EC", { timeZone: "UTC" }) : "Fecha"}
             <ChevronDownIcon />
           </Button>
         </PopoverTrigger>

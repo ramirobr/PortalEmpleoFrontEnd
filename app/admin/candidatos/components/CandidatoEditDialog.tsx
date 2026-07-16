@@ -140,6 +140,163 @@ function buildForm(candidato: UserInfoData | null): CandidatoFormState {
   };
 }
 
+function CandidatoLocationSection({
+  form,
+  catalogs,
+  onUpdate,
+}: {
+  form: CandidatoFormState;
+  catalogs: CatalogState;
+  onUpdate: (field: keyof CandidatoFormState, value: string) => void;
+}) {
+  return (
+    <section className="grid gap-4 border-t border-zinc-100 pt-6 md:grid-cols-2">
+      <div>
+        <Label htmlFor="candidato-celular">Celular</Label>
+        <Input
+          id="candidato-celular"
+          value={form.celular}
+          onChange={(event) => onUpdate("celular", event.target.value)}
+        />
+      </div>
+      <div>
+        <Label htmlFor="candidato-telefono">Teléfono</Label>
+        <Input
+          id="candidato-telefono"
+          value={form.telefono}
+          onChange={(event) => onUpdate("telefono", event.target.value)}
+        />
+      </div>
+      <div>
+        <Label>País</Label>
+        <Select value={form.idPais} onValueChange={(value) => onUpdate("idPais", value)}>
+          <SelectTrigger>
+            <SelectValue placeholder="Selecciona país" />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem value="0">Sin especificar</SelectItem>
+            {catalogs.paisOptions.map((item) => (
+              <SelectItem key={item.idCatalogo} value={item.idCatalogo.toString()}>
+                {item.nombre}
+              </SelectItem>
+            ))}
+          </SelectContent>
+        </Select>
+      </div>
+      <div>
+        <Label>Provincia</Label>
+        <Select
+          value={form.idProvincia}
+          onValueChange={(value) => onUpdate("idProvincia", value)}
+        >
+          <SelectTrigger>
+            <SelectValue placeholder="Selecciona provincia" />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem value="0">Sin especificar</SelectItem>
+            {catalogs.provinciaOptions.map((item) => (
+              <SelectItem key={item.idCatalogo} value={item.idCatalogo.toString()}>
+                {item.nombre}
+              </SelectItem>
+            ))}
+          </SelectContent>
+        </Select>
+      </div>
+      <div>
+        <Label>Ciudad</Label>
+        <Select
+          value={form.idCiudad}
+          onValueChange={(value) => onUpdate("idCiudad", value)}
+        >
+          <SelectTrigger>
+            <SelectValue placeholder="Selecciona ciudad" />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem value="0">Sin especificar</SelectItem>
+            {catalogs.ciudadOptions.map((item) => (
+              <SelectItem key={item.idCatalogo} value={item.idCatalogo.toString()}>
+                {item.nombre}
+              </SelectItem>
+            ))}
+          </SelectContent>
+        </Select>
+      </div>
+      <div>
+        <Label htmlFor="candidato-direccion">Dirección</Label>
+        <Input
+          id="candidato-direccion"
+          value={form.direccion}
+          onChange={(event) => onUpdate("direccion", event.target.value)}
+        />
+      </div>
+      <div>
+        <Label htmlFor="candidato-nacionalidad">Nacionalidad</Label>
+        <Input
+          id="candidato-nacionalidad"
+          value={form.nacionalidad}
+          onChange={(event) => onUpdate("nacionalidad", event.target.value)}
+        />
+      </div>
+    </section>
+  );
+}
+
+function CandidatoMobilitySection({
+  form,
+  onUpdate,
+}: {
+  form: CandidatoFormState;
+  onUpdate: (field: keyof CandidatoFormState, value: string | boolean) => void;
+}) {
+  return (
+    <section className="grid gap-4 border-t border-zinc-100 pt-6 md:grid-cols-2">
+      <label className="flex items-center gap-2 text-sm font-medium text-slate-700">
+        <input
+          type="checkbox"
+          checked={form.movilidad}
+          onChange={(event) => onUpdate("movilidad", event.target.checked)}
+        />
+        Movilidad propia
+      </label>
+      <label className="flex items-center gap-2 text-sm font-medium text-slate-700">
+        <input
+          type="checkbox"
+          checked={form.licencia}
+          onChange={(event) => onUpdate("licencia", event.target.checked)}
+        />
+        Posee licencia
+      </label>
+      {form.licencia && (
+        <div className="md:col-span-2">
+          <Label htmlFor="candidato-licencias">Tipos de licencia</Label>
+          <Input
+            id="candidato-licencias"
+            value={form.tipoLicencia}
+            onChange={(event) => onUpdate("tipoLicencia", event.target.value)}
+            placeholder="Ej. B, C"
+          />
+        </div>
+      )}
+      <div>
+        <Label htmlFor="candidato-ref1">Teléfono referencia 1</Label>
+        <Input
+          id="candidato-ref1"
+          value={form.telefonoReferencia1}
+          onChange={(event) => onUpdate("telefonoReferencia1", event.target.value)}
+        />
+      </div>
+      <div>
+        <Label htmlFor="candidato-ref2">Teléfono referencia 2</Label>
+        <Input
+          id="candidato-ref2"
+          value={form.telefonoReferencia2}
+          onChange={(event) => onUpdate("telefonoReferencia2", event.target.value)}
+        />
+      </div>
+    </section>
+  );
+}
+
 export default function CandidatoEditDialog({
   open,
   candidato,
@@ -354,140 +511,13 @@ export default function CandidatoEditDialog({
               </div>
             </section>
 
-            <section className="grid gap-4 border-t border-zinc-100 pt-6 md:grid-cols-2">
-              <div>
-                <Label htmlFor="candidato-celular">Celular</Label>
-                <Input
-                  id="candidato-celular"
-                  value={form.celular}
-                  onChange={(event) => updateField("celular", event.target.value)}
-                />
-              </div>
-              <div>
-                <Label htmlFor="candidato-telefono">Teléfono</Label>
-                <Input
-                  id="candidato-telefono"
-                  value={form.telefono}
-                  onChange={(event) => updateField("telefono", event.target.value)}
-                />
-              </div>
-              <div>
-                <Label>País</Label>
-                <Select value={form.idPais} onValueChange={(value) => updateField("idPais", value)}>
-                  <SelectTrigger>
-                    <SelectValue placeholder="Selecciona país" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="0">Sin especificar</SelectItem>
-                    {catalogs.paisOptions.map((item) => (
-                      <SelectItem key={item.idCatalogo} value={item.idCatalogo.toString()}>
-                        {item.nombre}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-              </div>
-              <div>
-                <Label>Provincia</Label>
-                <Select
-                  value={form.idProvincia}
-                  onValueChange={(value) => updateField("idProvincia", value)}
-                >
-                  <SelectTrigger>
-                    <SelectValue placeholder="Selecciona provincia" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="0">Sin especificar</SelectItem>
-                    {catalogs.provinciaOptions.map((item) => (
-                      <SelectItem key={item.idCatalogo} value={item.idCatalogo.toString()}>
-                        {item.nombre}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-              </div>
-              <div>
-                <Label>Ciudad</Label>
-                <Select
-                  value={form.idCiudad}
-                  onValueChange={(value) => updateField("idCiudad", value)}
-                >
-                  <SelectTrigger>
-                    <SelectValue placeholder="Selecciona ciudad" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="0">Sin especificar</SelectItem>
-                    {catalogs.ciudadOptions.map((item) => (
-                      <SelectItem key={item.idCatalogo} value={item.idCatalogo.toString()}>
-                        {item.nombre}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-              </div>
-              <div>
-                <Label htmlFor="candidato-direccion">Dirección</Label>
-                <Input
-                  id="candidato-direccion"
-                  value={form.direccion}
-                  onChange={(event) => updateField("direccion", event.target.value)}
-                />
-              </div>
-              <div>
-                <Label htmlFor="candidato-nacionalidad">Nacionalidad</Label>
-                <Input
-                  id="candidato-nacionalidad"
-                  value={form.nacionalidad}
-                  onChange={(event) => updateField("nacionalidad", event.target.value)}
-                />
-              </div>
-            </section>
+            <CandidatoLocationSection
+              form={form}
+              catalogs={catalogs}
+              onUpdate={updateField}
+            />
 
-            <section className="grid gap-4 border-t border-zinc-100 pt-6 md:grid-cols-2">
-              <label className="flex items-center gap-2 text-sm font-medium text-slate-700">
-                <input
-                  type="checkbox"
-                  checked={form.movilidad}
-                  onChange={(event) => updateField("movilidad", event.target.checked)}
-                />
-                Movilidad propia
-              </label>
-              <label className="flex items-center gap-2 text-sm font-medium text-slate-700">
-                <input
-                  type="checkbox"
-                  checked={form.licencia}
-                  onChange={(event) => updateField("licencia", event.target.checked)}
-                />
-                Posee licencia
-              </label>
-              {form.licencia && (
-                <div className="md:col-span-2">
-                  <Label htmlFor="candidato-licencias">Tipos de licencia</Label>
-                  <Input
-                    id="candidato-licencias"
-                    value={form.tipoLicencia}
-                    onChange={(event) => updateField("tipoLicencia", event.target.value)}
-                    placeholder="Ej. B, C"
-                  />
-                </div>
-              )}
-              <div>
-                <Label htmlFor="candidato-ref1">Teléfono referencia 1</Label>
-                <Input
-                  id="candidato-ref1"
-                  value={form.telefonoReferencia1}
-                  onChange={(event) => updateField("telefonoReferencia1", event.target.value)}
-                />
-              </div>
-              <div>
-                <Label htmlFor="candidato-ref2">Teléfono referencia 2</Label>
-                <Input
-                  id="candidato-ref2"
-                  value={form.telefonoReferencia2}
-                  onChange={(event) => updateField("telefonoReferencia2", event.target.value)}
-                />
-              </div>
-            </section>
+            <CandidatoMobilitySection form={form} onUpdate={updateField} />
 
             <DialogFooter>
               <Button

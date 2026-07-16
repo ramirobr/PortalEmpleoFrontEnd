@@ -140,6 +140,48 @@ function blogFormReducer(state: BlogFormState, action: BlogFormAction): BlogForm
   }
 }
 
+function BlogPreviewCard({
+  titulo,
+  resumen,
+  imagenUrl,
+  slug,
+}: {
+  titulo: string;
+  resumen: string;
+  imagenUrl: string;
+  slug: string;
+}) {
+  return (
+    <section className="rounded-lg border border-zinc-200 bg-white p-4">
+      <h3 className="text-sm font-semibold text-slate-900">Vista previa</h3>
+      <div className="mt-4 overflow-hidden rounded-md border border-zinc-100">
+        {imagenUrl ? (
+          <div
+            aria-label="Vista previa de imagen"
+            className="h-32 bg-zinc-100 bg-cover bg-center"
+            style={{ backgroundImage: `url("${imagenUrl}")` }}
+          />
+        ) : (
+          <div className="flex h-32 items-center justify-center bg-zinc-100 text-slate-400">
+            <ImageIcon className="size-8" />
+          </div>
+        )}
+        <div className="space-y-2 bg-white p-4">
+          <p className="line-clamp-2 text-base font-semibold text-slate-900">
+            {titulo || "Título del artículo"}
+          </p>
+          <p className="line-clamp-3 text-sm text-slate-500">
+            {resumen || "El resumen aparecerá aquí mientras editas."}
+          </p>
+          <code className="block truncate rounded bg-zinc-50 px-2 py-1 text-xs text-slate-500">
+            /blog/{slug || "slug-del-articulo"}
+          </code>
+        </div>
+      </div>
+    </section>
+  );
+}
+
 export default function BlogFormDialog({
   open,
   onClose,
@@ -394,33 +436,12 @@ export default function BlogFormDialog({
                   </div>
                 </section>
 
-                <section className="rounded-lg border border-zinc-200 bg-white p-4">
-                  <h3 className="text-sm font-semibold text-slate-900">Vista previa</h3>
-                  <div className="mt-4 overflow-hidden rounded-md border border-zinc-100">
-                    {state.form.imagenUrl ? (
-                      <div
-                        aria-label="Vista previa de imagen"
-                        className="h-32 bg-zinc-100 bg-cover bg-center"
-                        style={{ backgroundImage: `url("${state.form.imagenUrl}")` }}
-                      />
-                    ) : (
-                      <div className="flex h-32 items-center justify-center bg-zinc-100 text-slate-400">
-                        <ImageIcon className="size-8" />
-                      </div>
-                    )}
-                    <div className="space-y-2 bg-white p-4">
-                      <p className="line-clamp-2 text-base font-semibold text-slate-900">
-                        {state.form.titulo || "Título del artículo"}
-                      </p>
-                      <p className="line-clamp-3 text-sm text-slate-500">
-                        {state.form.resumen || "El resumen aparecerá aquí mientras editas."}
-                      </p>
-                      <code className="block truncate rounded bg-zinc-50 px-2 py-1 text-xs text-slate-500">
-                        /blog/{state.form.slug || "slug-del-articulo"}
-                      </code>
-                    </div>
-                  </div>
-                </section>
+                <BlogPreviewCard
+                  titulo={state.form.titulo}
+                  resumen={state.form.resumen}
+                  imagenUrl={state.form.imagenUrl}
+                  slug={state.form.slug}
+                />
               </div>
             </aside>
           </div>

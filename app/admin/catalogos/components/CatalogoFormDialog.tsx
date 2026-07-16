@@ -1,7 +1,7 @@
 ﻿"use client";
 
 import { useEffect } from "react";
-import { useForm, type Resolver } from "react-hook-form";
+import { useForm, type Resolver, type Control } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
 import {
@@ -63,6 +63,94 @@ interface CatalogoFormDialogProps {
 }
 
 const NO_PARENT_VALUE = "__none__";
+
+function CatalogoValueFields({ control }: { control: Control<CatalogoFormValues> }) {
+  return (
+    <>
+      <div className="grid grid-cols-2 gap-4">
+        {/* Código */}
+        <FormField
+          control={control}
+          name="codigo"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>
+                Código{" "}
+                <span className="text-slate-400 font-normal">(opcional)</span>
+              </FormLabel>
+              <FormControl>
+                <Input placeholder="Ej: TEC, ECU..." className="font-mono" {...field} />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+
+        {/* Orden */}
+        <FormField
+          control={control}
+          name="orden"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Orden</FormLabel>
+              <FormControl>
+                <Input type="number" min={1} placeholder="1" {...field} />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+      </div>
+
+      <div className="grid grid-cols-2 gap-4">
+        {/* Valor Entero */}
+        <FormField
+          control={control}
+          name="valorEntero"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>
+                Valor Entero{" "}
+                <span className="text-slate-400 font-normal">(opcional)</span>
+              </FormLabel>
+              <FormControl>
+                <Input
+                  type="number"
+                  placeholder="0"
+                  value={field.value ?? ""}
+                  onChange={(e) =>
+                    field.onChange(
+                      e.target.value === "" ? undefined : Number(e.target.value),
+                    )
+                  }
+                />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+
+        {/* Valor Cadena */}
+        <FormField
+          control={control}
+          name="valorCadena"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>
+                Valor Cadena{" "}
+                <span className="text-slate-400 font-normal">(opcional)</span>
+              </FormLabel>
+              <FormControl>
+                <Input placeholder="Valor texto..." {...field} />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+      </div>
+    </>
+  );
+}
 
 export default function CatalogoFormDialog({
   open,
@@ -238,104 +326,7 @@ export default function CatalogoFormDialog({
                   )}
                 />
 
-                <div className="grid grid-cols-2 gap-4">
-                  {/* Código */}
-                  <FormField
-                    control={form.control}
-                    name="codigo"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>
-                          Código{" "}
-                          <span className="text-slate-400 font-normal">
-                            (opcional)
-                          </span>
-                        </FormLabel>
-                        <FormControl>
-                          <Input
-                            placeholder="Ej: TEC, ECU..."
-                            className="font-mono"
-                            {...field}
-                          />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-
-                  {/* Orden */}
-                  <FormField
-                    control={form.control}
-                    name="orden"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>Orden</FormLabel>
-                        <FormControl>
-                          <Input
-                            type="number"
-                            min={1}
-                            placeholder="1"
-                            {...field}
-                          />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-                </div>
-
-                <div className="grid grid-cols-2 gap-4">
-                  {/* Valor Entero */}
-                  <FormField
-                    control={form.control}
-                    name="valorEntero"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>
-                          Valor Entero{" "}
-                          <span className="text-slate-400 font-normal">
-                            (opcional)
-                          </span>
-                        </FormLabel>
-                        <FormControl>
-                          <Input
-                            type="number"
-                            placeholder="0"
-                            value={field.value ?? ""}
-                            onChange={(e) =>
-                              field.onChange(
-                                e.target.value === ""
-                                  ? undefined
-                                  : Number(e.target.value),
-                              )
-                            }
-                          />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-
-                  {/* Valor Cadena */}
-                  <FormField
-                    control={form.control}
-                    name="valorCadena"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>
-                          Valor Cadena{" "}
-                          <span className="text-slate-400 font-normal">
-                            (opcional)
-                          </span>
-                        </FormLabel>
-                        <FormControl>
-                          <Input placeholder="Valor texto..." {...field} />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-                </div>
+                <CatalogoValueFields control={form.control} />
 
                 {/* Catálogo Padre */}
                 {possibleParents.length > 0 && (

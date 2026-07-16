@@ -1,6 +1,6 @@
 "use client";
 
-import { useForm } from "react-hook-form";
+import { useForm, UseFormReturn } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
 import { Button } from "@/components/ui/button";
@@ -44,6 +44,213 @@ const generalInfoSchema = z.object({
 });
 
 type GeneralInfoFormData = z.infer<typeof generalInfoSchema>;
+
+function GeneralInfoFormFields({
+  form,
+  filters,
+}: {
+  form: UseFormReturn<GeneralInfoFormData>;
+  filters: CompanyProfileFiltersResponse | null;
+}) {
+  return (
+    <>
+      <div className="space-y-2">
+        <Label htmlFor="nombre">Nombre de la empresa</Label>
+        <Input
+          id="nombre"
+          {...form.register("nombre")}
+          aria-invalid={!!form.formState.errors.nombre}
+        />
+        {form.formState.errors.nombre && (
+          <p className="text-sm text-red-500">
+            {form.formState.errors.nombre.message}
+          </p>
+        )}
+      </div>
+
+      <div className="space-y-2">
+        <Label htmlFor="razonSocial">Razón social</Label>
+        <Input
+          id="razonSocial"
+          {...form.register("razonSocial")}
+          aria-invalid={!!form.formState.errors.razonSocial}
+        />
+        {form.formState.errors.razonSocial && (
+          <p className="text-sm text-red-500">
+            {form.formState.errors.razonSocial.message}
+          </p>
+        )}
+      </div>
+
+      <div className="space-y-2">
+        <Label htmlFor="numeroDocumento">Número de documento</Label>
+        <Input
+          id="numeroDocumento"
+          {...form.register("numeroDocumento")}
+          aria-invalid={!!form.formState.errors.numeroDocumento}
+        />
+        {form.formState.errors.numeroDocumento && (
+          <p className="text-sm text-red-500">
+            {form.formState.errors.numeroDocumento.message}
+          </p>
+        )}
+      </div>
+
+      <div className="space-y-2">
+        <Label htmlFor="condicionFiscal">Condición fiscal</Label>
+        <Select
+          value={form.watch("idCondicionFiscal").toString()}
+          onValueChange={(value) =>
+            form.setValue("idCondicionFiscal", parseInt(value))
+          }
+        >
+          <SelectTrigger id="condicionFiscal">
+            <SelectValue placeholder="Selecciona una condición fiscal" />
+          </SelectTrigger>
+          <SelectContent>
+            {filters?.condicion_fiscal?.map((opt) => (
+              <SelectItem
+                key={opt.idCatalogo}
+                value={opt.idCatalogo.toString()}
+              >
+                {opt.nombre}
+              </SelectItem>
+            ))}
+          </SelectContent>
+        </Select>
+        {form.formState.errors.idCondicionFiscal && (
+          <p className="text-sm text-red-500">
+            {form.formState.errors.idCondicionFiscal.message}
+          </p>
+        )}
+      </div>
+
+      <div className="space-y-2">
+        <Label htmlFor="industria">Industria</Label>
+        <SearchAutocomplete<number>
+          id="industria"
+          options={
+            filters?.industria?.map((opt) => ({
+              id: opt.idCatalogo,
+              label: opt.nombre,
+            })) ?? []
+          }
+          value={form.watch("idIndustria") || undefined}
+          onChange={(value) => form.setValue("idIndustria", value)}
+          placeholder="Selecciona una industria"
+          searchPlaceholder="Buscar industria..."
+        />
+        {form.formState.errors.idIndustria && (
+          <p className="text-sm text-red-500">
+            {form.formState.errors.idIndustria.message}
+          </p>
+        )}
+      </div>
+
+      <div className="space-y-2">
+        <Label htmlFor="cantidadEmpleados">Cantidad de empleados</Label>
+        <Select
+          value={form.watch("idCantidadEmpleados").toString()}
+          onValueChange={(value) =>
+            form.setValue("idCantidadEmpleados", parseInt(value))
+          }
+        >
+          <SelectTrigger id="cantidadEmpleados">
+            <SelectValue placeholder="Selecciona una opción" />
+          </SelectTrigger>
+          <SelectContent>
+            {filters?.cantidad_empleados?.map((opt) => (
+              <SelectItem
+                key={opt.idCatalogo}
+                value={opt.idCatalogo.toString()}
+              >
+                {opt.nombre}
+              </SelectItem>
+            ))}
+          </SelectContent>
+        </Select>
+        {form.formState.errors.idCantidadEmpleados && (
+          <p className="text-sm text-red-500">
+            {form.formState.errors.idCantidadEmpleados.message}
+          </p>
+        )}
+      </div>
+
+      <div className="space-y-2">
+        <Label htmlFor="sitioWeb">Sitio web</Label>
+        <Input
+          id="sitioWeb"
+          {...form.register("sitioWeb")}
+          placeholder="https://"
+        />
+      </div>
+
+      <div className="space-y-2">
+        <Label htmlFor="tiempoOperacion">Años de operación</Label>
+        <Input
+          id="tiempoOperacion"
+          type="number"
+          min={0}
+          {...form.register("tiempoOperacion", { valueAsNumber: true })}
+          placeholder="Opcional"
+        />
+      </div>
+
+      <div className="space-y-2">
+        <Label htmlFor="certificaciones">Certificaciones</Label>
+        <Input
+          id="certificaciones"
+          {...form.register("certificaciones")}
+          placeholder="Opcional"
+        />
+      </div>
+
+      <div className="space-y-2">
+        <Label htmlFor="estado">Estado de la empresa</Label>
+        <Select
+          value={form.watch("idEstadoEmpresa").toString()}
+          onValueChange={(value) =>
+            form.setValue("idEstadoEmpresa", parseInt(value))
+          }
+        >
+          <SelectTrigger id="estado">
+            <SelectValue placeholder="Selecciona un estado" />
+          </SelectTrigger>
+          <SelectContent>
+            {filters?.estado_empresa?.map((estado) => (
+              <SelectItem
+                key={estado.idCatalogo}
+                value={estado.idCatalogo.toString()}
+              >
+                {estado.nombre}
+              </SelectItem>
+            ))}
+          </SelectContent>
+        </Select>
+        {form.formState.errors.idEstadoEmpresa && (
+          <p className="text-sm text-red-500">
+            {form.formState.errors.idEstadoEmpresa.message}
+          </p>
+        )}
+      </div>
+
+      <div className="space-y-2">
+        <Label htmlFor="descripcion">Descripción de la empresa</Label>
+        <Textarea
+          id="descripcion"
+          {...form.register("descripcion")}
+          placeholder="Describe la empresa, su actividad económica y principales líneas de negocio..."
+          rows={4}
+        />
+        {form.formState.errors.descripcion && (
+          <p className="text-sm text-red-500">
+            {form.formState.errors.descripcion.message}
+          </p>
+        )}
+      </div>
+    </>
+  );
+}
 
 interface GeneralInfoFormProps {
   companyData: CompanyProfileData;
@@ -157,200 +364,7 @@ export function GeneralInfoForm({
           <DialogTitle>Editar Información General</DialogTitle>
         </DialogHeader>
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4 py-4">
-          <div className="space-y-2">
-            <Label htmlFor="nombre">Nombre de la empresa</Label>
-            <Input
-              id="nombre"
-              {...form.register("nombre")}
-              aria-invalid={!!form.formState.errors.nombre}
-            />
-            {form.formState.errors.nombre && (
-              <p className="text-sm text-red-500">
-                {form.formState.errors.nombre.message}
-              </p>
-            )}
-          </div>
-
-          <div className="space-y-2">
-            <Label htmlFor="razonSocial">Razón social</Label>
-            <Input
-              id="razonSocial"
-              {...form.register("razonSocial")}
-              aria-invalid={!!form.formState.errors.razonSocial}
-            />
-            {form.formState.errors.razonSocial && (
-              <p className="text-sm text-red-500">
-                {form.formState.errors.razonSocial.message}
-              </p>
-            )}
-          </div>
-
-          <div className="space-y-2">
-            <Label htmlFor="numeroDocumento">Número de documento</Label>
-            <Input
-              id="numeroDocumento"
-              {...form.register("numeroDocumento")}
-              aria-invalid={!!form.formState.errors.numeroDocumento}
-            />
-            {form.formState.errors.numeroDocumento && (
-              <p className="text-sm text-red-500">
-                {form.formState.errors.numeroDocumento.message}
-              </p>
-            )}
-          </div>
-
-          <div className="space-y-2">
-            <Label htmlFor="condicionFiscal">Condición fiscal</Label>
-            <Select
-              value={form.watch("idCondicionFiscal").toString()}
-              onValueChange={(value) =>
-                form.setValue("idCondicionFiscal", parseInt(value))
-              }
-            >
-              <SelectTrigger id="condicionFiscal">
-                <SelectValue placeholder="Selecciona una condición fiscal" />
-              </SelectTrigger>
-              <SelectContent>
-                {filters?.condicion_fiscal?.map((opt) => (
-                  <SelectItem
-                    key={opt.idCatalogo}
-                    value={opt.idCatalogo.toString()}
-                  >
-                    {opt.nombre}
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
-            {form.formState.errors.idCondicionFiscal && (
-              <p className="text-sm text-red-500">
-                {form.formState.errors.idCondicionFiscal.message}
-              </p>
-            )}
-          </div>
-
-          <div className="space-y-2">
-            <Label htmlFor="industria">Industria</Label>
-            <SearchAutocomplete<number>
-              id="industria"
-              options={
-                filters?.industria?.map((opt) => ({
-                  id: opt.idCatalogo,
-                  label: opt.nombre,
-                })) ?? []
-              }
-              value={form.watch("idIndustria") || undefined}
-              onChange={(value) => form.setValue("idIndustria", value)}
-              placeholder="Selecciona una industria"
-              searchPlaceholder="Buscar industria..."
-            />
-            {form.formState.errors.idIndustria && (
-              <p className="text-sm text-red-500">
-                {form.formState.errors.idIndustria.message}
-              </p>
-            )}
-          </div>
-
-          <div className="space-y-2">
-            <Label htmlFor="cantidadEmpleados">Cantidad de empleados</Label>
-            <Select
-              value={form.watch("idCantidadEmpleados").toString()}
-              onValueChange={(value) =>
-                form.setValue("idCantidadEmpleados", parseInt(value))
-              }
-            >
-              <SelectTrigger id="cantidadEmpleados">
-                <SelectValue placeholder="Selecciona una opción" />
-              </SelectTrigger>
-              <SelectContent>
-                {filters?.cantidad_empleados?.map((opt) => (
-                  <SelectItem
-                    key={opt.idCatalogo}
-                    value={opt.idCatalogo.toString()}
-                  >
-                    {opt.nombre}
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
-            {form.formState.errors.idCantidadEmpleados && (
-              <p className="text-sm text-red-500">
-                {form.formState.errors.idCantidadEmpleados.message}
-              </p>
-            )}
-          </div>
-
-          <div className="space-y-2">
-            <Label htmlFor="sitioWeb">Sitio web</Label>
-            <Input
-              id="sitioWeb"
-              {...form.register("sitioWeb")}
-              placeholder="https://"
-            />
-          </div>
-
-          <div className="space-y-2">
-            <Label htmlFor="tiempoOperacion">Años de operación</Label>
-            <Input
-              id="tiempoOperacion"
-              type="number"
-              min={0}
-              {...form.register("tiempoOperacion", { valueAsNumber: true })}
-              placeholder="Opcional"
-            />
-          </div>
-
-          <div className="space-y-2">
-            <Label htmlFor="certificaciones">Certificaciones</Label>
-            <Input
-              id="certificaciones"
-              {...form.register("certificaciones")}
-              placeholder="Opcional"
-            />
-          </div>
-
-          <div className="space-y-2">
-            <Label htmlFor="estado">Estado de la empresa</Label>
-            <Select
-              value={form.watch("idEstadoEmpresa").toString()}
-              onValueChange={(value) =>
-                form.setValue("idEstadoEmpresa", parseInt(value))
-              }
-            >
-              <SelectTrigger id="estado">
-                <SelectValue placeholder="Selecciona un estado" />
-              </SelectTrigger>
-              <SelectContent>
-                {filters?.estado_empresa?.map((estado) => (
-                  <SelectItem
-                    key={estado.idCatalogo}
-                    value={estado.idCatalogo.toString()}
-                  >
-                    {estado.nombre}
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
-            {form.formState.errors.idEstadoEmpresa && (
-              <p className="text-sm text-red-500">
-                {form.formState.errors.idEstadoEmpresa.message}
-              </p>
-            )}
-          </div>
-
-          <div className="space-y-2">
-            <Label htmlFor="descripcion">Descripción de la empresa</Label>
-            <Textarea
-              id="descripcion"
-              {...form.register("descripcion")}
-              placeholder="Describe la empresa, su actividad económica y principales líneas de negocio..."
-              rows={4}
-            />
-            {form.formState.errors.descripcion && (
-              <p className="text-sm text-red-500">
-                {form.formState.errors.descripcion.message}
-              </p>
-            )}
-          </div>
+          <GeneralInfoFormFields form={form} filters={filters} />
 
           <div className="flex justify-end gap-2">
             <Button

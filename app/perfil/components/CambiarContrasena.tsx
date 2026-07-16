@@ -39,6 +39,83 @@ const schema = z
 
 type ChangePasswordFormValues = z.infer<typeof schema>;
 
+function PasswordRequirementsChecklist({
+  show,
+  hasMinLength,
+  hasUppercase,
+  hasLowercase,
+  hasNumber,
+  passwordsMatch,
+}: {
+  show: boolean;
+  hasMinLength: boolean;
+  hasUppercase: boolean;
+  hasLowercase: boolean;
+  hasNumber: boolean;
+  passwordsMatch: boolean;
+}) {
+  if (!show) return null;
+  return (
+    <div className="flex flex-col" id="requirements">
+      <h3 className="text-lg font-semibold text-primary mb-4">
+        Requisitos de la contraseña
+      </h3>
+      <ul className="space-y-2 text-sm">
+        <li className="flex items-center gap-2">
+          {hasMinLength ? (
+            <Check className="size-4 text-green-600" aria-hidden="true" />
+          ) : (
+            <X className="size-4 text-red-500" aria-hidden="true" />
+          )}
+          <span className={hasMinLength ? "text-green-600" : "text-red-500"}>
+            Mínimo 8 caracteres
+          </span>
+        </li>
+        <li className="flex items-center gap-2">
+          {hasUppercase ? (
+            <Check className="size-4 text-green-600" aria-hidden="true" />
+          ) : (
+            <X className="size-4 text-red-500" aria-hidden="true" />
+          )}
+          <span className={hasUppercase ? "text-green-600" : "text-red-500"}>
+            Al menos una letra mayúscula
+          </span>
+        </li>
+        <li className="flex items-center gap-2">
+          {hasLowercase ? (
+            <Check className="size-4 text-green-600" aria-hidden="true" />
+          ) : (
+            <X className="size-4 text-red-500" aria-hidden="true" />
+          )}
+          <span className={hasLowercase ? "text-green-600" : "text-red-500"}>
+            Al menos una letra minúscula
+          </span>
+        </li>
+        <li className="flex items-center gap-2">
+          {hasNumber ? (
+            <Check className="size-4 text-green-600" aria-hidden="true" />
+          ) : (
+            <X className="size-4 text-red-500" aria-hidden="true" />
+          )}
+          <span className={hasNumber ? "text-green-600" : "text-red-500"}>
+            Al menos un número
+          </span>
+        </li>
+        <li className="flex items-center gap-2">
+          {passwordsMatch ? (
+            <Check className="size-4 text-green-600" aria-hidden="true" />
+          ) : (
+            <X className="size-4 text-red-500" aria-hidden="true" />
+          )}
+          <span className={passwordsMatch ? "text-green-600" : "text-red-500"}>
+            Las contraseñas deben coincidir
+          </span>
+        </li>
+      </ul>
+    </div>
+  );
+}
+
 export default function CambiarContrasena() {
   const { data: session } = useSession();
   const pathname = usePathname();
@@ -275,92 +352,14 @@ export default function CambiarContrasena() {
             </form>
           </Form>
 
-          {showRequirements && (
-            <div className="flex flex-col" id="requirements">
-              <h3 className="text-lg font-semibold text-primary mb-4">
-                Requisitos de la contraseña
-              </h3>
-              <ul className="space-y-2 text-sm">
-                <li className="flex items-center gap-2">
-                  {hasMinLength ? (
-                    <Check
-                      className="size-4 text-green-600"
-                      aria-hidden="true"
-                    />
-                  ) : (
-                    <X className="size-4 text-red-500" aria-hidden="true" />
-                  )}
-                  <span
-                    className={hasMinLength ? "text-green-600" : "text-red-500"}
-                  >
-                    Mínimo 8 caracteres
-                  </span>
-                </li>
-                <li className="flex items-center gap-2">
-                  {hasUppercase ? (
-                    <Check
-                      className="size-4 text-green-600"
-                      aria-hidden="true"
-                    />
-                  ) : (
-                    <X className="size-4 text-red-500" aria-hidden="true" />
-                  )}
-                  <span
-                    className={hasUppercase ? "text-green-600" : "text-red-500"}
-                  >
-                    Al menos una letra mayúscula
-                  </span>
-                </li>
-                <li className="flex items-center gap-2">
-                  {hasLowercase ? (
-                    <Check
-                      className="size-4 text-green-600"
-                      aria-hidden="true"
-                    />
-                  ) : (
-                    <X className="size-4 text-red-500" aria-hidden="true" />
-                  )}
-                  <span
-                    className={hasLowercase ? "text-green-600" : "text-red-500"}
-                  >
-                    Al menos una letra minúscula
-                  </span>
-                </li>
-                <li className="flex items-center gap-2">
-                  {hasNumber ? (
-                    <Check
-                      className="size-4 text-green-600"
-                      aria-hidden="true"
-                    />
-                  ) : (
-                    <X className="size-4 text-red-500" aria-hidden="true" />
-                  )}
-                  <span
-                    className={hasNumber ? "text-green-600" : "text-red-500"}
-                  >
-                    Al menos un número
-                  </span>
-                </li>
-                <li className="flex items-center gap-2">
-                  {passwordsMatch ? (
-                    <Check
-                      className="size-4 text-green-600"
-                      aria-hidden="true"
-                    />
-                  ) : (
-                    <X className="size-4 text-red-500" aria-hidden="true" />
-                  )}
-                  <span
-                    className={
-                      passwordsMatch ? "text-green-600" : "text-red-500"
-                    }
-                  >
-                    Las contraseñas deben coincidir
-                  </span>
-                </li>
-              </ul>
-            </div>
-          )}
+          <PasswordRequirementsChecklist
+            show={showRequirements}
+            hasMinLength={hasMinLength}
+            hasUppercase={hasUppercase}
+            hasLowercase={hasLowercase}
+            hasNumber={hasNumber}
+            passwordsMatch={passwordsMatch}
+          />
         </div>
       </Card>
       <Link

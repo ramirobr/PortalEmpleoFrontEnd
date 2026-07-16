@@ -18,11 +18,11 @@ import { Job } from "@/types/jobs";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
-import { Controller, useForm } from "react-hook-form";
+import { Controller, useForm, type Control, type UseFormRegister, type FieldErrors } from "react-hook-form";
 import { toast } from "sonner";
 import { z } from "zod";
 import BannerSelector from "./BannerSelector";
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { SearchAutocomplete } from "@/components/ui/search-autocomplete";
 
 const INICIO_LABORES_OPTIONS = [
@@ -90,13 +90,422 @@ type FormProps = {
   initialValues?: Job;
 };
 
+type EmpleoBasicFieldsProps = {
+  control: Control<FormData>;
+  register: UseFormRegister<FormData>;
+  errors: FieldErrors<FormData>;
+  fields: CrearEmpleoFiltersResponse | null;
+};
+
+function EmpleoBasicFields({ control, register, errors, fields }: EmpleoBasicFieldsProps) {
+  return (
+    <>
+      {/* Title */}
+      <div className="lg:col-span-2">
+        <label htmlFor="tituloPuesto" className="block text-sm font-semibold text-slate-700 mb-1">
+          Título del Empleo
+        </label>
+        <Input
+          id="tituloPuesto"
+          placeholder="Ej. Desarrollador Senior React"
+          className="bg-zinc-50 border-zinc-200 focus:bg-white transition-colors"
+          {...register("tituloPuesto")}
+        />
+        {errors.tituloPuesto && (
+          <p className="text-sm text-red-600 mt-1">
+            {errors.tituloPuesto.message}
+          </p>
+        )}
+      </div>
+      {/* Location */}
+      <div>
+        <label htmlFor="idCiudad" className="block text-sm font-semibold text-slate-700 mb-1">
+          Ciudad
+        </label>
+        <Controller
+          name="idCiudad"
+          control={control}
+          render={({ field }) => (
+            <SearchAutocomplete<number>
+              id="idCiudad"
+              options={
+                fields?.ciudad?.map((c) => ({
+                  id: c.idCatalogo,
+                  label: c.nombre,
+                })) ?? []
+              }
+              value={field.value || undefined}
+              onChange={(id) => field.onChange(id)}
+              placeholder="Seleccionar Ciudad"
+            />
+          )}
+        />
+        {errors.idCiudad && (
+          <p className="text-sm text-red-600 mt-1">
+            {errors.idCiudad.message}
+          </p>
+        )}
+      </div>
+      {/* Modality */}
+      <div>
+        <label htmlFor="idModalidadTrabajo" className="block text-sm font-semibold text-slate-700 mb-1">
+          Modalidad
+        </label>
+        <Controller
+          name="idModalidadTrabajo"
+          control={control}
+          render={({ field }) => (
+            <Select
+              onValueChange={(value) => field.onChange(Number(value))}
+              value={field.value ? String(field.value) : ""}
+            >
+              <SelectTrigger id="idModalidadTrabajo" className="bg-zinc-50 border-zinc-200">
+                <SelectValue placeholder="Seleccionar Modalidad" />
+              </SelectTrigger>
+              <SelectContent>
+                {fields?.modalidad_trabajo?.map((modality) => (
+                  <SelectItem
+                    key={modality.idCatalogo}
+                    value={String(modality.idCatalogo)}
+                  >
+                    {modality.nombre}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          )}
+        />
+        {errors.idModalidadTrabajo && (
+          <p className="text-sm text-red-600 mt-1">
+            {errors.idModalidadTrabajo.message}
+          </p>
+        )}
+      </div>
+      {/* Jornada Laboral */}
+      <div>
+        <label htmlFor="idTipoJornadaLaboral" className="block text-sm font-semibold text-slate-700 mb-1">
+          Jornada Laboral
+        </label>
+        <Controller
+          name="idTipoJornadaLaboral"
+          control={control}
+          render={({ field }) => (
+            <Select
+              onValueChange={(value) => field.onChange(Number(value))}
+              value={field.value ? String(field.value) : ""}
+            >
+              <SelectTrigger id="idTipoJornadaLaboral" className="bg-zinc-50 border-zinc-200">
+                <SelectValue placeholder="Seleccionar Jornada" />
+              </SelectTrigger>
+              <SelectContent>
+                {fields?.tipo_empleo?.map((jornada) => (
+                  <SelectItem
+                    key={jornada.idCatalogo}
+                    value={String(jornada.idCatalogo)}
+                  >
+                    {jornada.nombre}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          )}
+        />
+      </div>
+      {/* Experience */}
+      <div>
+        <label htmlFor="idExperiencia" className="block text-sm font-semibold text-slate-700 mb-1">
+          Experiencia
+        </label>
+        <Controller
+          name="idExperiencia"
+          control={control}
+          render={({ field }) => (
+            <Select
+              onValueChange={(value) => field.onChange(Number(value))}
+              value={field.value ? String(field.value) : ""}
+            >
+              <SelectTrigger id="idExperiencia" className="bg-zinc-50 border-zinc-200">
+                <SelectValue placeholder="Seleccionar experiencia" />
+              </SelectTrigger>
+              <SelectContent>
+                {fields?.experiencia?.map((exp) => (
+                  <SelectItem
+                    key={exp.idCatalogo}
+                    value={String(exp.idCatalogo)}
+                  >
+                    {exp.nombre}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          )}
+        />
+        {errors.idExperiencia && (
+          <p className="text-sm text-red-600 mt-1">
+            {errors.idExperiencia.message}
+          </p>
+        )}
+      </div>
+      {/* Education Level */}
+      <div>
+        <label htmlFor="idNivelEstudio" className="block text-sm font-semibold text-slate-700 mb-1">
+          Nivel de Estudio
+        </label>
+        <Controller
+          name="idNivelEstudio"
+          control={control}
+          render={({ field }) => (
+            <Select
+              onValueChange={(value) => field.onChange(Number(value))}
+              value={field.value ? String(field.value) : ""}
+            >
+              <SelectTrigger id="idNivelEstudio" className="bg-zinc-50 border-zinc-200">
+                <SelectValue placeholder="Seleccionar nivel" />
+              </SelectTrigger>
+              <SelectContent>
+                {fields?.nivel_estudio?.map((level) => (
+                  <SelectItem
+                    key={level.idCatalogo}
+                    value={String(level.idCatalogo)}
+                  >
+                    {level.nombre}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          )}
+        />
+        {errors.idNivelEstudio && (
+          <p className="text-sm text-red-600 mt-1">
+            {errors.idNivelEstudio.message}
+          </p>
+        )}
+      </div>
+    </>
+  );
+}
+
+type EmpleoSchedulingFieldsProps = {
+  control: Control<FormData>;
+  register: UseFormRegister<FormData>;
+  errors: FieldErrors<FormData>;
+  watchedInicioLabores: string | undefined;
+  watchedConExperiencia: boolean;
+};
+
+function EmpleoSchedulingFields({
+  control,
+  register,
+  errors,
+  watchedInicioLabores,
+  watchedConExperiencia,
+}: EmpleoSchedulingFieldsProps) {
+  return (
+    <>
+      {/* Start Date */}
+      <div>
+        <label htmlFor="fechaInicio" className="block text-sm font-semibold text-slate-700 mb-1">
+          Fecha de Inicio
+        </label>
+        <Controller
+          name="fechaInicio"
+          control={control}
+          render={({ field }) => (
+            <DatePicker
+              id="fechaInicio"
+              value={field.value}
+              onChange={(d) => field.onChange(d ?? field.value)}
+            />
+          )}
+        />
+        {errors.fechaInicio && (
+          <p className="text-sm text-red-600 mt-1">
+            {errors.fechaInicio.message}
+          </p>
+        )}
+      </div>
+      {/* Closing Date */}
+      <div>
+        <label htmlFor="fechaCierre" className="block text-sm font-semibold text-slate-700 mb-1">
+          Fecha de Cierre
+        </label>
+        <Controller
+          name="fechaCierre"
+          control={control}
+          render={({ field }) => (
+            <DatePicker id="fechaCierre" value={field.value} onChange={field.onChange} />
+          )}
+        />
+        {errors.fechaCierre && (
+          <p className="text-sm text-red-600 mt-1">
+            {errors.fechaCierre.message}
+          </p>
+        )}
+      </div>
+      {/* Salary */}
+      <div className="lg:col-span-2">
+        <span className="block text-sm font-semibold text-slate-700 mb-2">
+          Rango Salarial Mensual (USD)
+        </span>
+        <Controller
+          name="salarioRange"
+          control={control}
+          render={({ field }) => (
+            <div className="flex items-center gap-3">
+              <div className="flex-1">
+                <label htmlFor="salarioMinimo" className="text-xs text-slate-500 mb-1 block">Mínimo</label>
+                <Input
+                  id="salarioMinimo"
+                  type="number"
+                  min={0}
+                  placeholder="Ej: 800"
+                  value={field.value?.[0] ?? ""}
+                  onChange={(e) =>
+                    field.onChange([Number(e.target.value), field.value?.[1] ?? 0])
+                  }
+                  className="bg-zinc-50 border-zinc-200"
+                />
+              </div>
+              <span className="mt-5 text-slate-500 font-bold">-</span>
+              <div className="flex-1">
+                <label htmlFor="salarioMaximo" className="text-xs text-slate-500 mb-1 block">Máximo</label>
+                <Input
+                  id="salarioMaximo"
+                  type="number"
+                  min={0}
+                  placeholder="Ej: 1500"
+                  value={field.value?.[1] ?? ""}
+                  onChange={(e) =>
+                    field.onChange([field.value?.[0] ?? 0, Number(e.target.value)])
+                  }
+                  className="bg-zinc-50 border-zinc-200"
+                />
+              </div>
+            </div>
+          )}
+        />
+        {errors.salarioRange && (
+          <p className="text-sm text-red-600 mt-1">
+            {errors.salarioRange.message as string}
+          </p>
+        )}
+      </div>
+      {/* Description */}
+      <div className="lg:col-span-2">
+        <label htmlFor="descripcion" className="block text-sm font-semibold text-slate-700 mb-1">
+          Descripción del Puesto
+        </label>
+        <Textarea
+          id="descripcion"
+          placeholder="Describe de forma clara las responsabilidades del puesto."
+          className="min-h-[200px] bg-zinc-50 border-zinc-200 focus:bg-white transition-colors"
+          {...register("descripcion")}
+        />
+        {errors.descripcion && (
+          <p className="text-sm text-red-600 mt-1">
+            {errors.descripcion.message}
+          </p>
+        )}
+      </div>
+      {/* Inicio de Labores */}
+      <div>
+        <label htmlFor="inicioLabores" className="block text-sm font-semibold text-slate-700 mb-1">
+          Inicio de Labores
+        </label>
+        <Controller
+          name="inicioLabores"
+          control={control}
+          render={({ field }) => (
+            <Select
+              onValueChange={field.onChange}
+              value={field.value ?? ""}
+            >
+              <SelectTrigger id="inicioLabores" className="bg-zinc-50 border-zinc-200">
+                <SelectValue placeholder="Seleccionar inicio" />
+              </SelectTrigger>
+              <SelectContent>
+                {INICIO_LABORES_OPTIONS.map((op) => (
+                  <SelectItem key={op} value={op}>
+                    {op}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          )}
+        />
+      </div>
+      {watchedInicioLabores === "Fecha específica" && (
+        <div>
+          <label htmlFor="fechaInicioLabores" className="block text-sm font-semibold text-slate-700 mb-1">
+            Fecha de Inicio de Labores
+          </label>
+          <Controller
+            name="fechaInicioLabores"
+            control={control}
+            render={({ field }) => (
+              <DatePicker id="fechaInicioLabores" value={field.value} onChange={field.onChange} />
+            )}
+          />
+          {errors.fechaInicioLabores && (
+            <p className="text-sm text-red-600 mt-1">
+              {errors.fechaInicioLabores.message}
+            </p>
+          )}
+        </div>
+      )}
+      {/* Experiencia Requerida */}
+      <div className="lg:col-span-2 flex flex-col sm:flex-row sm:items-center gap-4">
+        <label htmlFor="conExperiencia" className="flex items-center gap-2 text-sm font-semibold text-slate-700 cursor-pointer select-none">
+          <Controller
+            name="conExperiencia"
+            control={control}
+            render={({ field }) => (
+              <Checkbox
+                id="conExperiencia"
+                checked={field.value}
+                onCheckedChange={(v) => field.onChange(v === true)}
+              />
+            )}
+          />
+          Requiere experiencia previa
+        </label>
+        {watchedConExperiencia && (
+          <div className="flex items-center gap-2">
+            <label htmlFor="aniosExperiencia" className="text-sm text-slate-600 whitespace-nowrap">
+              Años de experiencia:
+            </label>
+            <Controller
+              name="aniosExperiencia"
+              control={control}
+              render={({ field }) => (
+                <Input
+                  id="aniosExperiencia"
+                  type="number"
+                  min={0}
+                  max={50}
+                  placeholder="Ej: 2"
+                  className="w-24 bg-zinc-50 border-zinc-200"
+                  value={field.value ?? ""}
+                  onChange={(e) =>
+                    field.onChange(
+                      e.target.value ? Number(e.target.value) : undefined,
+                    )
+                  }
+                />
+              )}
+            />
+          </div>
+        )}
+      </div>
+    </>
+  );
+}
+
 export default function CrearEmpleoForm({ fields, initialValues }: FormProps) {
   const { data: session } = useSession();
   const { push } = useRouter();
   const isEditMode = !!initialValues;
-  const [selectedBannerBase64, setSelectedBannerBase64] = useState<string | null>(
-    null
-  );
+  const selectedBannerBase64Ref = useRef<string | null>(null);
   const [selectedRequisitos, setSelectedRequisitos] = useState<string[]>(() => {
     if (!initialValues?.requisitos) return [];
     return initialValues.requisitos.split("\n").filter((r) => REQUISITOS_PREDEFINIDOS.includes(r));
@@ -246,394 +655,8 @@ export default function CrearEmpleoForm({ fields, initialValues }: FormProps) {
   return (
     <form className="space-y-6" onSubmit={handleSubmit(onSubmit)}>
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        {/* Title */}
-        <div className="lg:col-span-2">
-          <label htmlFor="tituloPuesto" className="block text-sm font-semibold text-slate-700 mb-1">
-            Título del Empleo
-          </label>
-          <Input
-            id="tituloPuesto"
-            placeholder="Ej. Desarrollador Senior React"
-            className="bg-zinc-50 border-zinc-200 focus:bg-white transition-colors"
-            {...register("tituloPuesto")}
-          />
-          {errors.tituloPuesto && (
-            <p className="text-sm text-red-600 mt-1">
-              {errors.tituloPuesto.message}
-            </p>
-          )}
-        </div>
-
-        {/* Location */}
-        <div>
-          <label htmlFor="idCiudad" className="block text-sm font-semibold text-slate-700 mb-1">
-            Ciudad
-          </label>
-          <Controller
-            name="idCiudad"
-            control={control}
-            render={({ field }) => (
-              <SearchAutocomplete<number>
-                id="idCiudad"
-                options={
-                  fields?.ciudad?.map((c) => ({
-                    id: c.idCatalogo,
-                    label: c.nombre,
-                  })) ?? []
-                }
-                value={field.value || undefined}
-                onChange={(id) => field.onChange(id)}
-                placeholder="Seleccionar Ciudad"
-              />
-            )}
-          />
-          {errors.idCiudad && (
-            <p className="text-sm text-red-600 mt-1">
-              {errors.idCiudad.message}
-            </p>
-          )}
-        </div>
-
-        {/* Modality */}
-        <div>
-          <label htmlFor="idModalidadTrabajo" className="block text-sm font-semibold text-slate-700 mb-1">
-            Modalidad
-          </label>
-          <Controller
-            name="idModalidadTrabajo"
-            control={control}
-            render={({ field }) => (
-              <Select
-                onValueChange={(value) => field.onChange(Number(value))}
-                value={field.value ? String(field.value) : ""}
-              >
-                <SelectTrigger id="idModalidadTrabajo" className="bg-zinc-50 border-zinc-200">
-                  <SelectValue placeholder="Seleccionar Modalidad" />
-                </SelectTrigger>
-                <SelectContent>
-                  {fields?.modalidad_trabajo?.map((modality) => (
-                    <SelectItem
-                      key={modality.idCatalogo}
-                      value={String(modality.idCatalogo)}
-                    >
-                      {modality.nombre}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-            )}
-          />
-          {errors.idModalidadTrabajo && (
-            <p className="text-sm text-red-600 mt-1">
-              {errors.idModalidadTrabajo.message}
-            </p>
-          )}
-        </div>
-
-        {/* Jornada Laboral */}
-        <div>
-          <label htmlFor="idTipoJornadaLaboral" className="block text-sm font-semibold text-slate-700 mb-1">
-            Jornada Laboral
-          </label>
-          <Controller
-            name="idTipoJornadaLaboral"
-            control={control}
-            render={({ field }) => (
-              <Select
-                onValueChange={(value) => field.onChange(Number(value))}
-                value={field.value ? String(field.value) : ""}
-              >
-                <SelectTrigger id="idTipoJornadaLaboral" className="bg-zinc-50 border-zinc-200">
-                  <SelectValue placeholder="Seleccionar Jornada" />
-                </SelectTrigger>
-                <SelectContent>
-                  {fields?.tipo_empleo?.map((jornada) => (
-                    <SelectItem
-                      key={jornada.idCatalogo}
-                      value={String(jornada.idCatalogo)}
-                    >
-                      {jornada.nombre}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-            )}
-          />
-        </div>
-
-        {/* Experience */}
-        <div>
-          <label htmlFor="idExperiencia" className="block text-sm font-semibold text-slate-700 mb-1">
-            Experiencia
-          </label>
-          <Controller
-            name="idExperiencia"
-            control={control}
-            render={({ field }) => (
-              <Select
-                onValueChange={(value) => field.onChange(Number(value))}
-                value={field.value ? String(field.value) : ""}
-              >
-                <SelectTrigger id="idExperiencia" className="bg-zinc-50 border-zinc-200">
-                  <SelectValue placeholder="Seleccionar experiencia" />
-                </SelectTrigger>
-                <SelectContent>
-                  {fields?.experiencia?.map((exp) => (
-                    <SelectItem
-                      key={exp.idCatalogo}
-                      value={String(exp.idCatalogo)}
-                    >
-                      {exp.nombre}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-            )}
-          />
-          {errors.idExperiencia && (
-            <p className="text-sm text-red-600 mt-1">
-              {errors.idExperiencia.message}
-            </p>
-          )}
-        </div>
-
-        {/* Education Level */}
-        <div>
-          <label htmlFor="idNivelEstudio" className="block text-sm font-semibold text-slate-700 mb-1">
-            Nivel de Estudio
-          </label>
-          <Controller
-            name="idNivelEstudio"
-            control={control}
-            render={({ field }) => (
-              <Select
-                onValueChange={(value) => field.onChange(Number(value))}
-                value={field.value ? String(field.value) : ""}
-              >
-                <SelectTrigger id="idNivelEstudio" className="bg-zinc-50 border-zinc-200">
-                  <SelectValue placeholder="Seleccionar nivel" />
-                </SelectTrigger>
-                <SelectContent>
-                  {fields?.nivel_estudio?.map((level) => (
-                    <SelectItem
-                      key={level.idCatalogo}
-                      value={String(level.idCatalogo)}
-                    >
-                      {level.nombre}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-            )}
-          />
-          {errors.idNivelEstudio && (
-            <p className="text-sm text-red-600 mt-1">
-              {errors.idNivelEstudio.message}
-            </p>
-          )}
-        </div>
-
-        {/* Start Date */}
-        <div>
-          <label htmlFor="fechaInicio" className="block text-sm font-semibold text-slate-700 mb-1">
-            Fecha de Inicio
-          </label>
-          <Controller
-            name="fechaInicio"
-            control={control}
-            render={({ field }) => (
-              <DatePicker
-                id="fechaInicio"
-                value={field.value}
-                onChange={(d) => field.onChange(d ?? field.value)}
-              />
-            )}
-          />
-          {errors.fechaInicio && (
-            <p className="text-sm text-red-600 mt-1">
-              {errors.fechaInicio.message}
-            </p>
-          )}
-        </div>
-
-        {/* Closing Date */}
-        <div>
-          <label htmlFor="fechaCierre" className="block text-sm font-semibold text-slate-700 mb-1">
-            Fecha de Cierre
-          </label>
-          <Controller
-            name="fechaCierre"
-            control={control}
-            render={({ field }) => (
-              <DatePicker id="fechaCierre" value={field.value} onChange={field.onChange} />
-            )}
-          />
-          {errors.fechaCierre && (
-            <p className="text-sm text-red-600 mt-1">
-              {errors.fechaCierre.message}
-            </p>
-          )}
-        </div>
-
-        {/* Salary */}
-        <div className="lg:col-span-2">
-          <span className="block text-sm font-semibold text-slate-700 mb-2">
-            Rango Salarial Mensual (USD)
-          </span>
-          <Controller
-            name="salarioRange"
-            control={control}
-            render={({ field }) => (
-              <div className="flex items-center gap-3">
-                <div className="flex-1">
-                  <label htmlFor="salarioMinimo" className="text-xs text-slate-500 mb-1 block">Mínimo</label>
-                  <Input
-                    id="salarioMinimo"
-                    type="number"
-                    min={0}
-                    placeholder="Ej: 800"
-                    value={field.value?.[0] ?? ""}
-                    onChange={(e) =>
-                      field.onChange([Number(e.target.value), field.value?.[1] ?? 0])
-                    }
-                    className="bg-zinc-50 border-zinc-200"
-                  />
-                </div>
-                <span className="mt-5 text-slate-500 font-bold">-</span>
-                <div className="flex-1">
-                  <label htmlFor="salarioMaximo" className="text-xs text-slate-500 mb-1 block">Máximo</label>
-                  <Input
-                    id="salarioMaximo"
-                    type="number"
-                    min={0}
-                    placeholder="Ej: 1500"
-                    value={field.value?.[1] ?? ""}
-                    onChange={(e) =>
-                      field.onChange([field.value?.[0] ?? 0, Number(e.target.value)])
-                    }
-                    className="bg-zinc-50 border-zinc-200"
-                  />
-                </div>
-              </div>
-            )}
-          />
-          {errors.salarioRange && (
-            <p className="text-sm text-red-600 mt-1">
-              {errors.salarioRange.message as string}
-            </p>
-          )}
-        </div>
-
-        {/* Description */}
-        <div className="lg:col-span-2">
-          <label htmlFor="descripcion" className="block text-sm font-semibold text-slate-700 mb-1">
-            Descripción del Puesto
-          </label>
-          <Textarea
-            id="descripcion"
-            placeholder="Describe de forma clara las responsabilidades del puesto."
-            className="min-h-[200px] bg-zinc-50 border-zinc-200 focus:bg-white transition-colors"
-            {...register("descripcion")}
-          />
-          {errors.descripcion && (
-            <p className="text-sm text-red-600 mt-1">
-              {errors.descripcion.message}
-            </p>
-          )}
-        </div>
-
-        {/* Inicio de Labores */}
-        <div>
-          <label htmlFor="inicioLabores" className="block text-sm font-semibold text-slate-700 mb-1">
-            Inicio de Labores
-          </label>
-          <Controller
-            name="inicioLabores"
-            control={control}
-            render={({ field }) => (
-              <Select
-                onValueChange={field.onChange}
-                value={field.value ?? ""}
-              >
-                <SelectTrigger id="inicioLabores" className="bg-zinc-50 border-zinc-200">
-                  <SelectValue placeholder="Seleccionar inicio" />
-                </SelectTrigger>
-                <SelectContent>
-                  {INICIO_LABORES_OPTIONS.map((op) => (
-                    <SelectItem key={op} value={op}>
-                      {op}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-            )}
-          />
-        </div>
-
-        {watchedInicioLabores === "Fecha específica" && (
-          <div>
-            <label htmlFor="fechaInicioLabores" className="block text-sm font-semibold text-slate-700 mb-1">
-              Fecha de Inicio de Labores
-            </label>
-            <Controller
-              name="fechaInicioLabores"
-              control={control}
-              render={({ field }) => (
-                <DatePicker id="fechaInicioLabores" value={field.value} onChange={field.onChange} />
-              )}
-            />
-            {errors.fechaInicioLabores && (
-              <p className="text-sm text-red-600 mt-1">
-                {errors.fechaInicioLabores.message}
-              </p>
-            )}
-          </div>
-        )}
-
-        {/* Experiencia Requerida */}
-        <div className="lg:col-span-2 flex flex-col sm:flex-row sm:items-center gap-4">
-          <label htmlFor="conExperiencia" className="flex items-center gap-2 text-sm font-semibold text-slate-700 cursor-pointer select-none">
-            <Controller
-              name="conExperiencia"
-              control={control}
-              render={({ field }) => (
-                <Checkbox
-                  id="conExperiencia"
-                  checked={field.value}
-                  onCheckedChange={(v) => field.onChange(v === true)}
-                />
-              )}
-            />
-            Requiere experiencia previa
-          </label>
-          {watchedConExperiencia && (
-            <div className="flex items-center gap-2">
-              <label htmlFor="aniosExperiencia" className="text-sm text-slate-600 whitespace-nowrap">
-                Años de experiencia:
-              </label>
-              <Controller
-                name="aniosExperiencia"
-                control={control}
-                render={({ field }) => (
-                  <Input
-                    id="aniosExperiencia"
-                    type="number"
-                    min={0}
-                    max={50}
-                    placeholder="Ej: 2"
-                    className="w-24 bg-zinc-50 border-zinc-200"
-                    value={field.value ?? ""}
-                    onChange={(e) =>
-                      field.onChange(
-                        e.target.value ? Number(e.target.value) : undefined,
-                      )
-                    }
-                  />
-                )}
-              />
-            </div>
-          )}
-        </div>
+        <EmpleoBasicFields control={control} register={register} errors={errors} fields={fields} />
+        <EmpleoSchedulingFields control={control} register={register} errors={errors} watchedInicioLabores={watchedInicioLabores} watchedConExperiencia={watchedConExperiencia} />
 
         {/* Requirements */}
         <div className="lg:col-span-2">
@@ -680,7 +703,7 @@ export default function CrearEmpleoForm({ fields, initialValues }: FormProps) {
                 selectedArchivos={field.value}
                 onSelectArchivo={(idArchivo, base64Data) => {
                   field.onChange(idArchivo);
-                  setSelectedBannerBase64(base64Data || null);
+                  selectedBannerBase64Ref.current = base64Data || null;
                 }}
               />
             )}

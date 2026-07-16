@@ -25,7 +25,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { FileText, Pencil, Phone, Trash2 } from "lucide-react";
 import { useSession } from "next-auth/react";
 import React, { useRef } from "react";
-import { useForm } from "react-hook-form";
+import { useForm, type Control } from "react-hook-form";
 import { toast } from "sonner";
 import { z } from "zod";
 import { fileToBase64 } from "@/lib/utils";
@@ -83,10 +83,450 @@ const schema = z.object({
   documentoIESS: docValidator,
 });
 
+type ContactoFormValues = z.infer<typeof schema>;
+
 type EditarDatosContactoProps = {
   user: UserInfoData;
   fields: DatosPersonalesFieldsResponse | null;
 };
+
+function ContactoBasicFields({
+  control,
+  isEditing,
+  fields,
+}: {
+  control: Control<ContactoFormValues>;
+  isEditing: boolean;
+  fields: DatosPersonalesFieldsResponse | null;
+}) {
+  return (
+    <>
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
+        <FormField
+          control={control}
+          name="celular"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel htmlFor="celular">Celular</FormLabel>
+              <FormControl>
+                <Input
+                  type="text"
+                  id="celular"
+                  inputMode="tel"
+                  placeholder="+593 987654321"
+                  value={field.value}
+                  onChange={(e) =>
+                    field.onChange(e.target.value.replace(/\D/g, ""))
+                  }
+                  disabled={!isEditing}
+                />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        <FormField
+          control={control}
+          name="telefono"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel htmlFor="telefono">Teléfono</FormLabel>
+              <FormControl>
+                <Input
+                  type="text"
+                  id="telefono"
+                  inputMode="tel"
+                  placeholder="+593 2375293"
+                  value={field.value}
+                  onChange={(e) =>
+                    field.onChange(e.target.value.replace(/\D/g, ""))
+                  }
+                  disabled={!isEditing}
+                />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+      </div>
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
+        <FormField
+          control={control}
+          name="email"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel htmlFor="email">Email</FormLabel>
+              <FormControl>
+                <Input
+                  id="email"
+                  type="email"
+                  autoComplete="email"
+                  placeholder="Email"
+                  disabled={!isEditing}
+                  {...field}
+                />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        <FormField
+          control={control}
+          name="direccion"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel htmlFor="direccion">Dirección</FormLabel>
+              <FormControl>
+                <Input
+                  id="direccion"
+                  autoComplete="street-address"
+                  placeholder="Av. Siempre Viva 123"
+                  disabled={!isEditing}
+                  {...field}
+                />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        <FormField
+          control={control}
+          name="idPais"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel htmlFor="Pais">País</FormLabel>
+              <FormControl>
+                <Select
+                  onValueChange={(value) => field.onChange(Number(value))}
+                  value={field.value ? String(field.value) : ""}
+                  disabled={!isEditing}
+                >
+                  <SelectTrigger id="Pais">
+                    <SelectValue placeholder="Pais" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {fields?.pais?.map((pais) => (
+                      <SelectItem
+                        key={pais.idCatalogo}
+                        value={pais.idCatalogo.toString()}
+                      >
+                        {pais.nombre}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        <FormField
+          control={control}
+          name="idCiudad"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel htmlFor="Ciudad">Ciudad</FormLabel>
+              <FormControl>
+                <SearchAutocomplete<number>
+                  options={
+                    fields?.ciudad?.map((c) => ({
+                      id: c.idCatalogo,
+                      label: c.nombre,
+                    })) ?? []
+                  }
+                  value={field.value || undefined}
+                  onChange={(id) => field.onChange(id)}
+                  placeholder="Selecciona una ciudad"
+                  searchPlaceholder="Buscar ciudad..."
+                  disabled={!isEditing}
+                />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        <FormField
+          control={control}
+          name="idProvincia"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel htmlFor="Provincia">Provincia</FormLabel>
+              <FormControl>
+                <Select
+                  onValueChange={(value) => field.onChange(Number(value))}
+                  value={field.value ? String(field.value) : ""}
+                  disabled={!isEditing}
+                >
+                  <SelectTrigger id="Provincia">
+                    <SelectValue placeholder="Provincia" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {fields?.provincia?.map((provincia) => (
+                      <SelectItem
+                        key={provincia.idCatalogo}
+                        value={provincia.idCatalogo.toString()}
+                      >
+                        {provincia.nombre}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+      </div>
+    </>
+  );
+}
+
+function ContactoDocumentFields({
+  control,
+  isEditing,
+}: {
+  control: Control<ContactoFormValues>;
+  isEditing: boolean;
+}) {
+  const fileInputRef = useRef<HTMLInputElement | null>(null);
+  const antecedentesRef = useRef<HTMLInputElement | null>(null);
+  const iessRef = useRef<HTMLInputElement | null>(null);
+
+  return (
+    <>
+      <div
+        id="planillaServicio"
+        className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8"
+      >
+        <FormField
+          control={control}
+          name="planillaServicio"
+          render={({ field }) => (
+            <FormItem className="flex flex-col">
+              <FormLabel htmlFor="planillaServicioInput">
+                <h2 className="text-2xl font-semibold text-primary flex items-center gap-2">
+                  <FileText
+                    width={25}
+                    height={25}
+                    className="text-primary"
+                  />
+                  Planilla de Servicio Basico
+                </h2>
+              </FormLabel>
+              <FormControl>
+                <div className="flex items-center gap-4">
+                  {isEditing ? (
+                    <>
+                      <input
+                        type="file"
+                        id="planillaServicioInput"
+                        accept=".jpg,.jpeg,.pdf"
+                        className="hidden"
+                        title="Subir planilla de servicio básico"
+                        placeholder="Subir archivo"
+                        ref={(el) => {
+                          fileInputRef.current = el;
+                          field.ref(el);
+                        }}
+                        onChange={(e) => {
+                          const file = e.target.files?.[0];
+                          if (file) {
+                            field.onChange(file);
+                          }
+                        }}
+                      />
+                      <button
+                        type="button"
+                        onClick={() => fileInputRef.current?.click()}
+                        className="btn btn-secondary flex items-center gap-2 cursor-pointer"
+                      >
+                        <FileText width={20} height={20} />
+                        {field.value instanceof File
+                          ? field.value.name
+                          : "Subir archivo"}
+                      </button>
+                      {field.value && (
+                        <button
+                          type="button"
+                          onClick={() => {
+                            field.onChange("");
+                            if (fileInputRef.current) {
+                              fileInputRef.current.value = "";
+                            }
+                          }}
+                          className="text-red-500 hover:text-red-700 cursor-pointer"
+                          aria-label="Eliminar archivo"
+                        >
+                          <Trash2 width={20} height={20} />
+                        </button>
+                      )}
+                    </>
+                  ) : (
+                    <div className="flex items-center gap-3 text-slate-600 italic">
+                      {field.value && typeof field.value === "string" ? (
+                        <>
+                          <span className="flex items-center gap-2 text-primary font-medium not-italic">
+                            <FileText width={20} height={20} />
+                            Archivo cargado (JPG/PDF)
+                          </span>
+                          <button
+                            type="button"
+                            onClick={() => {
+                              const dataUrl = field.value as string;
+                              const ext = dataUrl.startsWith("data:application/pdf")
+                                ? ".pdf"
+                                : ".jpg";
+                              const a = document.createElement("a");
+                              a.href = dataUrl;
+                              a.download = `planilla_servicio${ext}`;
+                              a.click();
+                            }}
+                            className="flex items-center gap-1.5 text-sm font-medium text-primary hover:text-primary/80 underline cursor-pointer not-italic"
+                            aria-label="Descargar planilla de servicio básico"
+                          >
+                            Descargar
+                          </button>
+                        </>
+                      ) : (
+                        "No se ha cargado ningún archivo"
+                      )}
+                    </div>
+                  )}
+                </div>
+              </FormControl>
+              <div className="text-[12px] text-slate-500 mt-1">
+                Límite: 5MB (JPG o PDF)
+              </div>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+      </div>
+
+      {/* Documento antecedentes penales */}
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
+        <FormField
+          control={control}
+          name="documentoAntecedentes"
+          render={({ field }) => (
+            <FormItem className="flex flex-col">
+              <FormLabel>
+                <h2 className="text-2xl font-semibold text-primary flex items-center gap-2">
+                  <FileText width={25} height={25} className="text-primary" />
+                  Antecedentes Penales
+                </h2>
+              </FormLabel>
+              <FormControl>
+                <div className="flex items-center gap-4">
+                  {isEditing ? (
+                    <>
+                      <input
+                        type="file"
+                        accept=".pdf,.doc,.docx"
+                        className="hidden"
+                        ref={(el) => { antecedentesRef.current = el; field.ref(el); }}
+                        onChange={(e) => { const f = e.target.files?.[0]; if (f) field.onChange(f); }}
+                      />
+                      <button type="button" onClick={() => antecedentesRef.current?.click()}
+                        className="btn btn-secondary flex items-center gap-2 cursor-pointer">
+                        <FileText width={20} height={20} />
+                        {field.value instanceof File ? field.value.name : "Subir documento"}
+                      </button>
+                      {field.value && (
+                        <button type="button"
+                          onClick={() => { field.onChange(""); if (antecedentesRef.current) antecedentesRef.current.value = ""; }}
+                          className="text-red-500 hover:text-red-700 cursor-pointer" aria-label="Quitar documento">
+                          <Trash2 width={20} height={20} />
+                        </button>
+                      )}
+                    </>
+                  ) : (
+                    <div className="flex items-center gap-3 italic text-slate-600">
+                      {field.value && typeof field.value === "string" ? (
+                        <>
+                          <span className="flex items-center gap-2 text-primary font-medium not-italic">
+                            <FileText width={20} height={20} /> Documento cargado
+                          </span>
+                          <button type="button"
+                            onClick={() => { const a = document.createElement("a"); a.href = field.value as string; a.download = "antecedentes_penales.pdf"; a.click(); }}
+                            className="text-sm font-medium text-primary hover:text-primary/80 underline cursor-pointer not-italic">
+                            Descargar
+                          </button>
+                        </>
+                      ) : "No se ha cargado ningún documento"}
+                    </div>
+                  )}
+                </div>
+              </FormControl>
+              <div className="text-[12px] text-slate-500 mt-1">Límite: 5MB (PDF o Word)</div>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+
+        {/* Documento IESS */}
+        <FormField
+          control={control}
+          name="documentoIESS"
+          render={({ field }) => (
+            <FormItem className="flex flex-col">
+              <FormLabel>
+                <h2 className="text-2xl font-semibold text-primary flex items-center gap-2">
+                  <FileText width={25} height={25} className="text-primary" />
+                  Validación IESS
+                </h2>
+              </FormLabel>
+              <FormControl>
+                <div className="flex items-center gap-4">
+                  {isEditing ? (
+                    <>
+                      <input
+                        type="file"
+                        accept=".pdf,.doc,.docx"
+                        className="hidden"
+                        ref={(el) => { iessRef.current = el; field.ref(el); }}
+                        onChange={(e) => { const f = e.target.files?.[0]; if (f) field.onChange(f); }}
+                      />
+                      <button type="button" onClick={() => iessRef.current?.click()}
+                        className="btn btn-secondary flex items-center gap-2 cursor-pointer">
+                        <FileText width={20} height={20} />
+                        {field.value instanceof File ? field.value.name : "Subir documento"}
+                      </button>
+                      {field.value && (
+                        <button type="button"
+                          onClick={() => { field.onChange(""); if (iessRef.current) iessRef.current.value = ""; }}
+                          className="text-red-500 hover:text-red-700 cursor-pointer" aria-label="Quitar documento">
+                          <Trash2 width={20} height={20} />
+                        </button>
+                      )}
+                    </>
+                  ) : (
+                    <div className="flex items-center gap-3 italic text-slate-600">
+                      {field.value && typeof field.value === "string" ? (
+                        <>
+                          <span className="flex items-center gap-2 text-primary font-medium not-italic">
+                            <FileText width={20} height={20} /> Documento cargado
+                          </span>
+                          <button type="button"
+                            onClick={() => { const a = document.createElement("a"); a.href = field.value as string; a.download = "validacion_iess.pdf"; a.click(); }}
+                            className="text-sm font-medium text-primary hover:text-primary/80 underline cursor-pointer not-italic">
+                            Descargar
+                          </button>
+                        </>
+                      ) : "No se ha cargado ningún documento"}
+                    </div>
+                  )}
+                </div>
+              </FormControl>
+              <div className="text-[12px] text-slate-500 mt-1">Límite: 5MB (PDF o Word)</div>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+      </div>
+    </>
+  );
+}
 
 export default function EditarDatosContacto({
   user,
@@ -110,10 +550,6 @@ export default function EditarDatosContacto({
       documentoIESS: user.datosContacto.documentoIESS ?? "",
     },
   });
-
-  const fileInputRef = useRef<HTMLInputElement | null>(null);
-  const antecedentesRef = useRef<HTMLInputElement | null>(null);
-  const iessRef = useRef<HTMLInputElement | null>(null);
 
   const handleSubmit = async (data: z.infer<typeof schema>) => {
     // Convertir archivos a base64 primero para poder reutilizarlos en el reset
@@ -202,413 +638,8 @@ export default function EditarDatosContacto({
           className=""
           aria-label="Formulario de datos de contacto"
         >
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
-            <FormField
-              control={form.control}
-              name="celular"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel htmlFor="celular">Celular</FormLabel>
-                  <FormControl>
-                    <Input
-                      type="text"
-                      id="celular"
-                      inputMode="tel"
-                      placeholder="+593 987654321"
-                      value={field.value}
-                      onChange={(e) =>
-                        field.onChange(e.target.value.replace(/\D/g, ""))
-                      }
-                      disabled={!isEditing}
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <FormField
-              control={form.control}
-              name="telefono"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel htmlFor="telefono">Teléfono</FormLabel>
-                  <FormControl>
-                    <Input
-                      type="text"
-                      id="telefono"
-                      inputMode="tel"
-                      placeholder="+593 2375293"
-                      value={field.value}
-                      onChange={(e) =>
-                        field.onChange(e.target.value.replace(/\D/g, ""))
-                      }
-                      disabled={!isEditing}
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-          </div>
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
-            <FormField
-              control={form.control}
-              name="email"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel htmlFor="email">Email</FormLabel>
-                  <FormControl>
-                    <Input
-                      id="email"
-                      type="email"
-                      autoComplete="email"
-                      placeholder="Email"
-                      disabled={!isEditing}
-                      {...field}
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <FormField
-              control={form.control}
-              name="direccion"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel htmlFor="direccion">Dirección</FormLabel>
-                  <FormControl>
-                    <Input
-                      id="direccion"
-                      autoComplete="street-address"
-                      placeholder="Av. Siempre Viva 123"
-                      disabled={!isEditing}
-                      {...field}
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <FormField
-              control={form.control}
-              name="idPais"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel htmlFor="Pais">País</FormLabel>
-                  <FormControl>
-                    <Select
-                      onValueChange={(value) => field.onChange(Number(value))}
-                      value={field.value ? String(field.value) : ""}
-                      disabled={!isEditing}
-                    >
-                      <SelectTrigger id="Pais">
-                        <SelectValue placeholder="Pais" />
-                      </SelectTrigger>
-                      <SelectContent>
-                        {fields?.pais?.map((pais) => (
-                          <SelectItem
-                            key={pais.idCatalogo}
-                            value={pais.idCatalogo.toString()}
-                          >
-                            {pais.nombre}
-                          </SelectItem>
-                        ))}
-                      </SelectContent>
-                    </Select>
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <FormField
-              control={form.control}
-              name="idCiudad"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel htmlFor="Ciudad">Ciudad</FormLabel>
-                  <FormControl>
-                    <SearchAutocomplete<number>
-                      options={
-                        fields?.ciudad?.map((c) => ({
-                          id: c.idCatalogo,
-                          label: c.nombre,
-                        })) ?? []
-                      }
-                      value={field.value || undefined}
-                      onChange={(id) => field.onChange(id)}
-                      placeholder="Selecciona una ciudad"
-                      searchPlaceholder="Buscar ciudad..."
-                      disabled={!isEditing}
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <FormField
-              control={form.control}
-              name="idProvincia"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel htmlFor="Provincia">Provincia</FormLabel>
-                  <FormControl>
-                    <Select
-                      onValueChange={(value) => field.onChange(Number(value))}
-                      value={field.value ? String(field.value) : ""}
-                      disabled={!isEditing}
-                    >
-                      <SelectTrigger id="Provincia">
-                        <SelectValue placeholder="Provincia" />
-                      </SelectTrigger>
-                      <SelectContent>
-                        {fields?.provincia?.map((provincia) => (
-                          <SelectItem
-                            key={provincia.idCatalogo}
-                            value={provincia.idCatalogo.toString()}
-                          >
-                            {provincia.nombre}
-                          </SelectItem>
-                        ))}
-                      </SelectContent>
-                    </Select>
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-          </div>
-
-          <div
-            id="planillaServicio"
-            className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8"
-          >
-            <FormField
-              control={form.control}
-              name="planillaServicio"
-              render={({ field }) => (
-                <FormItem className="flex flex-col">
-                  <FormLabel htmlFor="planillaServicioInput">
-                    <h2 className="text-2xl font-semibold text-primary flex items-center gap-2">
-                      <FileText
-                        width={25}
-                        height={25}
-                        className="text-primary"
-                      />
-                      Planilla de Servicio Basico
-                    </h2>
-                  </FormLabel>
-                  <FormControl>
-                    <div className="flex items-center gap-4">
-                      {isEditing ? (
-                        <>
-                          <input
-                            type="file"
-                            id="planillaServicioInput"
-                            accept=".jpg,.jpeg,.pdf"
-                            className="hidden"
-                            title="Subir planilla de servicio básico"
-                            placeholder="Subir archivo"
-                            ref={(el) => {
-                              fileInputRef.current = el;
-                              field.ref(el);
-                            }}
-                            onChange={(e) => {
-                              const file = e.target.files?.[0];
-                              if (file) {
-                                field.onChange(file);
-                              }
-                            }}
-                          />
-                          <button
-                            type="button"
-                            onClick={() => fileInputRef.current?.click()}
-                            className="btn btn-secondary flex items-center gap-2 cursor-pointer"
-                          >
-                            <FileText width={20} height={20} />
-                            {field.value instanceof File
-                              ? field.value.name
-                              : "Subir archivo"}
-                          </button>
-                          {field.value && (
-                            <button
-                              type="button"
-                              onClick={() => {
-                                field.onChange("");
-                                if (fileInputRef.current) {
-                                  fileInputRef.current.value = "";
-                                }
-                              }}
-                              className="text-red-500 hover:text-red-700 cursor-pointer"
-                              aria-label="Eliminar archivo"
-                            >
-                              <Trash2 width={20} height={20} />
-                            </button>
-                          )}
-                        </>
-                      ) : (
-                        <div className="flex items-center gap-3 text-slate-600 italic">
-                          {field.value && typeof field.value === "string" ? (
-                            <>
-                              <span className="flex items-center gap-2 text-primary font-medium not-italic">
-                                <FileText width={20} height={20} />
-                                Archivo cargado (JPG/PDF)
-                              </span>
-                              <button
-                                type="button"
-                                onClick={() => {
-                                  const dataUrl = field.value as string;
-                                  const ext = dataUrl.startsWith("data:application/pdf")
-                                    ? ".pdf"
-                                    : ".jpg";
-                                  const a = document.createElement("a");
-                                  a.href = dataUrl;
-                                  a.download = `planilla_servicio${ext}`;
-                                  a.click();
-                                }}
-                                className="flex items-center gap-1.5 text-sm font-medium text-primary hover:text-primary/80 underline cursor-pointer not-italic"
-                                aria-label="Descargar planilla de servicio básico"
-                              >
-                                Descargar
-                              </button>
-                            </>
-                          ) : (
-                            "No se ha cargado ningún archivo"
-                          )}
-                        </div>
-                      )}
-                    </div>
-                  </FormControl>
-                  <div className="text-[12px] text-slate-500 mt-1">
-                    Límite: 5MB (JPG o PDF)
-                  </div>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-          </div>
-
-          {/* Documento antecedentes penales */}
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
-            <FormField
-              control={form.control}
-              name="documentoAntecedentes"
-              render={({ field }) => (
-                <FormItem className="flex flex-col">
-                  <FormLabel>
-                    <h2 className="text-2xl font-semibold text-primary flex items-center gap-2">
-                      <FileText width={25} height={25} className="text-primary" />
-                      Antecedentes Penales
-                    </h2>
-                  </FormLabel>
-                  <FormControl>
-                    <div className="flex items-center gap-4">
-                      {isEditing ? (
-                        <>
-                          <input
-                            type="file"
-                            accept=".pdf,.doc,.docx"
-                            className="hidden"
-                            ref={(el) => { antecedentesRef.current = el; field.ref(el); }}
-                            onChange={(e) => { const f = e.target.files?.[0]; if (f) field.onChange(f); }}
-                          />
-                          <button type="button" onClick={() => antecedentesRef.current?.click()}
-                            className="btn btn-secondary flex items-center gap-2 cursor-pointer">
-                            <FileText width={20} height={20} />
-                            {field.value instanceof File ? field.value.name : "Subir documento"}
-                          </button>
-                          {field.value && (
-                            <button type="button"
-                              onClick={() => { field.onChange(""); if (antecedentesRef.current) antecedentesRef.current.value = ""; }}
-                              className="text-red-500 hover:text-red-700 cursor-pointer" aria-label="Quitar documento">
-                              <Trash2 width={20} height={20} />
-                            </button>
-                          )}
-                        </>
-                      ) : (
-                        <div className="flex items-center gap-3 italic text-slate-600">
-                          {field.value && typeof field.value === "string" ? (
-                            <>
-                              <span className="flex items-center gap-2 text-primary font-medium not-italic">
-                                <FileText width={20} height={20} /> Documento cargado
-                              </span>
-                              <button type="button"
-                                onClick={() => { const a = document.createElement("a"); a.href = field.value as string; a.download = "antecedentes_penales.pdf"; a.click(); }}
-                                className="text-sm font-medium text-primary hover:text-primary/80 underline cursor-pointer not-italic">
-                                Descargar
-                              </button>
-                            </>
-                          ) : "No se ha cargado ningún documento"}
-                        </div>
-                      )}
-                    </div>
-                  </FormControl>
-                  <div className="text-[12px] text-slate-500 mt-1">Límite: 5MB (PDF o Word)</div>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-
-            {/* Documento IESS */}
-            <FormField
-              control={form.control}
-              name="documentoIESS"
-              render={({ field }) => (
-                <FormItem className="flex flex-col">
-                  <FormLabel>
-                    <h2 className="text-2xl font-semibold text-primary flex items-center gap-2">
-                      <FileText width={25} height={25} className="text-primary" />
-                      Validación IESS
-                    </h2>
-                  </FormLabel>
-                  <FormControl>
-                    <div className="flex items-center gap-4">
-                      {isEditing ? (
-                        <>
-                          <input
-                            type="file"
-                            accept=".pdf,.doc,.docx"
-                            className="hidden"
-                            ref={(el) => { iessRef.current = el; field.ref(el); }}
-                            onChange={(e) => { const f = e.target.files?.[0]; if (f) field.onChange(f); }}
-                          />
-                          <button type="button" onClick={() => iessRef.current?.click()}
-                            className="btn btn-secondary flex items-center gap-2 cursor-pointer">
-                            <FileText width={20} height={20} />
-                            {field.value instanceof File ? field.value.name : "Subir documento"}
-                          </button>
-                          {field.value && (
-                            <button type="button"
-                              onClick={() => { field.onChange(""); if (iessRef.current) iessRef.current.value = ""; }}
-                              className="text-red-500 hover:text-red-700 cursor-pointer" aria-label="Quitar documento">
-                              <Trash2 width={20} height={20} />
-                            </button>
-                          )}
-                        </>
-                      ) : (
-                        <div className="flex items-center gap-3 italic text-slate-600">
-                          {field.value && typeof field.value === "string" ? (
-                            <>
-                              <span className="flex items-center gap-2 text-primary font-medium not-italic">
-                                <FileText width={20} height={20} /> Documento cargado
-                              </span>
-                              <button type="button"
-                                onClick={() => { const a = document.createElement("a"); a.href = field.value as string; a.download = "validacion_iess.pdf"; a.click(); }}
-                                className="text-sm font-medium text-primary hover:text-primary/80 underline cursor-pointer not-italic">
-                                Descargar
-                              </button>
-                            </>
-                          ) : "No se ha cargado ningún documento"}
-                        </div>
-                      )}
-                    </div>
-                  </FormControl>
-                  <div className="text-[12px] text-slate-500 mt-1">Límite: 5MB (PDF o Word)</div>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-          </div>
+          <ContactoBasicFields control={form.control} isEditing={isEditing} fields={fields} />
+          <ContactoDocumentFields control={form.control} isEditing={isEditing} />
 
           {isEditing && (
             <div className="col-span-2 mt-8 flex justify-end">

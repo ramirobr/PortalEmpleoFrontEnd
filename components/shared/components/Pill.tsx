@@ -14,6 +14,8 @@ interface PillProps {
   noButton?: boolean;
 }
 
+const isHexColor = (color: string) => /^#([0-9A-F]{3}){1,2}$/i.test(color);
+
 const Pill: React.FC<PillProps> = ({
   children,
   variant = "blue",
@@ -26,8 +28,6 @@ const Pill: React.FC<PillProps> = ({
   removable = false,
   noButton = false,
 }) => {
-  const isHexColor = (color: string) => /^#([0-9A-F]{3}){1,2}$/i.test(color);
-
   const getVariantClasses = () => {
     if (variant === "custom") {
       return "";

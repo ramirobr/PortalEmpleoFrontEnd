@@ -23,6 +23,21 @@ interface CandidatosTableProps {
   canDelete: boolean;
 }
 
+const getStatusClasses = (status: string) => {
+  switch (status.toLowerCase()) {
+    case "activo":
+    case "activa":
+      return "text-green-600 bg-green-50";
+    case "suspendido":
+    case "suspendida":
+      return "text-orange-600 bg-orange-50";
+    case "pendiente":
+      return "text-yellow-600 bg-amber-100";
+    default:
+      return "text-slate-600 bg-zinc-50";
+  }
+};
+
 export default function CandidatosTable({
   candidatos,
   loading,
@@ -34,20 +49,6 @@ export default function CandidatosTable({
   canChangeStatus,
   canDelete,
 }: CandidatosTableProps) {
-  const getStatusClasses = (status: string) => {
-    switch (status.toLowerCase()) {
-      case "activo":
-      case "activa":
-        return "text-green-600 bg-green-50";
-      case "suspendido":
-      case "suspendida":
-        return "text-orange-600 bg-orange-50";
-      case "pendiente":
-        return "text-yellow-600 bg-amber-100";
-      default:
-        return "text-slate-600 bg-zinc-50";
-    }
-  };
 
   if (loading) {
     return <AdminTableLoading message="Cargando candidatos..." />;

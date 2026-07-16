@@ -26,6 +26,19 @@ interface EmpleosTableProps {
   onDelete: (idVacante: string) => void;
 }
 
+const getStatusClasses = (status: string) => {
+  switch (status.toLowerCase()) {
+    case "activa":
+      return "text-green-600 bg-green-50";
+    case "cerrada":
+      return "text-slate-600 bg-zinc-100";
+    case "pendiente":
+      return "text-yellow-600 bg-amber-100";
+    default:
+      return "text-slate-600 bg-zinc-50";
+  }
+};
+
 export default function EmpleosTable({
   empleos,
   loading,
@@ -33,19 +46,6 @@ export default function EmpleosTable({
   onStatusChange,
   onDelete,
 }: EmpleosTableProps) {
-
-  const getStatusClasses = (status: string) => {
-    switch (status.toLowerCase()) {
-      case "activa":
-        return "text-green-600 bg-green-50";
-      case "cerrada":
-        return "text-slate-600 bg-zinc-100";
-      case "pendiente":
-        return "text-yellow-600 bg-amber-100";
-      default:
-        return "text-slate-600 bg-zinc-50";
-    }
-  };
 
   if (loading) {
     return <AdminTableLoading message="Cargando empleos..." />;

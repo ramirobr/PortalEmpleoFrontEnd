@@ -21,6 +21,19 @@ interface EmpresasTableProps {
   canDelete: boolean;
 }
 
+const getStatusClasses = (status: string) => {
+  switch (status.toLowerCase()) {
+    case "activa":
+    case "activo":
+      return "text-green-600 bg-green-50";
+    case "suspendido":
+    case "suspendida":
+      return "text-orange-600 bg-orange-50";
+    default:
+      return "text-slate-600 bg-zinc-50";
+  }
+};
+
 export default function EmpresasTable({
   empresas,
   loading,
@@ -31,19 +44,6 @@ export default function EmpresasTable({
   canChangeStatus,
   canDelete,
 }: EmpresasTableProps) {
-
-  const getStatusClasses = (status: string) => {
-    switch (status.toLowerCase()) {
-      case "activa":
-      case "activo":
-        return "text-green-600 bg-green-50";
-      case "suspendido":
-      case "suspendida":
-        return "text-orange-600 bg-orange-50";
-      default:
-        return "text-slate-600 bg-zinc-50";
-    }
-  };
 
   if (loading) {
     return <AdminTableLoading message="Cargando empresas..." />;

@@ -46,7 +46,7 @@ import { useSession } from "next-auth/react";
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useState, useTransition, Suspense } from "react";
-import { useForm } from "react-hook-form";
+import { useForm, UseFormReturn } from "react-hook-form";
 import { toast } from "sonner";
 import { z } from "zod";
 
@@ -56,21 +56,177 @@ const statusUpdateSchema = z.object({
   estado: z.string().min(1, "Selecciona un estado"),
 });
 
-interface PostulacionesListProps {
-  estados?: CatalogsByType[];
+type StatusUpdateValues = z.infer<typeof statusUpdateSchema>;
+
+type PostulacionesListProps = { estados?: CatalogsByType[] };
+
+const getPhotoSrc = (photo?: string | null): string | null => {
+  if (!photo) return null;
+  return `data:image/jpeg;base64,${photo.trim()}`;
+};
+
+function PostulacionFiltersSection({
+  searchQuery,
+  estadoFilter,
+  vacanteFilter,
+  estados,
+  vacantes,
+  onSearch,
+  onEstadoChange,
+  onVacanteChange,
+}: {
+  searchQuery: string;
+  estadoFilter: string;
+  vacanteFilter: string;
+  estados: CatalogsByType[];
+  vacantes: { id: string; titulo: string }[];
+  onSearch: (search: string) => void;
+  onEstadoChange: (value: string) => void;
+  onVacanteChange: (value: string) => void;
+}) {
+  return (
+    <div className="bg-white rounded-2xl border border-zinc-100 shadow-sm p-8 mb-8 transition-all hover:shadow-md">
+      <h3 className="text-sm font-semibold text-slate-900 mb-6 flex items-center gap-2 uppercase tracking-wider">
+        <svg className="size-4 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z" />
+        </svg>
+        Filtros de búsqueda
+      </h3>
+      <div className="flex flex-col lg:flex-row lg:items-end gap-6">
+        <div className="flex-1 min-w-0 w-full lg:max-w-md">
+          <span className="block text-xs font-bold text-slate-500 uppercase tracking-widest mb-2">Buscar Candidato</span>
+          <form className="flex gap-2" action={(formData) => { onSearch(formData.get("search") as string); }}>
+            <div className="relative flex-1">
+              <span className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 pointer-events-none">
+                <svg className="size-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                </svg>
+              </span>
+              <Input name="search" placeholder="Nombre, vacante o ubicación..." defaultValue={searchQuery} className="pl-10 h-11 bg-zinc-50/50 border-zinc-100 rounded-xl focus:bg-white transition-all text-sm" />
+            </div>
+            <PremiumButton type="submit" variant="primary" size="md">Buscar</PremiumButton>
+          </form>
+        </div>
+        <div className="w-full lg:w-48 shrink-0">
+          <span className="block text-xs font-bold text-slate-500 uppercase tracking-widest mb-2">Estado</span>
+          <Select value={estadoFilter} onValueChange={onEstadoChange}>
+            <SelectTrigger className="h-11 bg-zinc-50/50 border-zinc-100 rounded-xl text-sm"><SelectValue placeholder="Todos" /></SelectTrigger>
+            <SelectContent className="rounded-xl border-zinc-100 shadow-xl">
+              <SelectItem value="all">Todos los estados</SelectItem>
+              {estados.map((e) => (
+                <SelectItem key={e.idCatalogo} value={e.idCatalogo.toString()}>{e.nombre}</SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+        </div>
+        <div className="w-full lg:w-56 shrink-0">
+          <span className="block text-xs font-bold text-slate-500 uppercase tracking-widest mb-2">Vacante Específica</span>
+          <Select value={vacanteFilter} onValueChange={onVacanteChange}>
+            <SelectTrigger className="h-11 bg-zinc-50/50 border-zinc-100 rounded-xl text-sm"><SelectValue placeholder="Todas" /></SelectTrigger>
+            <SelectContent className="rounded-xl border-zinc-100 shadow-xl">
+              <SelectItem value="all">Todas las vacantes</SelectItem>
+              {vacantes.map((v) => (
+                <SelectItem key={v.id} value={v.id}>{v.titulo}</SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function PostulacionCard({
+  p,
+  onOpenStatusDialog,
+}: {
+  p: PostulacionItem;
+  onOpenStatusDialog: (p: PostulacionItem) => void;
+}) {
+  return (
+    <div className="p-8 hover:bg-zinc-50/50 transition-all flex flex-col md:flex-row md:items-center gap-8 group">
+      <div className="relative shrink-0">
+        <UserAvatar size={80} alt={p.nombreCompleto} className="rounded-full shadow-sm border-4 border-white bg-teal-50" src={getPhotoSrc(p.fotografia)} />
+        <div className="absolute bottom-1 right-1 size-6 bg-[#b24c1e] rounded-full border-2 border-white flex items-center justify-center shadow-md">
+          <StarIcon className="size-3 text-white" />
+        </div>
+      </div>
+      <div className="min-w-0 flex-1">
+        <div className="flex flex-wrap items-center gap-3 mb-2">
+          <h3 className="text-xl font-semibold text-slate-900 uppercase tracking-tight">{p.nombreCompleto}</h3>
+          <span className="px-2 py-0.5 bg-orange-50 text-orange-700 text-[11px] font-bold uppercase rounded border border-orange-100">Nuevo</span>
+        </div>
+        <p className="text-[#006a62] font-bold text-sm mb-3">Candidato</p>
+        <div className="flex flex-wrap items-center gap-4 text-xs font-bold text-slate-400 uppercase tracking-widest">
+          <span className="flex items-center gap-1.5"><MapPinIcon className="size-3.5 text-slate-300" />{p.ciudadUsuario || "Sin ubicación"}</span>
+          <span className="flex items-center gap-1.5"><BriefcaseIcon className="size-3.5 text-slate-300" />{p.tituloVacante}</span>
+        </div>
+      </div>
+      <div className="flex flex-col items-end gap-6 shrink-0">
+        <div className="flex items-center gap-2">
+          <StatusBadge status={p.estadoAplicacion} className="shadow-none border-none" />
+          <ActionButton onClick={() => onOpenStatusDialog(p)} icon={<EditIcon />} title="Cambiar estado" />
+        </div>
+        <PremiumButton href={`/empresa-perfil/candidato/${p.idUsuario}`} variant="primary" size="sm" className="rounded-full px-8 py-5 h-auto text-xs font-bold uppercase tracking-widest shadow-lg hover:shadow-teal-100 transition-all active:scale-95">
+          Ver Perfil
+        </PremiumButton>
+      </div>
+    </div>
+  );
+}
+
+function StatusUpdateDialog({
+  open,
+  onOpenChange,
+  selectedApplication,
+  estados,
+  form,
+  onSubmit,
+}: {
+  open: boolean;
+  onOpenChange: (v: boolean) => void;
+  selectedApplication: PostulacionItem | null;
+  estados: CatalogsByType[];
+  form: UseFormReturn<StatusUpdateValues>;
+  onSubmit: (data: StatusUpdateValues) => Promise<void>;
+}) {
+  return (
+    <Dialog open={open} onOpenChange={onOpenChange}>
+      <DialogContent>
+        <DialogHeader>
+          <DialogTitle>Cambiar Estado de Postulación</DialogTitle>
+          <DialogDescription>
+            Selecciona el nuevo estado para la postulación de {selectedApplication?.nombreCompleto}.
+          </DialogDescription>
+        </DialogHeader>
+        <form onSubmit={form.handleSubmit(onSubmit)}>
+          <div className="py-4">
+            <span className="block text-sm font-medium text-slate-700 mb-2">Estado</span>
+            <Select value={form.watch("estado")} onValueChange={(value) => form.setValue("estado", value)}>
+              <SelectTrigger><SelectValue placeholder="Selecciona un estado" /></SelectTrigger>
+              <SelectContent>
+                {estados.map((e) => (
+                  <SelectItem key={e.idCatalogo} value={e.idCatalogo.toString()}>{e.nombre}</SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+            {form.formState.errors.estado && (
+              <p className="text-sm text-red-600 mt-1">{form.formState.errors.estado.message}</p>
+            )}
+          </div>
+          <DialogFooter className="gap-3 sm:gap-0">
+            <PremiumButton variant="outline" size="md" onClick={() => onOpenChange(false)} className="rounded-xl">Cancelar</PremiumButton>
+            <PremiumButton type="submit" variant="primary" size="md" isLoading={form.formState.isSubmitting} className="rounded-xl min-w-[120px]">Guardar Cambios</PremiumButton>
+          </DialogFooter>
+        </form>
+      </DialogContent>
+    </Dialog>
+  );
 }
 
 function PostulacionesListInner({
   estados = [],
 }: PostulacionesListProps) {
-  const getPhotoSrc = (photo?: string | null) => {
-    if (!photo) return null;
-
-    const normalized = photo.trim();
-    if (!normalized) return null;
-
-    return `data:image/jpeg;base64,${normalized}`;
-  };
 
   const { data: session } = useSession();
   const { push } = useRouter();

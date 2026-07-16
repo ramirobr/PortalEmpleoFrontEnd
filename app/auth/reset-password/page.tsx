@@ -53,6 +53,98 @@ const resetPasswordSchema = z
 
 export type ResetPasswordValues = z.infer<typeof resetPasswordSchema>;
 
+type NavProps = {
+  isMobileMenuOpen: boolean;
+  onToggleMobileMenu: () => void;
+  onCloseMobileMenu: () => void;
+  authLinks: NavLink[];
+};
+
+function InvalidLinkView({ isMobileMenuOpen, onToggleMobileMenu, onCloseMobileMenu, authLinks }: NavProps) {
+  return (
+    <div className="min-h-screen flex flex-col bg-zinc-50">
+      <Navbar
+        showCompanyRegister={true}
+        onHamburgerClick={onToggleMobileMenu}
+        isAsideOpen={isMobileMenuOpen}
+      />
+      <AsideMenu
+        isOpen={isMobileMenuOpen}
+        onClose={onCloseMobileMenu}
+        side="left"
+        className="w-1/2 max-w-sm"
+        links={authLinks}
+      />
+      <main className="flex-1 flex flex-col items-center justify-center px-4 py-12">
+        <Card className="w-full max-w-md p-6 flex flex-col gap-6 shadow-md">
+          <CardContent className="flex flex-col gap-6 items-center text-center">
+            <div className="size-16 bg-red-100 rounded-full flex items-center justify-center text-red-600">
+              <ShieldCheck className="size-10" />
+            </div>
+            <div>
+              <h2 className="text-black text-2xl font-semibold mb-2">
+                Enlace inválido
+              </h2>
+              <p className="text-slate-600">
+                El enlace para restablecer tu contraseña es inválido o ha
+                expirado. Por favor, solicita uno nuevo.
+              </p>
+            </div>
+            <Link href="/auth/forgot-password" className="w-full mt-4">
+              <Button className="w-full">Solicitar nuevo enlace</Button>
+            </Link>
+          </CardContent>
+        </Card>
+      </main>
+      <Footer />
+    </div>
+  );
+}
+
+function SuccessView({ isMobileMenuOpen, onToggleMobileMenu, onCloseMobileMenu, authLinks }: NavProps) {
+  return (
+    <div className="min-h-screen flex flex-col bg-zinc-50">
+      <Navbar
+        showCompanyRegister={true}
+        onHamburgerClick={onToggleMobileMenu}
+        isAsideOpen={isMobileMenuOpen}
+      />
+      <AsideMenu
+        isOpen={isMobileMenuOpen}
+        onClose={onCloseMobileMenu}
+        side="left"
+        className="w-1/2 max-w-sm"
+        links={authLinks}
+      />
+      <main className="flex-1 flex flex-col items-center justify-center px-4 py-12">
+        <Card className="w-full max-w-md p-6 flex flex-col gap-6 shadow-md">
+          <CardContent className="flex flex-col gap-6 items-center text-center">
+            <div className="size-16 bg-green-100 rounded-full flex items-center justify-center text-green-600">
+              <CheckCircle className="size-10" />
+            </div>
+            <div>
+              <h2 className="text-black text-2xl font-semibold mb-2">
+                ¡Contraseña actualizada!
+              </h2>
+              <p className="text-slate-600">
+                Tu contraseña ha sido restablecida exitosamente. Serás
+                redirigido al inicio de sesión en unos segundos.
+              </p>
+            </div>
+            <Link href="/auth/login" className="w-full mt-4">
+              <Button className="w-full">
+                <ArrowLeft className="size-4 mr-2" />
+                Ir al inicio de sesión
+              </Button>
+            </Link>
+          </CardContent>
+        </Card>
+      </main>
+      <Footer />
+    </div>
+  );
+}
+
 function ResetPasswordForm() {
   const { push } = useRouter();
   const searchParams = useSearchParams();
@@ -124,44 +216,12 @@ function ResetPasswordForm() {
   // Verificar si tenemos los parámetros necesarios
   if (!email || !token) {
     return (
-      <div className="min-h-screen flex flex-col bg-zinc-50">
-        <Navbar
-          showCompanyRegister={true}
-          onHamburgerClick={toggleMobileMenu}
-          isAsideOpen={isMobileMenuOpen}
-        />
-        <AsideMenu
-          isOpen={isMobileMenuOpen}
-          onClose={closeMobileMenu}
-          side="left"
-          className="w-1/2 max-w-sm"
-          links={authLinks}
-        />
-        <main className="flex-1 flex flex-col items-center justify-center px-4 py-12">
-          <Card className="w-full max-w-md p-6 flex flex-col gap-6 shadow-md">
-            <CardContent className="flex flex-col gap-6 items-center text-center">
-              <div className="size-16 bg-red-100 rounded-full flex items-center justify-center text-red-600">
-                <ShieldCheck className="size-10" />
-              </div>
-
-              <div>
-                <h2 className="text-black text-2xl font-semibold mb-2">
-                  Enlace inválido
-                </h2>
-                <p className="text-slate-600">
-                  El enlace para restablecer tu contraseña es inválido o ha
-                  expirado. Por favor, solicita uno nuevo.
-                </p>
-              </div>
-
-              <Link href="/auth/forgot-password" className="w-full mt-4">
-                <Button className="w-full">Solicitar nuevo enlace</Button>
-              </Link>
-            </CardContent>
-          </Card>
-        </main>
-        <Footer />
-      </div>
+      <InvalidLinkView
+        isMobileMenuOpen={isMobileMenuOpen}
+        onToggleMobileMenu={toggleMobileMenu}
+        onCloseMobileMenu={closeMobileMenu}
+        authLinks={authLinks}
+      />
     );
   }
 
@@ -197,47 +257,12 @@ function ResetPasswordForm() {
   // Pantalla de éxito
   if (isSuccess) {
     return (
-      <div className="min-h-screen flex flex-col bg-zinc-50">
-        <Navbar
-          showCompanyRegister={true}
-          onHamburgerClick={toggleMobileMenu}
-          isAsideOpen={isMobileMenuOpen}
-        />
-        <AsideMenu
-          isOpen={isMobileMenuOpen}
-          onClose={closeMobileMenu}
-          side="left"
-          className="w-1/2 max-w-sm"
-          links={authLinks}
-        />
-        <main className="flex-1 flex flex-col items-center justify-center px-4 py-12">
-          <Card className="w-full max-w-md p-6 flex flex-col gap-6 shadow-md">
-            <CardContent className="flex flex-col gap-6 items-center text-center">
-              <div className="size-16 bg-green-100 rounded-full flex items-center justify-center text-green-600">
-                <CheckCircle className="size-10" />
-              </div>
-
-              <div>
-                <h2 className="text-black text-2xl font-semibold mb-2">
-                  ¡Contraseña actualizada!
-                </h2>
-                <p className="text-slate-600">
-                  Tu contraseña ha sido restablecida exitosamente. Serás
-                  redirigido al inicio de sesión en unos segundos.
-                </p>
-              </div>
-
-              <Link href="/auth/login" className="w-full mt-4">
-                <Button className="w-full">
-                  <ArrowLeft className="size-4 mr-2" />
-                  Ir al inicio de sesión
-                </Button>
-              </Link>
-            </CardContent>
-          </Card>
-        </main>
-        <Footer />
-      </div>
+      <SuccessView
+        isMobileMenuOpen={isMobileMenuOpen}
+        onToggleMobileMenu={toggleMobileMenu}
+        onCloseMobileMenu={closeMobileMenu}
+        authLinks={authLinks}
+      />
     );
   }
 

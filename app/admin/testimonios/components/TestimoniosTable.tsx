@@ -26,6 +26,41 @@ interface TestimoniosTableProps {
   onDelete: (id: string) => void;
 }
 
+const getStatusClasses = (status: ESTADOS) => {
+  switch (status) {
+    case EstadoNombre.Publicado:
+      return "text-green-600 bg-green-50";
+    case EstadoNombre.EnRevision:
+      return "text-yellow-600 bg-amber-100";
+    case EstadoNombre.Rechazado:
+      return "text-red-600 bg-red-50";
+    default:
+      return "text-slate-600 bg-zinc-50";
+  }
+};
+
+const renderStars = (rating: number) => {
+  return (
+    <div className="flex items-center gap-0.5">
+      {[1, 2, 3, 4, 5].map((star) => (
+        <Star
+          key={star}
+          className={`size-4 ${
+            star <= rating
+              ? "fill-yellow-400 text-yellow-400"
+              : "fill-zinc-200 text-slate-200"
+          }`}
+        />
+      ))}
+    </div>
+  );
+};
+
+const truncateText = (text: string, maxLength: number = 80) => {
+  if (text.length <= maxLength) return text;
+  return text.substring(0, maxLength) + "...";
+};
+
 export default function TestimoniosTable({
   testimonios,
   loading,
@@ -34,40 +69,6 @@ export default function TestimoniosTable({
   onReject,
   onDelete,
 }: TestimoniosTableProps) {
-  const getStatusClasses = (status: ESTADOS) => {
-    switch (status) {
-      case EstadoNombre.Publicado:
-        return "text-green-600 bg-green-50";
-      case EstadoNombre.EnRevision:
-        return "text-yellow-600 bg-amber-100";
-      case EstadoNombre.Rechazado:
-        return "text-red-600 bg-red-50";
-      default:
-        return "text-slate-600 bg-zinc-50";
-    }
-  };
-
-  const renderStars = (rating: number) => {
-    return (
-      <div className="flex items-center gap-0.5">
-        {[1, 2, 3, 4, 5].map((star) => (
-          <Star
-            key={star}
-            className={`size-4 ${
-              star <= rating
-                ? "fill-yellow-400 text-yellow-400"
-                : "fill-zinc-200 text-slate-200"
-            }`}
-          />
-        ))}
-      </div>
-    );
-  };
-
-  const truncateText = (text: string, maxLength: number = 80) => {
-    if (text.length <= maxLength) return text;
-    return text.substring(0, maxLength) + "...";
-  };
 
   if (loading) {
     return <AdminTableLoading message="Cargando testimonios..." />;

@@ -1,4 +1,5 @@
 ﻿"use client";
+import React from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { formatDate } from "@/lib/utils";
 import Pill from "@/components/shared/components/Pill";
@@ -28,6 +29,78 @@ import { ContactInfoForm } from "./ContactInfoForm";
 import { GeneralInfoForm } from "./GeneralInfoForm";
 import { LogoUploadDialog } from "./LogoUploadDialog";
 import { getWebsiteDisplayUrl, normalizeWebsiteUrl } from "@/lib/url";
+
+type AdminUser = NonNullable<CompanyProfileData["usuarioAdministrador"]>;
+
+function CompanyAdminCard({
+  admin,
+  companyData,
+  filters,
+  accessToken,
+  onSuccess,
+}: {
+  admin: AdminUser;
+  companyData: CompanyProfileData;
+  filters: CompanyProfileFiltersResponse | null;
+  accessToken: string | undefined;
+  onSuccess: (updated: Partial<CompanyProfileData>) => void;
+}) {
+  return (
+    <Card className="border-none shadow-soft">
+      <CardHeader className="pb-4">
+        <div className="flex items-center justify-between">
+          <CardTitle className="text-base font-semibold text-foreground">Usuario Administrador</CardTitle>
+          <AdminInfoForm
+            companyData={companyData}
+            filters={filters}
+            accessToken={accessToken}
+            onSuccess={onSuccess}
+          />
+        </div>
+      </CardHeader>
+      <CardContent className="pt-0">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+          {([
+            { icon: User, label: "Nombre", value: admin.nombreCompleto },
+            { icon: Mail, label: "Correo", value: admin.correoElectronico, truncate: true },
+            { icon: Phone, label: "Teléfono", value: admin.telefono || "No especificado" },
+          ] as { icon: React.ElementType; label: string; value: string; truncate?: boolean }[]).map((item) => (
+            <div key={item.label} className="flex items-center gap-3 p-4 bg-surface-container-low rounded-xl">
+              <div className="size-10 rounded-xl bg-white shadow-sm flex items-center justify-center border border-surface-container-low shrink-0">
+                <item.icon className="size-5 text-primary" />
+              </div>
+              <div className="text-sm min-w-0">
+                <p className="text-[11px] font-semibold uppercase tracking-[0.15em] text-gray-dark">{item.label}</p>
+                <p className={`font-medium text-foreground ${item.truncate ? "truncate" : ""}`}>{item.value}</p>
+              </div>
+            </div>
+          ))}
+          <div className="flex items-center gap-3 p-4 bg-surface-container-low rounded-xl">
+            <div className="size-10 rounded-xl bg-white shadow-sm flex items-center justify-center border border-surface-container-low shrink-0">
+              <UserCheck className="size-5 text-primary" />
+            </div>
+            <div className="text-sm">
+              <p className="text-[11px] font-semibold uppercase tracking-[0.15em] text-gray-dark mb-1">Estado</p>
+              <Pill
+                variant={admin.estadoCuenta?.nombre === "Activa" ? "green" : "yellow"}
+                className="text-[9px] font-semibold tracking-[0.1em] px-2.5 py-0.5 rounded-full"
+                noButton
+              >
+                {admin.estadoCuenta?.nombre ?? "No especificado"}
+              </Pill>
+            </div>
+          </div>
+        </div>
+        {admin.fechaRegistro && (
+          <div className="flex items-center gap-2 mt-4 pt-4 border-t border-surface-container-low text-xs text-gray-dark">
+            <Calendar className="size-3.5" />
+            <span>Registrado el {formatDate(admin.fechaRegistro)}</span>
+          </div>
+        )}
+      </CardContent>
+    </Card>
+  );
+}
 
 interface CompanyProfileViewProps {
   profile: CompanyProfileData;
@@ -261,91 +334,14 @@ export default function CompanyProfileView({
         </Card>
       </div>
 
-      {/* Admin User Card */}
       {admin && (
-        <Card className="border-none shadow-soft">
-          <CardHeader className="pb-4">
-            <div className="flex items-center justify-between">
-              <CardTitle className="text-base font-semibold text-foreground">
-                Usuario Administrador
-              </CardTitle>
-              <AdminInfoForm
-                companyData={companyData}
-                filters={filters}
-                accessToken={session?.user.accessToken}
-                onSuccess={handleUpdateCompanyData}
-              />
-            </div>
-          </CardHeader>
-          <CardContent className="pt-0">
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-              {[
-                {
-                  icon: User,
-                  label: "Nombre",
-                  value: admin.nombreCompleto,
-                },
-                {
-                  icon: Mail,
-                  label: "Correo",
-                  value: admin.correoElectronico,
-                  truncate: true,
-                },
-                {
-                  icon: Phone,
-                  label: "Teléfono",
-                  value: admin.telefono || "No especificado",
-                },
-              ].map((item) => (
-                <div
-                  key={item.label}
-                  className="flex items-center gap-3 p-4 bg-surface-container-low rounded-xl"
-                >
-                  <div className="size-10 rounded-xl bg-white shadow-sm flex items-center justify-center border border-surface-container-low shrink-0">
-                    <item.icon className="size-5 text-primary" />
-                  </div>
-                  <div className="text-sm min-w-0">
-                    <p className="text-[11px] font-semibold uppercase tracking-[0.15em] text-gray-dark">
-                      {item.label}
-                    </p>
-                    <p
-                      className={`font-medium text-foreground ${item.truncate ? "truncate" : ""}`}
-                    >
-                      {item.value}
-                    </p>
-                  </div>
-                </div>
-              ))}
-
-              <div className="flex items-center gap-3 p-4 bg-surface-container-low rounded-xl">
-                <div className="size-10 rounded-xl bg-white shadow-sm flex items-center justify-center border border-surface-container-low shrink-0">
-                  <UserCheck className="size-5 text-primary" />
-                </div>
-                <div className="text-sm">
-                  <p className="text-[11px] font-semibold uppercase tracking-[0.15em] text-gray-dark mb-1">
-                    Estado
-                  </p>
-                  <Pill
-                    variant={
-                      admin.estadoCuenta?.nombre === "Activa" ? "green" : "yellow"
-                    }
-                    className="text-[9px] font-semibold tracking-[0.1em] px-2.5 py-0.5 rounded-full"
-                    noButton
-                  >
-                    {admin.estadoCuenta?.nombre ?? "No especificado"}
-                  </Pill>
-                </div>
-              </div>
-            </div>
-
-            {admin.fechaRegistro && (
-              <div className="flex items-center gap-2 mt-4 pt-4 border-t border-surface-container-low text-xs text-gray-dark">
-                <Calendar className="size-3.5" />
-                <span>Registrado el {formatDate(admin.fechaRegistro)}</span>
-              </div>
-            )}
-          </CardContent>
-        </Card>
+        <CompanyAdminCard
+          admin={admin}
+          companyData={companyData}
+          filters={filters}
+          accessToken={session?.user.accessToken}
+          onSuccess={handleUpdateCompanyData}
+        />
       )}
     </div>
   );

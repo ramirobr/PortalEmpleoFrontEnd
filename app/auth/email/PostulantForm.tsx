@@ -32,6 +32,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useRef, useState } from "react";
 import { useForm } from "react-hook-form";
+import type { Control, UseFormReturn } from "react-hook-form";
 import { toast } from "sonner";
 import { z } from "zod";
 
@@ -93,6 +94,578 @@ type CompanyFormProps = {
   ciudades?: CatalogsByType[];
   provincias?: CatalogsByType[];
 };
+
+function PostulantPersonalFields({
+  control,
+  showPassword,
+  showConfirmPassword,
+  fields,
+  loadingFields,
+  onPwdMouseDown,
+  onPwdMouseUp,
+  onPwdClick,
+  onConfirmMouseDown,
+  onConfirmMouseUp,
+  onConfirmClick,
+}: {
+  control: Control<FormValues>;
+  showPassword: boolean;
+  showConfirmPassword: boolean;
+  fields: SignUpFieldsResponse | null;
+  loadingFields: boolean;
+  onPwdMouseDown: () => void;
+  onPwdMouseUp: () => void;
+  onPwdClick: () => void;
+  onConfirmMouseDown: () => void;
+  onConfirmMouseUp: () => void;
+  onConfirmClick: () => void;
+}) {
+  return (
+    <>
+      <FormField
+        control={control}
+        name="nombres"
+        render={({ field }) => (
+          <FormItem>
+            <FormLabel>Nombre(s) *</FormLabel>
+            <FormControl>
+              <Input placeholder="Ingresa tu nombre" {...field} />
+            </FormControl>
+            <FormMessage />
+          </FormItem>
+        )}
+      />
+
+      <FormField
+        control={control}
+        name="apellidos"
+        render={({ field }) => (
+          <FormItem>
+            <FormLabel>Apellido(s) *</FormLabel>
+            <FormControl>
+              <Input placeholder="Ingresa tu apellido" {...field} />
+            </FormControl>
+            <FormMessage />
+          </FormItem>
+        )}
+      />
+
+      <div className="col-span-1 lg:col-span-2 flex flex-col lg:flex-row gap-4">
+        <FormField
+          control={control}
+          name="idTipoDocumento"
+          render={({ field }) => (
+            <FormItem className="w-full lg:w-1/2">
+              <FormLabel htmlFor="documento">
+                Tipo de documento *
+              </FormLabel>
+              <FormControl>
+                <Select
+                  onValueChange={(value) =>
+                    field.onChange(Number(value))
+                  }
+                  value={field.value ? String(field.value) : ""}
+                  disabled={loadingFields}
+                >
+                  <SelectTrigger id="documento">
+                    <SelectValue placeholder={loadingFields ? "Cargando…" : "Tipo"} />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {fields?.tipo_documento?.map((tipo) => (
+                      <SelectItem
+                        key={tipo.idCatalogo}
+                        value={tipo.idCatalogo.toString()}
+                      >
+                        {tipo.nombre}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+
+        <FormField
+          control={control}
+          name="documento"
+          render={({ field }) => (
+            <FormItem className="w-full lg:w-1/2">
+              <FormLabel>Documento *</FormLabel>
+              <FormControl>
+                <Input
+                  placeholder="Documento"
+                  maxLength={10}
+                  minLength={10}
+                  inputMode="numeric"
+                  pattern="[0-9]{10}"
+                  {...field}
+                />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+      </div>
+
+      <div className="col-span-1 lg:col-span-2 flex flex-col lg:flex-row gap-4">
+        <FormField
+          control={control}
+          name="telefono"
+          render={({ field }) => (
+            <FormItem className="w-full lg:w-1/2">
+              <FormLabel htmlFor="telefono">Teléfono *</FormLabel>
+              <FormControl>
+                <Input
+                  type="text"
+                  id="telefono"
+                  inputMode="tel"
+                  placeholder="2375293123"
+                  value={field.value}
+                  onChange={(e) =>
+                    field.onChange(e.target.value.replace(/\D/g, ""))
+                  }
+                />
+              </FormControl>
+              <span className="text-xs text-slate-500 ml-2">
+                Ej. 991234567
+              </span>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        <FormField
+          control={control}
+          name="telefonoMobil"
+          render={({ field }) => (
+            <FormItem className="w-full lg:w-1/2">
+              <FormLabel htmlFor="telefonoMobil">
+                Teléfono Móvil
+              </FormLabel>
+              <FormControl>
+                <Input
+                  type="text"
+                  id="telefonoMobil"
+                  inputMode="tel"
+                  placeholder="+593 2375293"
+                  value={field.value}
+                  onChange={(e) =>
+                    field.onChange(e.target.value.replace(/\D/g, ""))
+                  }
+                />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+      </div>
+
+      <div className="col-span-1 lg:col-span-2 flex flex-col lg:flex-row gap-4">
+        <FormField
+          control={control}
+          name="fechaNacimiento"
+          render={({ field }) => (
+            <FormItem className="col-span-1 lg:col-span-2 w-full lg:w-1/2">
+              <FormLabel>Fecha de nacimiento *</FormLabel>
+              <FormControl>
+                <DatePicker
+                  value={field.value}
+                  onChange={field.onChange}
+                />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        <FormField
+          control={control}
+          name="password"
+          render={({ field }) => (
+            <FormItem className="w-full lg:w-1/2">
+              <FormLabel>Contraseña *</FormLabel>
+              <FormControl>
+                <div className="relative">
+                  <Input
+                    id="password"
+                    type={showPassword ? "text" : "password"}
+                    placeholder="Ingresa tu contraseña"
+                    className="pr-10"
+                    {...field}
+                  />
+                  <button
+                    type="button"
+                    aria-label={
+                      showPassword
+                        ? "Ocultar contraseña"
+                        : "Mostrar contraseña"
+                    }
+                    className="absolute right-3 top-1/2 -translate-y-1/2 size-5 text-slate-400"
+                    onMouseDown={onPwdMouseDown}
+                    onMouseUp={onPwdMouseUp}
+                    onMouseLeave={onPwdMouseUp}
+                    onClick={onPwdClick}
+                  >
+                    <Eye aria-hidden="true" />
+                  </button>
+                </div>
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+      </div>
+
+      <div className="col-span-1 lg:col-span-2 flex flex-col lg:flex-row gap-4">
+        <FormField
+          control={control}
+          name="confirmPassword"
+          render={({ field }) => (
+            <FormItem className="col-span-1 lg:col-span-2 w-full lg:w-1/2">
+              <FormLabel>Repetir contraseña *</FormLabel>
+              <FormControl>
+                <div className="relative">
+                  <Input
+                    type={showConfirmPassword ? "text" : "password"}
+                    placeholder="Repite tu contraseña"
+                    className="pr-10"
+                    {...field}
+                  />
+                  <button
+                    type="button"
+                    aria-label={showConfirmPassword ? "Ocultar contraseña" : "Mostrar contraseña"}
+                    className="absolute right-3 top-1/2 -translate-y-1/2 size-5 text-slate-400 cursor-pointer"
+                    onMouseDown={onConfirmMouseDown}
+                    onMouseUp={onConfirmMouseUp}
+                    onMouseLeave={onConfirmMouseUp}
+                    onClick={onConfirmClick}
+                  >
+                    <Eye aria-hidden="true" />
+                  </button>
+                </div>
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        <FormField
+          control={control}
+          name="idGenero"
+          render={({ field }) => (
+            <FormItem className="w-full lg:w-1/2">
+              <FormLabel htmlFor="genero">Género *</FormLabel>
+              <FormControl>
+                <Select
+                  onValueChange={(value) =>
+                    field.onChange(Number(value))
+                  }
+                  value={field.value ? String(field.value) : ""}
+                  disabled={loadingFields}
+                >
+                  <SelectTrigger id="genero">
+                    <SelectValue placeholder={loadingFields ? "Cargando…" : "Género"} />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {fields?.genero?.map((genero) => (
+                      <SelectItem
+                        key={genero.idCatalogo}
+                        value={genero.idCatalogo.toString()}
+                      >
+                        {genero.nombre}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+      </div>
+    </>
+  );
+}
+
+function PostulantLocationFields({
+  control,
+  fields,
+  loadingFields,
+  ciudades,
+  provincias,
+  onCiudadReset,
+}: {
+  control: Control<FormValues>;
+  fields: SignUpFieldsResponse | null;
+  loadingFields: boolean;
+  ciudades: CatalogsByType[];
+  provincias: CatalogsByType[];
+  onCiudadReset: () => void;
+}) {
+  return (
+    <>
+      <FormField
+        control={control}
+        name="idTipoJornadaLaboral"
+        render={({ field }) => (
+          <FormItem className="w-full col-span-1 lg:col-span-2">
+            <FormLabel htmlFor="jornada-laboral">Tipo de jornada laboral</FormLabel>
+            <FormControl>
+              <Select
+                onValueChange={(value) =>
+                  field.onChange(value ? Number(value) : undefined)
+                }
+                value={field.value ? String(field.value) : ""}
+                disabled={loadingFields}
+              >
+                <SelectTrigger id="jornada-laboral">
+                  <SelectValue placeholder={loadingFields ? "Cargando…" : "Selecciona una jornada"} />
+                </SelectTrigger>
+                <SelectContent>
+                  {fields?.tipo_empleo?.map((jornada) => (
+                    <SelectItem
+                      key={jornada.idCatalogo}
+                      value={jornada.idCatalogo.toString()}
+                    >
+                      {jornada.nombre}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </FormControl>
+            <FormMessage />
+          </FormItem>
+        )}
+      />
+
+      <div className="col-span-1 lg:col-span-2 flex flex-col lg:flex-row gap-4">
+        <FormField
+          control={control}
+          name="idProvincia"
+          render={({ field }) => (
+            <FormItem className="w-full lg:w-1/2">
+              <FormLabel>Provincia</FormLabel>
+              <FormControl>
+                <SearchAutocomplete<number>
+                  options={provincias.map((p) => ({ id: p.idCatalogo, label: p.nombre }))}
+                  value={field.value}
+                  onChange={(val) => {
+                    field.onChange(val);
+                    onCiudadReset();
+                  }}
+                  placeholder={loadingFields ? "Cargando…" : "Selecciona provincia"}
+                />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        <FormField
+          control={control}
+          name="idCiudad"
+          render={({ field }) => (
+            <FormItem className="w-full lg:w-1/2">
+              <FormLabel>Ciudad</FormLabel>
+              <FormControl>
+                <SearchAutocomplete<number>
+                  options={ciudades.map((c) => ({ id: c.idCatalogo, label: c.nombre }))}
+                  value={field.value}
+                  onChange={field.onChange}
+                  placeholder={loadingFields ? "Cargando…" : "Selecciona ciudad"}
+                />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+      </div>
+
+      <FormField
+        control={control}
+        name="email"
+        render={({ field }) => (
+          <FormItem className="w-full col-span-1 lg:col-span-2">
+            <FormLabel>Email *</FormLabel>
+            <FormControl>
+              <div className="relative">
+                <Mail className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 size-5" />
+                <Input
+                  type="email"
+                  placeholder="Ingresa tu email"
+                  className="pl-10"
+                  {...field}
+                />
+              </div>
+            </FormControl>
+            <FormMessage />
+          </FormItem>
+        )}
+      />
+    </>
+  );
+}
+
+function PostulantAgreements({ control }: { control: Control<FormValues> }) {
+  return (
+    <>
+      <FormField
+        control={control}
+        name="aceptaCondicionesUso"
+        render={({ field }) => (
+          <FormItem>
+            <FormControl>
+              <label htmlFor="aceptaCondicionesUso" className="flex items-center gap-2">
+                <Checkbox
+                  id="aceptaCondicionesUso"
+                  checked={field.value}
+                  onCheckedChange={field.onChange}
+                />
+                <span className="text-sm">
+                  Acepto las{" "}
+                  <Link
+                    href="/terminos"
+                    className="text-primary font-semibold underline"
+                  >
+                    Condiciones de uso
+                  </Link>{" "}
+                  *
+                </span>
+              </label>
+            </FormControl>
+            <FormMessage />
+          </FormItem>
+        )}
+      />
+
+      <FormField
+        control={control}
+        name="aceptaPoliticaPrivacidad"
+        render={({ field }) => (
+          <FormItem>
+            <FormControl>
+              <label htmlFor="aceptaPoliticaPrivacidad" className="flex items-center gap-2">
+                <Checkbox
+                  id="aceptaPoliticaPrivacidad"
+                  checked={field.value}
+                  onCheckedChange={field.onChange}
+                />
+                <span className="text-sm">
+                  He leído y comprendo la{" "}
+                  <Link
+                    href="/privacidad"
+                    className="text-primary font-semibold underline"
+                  >
+                    Política de protección de datos personales y
+                    privacidad
+                  </Link>{" "}
+                  *
+                </span>
+              </label>
+            </FormControl>
+            <FormMessage />
+          </FormItem>
+        )}
+      />
+
+      <FormField
+        control={control}
+        name="aceptaNotificaciones"
+        render={({ field }) => (
+          <FormItem>
+            <FormControl>
+              <label htmlFor="aceptaNotificaciones" className="flex items-center gap-2">
+                <Checkbox
+                  id="aceptaNotificaciones"
+                  checked={field.value}
+                  onCheckedChange={field.onChange}
+                />
+                <span className="text-sm">
+                  Acepto recibir novedades, promociones y actualizaciones.
+                </span>
+              </label>
+            </FormControl>
+          </FormItem>
+        )}
+      />
+    </>
+  );
+}
+
+function PostulantSignupForm({
+  form,
+  onSubmit,
+  showPassword,
+  showConfirmPassword,
+  fields,
+  loadingFields,
+  ciudades,
+  provincias,
+  onPwdMouseDown,
+  onPwdMouseUp,
+  onPwdClick,
+  onConfirmMouseDown,
+  onConfirmMouseUp,
+  onConfirmClick,
+}: {
+  form: UseFormReturn<FormValues>;
+  onSubmit: (data: FormValues) => Promise<void>;
+  showPassword: boolean;
+  showConfirmPassword: boolean;
+  fields: SignUpFieldsResponse | null;
+  loadingFields: boolean;
+  ciudades: CatalogsByType[];
+  provincias: CatalogsByType[];
+  onPwdMouseDown: () => void;
+  onPwdMouseUp: () => void;
+  onPwdClick: () => void;
+  onConfirmMouseDown: () => void;
+  onConfirmMouseUp: () => void;
+  onConfirmClick: () => void;
+}) {
+  return (
+    <Form {...form}>
+      <form
+        onSubmit={form.handleSubmit(onSubmit)}
+        className="flex flex-col gap-6"
+      >
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 gap-y-8">
+          <PostulantPersonalFields
+            control={form.control}
+            showPassword={showPassword}
+            showConfirmPassword={showConfirmPassword}
+            fields={fields}
+            loadingFields={loadingFields}
+            onPwdMouseDown={onPwdMouseDown}
+            onPwdMouseUp={onPwdMouseUp}
+            onPwdClick={onPwdClick}
+            onConfirmMouseDown={onConfirmMouseDown}
+            onConfirmMouseUp={onConfirmMouseUp}
+            onConfirmClick={onConfirmClick}
+          />
+          <PostulantLocationFields
+            control={form.control}
+            fields={fields}
+            loadingFields={loadingFields}
+            ciudades={ciudades}
+            provincias={provincias}
+            onCiudadReset={() => form.setValue("idCiudad", undefined)}
+          />
+        </div>
+        <PostulantAgreements control={form.control} />
+        <Button
+          type="submit"
+          className="w-full btn btn-primary text-lg"
+          disabled={form.formState.isSubmitting}
+        >
+          {form.formState.isSubmitting && (
+            <span className="animate-spin size-4 border-2 border-t-transparent rounded-full" />
+          )}
+          Crear cuenta
+          <ArrowRight />
+        </Button>
+      </form>
+    </Form>
+  );
+}
 
 export default function EmailSignup({ fields, loadingFields = false, ciudades = [], provincias = [] }: CompanyFormProps) {
   const [showPassword, setShowPassword] = useState(false);
@@ -185,466 +758,22 @@ export default function EmailSignup({ fields, loadingFields = false, ciudades = 
           <h2 className="text-black text-2xl font-semibold ">Crea tu cuenta</h2>
           <p className="mt-2">Únete a nuestra comunidad de profesionales</p>
         </div>
-        <Form {...form}>
-          <form
-            onSubmit={form.handleSubmit(onSubmit)}
-            className="flex flex-col gap-6"
-          >
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 gap-y-8">
-              <FormField
-                control={form.control}
-                name="nombres"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Nombre(s) *</FormLabel>
-                    <FormControl>
-                      <Input placeholder="Ingresa tu nombre" {...field} />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-
-              <FormField
-                control={form.control}
-                name="apellidos"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Apellido(s) *</FormLabel>
-                    <FormControl>
-                      <Input placeholder="Ingresa tu apellido" {...field} />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-
-              <div className="col-span-1 lg:col-span-2 flex flex-col lg:flex-row gap-4">
-                <FormField
-                  control={form.control}
-                  name="idTipoDocumento"
-                  render={({ field }) => (
-                    <FormItem className="w-full lg:w-1/2">
-                      <FormLabel htmlFor="documento">
-                        Tipo de documento *
-                      </FormLabel>
-                      <FormControl>
-                        <Select
-                          onValueChange={(value) =>
-                            field.onChange(Number(value))
-                          }
-                          value={field.value ? String(field.value) : ""}
-                          disabled={loadingFields}
-                        >
-                          <SelectTrigger id="documento">
-                            <SelectValue placeholder={loadingFields ? "Cargando…" : "Tipo"} />
-                          </SelectTrigger>
-                          <SelectContent>
-                            {fields?.tipo_documento?.map((tipo) => (
-                              <SelectItem
-                                key={tipo.idCatalogo}
-                                value={tipo.idCatalogo.toString()}
-                              >
-                                {tipo.nombre}
-                              </SelectItem>
-                            ))}
-                          </SelectContent>
-                        </Select>
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-
-                <FormField
-                  control={form.control}
-                  name="documento"
-                  render={({ field }) => (
-                    <FormItem className="w-full lg:w-1/2">
-                      <FormLabel>Documento *</FormLabel>
-                      <FormControl>
-                        <Input
-                          placeholder="Documento"
-                          maxLength={10}
-                          minLength={10}
-                          inputMode="numeric"
-                          pattern="[0-9]{10}"
-                          {...field}
-                        />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-              </div>
-
-              <div className="col-span-1 lg:col-span-2 flex flex-col lg:flex-row gap-4">
-                <FormField
-                  control={form.control}
-                  name="telefono"
-                  render={({ field }) => (
-                    <FormItem className="w-full lg:w-1/2">
-                      <FormLabel htmlFor="telefono">Teléfono *</FormLabel>
-                      <FormControl>
-                        <Input
-                          type="text"
-                          id="telefono"
-                          inputMode="tel"
-                          placeholder="2375293123"
-                          value={field.value}
-                          onChange={(e) =>
-                            field.onChange(e.target.value.replace(/\D/g, ""))
-                          }
-                        />
-                      </FormControl>
-                      <span className="text-xs text-slate-500 ml-2">
-                        Ej. 991234567
-                      </span>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-                <FormField
-                  control={form.control}
-                  name="telefonoMobil"
-                  render={({ field }) => (
-                    <FormItem className="w-full lg:w-1/2">
-                      <FormLabel htmlFor="telefonoMobil">
-                        Teléfono Móvil
-                      </FormLabel>
-                      <FormControl>
-                        <Input
-                          type="text"
-                          id="telefonoMobil"
-                          inputMode="tel"
-                          placeholder="+593 2375293"
-                          value={field.value}
-                          onChange={(e) =>
-                            field.onChange(e.target.value.replace(/\D/g, ""))
-                          }
-                        />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-              </div>
-
-              <div className="col-span-1 lg:col-span-2 flex flex-col lg:flex-row gap-4">
-                <FormField
-                  control={form.control}
-                  name="fechaNacimiento"
-                  render={({ field }) => (
-                    <FormItem className="col-span-1 lg:col-span-2 w-full lg:w-1/2">
-                      <FormLabel>Fecha de nacimiento *</FormLabel>
-                      <FormControl>
-                        <DatePicker
-                          value={field.value}
-                          onChange={field.onChange}
-                        />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-                <FormField
-                  control={form.control}
-                  name="password"
-                  render={({ field }) => (
-                    <FormItem className="w-full lg:w-1/2">
-                      <FormLabel>Contraseña *</FormLabel>
-                      <FormControl>
-                        <div className="relative">
-                          <Input
-                            id="password"
-                            type={showPassword ? "text" : "password"}
-                            placeholder="Ingresa tu contraseña"
-                            className="pr-10"
-                            {...field}
-                          />
-                          <button
-                            type="button"
-                            aria-label={
-                              showPassword
-                                ? "Ocultar contraseña"
-                                : "Mostrar contraseña"
-                            }
-                            className="absolute right-3 top-1/2 -translate-y-1/2 size-5 text-slate-400"
-                            onMouseDown={handleMouseDown}
-                            onMouseUp={handleMouseUp}
-                            onMouseLeave={handleMouseUp}
-                            onClick={handleClick}
-                          >
-                            <Eye aria-hidden="true" />
-                          </button>
-                        </div>
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-              </div>
-
-              <div className="col-span-1 lg:col-span-2 flex flex-col lg:flex-row gap-4">
-                <FormField
-                  control={form.control}
-                  name="confirmPassword"
-                  render={({ field }) => (
-                    <FormItem className="col-span-1 lg:col-span-2 w-full lg:w-1/2">
-                      <FormLabel>Repetir contraseña *</FormLabel>
-                      <FormControl>
-                        <div className="relative">
-                          <Input
-                            type={showConfirmPassword ? "text" : "password"}
-                            placeholder="Repite tu contraseña"
-                            className="pr-10"
-                            {...field}
-                          />
-                          <button
-                            type="button"
-                            aria-label={showConfirmPassword ? "Ocultar contraseña" : "Mostrar contraseña"}
-                            className="absolute right-3 top-1/2 -translate-y-1/2 size-5 text-slate-400 cursor-pointer"
-                            onMouseDown={handleConfirmMouseDown}
-                            onMouseUp={handleConfirmMouseUp}
-                            onMouseLeave={handleConfirmMouseUp}
-                            onClick={handleConfirmClick}
-                          >
-                            <Eye aria-hidden="true" />
-                          </button>
-                        </div>
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-                <FormField
-                  control={form.control}
-                  name="idGenero"
-                  render={({ field }) => (
-                    <FormItem className="w-full lg:w-1/2">
-                      <FormLabel htmlFor="genero">Género *</FormLabel>
-                      <FormControl>
-                        <Select
-                          onValueChange={(value) =>
-                            field.onChange(Number(value))
-                          }
-                          value={field.value ? String(field.value) : ""}
-                          disabled={loadingFields}
-                        >
-                          <SelectTrigger id="genero">
-                            <SelectValue placeholder={loadingFields ? "Cargando…" : "Género"} />
-                          </SelectTrigger>
-                          <SelectContent>
-                            {fields?.genero?.map((genero) => (
-                              <SelectItem
-                                key={genero.idCatalogo}
-                                value={genero.idCatalogo.toString()}
-                              >
-                                {genero.nombre}
-                              </SelectItem>
-                            ))}
-                          </SelectContent>
-                        </Select>
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-              </div>
-
-              <FormField
-                control={form.control}
-                name="idTipoJornadaLaboral"
-                render={({ field }) => (
-                  <FormItem className="w-full col-span-1 lg:col-span-2">
-                    <FormLabel htmlFor="jornada-laboral">Tipo de jornada laboral</FormLabel>
-                    <FormControl>
-                      <Select
-                        onValueChange={(value) =>
-                          field.onChange(value ? Number(value) : undefined)
-                        }
-                        value={field.value ? String(field.value) : ""}
-                        disabled={loadingFields}
-                      >
-                        <SelectTrigger id="jornada-laboral">
-                          <SelectValue placeholder={loadingFields ? "Cargando…" : "Selecciona una jornada"} />
-                        </SelectTrigger>
-                        <SelectContent>
-                          {fields?.tipo_empleo?.map((jornada) => (
-                            <SelectItem
-                              key={jornada.idCatalogo}
-                              value={jornada.idCatalogo.toString()}
-                            >
-                              {jornada.nombre}
-                            </SelectItem>
-                          ))}
-                        </SelectContent>
-                      </Select>
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-
-              <div className="col-span-1 lg:col-span-2 flex flex-col lg:flex-row gap-4">
-                <FormField
-                  control={form.control}
-                  name="idProvincia"
-                  render={({ field }) => (
-                    <FormItem className="w-full lg:w-1/2">
-                      <FormLabel>Provincia</FormLabel>
-                      <FormControl>
-                        <SearchAutocomplete<number>
-                          options={provincias.map((p) => ({ id: p.idCatalogo, label: p.nombre }))}
-                          value={field.value}
-                          onChange={(val) => {
-                            field.onChange(val);
-                            form.setValue("idCiudad", undefined);
-                          }}
-                          placeholder={loadingFields ? "Cargando…" : "Selecciona provincia"}
-                        />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-                <FormField
-                  control={form.control}
-                  name="idCiudad"
-                  render={({ field }) => (
-                    <FormItem className="w-full lg:w-1/2">
-                      <FormLabel>Ciudad</FormLabel>
-                      <FormControl>
-                        <SearchAutocomplete<number>
-                          options={ciudades.map((c) => ({ id: c.idCatalogo, label: c.nombre }))}
-                          value={field.value}
-                          onChange={field.onChange}
-                          placeholder={loadingFields ? "Cargando…" : "Selecciona ciudad"}
-                        />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-              </div>
-
-              <FormField
-                control={form.control}
-                name="email"
-                render={({ field }) => (
-                  <FormItem className="w-full col-span-1 lg:col-span-2">
-                    <FormLabel>Email *</FormLabel>
-                    <FormControl>
-                      <div className="relative">
-                        <Mail className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 size-5" />
-                        <Input
-                          type="email"
-                          placeholder="Ingresa tu email"
-                          className="pl-10"
-                          {...field}
-                        />
-                      </div>
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-            </div>
-
-            <FormField
-              control={form.control}
-              name="aceptaCondicionesUso"
-              render={({ field }) => (
-                <FormItem>
-                  <FormControl>
-                    <label htmlFor="aceptaCondicionesUso" className="flex items-center gap-2">
-                      <Checkbox
-                        id="aceptaCondicionesUso"
-                        checked={field.value}
-                        onCheckedChange={field.onChange}
-                      />
-                      <span className="text-sm">
-                        Acepto las{" "}
-                        <Link
-                          href="/terminos"
-                          className="text-primary font-semibold underline"
-                        >
-                          Condiciones de uso
-                        </Link>{" "}
-                        *
-                      </span>
-                    </label>
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-
-            <FormField
-              control={form.control}
-              name="aceptaPoliticaPrivacidad"
-              render={({ field }) => (
-                <FormItem>
-                  <FormControl>
-                    <label htmlFor="aceptaPoliticaPrivacidad" className="flex items-center gap-2">
-                      <Checkbox
-                        id="aceptaPoliticaPrivacidad"
-                        checked={field.value}
-                        onCheckedChange={field.onChange}
-                      />
-                      <span className="text-sm">
-                        He leído y comprendo la{" "}
-                        <Link
-                          href="/privacidad"
-                          className="text-primary font-semibold underline"
-                        >
-                          Política de protección de datos personales y
-                          privacidad
-                        </Link>{" "}
-                        *
-                      </span>
-                    </label>
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-
-            <FormField
-              control={form.control}
-              name="aceptaNotificaciones"
-              render={({ field }) => (
-                <FormItem>
-                  <FormControl>
-                    <label htmlFor="aceptaNotificaciones" className="flex items-center gap-2">
-                      <Checkbox
-                        id="aceptaNotificaciones"
-                        checked={field.value}
-                        onCheckedChange={field.onChange}
-                      />
-                      <span className="text-sm">
-                        Acepto recibir novedades, promociones y actualizaciones.
-                      </span>
-                    </label>
-                  </FormControl>
-                </FormItem>
-              )}
-            />
-
-            <Button
-              type="submit"
-              className="w-full btn btn-primary text-lg"
-              disabled={form.formState.isSubmitting}
-            >
-              {form.formState.isSubmitting && (
-                <span className="animate-spin size-4 border-2 border-t-transparent rounded-full" />
-              )}
-              Crear cuenta
-              <ArrowRight />
-            </Button>
-          </form>
-        </Form>
-
+        <PostulantSignupForm
+          form={form}
+          onSubmit={onSubmit}
+          showPassword={showPassword}
+          showConfirmPassword={showConfirmPassword}
+          fields={fields}
+          loadingFields={loadingFields}
+          ciudades={ciudades}
+          provincias={provincias}
+          onPwdMouseDown={handleMouseDown}
+          onPwdMouseUp={handleMouseUp}
+          onPwdClick={handleClick}
+          onConfirmMouseDown={handleConfirmMouseDown}
+          onConfirmMouseUp={handleConfirmMouseUp}
+          onConfirmClick={handleConfirmClick}
+        />
         <div className="text-center text-sm">
           ¿Ya tienes cuenta?{" "}
           <Link

@@ -40,6 +40,84 @@ type ArchivoPublico = {
   tipoArchivo: string;
 };
 
+function JobSummaryCard({ job }: { job: Job }) {
+  return (
+    <Card>
+      <TituloSubrayado>Resumen de la oferta</TituloSubrayado>
+      <div className="flex flex-col gap-4 ">
+        <div className="flex items-center gap-4 pt-0">
+          <IconBadge size={32} icon={Banknote} className="shrink-0" />
+          <div>
+            <p className="text-[11px] font-bold uppercase tracking-wider text-slate-500">Salario</p>
+            <p className="text-sm font-semibold text-slate-900 mt-0.5">
+              ${job.salarioBase.toLocaleString()} - ${job.salarioMaximo.toLocaleString()}
+            </p>
+          </div>
+        </div>
+        <div className="flex items-center gap-4 pt-4">
+          <IconBadge size={32} icon={MapPin} className="shrink-0" />
+          <div>
+            <p className="text-[11px] font-bold uppercase tracking-wider text-slate-500">Ciudad</p>
+            <p className="text-sm font-semibold text-slate-900 mt-0.5">{job.ciudad}</p>
+          </div>
+        </div>
+        <div className="flex items-center gap-4 pt-4">
+          <IconBadge size={32} icon={Briefcase} className="shrink-0" />
+          <div>
+            <p className="text-[11px] font-bold uppercase tracking-wider text-slate-500">Experiencia</p>
+            <p className="text-sm font-semibold text-slate-900 mt-0.5">{job.experiencia}</p>
+          </div>
+        </div>
+        <div className="flex items-center gap-4 pt-4">
+          <IconBadge size={32} icon={Building} className="shrink-0" />
+          <div>
+            <p className="text-[11px] font-bold uppercase tracking-wider text-slate-500">Modalidad</p>
+            <p className="text-sm font-semibold text-slate-900 mt-0.5">{job.modalidad}</p>
+          </div>
+        </div>
+        <div className="flex items-center gap-4 pt-4">
+          <IconBadge size={32} icon={GraduationCap} className="shrink-0" />
+          <div>
+            <p className="text-[11px] font-bold uppercase tracking-wider text-slate-500">Nivel de estudios</p>
+            <p className="text-sm font-semibold text-slate-900 mt-0.5">{job.nivelEstudios}</p>
+          </div>
+        </div>
+        <div className="flex items-center gap-4 pt-4">
+          <IconBadge size={32} icon={Mail} className="shrink-0" />
+          <div>
+            <p className="text-[11px] font-bold uppercase tracking-wider text-slate-500">Correo de contacto</p>
+            <a href={`mailto:${job.correoContacto}`} className="text-sm font-semibold text-slate-900 mt-0.5 break-all hover:underline">
+              {job.correoContacto}
+            </a>
+          </div>
+        </div>
+        {job.inicioLabores && (
+          <div className="flex items-center gap-4 pt-4">
+            <IconBadge size={32} icon={Clock} className="shrink-0" />
+            <div>
+              <p className="text-[11px] font-bold uppercase tracking-wider text-slate-500">Inicio de labores</p>
+              <p className="text-sm font-semibold text-slate-900 mt-0.5">
+                {job.inicioLabores === "Fecha específica" && job.fechaInicioLabores
+                  ? `${job.inicioLabores}: ${job.fechaInicioLabores}`
+                  : job.inicioLabores}
+              </p>
+            </div>
+          </div>
+        )}
+        {job.aniosExperiencia != null && (
+          <div className="flex items-center gap-4 pt-4">
+            <IconBadge size={32} icon={Briefcase} className="shrink-0" />
+            <div>
+              <p className="text-[11px] font-bold uppercase tracking-wider text-slate-500">Años de experiencia</p>
+              <p className="text-sm font-semibold text-slate-900 mt-0.5">{job.aniosExperiencia} año{job.aniosExperiencia !== 1 ? "s" : ""}</p>
+            </div>
+          </div>
+        )}
+      </div>
+    </Card>
+  );
+}
+
 export default function JobDetails(job: Job) {
   const id = useAuthStore((s) => s.id);
   const openFloatingChat = useAuthStore((s) => s.openFloatingChat);
@@ -174,103 +252,7 @@ export default function JobDetails(job: Job) {
               )}
             </div>
             <div>
-              <Card>
-                <TituloSubrayado>Resumen de la oferta</TituloSubrayado>
-                <div className="flex flex-col gap-4 ">
-                  <div className="flex items-center gap-4 pt-0">
-                    <IconBadge size={32} icon={Banknote} className="shrink-0" />
-                    <div>
-                      <p className="text-[11px] font-bold uppercase tracking-wider text-slate-500">
-                        Salario
-                      </p>
-                      <p className="text-sm font-semibold text-slate-900 mt-0.5">
-                        ${job.salarioBase.toLocaleString()} - $
-                        {job.salarioMaximo.toLocaleString()}
-                      </p>
-                    </div>
-                  </div>
-                  <div className="flex items-center gap-4 pt-4">
-                    <IconBadge size={32} icon={MapPin} className="shrink-0" />
-                    <div>
-                      <p className="text-[11px] font-bold uppercase tracking-wider text-slate-500">
-                        Ciudad
-                      </p>
-                      <p className="text-sm font-semibold text-slate-900 mt-0.5">{job.ciudad}</p>
-                    </div>
-                  </div>
-                  <div className="flex items-center gap-4 pt-4">
-                    <IconBadge size={32} icon={Briefcase} className="shrink-0" />
-                    <div>
-                      <p className="text-[11px] font-bold uppercase tracking-wider text-slate-500">
-                        Experiencia
-                      </p>
-                      <p className="text-sm font-semibold text-slate-900 mt-0.5">
-                        {job.experiencia}
-                      </p>
-                    </div>
-                  </div>
-                  <div className="flex items-center gap-4 pt-4">
-                    <IconBadge size={32} icon={Building} className="shrink-0" />
-                    <div>
-                      <p className="text-[11px] font-bold uppercase tracking-wider text-slate-500">
-                        Modalidad
-                      </p>
-                      <p className="text-sm font-semibold text-slate-900 mt-0.5">{job.modalidad}</p>
-                    </div>
-                  </div>
-                  <div className="flex items-center gap-4 pt-4">
-                    <IconBadge size={32} icon={GraduationCap} className="shrink-0" />
-                    <div>
-                      <p className="text-[11px] font-bold uppercase tracking-wider text-slate-500">
-                        Nivel de estudios
-                      </p>
-                      <p className="text-sm font-semibold text-slate-900 mt-0.5">
-                        {job.nivelEstudios}
-                      </p>
-                    </div>
-                  </div>
-                  <div className="flex items-center gap-4 pt-4">
-                    <IconBadge size={32} icon={Mail} className="shrink-0" />
-                    <div>
-                      <p className="text-[11px] font-bold uppercase tracking-wider text-slate-500">
-                        Correo de contacto
-                      </p>
-                      <a
-                        href={`mailto:${job.correoContacto}`}
-                        className="text-sm font-semibold text-slate-900 mt-0.5 break-all hover:underline"
-                      >
-                        {job.correoContacto}
-                      </a>
-                    </div>
-                  </div>
-                  {job.inicioLabores && (
-                    <div className="flex items-center gap-4 pt-4">
-                      <IconBadge size={32} icon={Clock} className="shrink-0" />
-                      <div>
-                        <p className="text-[11px] font-bold uppercase tracking-wider text-slate-500">
-                          Inicio de labores
-                        </p>
-                        <p className="text-sm font-semibold text-slate-900 mt-0.5">
-                          {job.inicioLabores === "Fecha específica" && job.fechaInicioLabores
-                            ? `${job.inicioLabores}: ${job.fechaInicioLabores}`
-                            : job.inicioLabores}
-                        </p>
-                      </div>
-                    </div>
-                  )}
-                  {job.aniosExperiencia != null && (
-                    <div className="flex items-center gap-4 pt-4">
-                      <IconBadge size={32} icon={Briefcase} className="shrink-0" />
-                      <div>
-                        <p className="text-[11px] font-bold uppercase tracking-wider text-slate-500">
-                          Años de experiencia
-                        </p>
-                        <p className="text-sm font-semibold text-slate-900 mt-0.5">{job.aniosExperiencia} año{job.aniosExperiencia !== 1 ? "s" : ""}</p>
-                      </div>
-                    </div>
-                  )}
-                </div>
-              </Card>
+              <JobSummaryCard job={job} />
 
               {/* Sobre la empresa */}
               <Card className="mt-6">

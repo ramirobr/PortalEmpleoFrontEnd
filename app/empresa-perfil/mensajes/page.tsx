@@ -34,8 +34,6 @@ export default function MensajesEmpresaPage() {
   const [mensajes, setMensajes] = useState<Mensaje[]>([]);
   const [loading, setLoading] = useState(true);
 
-  if (!MESSAGING_ENABLED) return null;
-
   useEffect(() => {
     if (!idEmpresa || !session?.user.accessToken) return;
     fetchConversacionesByEmpresa(idEmpresa, session.user.accessToken).then((res) => {
@@ -109,6 +107,8 @@ export default function MensajesEmpresaPage() {
       );
     }
   };
+
+  if (!MESSAGING_ENABLED) return null;
 
   if (loading) {
     return <div className="p-8 text-slate-400 text-sm">Cargando mensajes…</div>;

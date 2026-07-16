@@ -30,7 +30,7 @@ import { CatalogsByType } from "@/types/search";
 import { FileText, Plus, Search } from "lucide-react";
 import { useSession } from "next-auth/react";
 import { useRouter, useSearchParams } from "next/navigation";
-import { useCallback, useEffect, useState, useTransition } from "react";
+import { useCallback, useEffect, useRef, useState, useTransition } from "react";
 import { toast } from "sonner";
 import BlogFormDialog, { BlogFormData } from "./BlogFormDialog";
 import BlogsTable from "./BlogsTable";
@@ -38,6 +38,128 @@ import BlogsTable from "./BlogsTable";
 interface AdminBlogsClientProps {
   counters?: BlogCounters;
   estados: CatalogsByType[];
+}
+
+function BlogViewDialog({ open, onOpenChange, blog }: { open: boolean; onOpenChange: (v: boolean) => void; blog: AdminBlog | null }) {
+  return (
+    <Dialog open={open} onOpenChange={onOpenChange}>
+      <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
+        <DialogHeader>
+          <DialogTitle>{blog?.titulo}</DialogTitle>
+          <DialogDescription>{blog?.resumen}</DialogDescription>
+        </DialogHeader>
+        {blog && (
+          <div className="space-y-4 text-sm text-slate-700">
+            <div>
+              <span className="font-semibold">Slug: </span>
+              <code className="bg-zinc-100 px-1.5 py-0.5 rounded text-xs">{blog.slug}</code>
+            </div>
+            {blog.imagenUrl && (
+              <div>
+                <span className="font-semibold">Imagen: </span>
+                <a href={blog.imagenUrl} target="_blank" rel="noopener noreferrer" className="text-primary underline text-xs">
+                  {blog.imagenUrl}
+                </a>
+              </div>
+            )}
+            <div className="whitespace-pre-line border rounded-lg p-4 bg-zinc-50 max-h-72 overflow-y-auto text-sm leading-relaxed">
+              {blog.contenido}
+            </div>
+          </div>
+        )}
+      </DialogContent>
+    </Dialog>
+  );
+}
+
+function BlogDeleteConfirmDialog({ open, onOpenChange, onConfirm }: { open: boolean; onOpenChange: (v: boolean) => void; onConfirm: () => void }) {
+  return (
+    <Dialog open={open} onOpenChange={onOpenChange}>
+      <DialogContent className="max-w-md">
+        <DialogHeader>
+          <DialogTitle>Confirmar eliminación</DialogTitle>
+          <DialogDescription>
+            Esta acción no se puede deshacer. ¿Estás seguro de que deseas eliminar este artículo?
+          </DialogDescription>
+        </DialogHeader>
+        <div className="flex justify-end gap-3 mt-4">
+          <Button variant="outline" onClick={() => onOpenChange(false)}>Cancelar</Button>
+          <Button variant="destructive" onClick={onConfirm}>Eliminar</Button>
+        </div>
+      </DialogContent>
+    </Dialog>
+  );
+}
+
+function BlogStatsCards({ counters }: { counters: BlogCounters | undefined }) {
+  return (
+    <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
+      <Card className="p-4 text-center">
+        <p className="text-2xl font-bold text-slate-900">{counters?.totalBlogs ?? 0}</p>
+        <p className="text-sm text-slate-500">Total</p>
+      </Card>
+      <Card className="p-4 text-center">
+        <p className="text-2xl font-bold text-green-600">{counters?.totalBlogsPublicados ?? 0}</p>
+        <p className="text-sm text-slate-500">Publicados</p>
+      </Card>
+      <Card className="p-4 text-center">
+        <p className="text-2xl font-bold text-yellow-600">{counters?.totalBlogsBorrador ?? 0}</p>
+        <p className="text-sm text-slate-500">Borradores</p>
+      </Card>
+      <Card className="p-4 text-center">
+        <p className="text-2xl font-bold text-slate-500">{counters?.totalBlogsArchivados ?? 0}</p>
+        <p className="text-sm text-slate-500">Archivados</p>
+      </Card>
+    </div>
+  );
+}
+
+function BlogFiltersCard({
+  searchQuery,
+  estadoFilter,
+  estados,
+  onSearchSubmit,
+  onEstadoChange,
+}: {
+  searchQuery: string;
+  estadoFilter: string;
+  estados: CatalogsByType[];
+  onSearchSubmit: (search: string) => void;
+  onEstadoChange: (value: string) => void;
+}) {
+  return (
+    <Card className="mb-6 p-6">
+      <div className="flex flex-col lg:flex-row gap-4">
+        <form
+          className="relative flex-1"
+          action={(formData) => {
+            onSearchSubmit(formData.get("search") as string);
+          }}
+        >
+          <Search className="absolute left-3 top-1/2 -translate-y-1/2 size-4 text-slate-400" />
+          <Input
+            name="search"
+            defaultValue={searchQuery}
+            placeholder="Buscar por título o resumen..."
+            className="pl-9"
+          />
+        </form>
+        <Select value={estadoFilter} onValueChange={onEstadoChange}>
+          <SelectTrigger className="w-full lg:w-48">
+            <SelectValue placeholder="Estado" />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem value="todos">Todos</SelectItem>
+            {estados.map((e) => (
+              <SelectItem key={e.idCatalogo} value={e.nombre.toLowerCase()}>
+                {e.nombre}
+              </SelectItem>
+            ))}
+          </SelectContent>
+        </Select>
+      </div>
+    </Card>
+  );
 }
 
 export default function AdminBlogsClient({
@@ -68,7 +190,7 @@ export default function AdminBlogsClient({
   const [selectedBlog, setSelectedBlog] = useState<AdminBlog | null>(null);
   const [isViewOpen, setIsViewOpen] = useState(false);
   const [isDeleteConfirmOpen, setIsDeleteConfirmOpen] = useState(false);
-  const [blogToDelete, setBlogToDelete] = useState<string | null>(null);
+  const blogToDeleteRef = useRef<string | null>(null);
 
   const fetchCounters = useCallback(async () => {
     const res = await getBlogCounters(session?.user.accessToken);
@@ -175,8 +297,8 @@ export default function AdminBlogsClient({
   };
 
   const handleDeleteConfirm = async () => {
-    if (!blogToDelete) return;
-    const res = await deleteBlog(blogToDelete, session?.user.accessToken);
+    if (!blogToDeleteRef.current) return;
+    const res = await deleteBlog(blogToDeleteRef.current, session?.user.accessToken);
     if (res?.isSuccess) {
       toast.success("Artículo eliminado correctamente");
       setRefetchTrigger((p) => p + 1);
@@ -185,7 +307,7 @@ export default function AdminBlogsClient({
       toast.error(res?.messages?.[0] || "Error al eliminar el artículo");
     }
     setIsDeleteConfirmOpen(false);
-    setBlogToDelete(null);
+    blogToDeleteRef.current = null;
   };
 
   const handleChangeStatus = async (idBlog: string, currentStatus: string) => {
@@ -235,69 +357,15 @@ export default function AdminBlogsClient({
         </Button>
       </div>
 
-      {/* Stats */}
-      <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
-        <Card className="p-4 text-center">
-          <p className="text-2xl font-bold text-slate-900">
-            {counters?.totalBlogs ?? 0}
-          </p>
-          <p className="text-sm text-slate-500">Total</p>
-        </Card>
-        <Card className="p-4 text-center">
-          <p className="text-2xl font-bold text-green-600">
-            {counters?.totalBlogsPublicados ?? 0}
-          </p>
-          <p className="text-sm text-slate-500">Publicados</p>
-        </Card>
-        <Card className="p-4 text-center">
-          <p className="text-2xl font-bold text-yellow-600">
-            {counters?.totalBlogsBorrador ?? 0}
-          </p>
-          <p className="text-sm text-slate-500">Borradores</p>
-        </Card>
-        <Card className="p-4 text-center">
-          <p className="text-2xl font-bold text-slate-500">
-            {counters?.totalBlogsArchivados ?? 0}
-          </p>
-          <p className="text-sm text-slate-500">Archivados</p>
-        </Card>
-      </div>
+      <BlogStatsCards counters={counters} />
 
-      {/* Filters */}
-      <Card className="mb-6 p-6">
-        <div className="flex flex-col lg:flex-row gap-4">
-          <form
-            className="relative flex-1"
-            action={(formData) => {
-              updateUrlParams({ search: formData.get("search") as string, page: "1" });
-            }}
-          >
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 size-4 text-slate-400" />
-            <Input
-              name="search"
-              defaultValue={searchQuery}
-              placeholder="Buscar por título o resumen..."
-              className="pl-9"
-            />
-          </form>
-          <Select
-            value={estadoFilter}
-            onValueChange={(v) => updateUrlParams({ estado: v, page: "1" })}
-          >
-            <SelectTrigger className="w-full lg:w-48">
-              <SelectValue placeholder="Estado" />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="todos">Todos</SelectItem>
-              {estados.map((e) => (
-                <SelectItem key={e.idCatalogo} value={e.nombre.toLowerCase()}>
-                  {e.nombre}
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
-        </div>
-      </Card>
+      <BlogFiltersCard
+        searchQuery={searchQuery}
+        estadoFilter={estadoFilter}
+        estados={estados}
+        onSearchSubmit={(search) => updateUrlParams({ search, page: "1" })}
+        onEstadoChange={(v) => updateUrlParams({ estado: v, page: "1" })}
+      />
 
       {/* Table */}
       <Card className="overflow-hidden">
@@ -313,7 +381,7 @@ export default function AdminBlogsClient({
             setIsFormOpen(true);
           }}
           onDelete={(id) => {
-            setBlogToDelete(id);
+            blogToDeleteRef.current = id;
             setIsDeleteConfirmOpen(true);
           }}
           onChangeStatus={handleChangeStatus}
@@ -345,64 +413,10 @@ export default function AdminBlogsClient({
       />
 
       {/* View Dialog */}
-      <Dialog open={isViewOpen} onOpenChange={setIsViewOpen}>
-        <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
-          <DialogHeader>
-            <DialogTitle>{selectedBlog?.titulo}</DialogTitle>
-            <DialogDescription>{selectedBlog?.resumen}</DialogDescription>
-          </DialogHeader>
-          {selectedBlog && (
-            <div className="space-y-4 text-sm text-slate-700">
-              <div>
-                <span className="font-semibold">Slug: </span>
-                <code className="bg-zinc-100 px-1.5 py-0.5 rounded text-xs">
-                  {selectedBlog.slug}
-                </code>
-              </div>
-              {selectedBlog.imagenUrl && (
-                <div>
-                  <span className="font-semibold">Imagen: </span>
-                  <a
-                    href={selectedBlog.imagenUrl}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="text-primary underline text-xs"
-                  >
-                    {selectedBlog.imagenUrl}
-                  </a>
-                </div>
-              )}
-              <div className="whitespace-pre-line border rounded-lg p-4 bg-zinc-50 max-h-72 overflow-y-auto text-sm leading-relaxed">
-                {selectedBlog.contenido}
-              </div>
-            </div>
-          )}
-        </DialogContent>
-      </Dialog>
+      <BlogViewDialog open={isViewOpen} onOpenChange={setIsViewOpen} blog={selectedBlog} />
 
       {/* Delete Confirm Dialog */}
-      <Dialog open={isDeleteConfirmOpen} onOpenChange={setIsDeleteConfirmOpen}>
-        <DialogContent className="max-w-md">
-          <DialogHeader>
-            <DialogTitle>Confirmar eliminación</DialogTitle>
-            <DialogDescription>
-              Esta acción no se puede deshacer. ¿Estás seguro de que deseas
-              eliminar este artículo?
-            </DialogDescription>
-          </DialogHeader>
-          <div className="flex justify-end gap-3 mt-4">
-            <Button
-              variant="outline"
-              onClick={() => setIsDeleteConfirmOpen(false)}
-            >
-              Cancelar
-            </Button>
-            <Button variant="destructive" onClick={handleDeleteConfirm}>
-              Eliminar
-            </Button>
-          </div>
-        </DialogContent>
-      </Dialog>
+      <BlogDeleteConfirmDialog open={isDeleteConfirmOpen} onOpenChange={setIsDeleteConfirmOpen} onConfirm={handleDeleteConfirm} />
     </div>
   );
 }

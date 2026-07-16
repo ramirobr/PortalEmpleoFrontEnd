@@ -43,6 +43,205 @@ import UsuarioWizard, {
 import UsuarioForm from "./components/UsuarioForm";
 import TablePagination from "@/components/shared/components/TablePagination";
 
+function ChangePasswordDialog({
+  open,
+  onOpenChange,
+  usuario,
+  newPassword,
+  setNewPassword,
+  confirmPassword,
+  setConfirmPassword,
+  showPassword,
+  setShowPassword,
+  loading,
+  onConfirm,
+}: {
+  open: boolean;
+  onOpenChange: (v: boolean) => void;
+  usuario: { nombreCompleto: string } | null;
+  newPassword: string;
+  setNewPassword: (v: string) => void;
+  confirmPassword: string;
+  setConfirmPassword: (v: string) => void;
+  showPassword: boolean;
+  setShowPassword: (fn: (v: boolean) => boolean) => void;
+  loading: boolean;
+  onConfirm: () => void;
+}) {
+  return (
+    <Dialog open={open} onOpenChange={onOpenChange}>
+      <DialogContent className="max-w-md">
+        <DialogHeader>
+          <DialogTitle className="flex items-center gap-2">
+            <KeyRound className="size-5 text-primary" />
+            Cambiar contraseña
+          </DialogTitle>
+          <DialogDescription>
+            Actualiza la contraseña de {usuario?.nombreCompleto}.
+          </DialogDescription>
+        </DialogHeader>
+        <div className="space-y-4 py-2">
+          <div>
+            <label className="mb-2 block text-sm font-medium text-slate-700">Nueva contraseña</label>
+            <div className="relative">
+              <Input
+                type={showPassword ? "text" : "password"}
+                value={newPassword}
+                onChange={(e) => setNewPassword(e.target.value)}
+                placeholder="Nueva contraseña"
+                className="pr-10"
+              />
+              <button
+                type="button"
+                className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600"
+                onClick={() => setShowPassword((v) => !v)}
+                title={showPassword ? "Ocultar contraseña" : "Mostrar contraseña"}
+              >
+                {showPassword ? <EyeOff className="size-4" /> : <Eye className="size-4" />}
+              </button>
+            </div>
+          </div>
+          <div>
+            <label className="mb-2 block text-sm font-medium text-slate-700">Confirmar contraseña</label>
+            <Input
+              type={showPassword ? "text" : "password"}
+              value={confirmPassword}
+              onChange={(e) => setConfirmPassword(e.target.value)}
+              placeholder="Repite la contraseña"
+            />
+          </div>
+          <p className="text-xs leading-5 text-slate-500">
+            Debe tener al menos 8 caracteres, una mayúscula, una minúscula, un número y un carácter especial.
+          </p>
+        </div>
+        <div className="flex justify-end gap-3">
+          <Button variant="outline" onClick={() => onOpenChange(false)} disabled={loading}>Cancelar</Button>
+          <Button onClick={onConfirm} disabled={loading}>
+            {loading ? "Actualizando..." : "Actualizar contraseña"}
+          </Button>
+        </div>
+      </DialogContent>
+    </Dialog>
+  );
+}
+
+function UserFiltersCard({
+  search,
+  onSearchChange,
+  estadoFilter,
+  onEstadoChange,
+  rolFilter,
+  onRolChange,
+  tipoFilter,
+  onTipoChange,
+  estadoOptions,
+  roles,
+}: {
+  search: string;
+  onSearchChange: (v: string) => void;
+  estadoFilter: string;
+  onEstadoChange: (v: string) => void;
+  rolFilter: string;
+  onRolChange: (v: string) => void;
+  tipoFilter: string;
+  onTipoChange: (v: string) => void;
+  estadoOptions: CatalogsByType[];
+  roles: { idRol: string; nombre: string }[];
+}) {
+  return (
+    <Card className="mb-6 p-6">
+      <div className="flex flex-col gap-4">
+        <div className="flex flex-col lg:flex-row gap-4 flex-wrap">
+          <div className="relative flex-1 min-w-[200px]">
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 size-4 text-slate-400" />
+            <Input
+              type="text"
+              placeholder="Buscar por nombre, email o rol..."
+              value={search}
+              onChange={(e) => onSearchChange(e.target.value)}
+              className="pl-10"
+            />
+          </div>
+
+          <Select value={estadoFilter} onValueChange={onEstadoChange}>
+            <SelectTrigger className="w-full lg:w-40">
+              <SelectValue placeholder="Estado" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="todos">Todos los estados</SelectItem>
+              {estadoOptions.map((item) => (
+                <SelectItem key={item.idCatalogo} value={item.idCatalogo.toString()}>
+                  {item.nombre}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+
+          <Select value={rolFilter} onValueChange={onRolChange}>
+            <SelectTrigger className="w-full lg:w-48">
+              <SelectValue placeholder="Rol" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="todos">Todos los roles</SelectItem>
+              {roles.map((role) => (
+                <SelectItem key={role.idRol} value={role.nombre}>
+                  {role.nombre}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+
+          <Select value={tipoFilter} onValueChange={onTipoChange}>
+            <SelectTrigger className="w-full lg:w-40">
+              <SelectValue placeholder="Tipo" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="todos">Todos los tipos</SelectItem>
+              <SelectItem value="admin">Administrador</SelectItem>
+              <SelectItem value="empresa">Empresa</SelectItem>
+              <SelectItem value="candidato">Postulante</SelectItem>
+            </SelectContent>
+          </Select>
+        </div>
+      </div>
+    </Card>
+  );
+}
+
+function DeleteUserDialog({
+  open,
+  onOpenChange,
+  usuario,
+  onConfirm,
+}: {
+  open: boolean;
+  onOpenChange: (v: boolean) => void;
+  usuario: AdminUsuario | null;
+  onConfirm: () => void;
+}) {
+  return (
+    <Dialog open={open} onOpenChange={onOpenChange}>
+      <DialogContent className="max-w-md">
+        <DialogHeader>
+          <DialogTitle>¿Dar de baja usuario?</DialogTitle>
+        </DialogHeader>
+        <div className="py-4">
+          <p className="text-sm text-slate-600">
+            Se cambiará el estado de <strong>{usuario?.nombreCompleto}</strong>{" "}
+            para que deje de estar activo en el sistema.
+          </p>
+        </div>
+        <div className="flex justify-end gap-3">
+          <Button variant="outline" onClick={() => onOpenChange(false)}>Cancelar</Button>
+          <Button onClick={onConfirm} className="bg-red-600 hover:bg-red-700">
+            Dar de baja
+          </Button>
+        </div>
+      </DialogContent>
+    </Dialog>
+  );
+}
+
 export default function AdminUsuariosPage() {
   const { data: session } = useSession();
   const [dataState, setDataState] = useState({
@@ -350,83 +549,18 @@ export default function AdminUsuariosPage() {
         </Button>
       </div>
 
-      <Card className="mb-6 p-6">
-        <div className="flex flex-col gap-4">
-          <div className="flex flex-col lg:flex-row gap-4 flex-wrap">
-            <div className="relative flex-1 min-w-[200px]">
-              <Search className="absolute left-3 top-1/2 -translate-y-1/2 size-4 text-slate-400" />
-              <Input
-                type="text"
-                placeholder="Buscar por nombre, email o rol..."
-                value={search}
-                onChange={(e) => {
-                  setSearch(e.target.value);
-                  setCurrentPage(1);
-                }}
-                className="pl-10"
-              />
-            </div>
-
-            <Select
-              value={estadoFilter}
-              onValueChange={(value) => {
-                setEstadoFilter(value);
-                setCurrentPage(1);
-              }}
-            >
-              <SelectTrigger className="w-full lg:w-40">
-                <SelectValue placeholder="Estado" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="todos">Todos los estados</SelectItem>
-                {estadoOptions.map((item) => (
-                  <SelectItem key={item.idCatalogo} value={item.idCatalogo.toString()}>
-                    {item.nombre}
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
-
-            <Select
-              value={rolFilter}
-              onValueChange={(value) => {
-                setRolFilter(value);
-                setCurrentPage(1);
-              }}
-            >
-              <SelectTrigger className="w-full lg:w-48">
-                <SelectValue placeholder="Rol" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="todos">Todos los roles</SelectItem>
-                {roles.map((role) => (
-                  <SelectItem key={role.idRol} value={role.nombre}>
-                    {role.nombre}
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
-
-            <Select
-              value={tipoFilter}
-              onValueChange={(value) => {
-                setTipoFilter(value);
-                setCurrentPage(1);
-              }}
-            >
-              <SelectTrigger className="w-full lg:w-40">
-                <SelectValue placeholder="Tipo" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="todos">Todos los tipos</SelectItem>
-                <SelectItem value="admin">Administrador</SelectItem>
-                <SelectItem value="empresa">Empresa</SelectItem>
-                <SelectItem value="candidato">Postulante</SelectItem>
-              </SelectContent>
-            </Select>
-          </div>
-        </div>
-      </Card>
+      <UserFiltersCard
+        search={search}
+        onSearchChange={(v) => { setSearch(v); setCurrentPage(1); }}
+        estadoFilter={estadoFilter}
+        onEstadoChange={(v) => { setEstadoFilter(v); setCurrentPage(1); }}
+        rolFilter={rolFilter}
+        onRolChange={(v) => { setRolFilter(v); setCurrentPage(1); }}
+        tipoFilter={tipoFilter}
+        onTipoChange={(v) => { setTipoFilter(v); setCurrentPage(1); }}
+        estadoOptions={estadoOptions}
+        roles={roles}
+      />
 
       <Card className="overflow-hidden">
         <UsuariosTable
@@ -494,99 +628,26 @@ export default function AdminUsuariosPage() {
         </DialogContent>
       </Dialog>
 
-      <Dialog open={deleteDialogOpen} onOpenChange={setDeleteDialogOpen}>
-        <DialogContent className="max-w-md">
-          <DialogHeader>
-            <DialogTitle>¿Dar de baja usuario?</DialogTitle>
-          </DialogHeader>
-          <div className="py-4">
-            <p className="text-sm text-slate-600">
-              Se cambiará el estado de <strong>{usuarioToDelete?.nombreCompleto}</strong>{" "}
-              para que deje de estar activo en el sistema.
-            </p>
-          </div>
-          <div className="flex justify-end gap-3">
-            <Button
-              variant="outline"
-              onClick={() => setDeleteDialogOpen(false)}
-            >
-              Cancelar
-            </Button>
-            <Button
-              onClick={confirmDelete}
-              className="bg-red-600 hover:bg-red-700"
-            >
-              Dar de baja
-            </Button>
-          </div>
-        </DialogContent>
-      </Dialog>
+      <DeleteUserDialog
+        open={deleteDialogOpen}
+        onOpenChange={setDeleteDialogOpen}
+        usuario={usuarioToDelete}
+        onConfirm={confirmDelete}
+      />
 
-      <Dialog open={passwordDialogOpen} onOpenChange={setPasswordDialogOpen}>
-        <DialogContent className="max-w-md">
-          <DialogHeader>
-            <DialogTitle className="flex items-center gap-2">
-              <KeyRound className="size-5 text-primary" />
-              Cambiar contraseña
-            </DialogTitle>
-            <DialogDescription>
-              Actualiza la contraseña de {usuarioToChangePassword?.nombreCompleto}.
-            </DialogDescription>
-          </DialogHeader>
-          <div className="space-y-4 py-2">
-            <div>
-              <label className="mb-2 block text-sm font-medium text-slate-700">
-                Nueva contraseña
-              </label>
-              <div className="relative">
-                <Input
-                  type={showPassword ? "text" : "password"}
-                  value={newPassword}
-                  onChange={(event) => setNewPassword(event.target.value)}
-                  placeholder="Nueva contraseña"
-                  className="pr-10"
-                />
-                <button
-                  type="button"
-                  className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600"
-                  onClick={() => setShowPassword((value) => !value)}
-                  title={showPassword ? "Ocultar contraseña" : "Mostrar contraseña"}
-                >
-                  {showPassword ? <EyeOff className="size-4" /> : <Eye className="size-4" />}
-                </button>
-              </div>
-            </div>
-
-            <div>
-              <label className="mb-2 block text-sm font-medium text-slate-700">
-                Confirmar contraseña
-              </label>
-              <Input
-                type={showPassword ? "text" : "password"}
-                value={confirmPassword}
-                onChange={(event) => setConfirmPassword(event.target.value)}
-                placeholder="Repite la contraseña"
-              />
-            </div>
-
-            <p className="text-xs leading-5 text-slate-500">
-              Debe tener al menos 8 caracteres, una mayúscula, una minúscula, un número y un carácter especial.
-            </p>
-          </div>
-          <div className="flex justify-end gap-3">
-            <Button
-              variant="outline"
-              onClick={() => setPasswordDialogOpen(false)}
-              disabled={passwordLoading}
-            >
-              Cancelar
-            </Button>
-            <Button onClick={confirmChangePassword} disabled={passwordLoading}>
-              {passwordLoading ? "Actualizando..." : "Actualizar contraseña"}
-            </Button>
-          </div>
-        </DialogContent>
-      </Dialog>
+      <ChangePasswordDialog
+        open={passwordDialogOpen}
+        onOpenChange={setPasswordDialogOpen}
+        usuario={usuarioToChangePassword}
+        newPassword={newPassword}
+        setNewPassword={setNewPassword}
+        confirmPassword={confirmPassword}
+        setConfirmPassword={setConfirmPassword}
+        showPassword={showPassword}
+        setShowPassword={setShowPassword}
+        loading={passwordLoading}
+        onConfirm={confirmChangePassword}
+      />
     </div>
   );
 }

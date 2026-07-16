@@ -24,6 +24,29 @@ interface RolesTableProps {
   onDelete: (idRol: string) => void;
 }
 
+const getStatusClasses = (status: string) => {
+  switch (status.toLowerCase()) {
+    case "activo":
+      return "text-green-600 bg-green-50";
+    case "inactivo":
+      return "text-slate-600 bg-zinc-100";
+    default:
+      return "text-slate-600 bg-zinc-50";
+  }
+};
+
+// Check if role is a system role (cannot be deleted)
+const isSystemRole = (nombre: string) => {
+  const systemRoles = [
+    "Administrador",
+    "Administrador Sistema",
+    "Administrador Empresa",
+    "Administrador de empresa",
+    "Postulante",
+  ];
+  return systemRoles.includes(nombre);
+};
+
 export default function RolesTable({
   roles,
   loading,
@@ -31,28 +54,6 @@ export default function RolesTable({
   onToggleStatus,
   onDelete,
 }: RolesTableProps) {
-  const getStatusClasses = (status: string) => {
-    switch (status.toLowerCase()) {
-      case "activo":
-        return "text-green-600 bg-green-50";
-      case "inactivo":
-        return "text-slate-600 bg-zinc-100";
-      default:
-        return "text-slate-600 bg-zinc-50";
-    }
-  };
-
-  // Check if role is a system role (cannot be deleted)
-  const isSystemRole = (nombre: string) => {
-    const systemRoles = [
-      "Administrador",
-      "Administrador Sistema",
-      "Administrador Empresa",
-      "Administrador de empresa",
-      "Postulante",
-    ];
-    return systemRoles.includes(nombre);
-  };
 
   if (loading) {
     return <AdminTableLoading message="Cargando roles..." />;

@@ -29,7 +29,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { Pencil, Trash2, UserRound } from "lucide-react";
 import { useSession } from "next-auth/react";
 import React from "react";
-import { useForm } from "react-hook-form";
+import { useForm, type Control } from "react-hook-form";
 import { useAuthStore } from "@/context/authStore";
 import { toast } from "sonner";
 import { z } from "zod";
@@ -78,10 +78,436 @@ const schema = z
     }
   });
 
+type PersonalesFormValues = z.input<typeof schema>;
+
 type EditarDatosPersonalesProps = {
   user: UserInfoData;
   fields: DatosPersonalesFieldsResponse | null;
 };
+
+function PersonalesIdentityFields({
+  control,
+  isEditing,
+  fields,
+}: {
+  control: Control<PersonalesFormValues>;
+  isEditing: boolean;
+  fields: DatosPersonalesFieldsResponse | null;
+}) {
+  return (
+    <>
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
+        <FormField
+          control={control}
+          name="nombre"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel htmlFor="nombre">Nombre</FormLabel>
+              <FormControl>
+                <Input
+                  id="nombre"
+                  autoComplete="given-name"
+                  disabled={!isEditing}
+                  {...field}
+                />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        <FormField
+          control={control}
+          name="apellido"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel htmlFor="apellido">Apellido</FormLabel>
+              <FormControl>
+                <Input
+                  id="apellido"
+                  autoComplete="family-name"
+                  disabled={!isEditing}
+                  {...field}
+                />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+      </div>
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-4">
+        <FormField
+          control={control}
+          name="nacimiento"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel htmlFor="nacimiento">
+                Fecha de nacimiento
+              </FormLabel>
+              <FormControl>
+                <DatePicker
+                  id="nacimiento"
+                  value={field.value}
+                  onChange={field.onChange}
+                  disabled={!isEditing}
+                />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        <FormField
+          control={control}
+          name="nacionalidad"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel htmlFor="nacionalidad">Nacionalidad</FormLabel>
+              <FormControl>
+                <Input id="nacionalidad" disabled={!isEditing} {...field} />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+      </div>
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-4">
+        <FormField
+          control={control}
+          name="idEstadoCivil"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel htmlFor="idEstadoCivil">Estado Civil</FormLabel>
+              <FormControl>
+                <Select
+                  onValueChange={(value) => field.onChange(Number(value))}
+                  defaultValue={field.value?.toString()}
+                  disabled={!isEditing}
+                >
+                  <SelectTrigger id="estadoCivil">
+                    <SelectValue placeholder="Estado Civil" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {fields?.estado_civil?.map((estadoCivil) => (
+                      <SelectItem
+                        key={estadoCivil.idCatalogo}
+                        value={estadoCivil.idCatalogo.toString()}
+                      >
+                        {estadoCivil.nombre}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        <FormField
+          control={control}
+          name="idTipoJornadaLaboral"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel htmlFor="idTipoJornadaLaboral">Tipo de jornada laboral</FormLabel>
+              <FormControl>
+                <Select
+                  onValueChange={(value) => field.onChange(value ? Number(value) : undefined)}
+                  value={field.value ? String(field.value) : ""}
+                  disabled={!isEditing}
+                >
+                  <SelectTrigger id="idTipoJornadaLaboral">
+                    <SelectValue placeholder="Tipo de jornada" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {fields?.tipo_empleo?.map((jornada) => (
+                      <SelectItem
+                        key={jornada.idCatalogo}
+                        value={jornada.idCatalogo.toString()}
+                      >
+                        {jornada.nombre}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+      </div>
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-4">
+        <FormField
+          control={control}
+          name="idGenero"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel htmlFor="genero">Género</FormLabel>
+              <FormControl>
+                <Select
+                  onValueChange={(value) => field.onChange(Number(value))}
+                  value={field.value ? String(field.value) : ""}
+                  disabled={!isEditing}
+                >
+                  <SelectTrigger id="genero">
+                    <SelectValue placeholder="Género" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {fields?.genero?.map((genero) => (
+                      <SelectItem
+                        key={genero.idCatalogo}
+                        value={genero.idCatalogo.toString()}
+                      >
+                        {genero.nombre}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+      </div>
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-4">
+        <FormField
+          control={control}
+          name="idTipoDocumento"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel htmlFor="idTipoDocumento">
+                Tipo de Documento
+              </FormLabel>
+              <FormControl>
+                <Select
+                  onValueChange={(value) => field.onChange(Number(value))}
+                  value={field.value ? String(field.value) : ""}
+                  disabled={!isEditing}
+                >
+                  <SelectTrigger id="idTipoDocumento">
+                    <SelectValue placeholder="Tipo de Documento" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {fields?.tipo_documento?.map((documento) => (
+                      <SelectItem
+                        key={documento.idCatalogo}
+                        value={documento.idCatalogo.toString()}
+                      >
+                        {documento.nombre}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        <FormField
+          control={control}
+          name="cedula"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel htmlFor="cedula">Número de Cédula</FormLabel>
+              <FormControl>
+                <Input
+                  id="cedula"
+                  placeholder="Cédula"
+                  maxLength={10}
+                  minLength={10}
+                  inputMode="numeric"
+                  pattern="[0-9]{10}"
+                  disabled={!isEditing}
+                  {...field}
+                />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+      </div>
+    </>
+  );
+}
+
+function PersonalesAdditionalFields({
+  control,
+  isEditing,
+  licenciaChecked,
+}: {
+  control: Control<PersonalesFormValues>;
+  isEditing: boolean;
+  licenciaChecked: boolean | undefined;
+}) {
+  return (
+    <>
+      {/* Fila 5: Movilidad Propia / Licencia de conducir */}
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
+        <FormField
+          control={control}
+          name="movilidad"
+          render={({ field }) => (
+            <FormItem className="block">
+              <FormLabel htmlFor="movilidad">Movilidad Propia</FormLabel>
+              <FormControl>
+                <Checkbox
+                  id="movilidad"
+                  checked={field.value}
+                  onCheckedChange={field.onChange}
+                  disabled={!isEditing}
+                />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        <FormField
+          control={control}
+          name="licencia"
+          render={({ field }) => (
+            <FormItem className="block">
+              <FormLabel htmlFor="licencia" className="mr-2">
+                Poseo Licencia de Conducir
+              </FormLabel>
+              <FormControl>
+                <Checkbox
+                  id="licencia"
+                  checked={field.value}
+                  onCheckedChange={field.onChange}
+                  disabled={!isEditing}
+                />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+      </div>
+      {licenciaChecked && (
+        <div className="col-span-2">
+          <FormField
+            control={control}
+            name="tipoLicencia"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Tipo de Licencia</FormLabel>
+                <FormControl>
+                  <div
+                    role="group"
+                    aria-label="Tipo de Licencia"
+                    className="flex flex-row flex-wrap gap-5"
+                  >
+                    {licenciaOptions.map((opt) => (
+                      <div className="flex items-center gap-2" key={opt}>
+                        <Checkbox
+                          id={`tipoLicencia-${opt}`}
+                          value={opt}
+                          checked={field.value?.includes(opt) || false}
+                          onCheckedChange={(checked) => {
+                            if (checked) {
+                              field.onChange([...(field.value || []), opt]);
+                            } else {
+                              field.onChange(
+                                (field.value || []).filter(
+                                  (v) => v !== opt,
+                                ),
+                              );
+                            }
+                          }}
+                          disabled={!isEditing}
+                          aria-label={`Licencia tipo ${opt}`}
+                        />
+                        <Label
+                          htmlFor={`tipoLicencia-${opt}`}
+                          className="mb-0"
+                        >
+                          {opt}
+                        </Label>
+                      </div>
+                    ))}
+                  </div>
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+        </div>
+      )}
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-4 mt-4">
+        <FormField
+          control={control}
+          name="telefonoReferencia1"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel htmlFor="telefonoReferencia1">Teléfono de referencia 1</FormLabel>
+              <FormControl>
+                <Input id="telefonoReferencia1" disabled={!isEditing} placeholder="Opcional" {...field} />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        <FormField
+          control={control}
+          name="telefonoReferencia2"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel htmlFor="telefonoReferencia2">Teléfono de referencia 2</FormLabel>
+              <FormControl>
+                <Input id="telefonoReferencia2" disabled={!isEditing} placeholder="Opcional" {...field} />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+      </div>
+      {/* Aspiración salarial y preferencia de contacto */}
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-4 mt-4">
+        <FormField
+          control={control}
+          name="expectativaSalarial"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel htmlFor="expectativaSalarial">Aspiración salarial</FormLabel>
+              <FormControl>
+                <Input
+                  id="expectativaSalarial"
+                  disabled={!isEditing}
+                  placeholder="Ej: $800 - $1200 mensuales"
+                  {...field}
+                />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        <FormField
+          control={control}
+          name="medioContactoPreferido"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel htmlFor="medioContactoPreferido">Medio de contacto preferido</FormLabel>
+              <FormControl>
+                <Select
+                  onValueChange={field.onChange}
+                  value={field.value ?? ""}
+                  disabled={!isEditing}
+                >
+                  <SelectTrigger id="medioContactoPreferido">
+                    <SelectValue placeholder="Selecciona una opción" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="Llamada telefónica">Llamada telefónica</SelectItem>
+                    <SelectItem value="WhatsApp">WhatsApp</SelectItem>
+                    <SelectItem value="Correo electrónico">Correo electrónico</SelectItem>
+                    <SelectItem value="Mensajería interna">Mensajería interna</SelectItem>
+                  </SelectContent>
+                </Select>
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+      </div>
+    </>
+  );
+}
 
 export default function EditarDatosPersonales({
   user,
@@ -201,399 +627,8 @@ export default function EditarDatosPersonales({
           onSubmit={form.handleSubmit(handleSubmit)}
           aria-label="Formulario de datos personales"
         >
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
-            <FormField
-              control={form.control}
-              name="nombre"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel htmlFor="nombre">Nombre</FormLabel>
-                  <FormControl>
-                    <Input
-                      id="nombre"
-                      autoComplete="given-name"
-                      disabled={!isEditing}
-                      {...field}
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <FormField
-              control={form.control}
-              name="apellido"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel htmlFor="apellido">Apellido</FormLabel>
-                  <FormControl>
-                    <Input
-                      id="apellido"
-                      autoComplete="family-name"
-                      disabled={!isEditing}
-                      {...field}
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-          </div>
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-4">
-            <FormField
-              control={form.control}
-              name="nacimiento"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel htmlFor="nacimiento">
-                    Fecha de nacimiento
-                  </FormLabel>
-                  <FormControl>
-                    <DatePicker
-                      id="nacimiento"
-                      value={field.value}
-                      onChange={field.onChange}
-                      disabled={!isEditing}
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <FormField
-              control={form.control}
-              name="nacionalidad"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel htmlFor="nacionalidad">Nacionalidad</FormLabel>
-                  <FormControl>
-                    <Input id="nacionalidad" disabled={!isEditing} {...field} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-          </div>
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-4">
-            <FormField
-              control={form.control}
-              name="idEstadoCivil"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel htmlFor="idEstadoCivil">Estado Civil</FormLabel>
-                  <FormControl>
-                    <Select
-                      onValueChange={(value) => field.onChange(Number(value))}
-                      defaultValue={field.value?.toString()}
-                      disabled={!isEditing}
-                    >
-                      <SelectTrigger id="estadoCivil">
-                        <SelectValue placeholder="Estado Civil" />
-                      </SelectTrigger>
-                      <SelectContent>
-                        {fields?.estado_civil?.map((estadoCivil) => (
-                          <SelectItem
-                            key={estadoCivil.idCatalogo}
-                            value={estadoCivil.idCatalogo.toString()}
-                          >
-                            {estadoCivil.nombre}
-                          </SelectItem>
-                        ))}
-                      </SelectContent>
-                    </Select>
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <FormField
-              control={form.control}
-              name="idTipoJornadaLaboral"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel htmlFor="idTipoJornadaLaboral">Tipo de jornada laboral</FormLabel>
-                  <FormControl>
-                    <Select
-                      onValueChange={(value) => field.onChange(value ? Number(value) : undefined)}
-                      value={field.value ? String(field.value) : ""}
-                      disabled={!isEditing}
-                    >
-                      <SelectTrigger id="idTipoJornadaLaboral">
-                        <SelectValue placeholder="Tipo de jornada" />
-                      </SelectTrigger>
-                      <SelectContent>
-                        {fields?.tipo_empleo?.map((jornada) => (
-                          <SelectItem
-                            key={jornada.idCatalogo}
-                            value={jornada.idCatalogo.toString()}
-                          >
-                            {jornada.nombre}
-                          </SelectItem>
-                        ))}
-                      </SelectContent>
-                    </Select>
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-          </div>
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-4">
-            <FormField
-              control={form.control}
-              name="idGenero"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel htmlFor="genero">Género</FormLabel>
-                  <FormControl>
-                    <Select
-                      onValueChange={(value) => field.onChange(Number(value))}
-                      value={field.value ? String(field.value) : ""}
-                      disabled={!isEditing}
-                    >
-                      <SelectTrigger id="genero">
-                        <SelectValue placeholder="Género" />
-                      </SelectTrigger>
-                      <SelectContent>
-                        {fields?.genero?.map((genero) => (
-                          <SelectItem
-                            key={genero.idCatalogo}
-                            value={genero.idCatalogo.toString()}
-                          >
-                            {genero.nombre}
-                          </SelectItem>
-                        ))}
-                      </SelectContent>
-                    </Select>
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-          </div>
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-4">
-            <FormField
-              control={form.control}
-              name="idTipoDocumento"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel htmlFor="idTipoDocumento">
-                    Tipo de Documento
-                  </FormLabel>
-                  <FormControl>
-                    <Select
-                      onValueChange={(value) => field.onChange(Number(value))}
-                      value={field.value ? String(field.value) : ""}
-                      disabled={!isEditing}
-                    >
-                      <SelectTrigger id="idTipoDocumento">
-                        <SelectValue placeholder="Tipo de Documento" />
-                      </SelectTrigger>
-                      <SelectContent>
-                        {fields?.tipo_documento?.map((documento) => (
-                          <SelectItem
-                            key={documento.idCatalogo}
-                            value={documento.idCatalogo.toString()}
-                          >
-                            {documento.nombre}
-                          </SelectItem>
-                        ))}
-                      </SelectContent>
-                    </Select>
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <FormField
-              control={form.control}
-              name="cedula"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel htmlFor="cedula">Número de Cédula</FormLabel>
-                  <FormControl>
-                    <Input
-                      id="cedula"
-                      placeholder="Cédula"
-                      maxLength={10}
-                      minLength={10}
-                      inputMode="numeric"
-                      pattern="[0-9]{10}"
-                      disabled={!isEditing}
-                      {...field}
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-          </div>
-          {/* Fila 5: Movilidad Propia / Licencia de conducir */}
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
-            <FormField
-              control={form.control}
-              name="movilidad"
-              render={({ field }) => (
-                <FormItem className="block">
-                  <FormLabel htmlFor="movilidad">Movilidad Propia</FormLabel>
-                  <FormControl>
-                    <Checkbox
-                      id="movilidad"
-                      checked={field.value}
-                      onCheckedChange={field.onChange}
-                      disabled={!isEditing}
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <FormField
-              control={form.control}
-              name="licencia"
-              render={({ field }) => (
-                <FormItem className="block">
-                  <FormLabel htmlFor="licencia" className="mr-2">
-                    Poseo Licencia de Conducir
-                  </FormLabel>
-                  <FormControl>
-                    <Checkbox
-                      id="licencia"
-                      checked={field.value}
-                      onCheckedChange={field.onChange}
-                      disabled={!isEditing}
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-          </div>
-          {licenciaChecked && (            <div className="col-span-2">
-              <FormField
-                control={form.control}
-                name="tipoLicencia"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Tipo de Licencia</FormLabel>
-                    <FormControl>
-                      <div
-                        role="group"
-                        aria-label="Tipo de Licencia"
-                        className="flex flex-row flex-wrap gap-5"
-                      >
-                        {licenciaOptions.map((opt) => (
-                          <div className="flex items-center gap-2" key={opt}>
-                            <Checkbox
-                              id={`tipoLicencia-${opt}`}
-                              value={opt}
-                              checked={field.value?.includes(opt) || false}
-                              onCheckedChange={(checked) => {
-                                if (checked) {
-                                  field.onChange([...(field.value || []), opt]);
-                                } else {
-                                  field.onChange(
-                                    (field.value || []).filter(
-                                      (v) => v !== opt,
-                                    ),
-                                  );
-                                }
-                              }}
-                              disabled={!isEditing}
-                              aria-label={`Licencia tipo ${opt}`}
-                            />
-                            <Label
-                              htmlFor={`tipoLicencia-${opt}`}
-                              className="mb-0"
-                            >
-                              {opt}
-                            </Label>
-                          </div>
-                        ))}
-                      </div>
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-            </div>
-          )}
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-4 mt-4">
-            <FormField
-              control={form.control}
-              name="telefonoReferencia1"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel htmlFor="telefonoReferencia1">Teléfono de referencia 1</FormLabel>
-                  <FormControl>
-                    <Input id="telefonoReferencia1" disabled={!isEditing} placeholder="Opcional" {...field} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <FormField
-              control={form.control}
-              name="telefonoReferencia2"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel htmlFor="telefonoReferencia2">Teléfono de referencia 2</FormLabel>
-                  <FormControl>
-                    <Input id="telefonoReferencia2" disabled={!isEditing} placeholder="Opcional" {...field} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-          </div>
-          {/* Aspiración salarial y preferencia de contacto */}
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-4 mt-4">
-            <FormField
-              control={form.control}
-              name="expectativaSalarial"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel htmlFor="expectativaSalarial">Aspiración salarial</FormLabel>
-                  <FormControl>
-                    <Input
-                      id="expectativaSalarial"
-                      disabled={!isEditing}
-                      placeholder="Ej: $800 - $1200 mensuales"
-                      {...field}
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <FormField
-              control={form.control}
-              name="medioContactoPreferido"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel htmlFor="medioContactoPreferido">Medio de contacto preferido</FormLabel>
-                  <FormControl>
-                    <Select
-                      onValueChange={field.onChange}
-                      value={field.value ?? ""}
-                      disabled={!isEditing}
-                    >
-                      <SelectTrigger id="medioContactoPreferido">
-                        <SelectValue placeholder="Selecciona una opción" />
-                      </SelectTrigger>
-                      <SelectContent>
-                        <SelectItem value="Llamada telefónica">Llamada telefónica</SelectItem>
-                        <SelectItem value="WhatsApp">WhatsApp</SelectItem>
-                        <SelectItem value="Correo electrónico">Correo electrónico</SelectItem>
-                        <SelectItem value="Mensajería interna">Mensajería interna</SelectItem>
-                      </SelectContent>
-                    </Select>
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-          </div>
+          <PersonalesIdentityFields control={form.control} isEditing={isEditing} fields={fields} />
+          <PersonalesAdditionalFields control={form.control} isEditing={isEditing} licenciaChecked={licenciaChecked} />
           {/* Discapacidad */}
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-4">
             <FormField

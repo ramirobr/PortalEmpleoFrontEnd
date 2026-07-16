@@ -17,7 +17,7 @@ import {
   UserTestimonial,
   estadoTestimonioMap,
 } from "@/lib/testimonials/schema";
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { toast } from "sonner";
 import {
   Dialog,
@@ -181,7 +181,7 @@ export default function TestimoniosList({
   const { data: session } = useSession();
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
   const [editDialogOpen, setEditDialogOpen] = useState(false);
-  const [selectedId, setSelectedId] = useState<string | null>(null);
+  const selectedIdRef = useRef<string | null>(null);
   const [selectedTestimonio, setSelectedTestimonio] =
     useState<UserTestimonial | null>(null);
   const [isDeleting, setIsDeleting] = useState(false);
@@ -206,17 +206,17 @@ export default function TestimoniosList({
   };
 
   const handleDeleteClick = (id: string) => {
-    setSelectedId(id);
+    selectedIdRef.current = id;
     setDeleteDialogOpen(true);
   };
 
   const handleDeleteConfirm = async () => {
-    if (!selectedId || !session?.user.accessToken) return;
+    if (!selectedIdRef.current || !session?.user.accessToken) return;
 
     setIsDeleting(true);
     try {
       const response = await deleteTestimonial(
-        selectedId,
+        selectedIdRef.current,
         session.user.accessToken,
       );
 
@@ -234,7 +234,7 @@ export default function TestimoniosList({
     } finally {
       setIsDeleting(false);
       setDeleteDialogOpen(false);
-      setSelectedId(null);
+      selectedIdRef.current = null;
     }
   };
 

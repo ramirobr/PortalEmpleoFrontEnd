@@ -44,6 +44,180 @@ interface AdminTestimoniosClientProps {
   counters?: TestimonialCounters;
 }
 
+const renderStars = (rating: number) => (
+  <div className="flex items-center gap-0.5">
+    {[1, 2, 3, 4, 5].map((star) => (
+      <Star
+        key={star}
+        className={`size-5 ${
+          star <= rating
+            ? "fill-yellow-400 text-yellow-400"
+            : "fill-zinc-200 text-slate-200"
+        }`}
+      />
+    ))}
+  </div>
+);
+
+function TestimonialViewDialog({
+  open,
+  onOpenChange,
+  testimonio,
+}: {
+  open: boolean;
+  onOpenChange: (v: boolean) => void;
+  testimonio: TestimonialData | null;
+}) {
+  return (
+    <Dialog open={open} onOpenChange={onOpenChange}>
+      <DialogContent className="sm:max-w-lg">
+        <DialogHeader>
+          <DialogTitle>Detalle del Testimonio</DialogTitle>
+          <DialogDescription>
+            Información completa del testimonio enviado por el candidato.
+          </DialogDescription>
+        </DialogHeader>
+        {testimonio && (
+          <div className="space-y-4 mt-4">
+            <div className="flex items-center gap-4">
+              <Avatar className="size-14 border border-zinc-200">
+                <AvatarImage
+                  src={normalizeImageSrc(testimonio.candidato.fotoUrl)}
+                  alt={testimonio.candidato.nombreCompleto}
+                />
+                <AvatarFallback className="bg-primary/10 text-primary font-medium">
+                  {getInitials(testimonio.candidato.nombreCompleto)}
+                </AvatarFallback>
+              </Avatar>
+              <div>
+                <h3 className="font-semibold text-slate-900">{testimonio.candidato.nombreCompleto}</h3>
+                <p className="text-sm text-slate-600">{testimonio.cargo} en {testimonio.empresa}</p>
+                <p className="text-xs text-slate-400">{testimonio.candidato.email}</p>
+              </div>
+            </div>
+            <div className="flex items-center gap-2">
+              <span className="text-sm text-slate-600">Calificación:</span>
+              {renderStars(testimonio.calificacion)}
+            </div>
+            <div className="bg-zinc-50 rounded-lg p-4">
+              <p className="text-slate-700 italic">&quot;{testimonio.testimonioDetalle}&quot;</p>
+            </div>
+            <div className="flex justify-between text-sm text-slate-500 pt-2 border-t">
+              <span>Fecha: {formatDate(testimonio.fechaCreacion)}</span>
+              <span className={`font-medium ${
+                testimonio.estado.nombre.toLowerCase() === "aprobado"
+                  ? "text-green-600"
+                  : testimonio.estado.nombre.toLowerCase() === "pendiente"
+                    ? "text-yellow-600"
+                    : "text-red-600"
+              }`}>
+                {testimonio.estado.nombre}
+              </span>
+            </div>
+          </div>
+        )}
+      </DialogContent>
+    </Dialog>
+  );
+}
+
+function TestimonialStatsCards({ counters }: { counters: TestimonialCounters | undefined }) {
+  return (
+    <div className="grid grid-cols-2 lg:grid-cols-5 gap-4 mb-6">
+      <Card className="p-4 text-center">
+        <p className="text-2xl font-bold text-slate-900">{counters?.totalTestimonios}</p>
+        <p className="text-sm text-slate-500">Total</p>
+      </Card>
+      <Card className="p-4 text-center">
+        <p className="text-2xl font-bold text-green-600">{counters?.totalTestimoniosPublicados}</p>
+        <p className="text-sm text-slate-500">Aprobados</p>
+      </Card>
+      <Card className="p-4 text-center">
+        <p className="text-2xl font-bold text-yellow-600">{counters?.totalTestimoniosEnRevision}</p>
+        <p className="text-sm text-slate-500">Pendientes</p>
+      </Card>
+      <Card className="p-4 text-center">
+        <p className="text-2xl font-bold text-red-600">{counters?.totalTestimoniosRechazados}</p>
+        <p className="text-sm text-slate-500">Rechazados</p>
+      </Card>
+      <Card className="p-4 text-center">
+        <div className="flex items-center justify-center gap-1">
+          <p className="text-2xl font-bold text-yellow-500">{counters?.calificacionPromedio}</p>
+          <Star className="size-5 fill-yellow-400 text-yellow-400" />
+        </div>
+        <p className="text-sm text-slate-500">Promedio</p>
+      </Card>
+    </div>
+  );
+}
+
+function TestimonialFiltersCard({
+  searchQuery,
+  estadoFilter,
+  calificacionFilter,
+  estados,
+  onSearchSubmit,
+  onEstadoChange,
+  onCalificacionChange,
+}: {
+  searchQuery: string;
+  estadoFilter: string;
+  calificacionFilter: string;
+  estados: CatalogsByType[];
+  onSearchSubmit: (search: string) => void;
+  onEstadoChange: (value: string) => void;
+  onCalificacionChange: (value: string) => void;
+}) {
+  return (
+    <Card className="mb-6 p-6">
+      <div className="flex flex-col lg:flex-row gap-4">
+        <form
+          className="relative flex-1"
+          action={(formData) => {
+            onSearchSubmit(formData.get("search") as string);
+          }}
+        >
+          <Search className="absolute left-3 top-1/2 -translate-y-1/2 size-4 text-slate-400" />
+          <Input
+            name="search"
+            type="text"
+            placeholder="Buscar por candidato, empresa o contenido..."
+            defaultValue={searchQuery}
+            className="pl-10"
+          />
+          <Button type="submit" className="sr-only">Buscar</Button>
+        </form>
+        <Select value={estadoFilter} onValueChange={onEstadoChange}>
+          <SelectTrigger className="w-full lg:w-48">
+            <SelectValue placeholder="Estado" />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem value="todos">Todos los estados</SelectItem>
+            {estados.map((estado) => (
+              <SelectItem key={estado.idCatalogo} value={estado.idCatalogo.toString()}>
+                {estado.nombre}
+              </SelectItem>
+            ))}
+          </SelectContent>
+        </Select>
+        <Select value={calificacionFilter} onValueChange={onCalificacionChange}>
+          <SelectTrigger className="w-full lg:w-48">
+            <SelectValue placeholder="Calificación" />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem value="todas">Todas las calificaciones</SelectItem>
+            <SelectItem value="5">5 estrellas</SelectItem>
+            <SelectItem value="4">4 estrellas</SelectItem>
+            <SelectItem value="3">3 estrellas</SelectItem>
+            <SelectItem value="2">2 estrellas</SelectItem>
+            <SelectItem value="1">1 estrella</SelectItem>
+          </SelectContent>
+        </Select>
+      </div>
+    </Card>
+  );
+}
+
 export default function AdminTestimoniosClient({
   estados = [],
   counters: initialCounters,
@@ -71,10 +245,12 @@ export default function AdminTestimoniosClient({
     initialCounters,
   );
 
-  if (initialCounters !== prevInitialCountersRef.current) {
-    prevInitialCountersRef.current = initialCounters;
-    setCounters(initialCounters);
-  }
+  useEffect(() => {
+    if (initialCounters !== prevInitialCountersRef.current) {
+      prevInitialCountersRef.current = initialCounters;
+      setCounters(initialCounters);
+    }
+  }, [initialCounters]);
 
   const [selectedTestimonio, setSelectedTestimonio] =
     useState<TestimonialData | null>(null);
@@ -219,23 +395,6 @@ export default function AdminTestimoniosClient({
     }
   };
 
-  const renderStars = (rating: number) => {
-    return (
-      <div className="flex items-center gap-0.5">
-        {[1, 2, 3, 4, 5].map((star) => (
-          <Star
-            key={star}
-            className={`size-5 ${
-              star <= rating
-                ? "fill-yellow-400 text-yellow-400"
-                : "fill-zinc-200 text-slate-200"
-            }`}
-          />
-        ))}
-      </div>
-    );
-  };
-
   return (
     <div>
       <h1 className="text-3xl font-semibold mb-6 flex items-center gap-3">
@@ -244,106 +403,17 @@ export default function AdminTestimoniosClient({
       </h1>
 
       {/* Stats Cards */}
-      <div className="grid grid-cols-2 lg:grid-cols-5 gap-4 mb-6">
-        <Card className="p-4 text-center">
-          <p className="text-2xl font-bold text-slate-900">
-            {counters?.totalTestimonios}
-          </p>
-          <p className="text-sm text-slate-500">Total</p>
-        </Card>
-        <Card className="p-4 text-center">
-          <p className="text-2xl font-bold text-green-600">
-            {counters?.totalTestimoniosPublicados}
-          </p>
-          <p className="text-sm text-slate-500">Aprobados</p>
-        </Card>
-        <Card className="p-4 text-center">
-          <p className="text-2xl font-bold text-yellow-600">
-            {counters?.totalTestimoniosEnRevision}
-          </p>
-          <p className="text-sm text-slate-500">Pendientes</p>
-        </Card>
-        <Card className="p-4 text-center">
-          <p className="text-2xl font-bold text-red-600">
-            {counters?.totalTestimoniosRechazados}
-          </p>
-          <p className="text-sm text-slate-500">Rechazados</p>
-        </Card>
-        <Card className="p-4 text-center">
-          <div className="flex items-center justify-center gap-1">
-            <p className="text-2xl font-bold text-yellow-500">
-              {counters?.calificacionPromedio}
-            </p>
-            <Star className="size-5 fill-yellow-400 text-yellow-400" />
-          </div>
-          <p className="text-sm text-slate-500">Promedio</p>
-        </Card>
-      </div>
+      <TestimonialStatsCards counters={counters} />
 
-      <Card className="mb-6 p-6">
-        <div className="flex flex-col lg:flex-row gap-4">
-          <form
-            className="relative flex-1"
-            action={(formData) => {
-              const search = formData.get("search") as string;
-              updateParams({ search, page: "1" });
-            }}
-          >
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 size-4 text-slate-400" />
-            <Input
-              name="search"
-              type="text"
-              placeholder="Buscar por candidato, empresa o contenido..."
-              defaultValue={searchQuery}
-              className="pl-10"
-            />
-            <Button type="submit" className="sr-only">
-              Buscar
-            </Button>
-          </form>
-
-          <Select
-            value={estadoFilter}
-            onValueChange={(value) =>
-              updateParams({ estado: value, page: "1" })
-            }
-          >
-            <SelectTrigger className="w-full lg:w-48">
-              <SelectValue placeholder="Estado" />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="todos">Todos los estados</SelectItem>
-              {estados.map((estado) => (
-                <SelectItem
-                  key={estado.idCatalogo}
-                  value={estado.idCatalogo.toString()}
-                >
-                  {estado.nombre}
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
-
-          <Select
-            value={calificacionFilter}
-            onValueChange={(value) =>
-              updateParams({ calificacion: value, page: "1" })
-            }
-          >
-            <SelectTrigger className="w-full lg:w-48">
-              <SelectValue placeholder="Calificación" />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="todas">Todas las calificaciones</SelectItem>
-              <SelectItem value="5">5 estrellas</SelectItem>
-              <SelectItem value="4">4 estrellas</SelectItem>
-              <SelectItem value="3">3 estrellas</SelectItem>
-              <SelectItem value="2">2 estrellas</SelectItem>
-              <SelectItem value="1">1 estrella</SelectItem>
-            </SelectContent>
-          </Select>
-        </div>
-      </Card>
+      <TestimonialFiltersCard
+        searchQuery={searchQuery}
+        estadoFilter={estadoFilter}
+        calificacionFilter={calificacionFilter}
+        estados={estados}
+        onSearchSubmit={(search) => updateParams({ search, page: "1" })}
+        onEstadoChange={(value) => updateParams({ estado: value, page: "1" })}
+        onCalificacionChange={(value) => updateParams({ calificacion: value, page: "1" })}
+      />
 
       <Card className="overflow-hidden">
         <TestimoniosTable
@@ -368,73 +438,11 @@ export default function AdminTestimoniosClient({
         />
       </Card>
 
-      <Dialog open={isViewDialogOpen} onOpenChange={setIsViewDialogOpen}>
-        <DialogContent className="sm:max-w-lg">
-          <DialogHeader>
-            <DialogTitle>Detalle del Testimonio</DialogTitle>
-            <DialogDescription>
-              Información completa del testimonio enviado por el candidato.
-            </DialogDescription>
-          </DialogHeader>
-
-          {selectedTestimonio && (
-            <div className="space-y-4 mt-4">
-              <div className="flex items-center gap-4">
-                <Avatar className="size-14 border border-zinc-200">
-                  <AvatarImage
-                    src={normalizeImageSrc(selectedTestimonio.candidato.fotoUrl)}
-                    alt={selectedTestimonio.candidato.nombreCompleto}
-                  />
-                  <AvatarFallback className="bg-primary/10 text-primary font-medium">
-                    {getInitials(selectedTestimonio.candidato.nombreCompleto)}
-                  </AvatarFallback>
-                </Avatar>
-                <div>
-                  <h3 className="font-semibold text-slate-900">
-                    {selectedTestimonio.candidato.nombreCompleto}
-                  </h3>
-                  <p className="text-sm text-slate-600">
-                    {selectedTestimonio.cargo} en {selectedTestimonio.empresa}
-                  </p>
-                  <p className="text-xs text-slate-400">
-                    {selectedTestimonio.candidato.email}
-                  </p>
-                </div>
-              </div>
-
-              <div className="flex items-center gap-2">
-                <span className="text-sm text-slate-600">Calificación:</span>
-                {renderStars(selectedTestimonio.calificacion)}
-              </div>
-
-              <div className="bg-zinc-50 rounded-lg p-4">
-                <p className="text-slate-700 italic">
-                  &quot;{selectedTestimonio.testimonioDetalle}&quot;
-                </p>
-              </div>
-
-              <div className="flex justify-between text-sm text-slate-500 pt-2 border-t">
-                <span>
-                  Fecha: {formatDate(selectedTestimonio.fechaCreacion)}
-                </span>
-                <span
-                  className={`font-medium ${
-                    selectedTestimonio.estado.nombre.toLowerCase() ===
-                    "aprobado"
-                      ? "text-green-600"
-                      : selectedTestimonio.estado.nombre.toLowerCase() ===
-                          "pendiente"
-                        ? "text-yellow-600"
-                        : "text-red-600"
-                  }`}
-                >
-                  {selectedTestimonio.estado.nombre}
-                </span>
-              </div>
-            </div>
-          )}
-        </DialogContent>
-      </Dialog>
+      <TestimonialViewDialog
+        open={isViewDialogOpen}
+        onOpenChange={setIsViewDialogOpen}
+        testimonio={selectedTestimonio}
+      />
     </div>
   );
 }

@@ -160,8 +160,9 @@ export default function ArchivoEmpresaUploadDialog({
                   <FormItem>
                     <FormLabel>Archivo</FormLabel>
                     <FormControl>
-                      <div
-                        className="border-2 border-dashed border-zinc-200 rounded-lg p-6 text-center cursor-pointer hover:border-primary/50 transition-colors"
+                      <button
+                        type="button"
+                        className="w-full border-2 border-dashed border-zinc-200 rounded-lg p-6 text-center cursor-pointer hover:border-primary/50 transition-colors"
                         onClick={() => fileInputRef.current?.click()}
                       >
                         <Upload className="size-8 text-slate-400 mx-auto mb-2" />
@@ -175,7 +176,7 @@ export default function ArchivoEmpresaUploadDialog({
                           className="hidden"
                           onChange={handleFileChange}
                         />
-                      </div>
+                      </button>
                     </FormControl>
                     <FormMessage />
                   </FormItem>
