@@ -140,6 +140,12 @@ export interface AdminCandidatoUpdateRequest {
   idTipoJornadaLaboral?: number;
   telefonoReferencia1?: string;
   telefonoReferencia2?: string;
+  tieneDiscapacidad?: boolean;
+  tipoDiscapacidad?: string;
+  porcentajeDiscapacidad?: number;
+  planillaServicio?: string;
+  documentoAntecedentes?: string;
+  documentoIESS?: string;
 }
 
 export type UpdateAdminCandidatoResponse = GenericResponse<string>;
